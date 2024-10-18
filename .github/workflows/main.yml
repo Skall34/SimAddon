@@ -22,8 +22,11 @@ jobs:
         dotnet-version: '8.0.x'  # Adjust the version if needed
 
     - name: Build the project
-      run: dotnet build FlightRecorder.csproj --configuration Release
+      run: dotnet build SimAddon/SimAddon.csproj --configuration Release
 
+    - name: Build FlightRec plugin
+      run: dotnet build plugins/FlightRecPlugin/FlightRecPlugin.csproj --configuration Release
+      
     # Execute all unit tests in the solution
     - name: Execute unit tests
       run: dotnet test
