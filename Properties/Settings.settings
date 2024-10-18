@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FlightRecorder.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="callsign" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="GSheetAPIUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://script.google.com/macros/s/AKfycbyhK_pky8u_OUPNwtQJtpRSiWwE0gF64zHHkbbDJuY6I9-3jjegoiIIfJfV0QKcVC2IAg/exec</Value>
+    </Setting>
+    <Setting Name="lastImmat" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

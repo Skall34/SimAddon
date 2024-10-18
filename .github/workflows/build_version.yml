@@ -1,0 +1,84 @@
+name: Build with version from tag
+
+on:
+  create:
+    tags:
+      - '*'
+      
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+       
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'  # Adjust the version if needed
+
+    - name: Get latest tag pushed
+      id: previoustag
+      uses: oprypin/find-latest-tag@v1
+      with:
+        repository: Skall34/FlightRecorder
+        releases-only: false
+    
+    - name: Get the version from tag
+      id: get_version
+      run: echo ::set-output name=VERSION::${{ steps.previoustag.outputs.tag }}
+
+    - name: set version in assembly
+      id: update
+      uses: vers-one/dotnet-project-version-updater@v1.4
+      with:
+        file: "FlightRecorder.csproj"
+        version: ${{ steps.previoustag.outputs.tag }}
+
+    - name: set version in installer
+      shell: pwsh
+      run: ./updateVersion.ps1 ${{ steps.previoustag.outputs.tag }}
+
+    - name: Build the project
+      run: dotnet build FlightRecorder.csproj  --configuration Release
+
+    - name: Setup VS Dev Environment
+      uses: seanmiddleditch/gha-setup-vsdevenv@v4
+      
+    - name: Build vdproj installer
+      run: devenv installer.vdproj /build release
+
+#    - name: Compile .ISS to .EXE Installer
+#      uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+#      with:
+#        path: Setup/Flight_Recorder.iss
+#        options: /O+
+
+#    #rem sign OK, but verify fails because auto-signed
+#    - name: sign setup
+#      uses: GabrielAcostaEngler/signtool-code-sign@1.0.6
+#      with:
+#       certificate: '${{ secrets.CERTIFICATE }}'
+#       cert-password: '${{ secrets.PASSWORD }}'
+#       cert-sha1: '${{ secrets.SHA1 }}'
+#       cert-description: 'Skywing'
+#       folder: 'Build'
+#       recursive: false
+#       timestamp-server: 'http://timestamp.digicert.com'
+
+#    - name: Publish the project
+#      run: dotnet publish FlightRecorder.csproj --configuration Release --output publish_output
+
+    - name: Upload archive
+      uses: actions/upload-artifact@v2
+      with:
+        name: flight_recorder_${{ steps.previoustag.outputs.tag }}
+        path: Release/*.*
+
+#    - name: Upload setup
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: flight_recorder_setup_${{ steps.previoustag.outputs.tag }}
+#        path: Build/flight_recorder_setup_${{ steps.previoustag.outputs.tag }}.exe

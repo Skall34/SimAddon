@@ -1,0 +1,38 @@
+name: Autobuild & test from code push
+
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '.github/**'     
+    branches:
+      - main  # Adjust the branch name if needed
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'  # Adjust the version if needed
+
+    - name: Build the project
+      run: dotnet build FlightRecorder.csproj --configuration Release
+
+    # Execute all unit tests in the solution
+    - name: Execute unit tests
+      run: dotnet test
+
+    - name: Publish the project
+      run: dotnet publish --configuration Release --output publish_output /p:EnableWindowsTargeting=true
+
+    - name: Upload zip artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: flight_recorder
+        path: publish_output/*
