@@ -35,7 +35,7 @@ jobs:
       run: dotnet publish --configuration Release --output publish_output /p:EnableWindowsTargeting=true
 
     - name: Upload zip artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4.4.3
       with:
         name: flight_recorder
         path: publish_output/*
