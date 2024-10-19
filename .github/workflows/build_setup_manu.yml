@@ -33,7 +33,7 @@ jobs:
       uses: vers-one/dotnet-project-version-updater@v1.4
       with:
         file: |
-          "plugins/FlightRecPlugin/FlightRecPlugin.csproj"
+          "SimAddon/SimAddon/Properties/AssemblyInfo.cs"
         version: ${{ steps.previoustag.outputs.tag }}
 
     - name: set version in installer
@@ -46,11 +46,11 @@ jobs:
     - name: Build the flightrec plugin project
       run: dotnet build plugins/FlightRecPlugin/FlightRecPlugin.csproj  --configuration Release
       
-    - name: Setup VS Dev Environment
-      uses: seanmiddleditch/gha-setup-vsdevenv@v4
+#    - name: Setup VS Dev Environment
+#      uses: seanmiddleditch/gha-setup-vsdevenv@v4
       
-    - name: Build vdproj installer
-      run: devenv installer.vdproj /build release
+#    - name: Build vdproj installer
+#      run: devenv installer.vdproj /build release
 
 #    - name: Compile .ISS to .EXE Installer
 #      uses: Minionguyjpro/Inno-Setup-Action@v1.2.4
@@ -81,7 +81,7 @@ jobs:
 #        compression-level: 9 # no compression
 
     - name: Upload archive
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4.4.3
       with:
         name: flight_recorder_${{ steps.previoustag.outputs.tag }}
         path: Release/*.*
