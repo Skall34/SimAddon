@@ -21,6 +21,15 @@ jobs:
       with:
         dotnet-version: '8.0.x'  # Adjust the version if needed
 
+    - name: Build the SimAddonLogger project
+      run: dotnet build Logger/SimAddonLogger.csproj --configuration Release
+
+    - name: Build the SimAddonDataManager project
+      run: dotnet build SimDataManager/SimDataManager.csproj --configuration Release
+
+    - name: Build the SimAddonPlugin project
+      run: dotnet build plugins/SimAddonPLugin/SimAddonPlugin.csproj --configuration Release
+
     - name: Build the project
       run: dotnet build SimAddon/SimAddon.csproj --configuration Release
 
