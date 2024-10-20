@@ -62,7 +62,7 @@ namespace SimAddonLogger
             logger = new TextWriterTraceListener(logFile + ".log");
             _logFileName = logFile + ".log";
 
-            Trace.Listeners.Add(logger);
+            System.Diagnostics.Trace.Listeners.Add(logger);
             Trace.AutoFlush = true;
         }
 
@@ -71,7 +71,7 @@ namespace SimAddonLogger
             Trace.WriteLine(DateTime.Now.ToLongTimeString() + " : " + lastLine);
             logger.Flush();
             logger.Close();
-            Trace.Listeners.Remove(logger);
+            System.Diagnostics.Trace.Listeners.Remove(logger);
         }
 
         public static void suspend()
@@ -79,13 +79,13 @@ namespace SimAddonLogger
             Trace.WriteLine(DateTime.Now.ToLongTimeString() + " : " + lastLine);
             logger.Flush();
             logger.Close();
-            Trace.Listeners.Remove(logger);
+            System.Diagnostics.Trace.Listeners.Remove(logger);
         }
 
         public static void restart()
         {
             logger = new TextWriterTraceListener(_logFileName);
-            Trace.Listeners.Add(logger);
+            System.Diagnostics.Trace.Listeners.Add(logger);
             Trace.AutoFlush = true;
         }
 
