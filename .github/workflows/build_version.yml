@@ -32,7 +32,7 @@ jobs:
 
     - name: set version in assembly
       id: update
-      uses: vers-one/dotnet-project-version-updater@v1.4
+      uses: Thundernerd/dotnet-project-version-updater@v1.2
       with:
         file: "SimAddon/SimAddon.csproj"
         version: ${{ steps.previoustag.outputs.tag }}
@@ -44,20 +44,20 @@ jobs:
     - name: Build the solution
       run: dotnet build SimAddon.sln --configuration Release
 
-#    - name: Build the SimAddonLogger project
-#      run: dotnet build Logger/SimAddonLogger.csproj --configuration Release
+    - name: publish the SimAddonLogger project
+      run: dotnet publish Logger/SimAddonLogger.csproj --configuration Release --output publish_output
 
-#    - name: Build the SimAddonDataManager project
-#      run: dotnet build SimDataManager/SimDataManager.csproj --configuration Release
+    - name: publish the SimAddonDataManager project
+      run: dotnet publish SimDataManager/SimDataManager.csproj --configuration Release --output publish_output
 
-#    - name: Build the SimAddonPlugin project
-#      run: dotnet build plugins/SimAddonPLugin/SimAddonPlugin.csproj --configuration Release
+    - name: publish the SimAddonPlugin project
+      run: dotnet publish plugins/SimAddonPLugin/SimAddonPlugin.csproj --configuration Release --output publish_output
 
-#    - name: Build the project
-#      run: dotnet build SimAddon/SimAddon.csproj --configuration Release
+    - name: publish the SimAddon project
+      run: dotnet publish SimAddon/SimAddon.csproj --configuration Release --output publish_output
 
-#    - name: Build FlightRec plugin
-#      run: dotnet build plugins/FlightRecPlugin/FlightRecPlugin.csproj --configuration Release
+    - name: publish FlightRec plugin
+      run: dotnet publish plugins/FlightRecPlugin/FlightRecPlugin.csproj --configuration Release --output publish_output\plugins\FlightRecorder
 
 #    - name: Setup VS Dev Environment
 #      uses: seanmiddleditch/gha-setup-vsdevenv@v4
@@ -89,8 +89,8 @@ jobs:
     - name: Upload archive
       uses: actions/upload-artifact@v4.4.3
       with:
-        name: flight_recorder_${{ steps.previoustag.outputs.tag }}
-        path: Release/*.*
+        name: SimAddon_${{ steps.previoustag.outputs.tag }}
+        path: publish_output
 
 #    - name: Upload setup
 #      uses: actions/upload-artifact@v2
