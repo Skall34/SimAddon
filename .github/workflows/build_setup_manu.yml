@@ -36,6 +36,9 @@ jobs:
           "SimAddon/SimAddon.csproj"
         version: ${{ steps.previoustag.outputs.tag }}
 
+    - name: get nugets
+      run: dotnet nuget locals all --clear
+      
     - name: Build the solution
       run: dotnet build SimAddon.sln --configuration Release
 
