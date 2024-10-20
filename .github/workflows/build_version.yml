@@ -34,21 +34,36 @@ jobs:
       id: update
       uses: vers-one/dotnet-project-version-updater@v1.4
       with:
-        file: "FlightRecorder.csproj"
+        file: "SimAddon/SimAddon.csproj"
         version: ${{ steps.previoustag.outputs.tag }}
 
     - name: set version in installer
       shell: pwsh
       run: ./updateVersion.ps1 ${{ steps.previoustag.outputs.tag }}
 
-    - name: Build the project
-      run: dotnet build FlightRecorder.csproj  --configuration Release
+    - name: Build the solution
+      run: dotnet build SimAddon.sln --configuration Release
 
-    - name: Setup VS Dev Environment
-      uses: seanmiddleditch/gha-setup-vsdevenv@v4
+#    - name: Build the SimAddonLogger project
+#      run: dotnet build Logger/SimAddonLogger.csproj --configuration Release
+
+#    - name: Build the SimAddonDataManager project
+#      run: dotnet build SimDataManager/SimDataManager.csproj --configuration Release
+
+#    - name: Build the SimAddonPlugin project
+#      run: dotnet build plugins/SimAddonPLugin/SimAddonPlugin.csproj --configuration Release
+
+#    - name: Build the project
+#      run: dotnet build SimAddon/SimAddon.csproj --configuration Release
+
+#    - name: Build FlightRec plugin
+#      run: dotnet build plugins/FlightRecPlugin/FlightRecPlugin.csproj --configuration Release
+
+#    - name: Setup VS Dev Environment
+#      uses: seanmiddleditch/gha-setup-vsdevenv@v4
       
-    - name: Build vdproj installer
-      run: devenv installer.vdproj /build release
+#    - name: Build vdproj installer
+#      run: devenv installer.vdproj /build release
 
 #    - name: Compile .ISS to .EXE Installer
 #      uses: Minionguyjpro/Inno-Setup-Action@v1.2.2

@@ -16,5 +16,5 @@ function Update-vdproj-version([string] $ver, [string] $filename) {
     } | Set-Content $filename
 }
 echo "Tag version $args"
-Update-vdproj-version $args[0] "Installer.vdproj"
+Update-vdproj-version $args[0] "Installer/Installer.vdproj"
 

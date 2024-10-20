@@ -36,25 +36,24 @@ jobs:
           "SimAddon/SimAddon.csproj"
         version: ${{ steps.previoustag.outputs.tag }}
 
-#    - name: set version in installer
-#      shell: pwsh
-#      run: ./updateVersion.ps1 ${{ steps.previoustag.outputs.tag }}
+    - name: Build the solution
+      run: dotnet build SimAddon.sln --configuration Release
 
-    - name: Build the Logger project
-      run: dotnet build Logger/SimAddonLogger.csproj  --configuration Release
+#    - name: Build the SimAddonLogger project
+#      run: dotnet build Logger/SimAddonLogger.csproj --configuration Release
 
-    - name: Build the DataManager project
-      run: dotnet build SimDataManager/SimDataManager.csproj  --configuration Release
+#    - name: Build the SimAddonDataManager project
+#      run: dotnet build SimDataManager/SimDataManager.csproj --configuration Release
 
-    - name: Build the plugin project
-      run: dotnet build plugins/SimAddonPlugin/SimAddonPlugin.csproj  --configuration Release    
+#    - name: Build the SimAddonPlugin project
+#      run: dotnet build plugins/SimAddonPLugin/SimAddonPlugin.csproj --configuration Release
 
-    - name: Build the project
-      run: dotnet build SimAddon/SimAddon.csproj  --configuration Release
+#    - name: Build the project
+#      run: dotnet build SimAddon/SimAddon.csproj --configuration Release
 
-    - name: Build the flightrec plugin project
-      run: dotnet build plugins/FlightRecPlugin/FlightRecPlugin.csproj  --configuration Release
-      
+#    - name: Build FlightRec plugin
+#      run: dotnet build plugins/FlightRecPlugin/FlightRecPlugin.csproj --configuration Release
+
 #    - name: Setup VS Dev Environment
 #      uses: seanmiddleditch/gha-setup-vsdevenv@v4
       
