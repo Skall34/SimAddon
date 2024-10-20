@@ -22,8 +22,8 @@ jobs:
       with:
         dotnet-version: '8.0.x'  # Adjust the version if needed
 
-    -name: get nugets
-      run: dotnet clean SimAddon.sln --configuration Release && dotnet nuget locals all --clear
+    - name: get nugets
+      run: dotnet nuget locals all --clear
       
     - name: Build the solution
       run: dotnet build SimAddon.sln --configuration Release
