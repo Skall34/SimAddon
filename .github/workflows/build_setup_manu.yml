@@ -30,7 +30,7 @@ jobs:
 
     - name: set version in assembly
       id: update
-      uses: Thundernerd/dotnet-project-version-updater@v1.2
+      uses: vers-one/dotnet-project-version-updater@v1.6
       with:
         file: "SimAddon/SimAddon.csproj"
         version: ${{ steps.previoustag.outputs.tag }}
