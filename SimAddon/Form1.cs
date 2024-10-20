@@ -79,16 +79,17 @@ namespace SimAddon
             Assembly assembly = Assembly.GetEntryAssembly();
             if (null != assembly)
             {
+                AssemblyName assemblyName = assembly.GetName();
                 version = assembly.GetName().Version;
                 if (null == version)
                 {
                     version = new Version("unknown");
                 }
                 // Set the form's title to include the version number
-                this.Text = $"SimAddon - Version {version.ToString(3)}";
+                Text = $"SimAddon - Version {version.ToString(3)}";
                 if (autostart)
                 {
-                    this.Text += " autostarted";
+                    Text += " autostarted";
                 }
                 Logger.WriteLine($"Version : {version.ToString(3)}");
             }
