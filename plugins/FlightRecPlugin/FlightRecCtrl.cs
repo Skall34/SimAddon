@@ -298,11 +298,13 @@ namespace FlightRecPlugin
             {
                 Logger.WriteLine("off runway crashed detected");
                 flightPerfs.overRunwayCrashed = true;
+                getEndOfFlightData();
             }
             if (currentFlightStatus.crashedFlag != 0)
             {
                 Logger.WriteLine("crash detected");
                 flightPerfs.crashed = true;
+                getEndOfFlightData();
             }
             if (currentFlightStatus.stallWarning!= 0)
             {
@@ -500,6 +502,7 @@ namespace FlightRecPlugin
             _endPayload = data.GetPayload();
             //compute the note of the flight
             AnalyseFlight();
+            Logger.WriteLine("End of flight data updated");
         }
 
         private bool CheckBeforeSave()
