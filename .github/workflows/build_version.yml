@@ -59,6 +59,9 @@ jobs:
     - name: publish FlightRec plugin
       run: dotnet publish plugins/FlightRecPlugin/FlightRecPlugin.csproj --configuration Release --output publish_output\plugins\FlightRecorder
 
+    - name: publish Bushtrip plugin
+      run: dotnet publish plugins/BushtripPlugin/BushtripPlugin.csproj --configuration Release --output publish_output\plugins\Bushtrip
+
 #    - name: Setup VS Dev Environment
 #      uses: seanmiddleditch/gha-setup-vsdevenv@v4
       
