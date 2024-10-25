@@ -50,6 +50,9 @@ jobs:
     - name: publish FlightRec plugin
       run: dotnet publish plugins/FlightRecPlugin/FlightRecPlugin.csproj --configuration Release --output publish_output\plugins\FlightRecorder
 
+    - name: publish bushtrip plugin
+      run: dotnet publish plugins/Bushtrip/Bushtirp.csproj --configuration Release --output publish_output\plugins\BushTrip
+
     - name: Upload zip artifact
       uses: actions/upload-artifact@v4.4.3
       with:
