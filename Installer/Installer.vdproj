@@ -22,6 +22,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C9D85A415AE54EF585FA6FA6F950E3F5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D362E65A94224699893EDB8127D5F4DC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -236,11 +242,22 @@
                         {
                             "{9EF0B969-E518-4E46-987F-47570745A589}:_2686F64D265E4483B6DE8334327FBEE8"
                             {
-                            "Name" = "8:FlightRecPlugin"
+                            "Name" = "8:FlightRec"
                             "AlwaysCreate" = "11:FALSE"
                             "Condition" = "8:"
                             "Transitive" = "11:FALSE"
                             "Property" = "8:_DF86054256C546C08B793639FADE0130"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_A444C94218AE4148A091B2A842781843"
+                            {
+                            "Name" = "8:Bushtrip"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_29386C58B51A44049C8B2245A7C9CA8C"
                                 "Folders"
                                 {
                                 }
@@ -266,7 +283,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SimAddon"
         "ProductCode" = "8:{CB70CE82-ECCA-4349-9F94-B78D76148764}"
-        "PackageCode" = "8:{25AA071E-1463-4E66-91B5-9F2935A1931A}"
+        "PackageCode" = "8:{52C5A924-E6DF-4773-89AE-AD4ACE2C67C1}"
         "UpgradeCode" = "8:{2ECD94C2-9C86-4988-A257-8DFFDD363624}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
@@ -785,6 +802,34 @@
         }
         "ProjectOutput"
         {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C9D85A415AE54EF585FA6FA6F950E3F5"
+            {
+            "SourcePath" = "8:..\\plugins\\BushTripPlugin\\obj\\Debug\\net8.0-windows\\BushTripPlugin.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_A444C94218AE4148A091B2A842781843"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D362E65A94224699893EDB8127D5F4DC"
             {
             "SourcePath" = "8:..\\plugins\\FlightRecPlugin\\obj\\Debug\\net8.0-windows\\FlightRecPlugin.dll"

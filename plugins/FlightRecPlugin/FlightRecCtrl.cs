@@ -112,12 +112,14 @@ namespace FlightRecPlugin
 
         public void registerPage(TabControl parent)
         {
+            parent.SuspendLayout();
             TabPage pluginPage = new TabPage();
             pluginPage.Text = getName();
             pluginPage.Controls.Add(this);
             this.Dock = DockStyle.Fill;
             pluginPage.Visible = true;
             parent.TabPages.Add(pluginPage);
+            parent.ResumeLayout();
         }
 
         public void updateSituation(situation currentFlightStatus)

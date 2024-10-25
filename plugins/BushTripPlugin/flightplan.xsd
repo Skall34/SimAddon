@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="LittleNavmap" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="LittleNavmap" msdata:IsDataSet="true" msdata:Locale="en-US">
+    <xs:complexType>
+      <xs:choice minOccurs="1" maxOccurs="1">
+        <xs:element name="Flightplan">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SimData" type="xs:string" minOccurs="0" />
+              <xs:element name="NavData" type="xs:string" minOccurs="0" />
+              <xs:element name="Header" minOccurs="1" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="FlightplanType" type="xs:string" minOccurs="0" />
+                    <xs:element name="CruisingAlt" type="xs:int" minOccurs="0" />
+                    <xs:element name="CruisingAltF" type="xs:decimal" minOccurs="0" />
+                    <xs:element name="CreationDate" type="xs:string" minOccurs="0" />
+                    <xs:element name="FileVersion" type="xs:string" minOccurs="0" />
+                    <xs:element name="ProgramName" type="xs:string" minOccurs="0" />
+                    <xs:element name="ProgramVersion" type="xs:string" minOccurs="0" />
+                    <xs:element name="Documentation" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="AircraftPerformance" minOccurs="1" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="FilePath" type="xs:string" minOccurs="0" />
+                    <xs:element name="Type" type="xs:string" minOccurs="0" />
+                    <xs:element name="Name" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Waypoints" minOccurs="1" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Waypoint" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Name" type="xs:string" minOccurs="0" />
+                          <xs:element name="Ident" type="xs:string" minOccurs="0" />
+                          <xs:element name="Region" type="xs:string" minOccurs="0" />
+                          <xs:element name="Type" type="xs:string" minOccurs="0" />
+                          <xs:element name="Comment" type="xs:string" minOccurs="0" />
+                          <xs:element name="Pos" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                              <xs:attribute name="Lon" type="xs:double" />
+                              <xs:attribute name="Lat" type="xs:double" />
+                              <xs:attribute name="Alt" type="xs:double" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

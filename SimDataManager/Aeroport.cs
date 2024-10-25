@@ -68,25 +68,14 @@ namespace SimDataManager
 
         public double DistanceTo(double targetLatitude, double targetLongitude)
         {
-            double earthRadius = 6371; // Earth's radius in kilometers
-
-            double dLat = DegreeToRadian(targetLatitude - latitude_deg);
-            double dLon = DegreeToRadian(targetLongitude - longitude_deg);
-
-            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                       Math.Cos(DegreeToRadian(latitude_deg)) * Math.Cos(DegreeToRadian(targetLatitude)) *
-                       Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
-
-            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-
-            double distance = earthRadius * c;
+            double distance = NavigationHelper.GetDistance(this.latitude_deg,this.longitude_deg,targetLatitude,targetLongitude);
 
             return distance;
         }
-        private double DegreeToRadian(double angle)
-        {
-            return Math.PI * angle / 180.0;
-        }
+        //private double DegreeToRadian(double angle)
+        //{
+        //    return Math.PI * angle / 180.0;
+        //}
 
         public static Aeroport FindClosestAirport(List<Aeroport> airports, double targetLatitude, double targetLongitude)
         {

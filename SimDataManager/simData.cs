@@ -67,6 +67,10 @@ namespace SimDataManager
         // DECLARE OFFSETS YOU WANT TO USE HERE
         // =====================================
         //https://www.projectmagenta.com/all-fsuipc-offsets/
+
+        private readonly Offset<uint> initialized1 = new Offset<uint>(0x04D2);
+        private readonly Offset<uint> initialized2 = new Offset<uint>(0x04D4);
+
         private readonly Offset<uint> airspeed = new Offset<uint>(0x02BC);
         private readonly Offset<string> startSituation = new Offset<string>(0x0024, 256);
         private readonly Offset<uint> avionicsMaster = new Offset<uint>(0x2E80);
@@ -143,11 +147,11 @@ namespace SimDataManager
 
         private bool _isConnected;
         public bool isConnected { get {
-                return _isConnected;
+                return (_isConnected);
             }
-            set {
-                _isConnected = value;
-            }
+            //set {
+            //    _isConnected = value;
+            //}
         }
 
 

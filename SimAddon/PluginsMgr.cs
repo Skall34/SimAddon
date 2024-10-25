@@ -58,37 +58,40 @@ namespace SimAddon
                         Assembly assembly = Assembly.LoadFrom(item);
                         if (assembly.GetExportedTypes().Count() > 0)
                         {
-                            Type pluginType = assembly.GetExportedTypes()[0]; // Remplacer par le namespace et le nom de la classe
-                            if (pluginType != null)
+                            foreach (Type pluginType in assembly.GetExportedTypes())
                             {
-                                try
+                                //Type pluginType = assembly.GetExportedTypes()[0]; // Remplacer par le namespace et le nom de la classe
+                                if (pluginType != null)
                                 {
-                                    // Créer une instance de la classe dynamiquement
-                                    ISimAddonPluginCtrl pluginInstance = (ISimAddonPluginCtrl)Activator.CreateInstance(pluginType);
-                                    _plugins.Add(pluginInstance);
+                                    try
+                                    {
+                                        // Créer une instance de la classe dynamiquement
+                                        ISimAddonPluginCtrl pluginInstance = (ISimAddonPluginCtrl)Activator.CreateInstance(pluginType);
+                                        _plugins.Add(pluginInstance);
 
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        //just ignore, that's not a plugin file
+                                    }
+                                    // Exemple : appeler une méthode publique de la classe
+                                    //MethodInfo method = pluginType.GetMethod("init"); // Remplacer par le nom de la méthode que tu veux appeler
+
+                                    //if (method != null)
+                                    //{
+                                    //    // Appeler la méthode (sans paramètres ici, tu peux ajouter des paramètres si nécessaire)
+                                    //    method.Invoke(pluginInstance, null);
+                                    //    Console.WriteLine("Méthode appelée avec succès.");
+                                    //}
+                                    //else
+                                    //{
+                                    //    Console.WriteLine("Méthode non trouvée dans la classe spécifiée.");
+                                    //}
                                 }
-                                catch (Exception ex)
+                                else
                                 {
-                                    //just ignore, that's not a plugin file
+                                    Console.WriteLine("Type (classe) non trouvé dans la DLL" + item);
                                 }
-                                // Exemple : appeler une méthode publique de la classe
-                                //MethodInfo method = pluginType.GetMethod("init"); // Remplacer par le nom de la méthode que tu veux appeler
-
-                                //if (method != null)
-                                //{
-                                //    // Appeler la méthode (sans paramètres ici, tu peux ajouter des paramètres si nécessaire)
-                                //    method.Invoke(pluginInstance, null);
-                                //    Console.WriteLine("Méthode appelée avec succès.");
-                                //}
-                                //else
-                                //{
-                                //    Console.WriteLine("Méthode non trouvée dans la classe spécifiée.");
-                                //}
-                            }
-                            else
-                            {
-                                Console.WriteLine("Type (classe) non trouvé dans la DLL" + item);
                             }
                         }
                         else

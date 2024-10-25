@@ -3,20 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimAddonPlugin", "plugins\SimAddonPlugin\SimAddonPlugin.csproj", "{88F567B8-6263-4748-8766-86C82CFA821B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimAddonPlugin", "plugins\SimAddonPlugin\SimAddonPlugin.csproj", "{88F567B8-6263-4748-8766-86C82CFA821B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimDataManager", "SimDataManager\SimDataManager.csproj", "{D262AFEC-FD87-4B9B-BA4C-E8A70D85E001}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimDataManager", "SimDataManager\SimDataManager.csproj", "{D262AFEC-FD87-4B9B-BA4C-E8A70D85E001}"
 	ProjectSection(ProjectDependencies) = postProject
 		{AD0B81B7-AE03-459A-B452-70ADDEAA0FA5} = {AD0B81B7-AE03-459A-B452-70ADDEAA0FA5}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightRecPlugin", "plugins\FlightRecPlugin\FlightRecPlugin.csproj", "{F79AFF10-3AAA-44A3-8EAE-8DE5E59BC2CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightRecPlugin", "plugins\FlightRecPlugin\FlightRecPlugin.csproj", "{F79AFF10-3AAA-44A3-8EAE-8DE5E59BC2CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimAddon", "SimAddon\SimAddon.csproj", "{1B5B0CBD-B726-4929-9CFB-664D41294629}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimAddon", "SimAddon\SimAddon.csproj", "{1B5B0CBD-B726-4929-9CFB-664D41294629}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimAddonLogger", "Logger\SimAddonLogger.csproj", "{AD0B81B7-AE03-459A-B452-70ADDEAA0FA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimAddonLogger", "Logger\SimAddonLogger.csproj", "{AD0B81B7-AE03-459A-B452-70ADDEAA0FA5}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Installer.vdproj", "{E70A2523-0740-4522-B9F7-F1B1F67FB58E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BushTripPlugin", "plugins\BushTripPlugin\BushTripPlugin.csproj", "{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,10 @@ Global
 		{E70A2523-0740-4522-B9F7-F1B1F67FB58E}.Debug|Any CPU.Build.0 = Debug
 		{E70A2523-0740-4522-B9F7-F1B1F67FB58E}.Release|Any CPU.ActiveCfg = Release
 		{E70A2523-0740-4522-B9F7-F1B1F67FB58E}.Release|Any CPU.Build.0 = Release
+		{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
