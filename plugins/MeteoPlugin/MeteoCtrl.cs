@@ -41,9 +41,20 @@ namespace MeteoPlugin
         {
             //create a request to https://aviationweather.gov/cgi-bin/data/metar.php?ids=LFMT
 
-            string metar = await SimDataManager.Meteo.getMetar(tbICAO.Text);
+            string metar = await Meteo.getMetar(tbICAO.Text);
             tbMETAR.Text = metar;
-            tbDecodedMETAR.Text  = SimDataManager.Meteo.DecodeMetar(metar);
+            tbDecodedMETAR.Text = Meteo.decodeMetar(metar);
+        }
+
+        private void MeteoCtrl_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            tbDecodedMETAR.Text = Meteo.decodeMetar(tbMETAR.Text);
+
         }
     }
 }

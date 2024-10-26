@@ -37,7 +37,13 @@ namespace MeteoPlugin
             tbDecodedMETAR = new TextBox();
             pictureBox1 = new PictureBox();
             tbMETAR = new TextBox();
+            splitContainer1 = new SplitContainer();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -77,12 +83,12 @@ namespace MeteoPlugin
             // 
             // tbDecodedMETAR
             // 
-            tbDecodedMETAR.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            tbDecodedMETAR.Location = new Point(15, 196);
+            tbDecodedMETAR.Dock = DockStyle.Fill;
+            tbDecodedMETAR.Location = new Point(0, 0);
             tbDecodedMETAR.Multiline = true;
             tbDecodedMETAR.Name = "tbDecodedMETAR";
             tbDecodedMETAR.ReadOnly = true;
-            tbDecodedMETAR.Size = new Size(771, 43);
+            tbDecodedMETAR.Size = new Size(774, 219);
             tbDecodedMETAR.TabIndex = 4;
             // 
             // pictureBox1
@@ -98,29 +104,64 @@ namespace MeteoPlugin
             // 
             // tbMETAR
             // 
-            tbMETAR.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            tbMETAR.Location = new Point(15, 138);
+            tbMETAR.Dock = DockStyle.Fill;
+            tbMETAR.Location = new Point(0, 0);
             tbMETAR.Multiline = true;
             tbMETAR.Name = "tbMETAR";
             tbMETAR.ReadOnly = true;
-            tbMETAR.Size = new Size(771, 52);
+            tbMETAR.Size = new Size(774, 82);
             tbMETAR.TabIndex = 7;
+            // 
+            // splitContainer1
+            // 
+            splitContainer1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            splitContainer1.Location = new Point(14, 127);
+            splitContainer1.Name = "splitContainer1";
+            splitContainer1.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(tbMETAR);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(tbDecodedMETAR);
+            splitContainer1.Size = new Size(774, 305);
+            splitContainer1.SplitterDistance = 82;
+            splitContainer1.TabIndex = 8;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(384, 102);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 9;
+            button1.Text = "re-parse";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // MeteoCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Teal;
-            Controls.Add(tbMETAR);
+            Controls.Add(button1);
+            Controls.Add(splitContainer1);
             Controls.Add(pictureBox1);
-            Controls.Add(tbDecodedMETAR);
             Controls.Add(label2);
             Controls.Add(btnRequest);
             Controls.Add(tbICAO);
             Controls.Add(label1);
             Name = "MeteoCtrl";
             Size = new Size(800, 450);
+            Load += MeteoCtrl_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel1.PerformLayout();
+            splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -136,5 +177,7 @@ namespace MeteoPlugin
         private TextBox tbDecodedMETAR;
         private PictureBox pictureBox1;
         private TextBox tbMETAR;
+        private SplitContainer splitContainer1;
+        private Button button1;
     }
 }

@@ -13,6 +13,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightRecPlugin", "plugins\FlightRecPlugin\FlightRecPlugin.csproj", "{F79AFF10-3AAA-44A3-8EAE-8DE5E59BC2CF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimAddon", "SimAddon\SimAddon.csproj", "{1B5B0CBD-B726-4929-9CFB-664D41294629}"
+	ProjectSection(ProjectDependencies) = postProject
+		{93F7C2E1-2970-4368-947F-395BF48CDD3A} = {93F7C2E1-2970-4368-947F-395BF48CDD3A}
+		{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C} = {EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}
+		{F79AFF10-3AAA-44A3-8EAE-8DE5E59BC2CF} = {F79AFF10-3AAA-44A3-8EAE-8DE5E59BC2CF}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimAddonLogger", "Logger\SimAddonLogger.csproj", "{AD0B81B7-AE03-459A-B452-70ADDEAA0FA5}"
 EndProject
@@ -20,7 +25,7 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Inst
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BushTripPlugin", "plugins\BushTripPlugin\BushTripPlugin.csproj", "{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeteoPlugin", "plugins\MeteoPlugin\MeteoPlugin.csproj", "{93F7C2E1-2970-4368-947F-395BF48CDD3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeteoPlugin", "plugins\MeteoPlugin\MeteoPlugin.csproj", "{93F7C2E1-2970-4368-947F-395BF48CDD3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
