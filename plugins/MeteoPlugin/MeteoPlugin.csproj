@@ -5,15 +5,14 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <OutputPath>..\..\bin\plugins\Bushtrip</OutputPath>
+    <OutputPath>..\..\bin\plugins\Meteo</OutputPath>
+
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Logger\SimAddonLogger.csproj" />
     <ProjectReference Include="..\..\SimDataManager\SimDataManager.csproj" />
     <ProjectReference Include="..\SimAddonPlugin\SimAddonPlugin.csproj" />
   </ItemGroup>

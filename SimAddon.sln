@@ -18,7 +18,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimAddonLogger", "Logger\Si
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Installer.vdproj", "{E70A2523-0740-4522-B9F7-F1B1F67FB58E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BushTripPlugin", "plugins\BushTripPlugin\BushTripPlugin.csproj", "{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BushTripPlugin", "plugins\BushTripPlugin\BushTripPlugin.csproj", "{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeteoPlugin", "plugins\MeteoPlugin\MeteoPlugin.csproj", "{93F7C2E1-2970-4368-947F-395BF48CDD3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +56,10 @@ Global
 		{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93F7C2E1-2970-4368-947F-395BF48CDD3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93F7C2E1-2970-4368-947F-395BF48CDD3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93F7C2E1-2970-4368-947F-395BF48CDD3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93F7C2E1-2970-4368-947F-395BF48CDD3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

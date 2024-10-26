@@ -38,7 +38,6 @@ namespace BushTripPlugin
             pluginPage.Controls.Add(this);
             this.Dock = DockStyle.Fill;
             pluginPage.Visible = true;
-            pluginPage.ImageKey = "bushtrip";
             parent.TabPages.Add(pluginPage);
             parent.ResumeLayout();
         }

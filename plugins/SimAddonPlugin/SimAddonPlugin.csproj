@@ -5,7 +5,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <OutputPath>C:\Users\pasca\source\repos\SimAddon\bin</OutputPath>
+    <OutputPath>..\bin</OutputPath>
 
   </PropertyGroup>
   <PropertyGroup>

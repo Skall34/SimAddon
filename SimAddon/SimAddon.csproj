@@ -13,7 +13,7 @@
     <DelaySign>False</DelaySign>
     <AssemblyOriginatorKeyFile>..\keys\skywings.snk</AssemblyOriginatorKeyFile>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <OutputPath>C:\Users\pasca\source\repos\SimAddon\bin\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 

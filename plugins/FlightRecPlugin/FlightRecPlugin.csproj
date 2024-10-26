@@ -6,7 +6,9 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
-    <OutputPath>C:\Users\pasca\source\repos\SimAddon\bin\plugins\FlightRecorder</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <OutputPath>..\..\bin\plugins\FlightRecorder</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="FlightRecCtrl.cs">
