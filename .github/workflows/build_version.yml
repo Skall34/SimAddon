@@ -62,6 +62,9 @@ jobs:
     - name: publish Bushtrip plugin
       run: dotnet publish plugins/BushtripPlugin/BushtripPlugin.csproj --configuration Release --output publish_output\plugins\Bushtrip
 
+    - name: publish meteo plugin
+      run: dotnet publish plugins/MeteoPlugin/MeteoPlugin.csproj --configuration Release --output publish_output\plugins\Meteo
+
 #    - name: Setup VS Dev Environment
 #      uses: seanmiddleditch/gha-setup-vsdevenv@v4
       
