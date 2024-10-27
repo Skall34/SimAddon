@@ -149,12 +149,13 @@ namespace SimAddon
         {
             try
             {
-
+                ConfigureForm();
                 //rafraichis les données venant du simu
                 _simData.Refresh();
 
                 //tell the plugins to update
                 situation currentStatus=new situation();
+                currentStatus.readyToFly = _simData.GetReadyToFly();
                 currentStatus.airSpeed = _simData.GetAirSpeed();
                 currentStatus.crashedFlag = _simData.GetCrashedFlag();
                 currentStatus.currentFuel = _simData.GetFuelWeight();
@@ -201,17 +202,28 @@ namespace SimAddon
         // Configures the status label depending on if we're connected or not 
         private void ConfigureForm()
         {
+            string statusText = "";
             //si la connection vers le simu est OK
             if (_simData.isConnected)
             {
-                this.lblConnectionStatus.Text = "Connected";
+                statusText = "Connected";
                 this.lblConnectionStatus.ForeColor = Color.Green;
             }
             else
             {
-                this.lblConnectionStatus.Text = "Disconnected. Looking for Flight Simulator...";
+                statusText = "Disconnected. Looking for Flight Simulator...";
                 this.lblConnectionStatus.ForeColor = Color.Red;
             }
+
+            if (_simData.GetReadyToFly())
+            {
+                statusText += " ready to fly";
+            }
+            else
+            {
+                statusText += " waiting for flight load...";
+            }
+            this.lblConnectionStatus.Text = statusText;
         }
 
         // Form is closing so stop all the timers and close FSUIPC Connection

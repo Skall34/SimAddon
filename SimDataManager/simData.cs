@@ -68,6 +68,9 @@ namespace SimDataManager
         // =====================================
         //https://www.projectmagenta.com/all-fsuipc-offsets/
 
+        private readonly Offset<byte> readyToFLy = new Offset<byte>(0x3364);
+        private readonly Offset<byte> inMenu = new Offset<byte>(0x3365);
+
         private readonly Offset<uint> initialized1 = new Offset<uint>(0x04D2);
         private readonly Offset<uint> initialized2 = new Offset<uint>(0x04D4);
 
@@ -281,6 +284,11 @@ namespace SimDataManager
                 _isConnected=false;
                 throw;
             }
+        }
+
+        public bool GetReadyToFly()
+        {
+            return ((readyToFLy.Value == 0)&&(inMenu.Value == 0));
         }
 
         public double GetFuelWeight()

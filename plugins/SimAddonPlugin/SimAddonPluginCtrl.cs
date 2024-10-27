@@ -19,6 +19,7 @@ namespace SimAddonPlugin
 
     public  class situation
     {
+        public bool readyToFly { get; set; }
         public double airSpeed { get; set; }
         public short crashedFlag { get; set; }
         public double currentFuel { get; set; }
