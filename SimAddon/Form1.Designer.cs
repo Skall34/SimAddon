@@ -33,82 +33,79 @@ namespace SimAddon
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.lblConnectionStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.timerMain = new System.Windows.Forms.Timer(this.components);
-            this.timerConnection = new System.Windows.Forms.Timer(this.components);
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.statusStrip.SuspendLayout();
-            this.SuspendLayout();
+            statusStrip = new StatusStrip();
+            lblConnectionStatus = new ToolStripStatusLabel();
+            timerMain = new System.Windows.Forms.Timer(components);
+            timerConnection = new System.Windows.Forms.Timer(components);
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            tabControl1 = new TabControl();
+            statusStrip.SuspendLayout();
+            SuspendLayout();
             // 
             // statusStrip
             // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lblConnectionStatus});
-            this.statusStrip.Location = new System.Drawing.Point(0, 813);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 21, 0);
-            this.statusStrip.Size = new System.Drawing.Size(570, 22);
-            this.statusStrip.TabIndex = 6;
-            this.statusStrip.Text = "statusStrip1";
+            statusStrip.Items.AddRange(new ToolStripItem[] { lblConnectionStatus });
+            statusStrip.Location = new Point(0, 808);
+            statusStrip.Name = "statusStrip";
+            statusStrip.Padding = new Padding(1, 0, 22, 0);
+            statusStrip.Size = new Size(571, 22);
+            statusStrip.TabIndex = 6;
+            statusStrip.Text = "statusStrip1";
             // 
             // lblConnectionStatus
             // 
-            this.lblConnectionStatus.Name = "lblConnectionStatus";
-            this.lblConnectionStatus.Size = new System.Drawing.Size(104, 17);
-            this.lblConnectionStatus.Text = "Connection Status";
+            lblConnectionStatus.Name = "lblConnectionStatus";
+            lblConnectionStatus.Size = new Size(104, 17);
+            lblConnectionStatus.Text = "Connection Status";
             // 
             // timerMain
             // 
-            this.timerMain.Tick += new System.EventHandler(this.TimerMain_Tick);
+            timerMain.Tick += TimerMain_Tick;
             // 
             // timerConnection
             // 
-            this.timerConnection.Interval = 1000;
-            this.timerConnection.Tick += new System.EventHandler(this.TimerConnection_Tick);
+            timerConnection.Interval = 1000;
+            timerConnection.Tick += TimerConnection_Tick;
             // 
             // contextMenuStrip1
             // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(61, 4);
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(570, 810);
-            this.tabControl1.TabIndex = 7;
+            tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tabControl1.Location = new Point(0, 0);
+            tabControl1.Margin = new Padding(4, 3, 4, 3);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(571, 810);
+            tabControl1.TabIndex = 7;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Silver;
-            this.ClientSize = new System.Drawing.Size(570, 835);
-            this.ContextMenuStrip = this.contextMenuStrip1;
-            this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.statusStrip);
-            this.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ForeColor = System.Drawing.Color.White;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
-            this.MaximizeBox = false;
-            this.Name = "Form1";
-            this.Text = "SimAddon";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(9F, 18F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Silver;
+            ClientSize = new Size(571, 830);
+            ContextMenuStrip = contextMenuStrip1;
+            Controls.Add(tabControl1);
+            Controls.Add(statusStrip);
+            Font = new Font("Arial", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            ForeColor = Color.White;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(4, 5, 4, 5);
+            MaximizeBox = false;
+            Name = "Form1";
+            Text = "SimAddon";
+            Load += Form1_Load;
+            statusStrip.ResumeLayout(false);
+            statusStrip.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

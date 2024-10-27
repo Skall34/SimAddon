@@ -43,7 +43,7 @@ namespace MeteoPlugin
 
             string metar = await Meteo.getMetar(tbICAO.Text);
             tbMETAR.Text = metar;
-            tbDecodedMETAR.Text = Meteo.decodeMetar(metar);
+            lblDecodedMETAR.Text = Meteo.decodeMetar(metar);
         }
 
         private void MeteoCtrl_Load(object sender, EventArgs e)
@@ -51,9 +51,8 @@ namespace MeteoPlugin
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void tbDecodedMETAR_TextChanged(object sender, EventArgs e)
         {
-            tbDecodedMETAR.Text = Meteo.decodeMetar(tbMETAR.Text);
 
         }
     }

@@ -34,16 +34,11 @@ namespace MeteoPlugin
             tbICAO = new TextBox();
             btnRequest = new Button();
             label2 = new Label();
-            tbDecodedMETAR = new TextBox();
-            pictureBox1 = new PictureBox();
             tbMETAR = new TextBox();
-            splitContainer1 = new SplitContainer();
-            button1 = new Button();
+            statusStrip1 = new StatusStrip();
+            pictureBox1 = new PictureBox();
+            lblDecodedMETAR = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
-            splitContainer1.Panel1.SuspendLayout();
-            splitContainer1.Panel2.SuspendLayout();
-            splitContainer1.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -81,87 +76,62 @@ namespace MeteoPlugin
             label2.TabIndex = 3;
             label2.Text = "METAR : ";
             // 
-            // tbDecodedMETAR
+            // tbMETAR
             // 
-            tbDecodedMETAR.Dock = DockStyle.Fill;
-            tbDecodedMETAR.Location = new Point(0, 0);
-            tbDecodedMETAR.Multiline = true;
-            tbDecodedMETAR.Name = "tbDecodedMETAR";
-            tbDecodedMETAR.ReadOnly = true;
-            tbDecodedMETAR.Size = new Size(774, 219);
-            tbDecodedMETAR.TabIndex = 4;
+            tbMETAR.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbMETAR.Location = new Point(15, 127);
+            tbMETAR.Multiline = true;
+            tbMETAR.Name = "tbMETAR";
+            tbMETAR.ReadOnly = true;
+            tbMETAR.Size = new Size(485, 79);
+            tbMETAR.TabIndex = 7;
+            // 
+            // statusStrip1
+            // 
+            statusStrip1.Location = new Point(0, 560);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(512, 22);
+            statusStrip1.TabIndex = 9;
+            statusStrip1.Text = "statusStrip1";
             // 
             // pictureBox1
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.InitialImage = (Image)resources.GetObject("pictureBox1.InitialImage");
             pictureBox1.Location = new Point(3, 3);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(794, 62);
+            pictureBox1.Size = new Size(506, 62);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.TabIndex = 6;
+            pictureBox1.TabIndex = 10;
             pictureBox1.TabStop = false;
             // 
-            // tbMETAR
+            // lblDecodedMETAR
             // 
-            tbMETAR.Dock = DockStyle.Fill;
-            tbMETAR.Location = new Point(0, 0);
-            tbMETAR.Multiline = true;
-            tbMETAR.Name = "tbMETAR";
-            tbMETAR.ReadOnly = true;
-            tbMETAR.Size = new Size(774, 82);
-            tbMETAR.TabIndex = 7;
-            // 
-            // splitContainer1
-            // 
-            splitContainer1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            splitContainer1.Location = new Point(14, 127);
-            splitContainer1.Name = "splitContainer1";
-            splitContainer1.Orientation = Orientation.Horizontal;
-            // 
-            // splitContainer1.Panel1
-            // 
-            splitContainer1.Panel1.Controls.Add(tbMETAR);
-            // 
-            // splitContainer1.Panel2
-            // 
-            splitContainer1.Panel2.Controls.Add(tbDecodedMETAR);
-            splitContainer1.Size = new Size(774, 305);
-            splitContainer1.SplitterDistance = 82;
-            splitContainer1.TabIndex = 8;
-            // 
-            // button1
-            // 
-            button1.Location = new Point(384, 102);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 9;
-            button1.Text = "re-parse";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            lblDecodedMETAR.AutoSize = true;
+            lblDecodedMETAR.Location = new Point(15, 219);
+            lblDecodedMETAR.Name = "lblDecodedMETAR";
+            lblDecodedMETAR.Size = new Size(16, 15);
+            lblDecodedMETAR.TabIndex = 12;
+            lblDecodedMETAR.Text = "...";
             // 
             // MeteoCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Teal;
-            Controls.Add(button1);
-            Controls.Add(splitContainer1);
+            Controls.Add(lblDecodedMETAR);
             Controls.Add(pictureBox1);
+            Controls.Add(tbMETAR);
+            Controls.Add(statusStrip1);
             Controls.Add(label2);
             Controls.Add(btnRequest);
             Controls.Add(tbICAO);
             Controls.Add(label1);
             Name = "MeteoCtrl";
-            Size = new Size(800, 450);
+            Size = new Size(512, 582);
             Load += MeteoCtrl_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            splitContainer1.Panel1.ResumeLayout(false);
-            splitContainer1.Panel1.PerformLayout();
-            splitContainer1.Panel2.ResumeLayout(false);
-            splitContainer1.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
-            splitContainer1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -174,10 +144,9 @@ namespace MeteoPlugin
         private TextBox tbICAO;
         private Button btnRequest;
         private Label label2;
-        private TextBox tbDecodedMETAR;
-        private PictureBox pictureBox1;
         private TextBox tbMETAR;
-        private SplitContainer splitContainer1;
-        private Button button1;
+        private StatusStrip statusStrip1;
+        private PictureBox pictureBox1;
+        private Label lblDecodedMETAR;
     }
 }
