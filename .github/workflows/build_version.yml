@@ -23,7 +23,7 @@ jobs:
       id: previoustag
       uses: oprypin/find-latest-tag@v1
       with:
-        repository: Skall34/FlightRecorder
+        repository: Skall34/SimAddon
         releases-only: false
     
     - name: Get the version from tag
