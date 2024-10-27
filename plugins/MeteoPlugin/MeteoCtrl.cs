@@ -26,6 +26,7 @@ namespace MeteoPlugin
             TabPage pluginPage = new TabPage();
             pluginPage.Text = getName();
             pluginPage.Controls.Add(this);
+            this.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             this.Dock = DockStyle.Fill;
             pluginPage.Visible = true;
             parent.TabPages.Add(pluginPage);
@@ -52,6 +53,11 @@ namespace MeteoPlugin
         }
 
         private void tbDecodedMETAR_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
         {
 
         }
