@@ -10,7 +10,7 @@
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <OutputPath>..\..\bin\plugins\Bushtrip</OutputPath>
+    <OutputPath>..\..\bin\plugins\1_Bushtrip</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

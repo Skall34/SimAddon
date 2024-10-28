@@ -8,7 +8,7 @@
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <OutputPath>..\..\bin\plugins\FlightRecorder</OutputPath>
+    <OutputPath>..\..\bin\plugins\0_FlightRecorder</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="FlightRecCtrl.cs">
