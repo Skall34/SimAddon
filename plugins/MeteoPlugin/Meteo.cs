@@ -23,6 +23,7 @@ namespace MeteoPlugin
 
             public const string CST_AUTO = "AUTO";
             public const string CST_TEMPO = "TEMPO";
+            public const string CST_BECOMING = "BECMG";
             public const string CST_RMK = "RMK";
 
             public abstract class METARItem
@@ -162,12 +163,22 @@ namespace MeteoPlugin
                 public METARVisibility(string category, string METARPart)
                 {
                     _category = category;
-                    Regex r = new Regex(@"^(?<distance>(\S{1,3})?\d)(?<unit>\S{1,2})?");
+                    Regex r = new Regex(@"^(?<distance>(\d{1,4})|(\d\/\d))(?<unit>\S{1,2})?");
                     Match result = r.Match(METARPart);
                     if (result.Success)
                     {
                         Distance = result.Groups["distance"].Value;
                         Unit = result.Groups["unit"].Value;
+                        if (Unit=="")
+                        {
+                            //in case of no unit, use meters
+                            Unit = "m";
+                        }
+                        if (Distance == "9999")
+                        {
+                            Distance = ">10";
+                            Unit = "km";
+                        }
                     }
                     else
                     {
@@ -697,193 +708,212 @@ namespace MeteoPlugin
             public METARData(string rawMETAR)
             {
                 items=new List<METARItem>();
-
-                string[] parts = rawMETAR.Split(' ');
-                int index = 0;
-
-                METARIcao icao = new METARIcao("Station",parts[(int)index]);
-                items.Add(icao);
-                index++;
-
-                Date = new METARDate("Date/Time",parts[index]);
-                items.Add(Date);
-                index++;
-
-                if (parts[index] == METARData.CST_AUTO)
-                {
-                    index++;
-                }
-
-                Wind = new METARWind("Wind",parts[index]);
-                items.Add(Wind);
-                index++;
-
                 try
                 {
-                    WindVariation = new METARWindVariation("Wind variation",parts[index]);
-                    items.Add(WindVariation);
 
+                    string[] parts = rawMETAR.Split(' ');
+                    int index = 0;
+
+                    METARIcao icao = new METARIcao("Station", parts[(int)index]);
+                    items.Add(icao);
                     index++;
-                } catch (Exception ex) {
-                    //can happen if there is no wind variation
-                }
 
-                try
-                {
-                    Visibility = new METARVisibility("Visibility",parts[index]);
-                    items.Add(Visibility);
+                    Date = new METARDate("Date/Time", parts[index]);
+                    items.Add(Date);
                     index++;
-                }
-                catch (Exception ex)
-                {
-                }
 
-                try
-                {
-                    RunwayVisualRange = new METARRunwayVisualRange("Runway visual range",parts[index]);
-                    items.Add(RunwayVisualRange);
-                    index++;
-                }
-                catch (Exception ex)
-                {
-                }
-
-                try
-                {
-                    PresentWeather = new METARWeather("Weather",parts[index]);
-                    items.Add(PresentWeather);
-                    index++;
-                }
-                catch (Exception ex)
-                {
-                }
-
-                bool cloudlayersDone = false;
-                CloudLayers = new List<METARCloudLayer>();
-                while (!cloudlayersDone)
-                {
-                    try
+                    if (parts[index] == METARData.CST_AUTO)
                     {
-                        METARCloudLayer layer = new METARCloudLayer("Cloud layer",parts[index]);
-                        CloudLayers.Add(layer);
-                        items.Add(layer);
                         index++;
                     }
-                    catch(Exception ex)
-                    {
-                        cloudlayersDone = true;
-                    }
-                }
 
-                try
-                {
-                    Temperature = new METARTemperature("Temperature",parts[index]);
-                    items.Add(Temperature);
+                    Wind = new METARWind("Wind", parts[index]);
+                    items.Add(Wind);
                     index++;
-                }
-                catch (Exception ex)
-                {
-                }
 
-                try
-                {
-                    Altimeter = new METARAltimeter("Altimeter setting",parts[index]);
-                    items.Add(Altimeter);
-                    index++;
-                }
-                catch (Exception ex)
-                {
-                }
-
-                try
-                {
-                    RecentWeather = new METARWeather("Recent weather", parts[index]);
-                    items.Add(RecentWeather);
-                    index++;
-                }
-                catch (Exception ex)
-                {
-                }
-
-                try
-                {
-                    //windshear is particular, there is a space between WS and the windshear definition. ex :WS RWY36
-                    if (parts[index] == "WS")
-                    {
-                        index++; //go to next part for windshear definition
-
-                        WindShear = new METARWindShear("Windshear", parts[index]);
-                        items.Add(WindShear);
-                        index++;
-                    }
-                }catch(Exception ex)
-                {
-                    Logger.WriteLine("bad windshear definition " + parts[index]);
-                }
-
-                //skip until finding TEMPO.
-                while ((index < parts.Length) && (parts[index] != CST_TEMPO))
-                {
-                    index++;
-                }
-                //evenutally we have reached the end of the elements to parse. stop here.
-                if (index == parts.Length)
-                {
-                    return;
-                }
-                //start parsing temporary values.
-                index++;
-
-                //Temporary wind
-                try
-                {
-                    TemporaryWind = new METARWind("Temporary wind",parts[index]);
-                    items.Add(TemporaryWind);
-                    index++;
-                }catch(Exception ex)
-                {
-
-                }
-
-                try
-                {
-                    TemporaryVisibility = new METARVisibility("Temporary visibility", parts[index]);
-                    items.Add(TemporaryVisibility);
-                    index++;
-                }
-                catch (Exception ex)
-                {
-                }
-
-                try
-                {
-                    TemporaryWeather = new METARWeather("Temporary weather", parts[index]);
-                    items.Add(TemporaryWeather);
-                    index++;
-                }
-                catch (Exception ex)
-                {
-                }
-
-                cloudlayersDone = false;
-                TemporaryCloudLayers = new List<METARCloudLayer>();
-                while (!cloudlayersDone)
-                {
                     try
                     {
-                        METARCloudLayer layer = new METARCloudLayer("Temporary cloud layer", parts[index]);
-                        TemporaryCloudLayers.Add(layer);
-                        items.Add(layer);
+                        WindVariation = new METARWindVariation("Wind variation", parts[index]);
+                        items.Add(WindVariation);
+
                         index++;
                     }
                     catch (Exception ex)
                     {
-                        cloudlayersDone = true;
+                        //can happen if there is no wind variation
                     }
+
+                    try
+                    {
+                        Visibility = new METARVisibility("Visibility", parts[index]);
+                        items.Add(Visibility);
+                        index++;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    try
+                    {
+                        RunwayVisualRange = new METARRunwayVisualRange("Runway visual range", parts[index]);
+                        items.Add(RunwayVisualRange);
+                        index++;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    try
+                    {
+                        PresentWeather = new METARWeather("Weather", parts[index]);
+                        items.Add(PresentWeather);
+                        index++;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    bool cloudlayersDone = false;
+                    CloudLayers = new List<METARCloudLayer>();
+                    while (!cloudlayersDone)
+                    {
+                        try
+                        {
+                            METARCloudLayer layer = new METARCloudLayer("Cloud layer", parts[index]);
+                            CloudLayers.Add(layer);
+                            items.Add(layer);
+                            index++;
+                        }
+                        catch (Exception ex)
+                        {
+                            cloudlayersDone = true;
+                        }
+                    }
+
+                    try
+                    {
+                        Temperature = new METARTemperature("Temperature", parts[index]);
+                        items.Add(Temperature);
+                        index++;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    try
+                    {
+                        Altimeter = new METARAltimeter("Altimeter setting", parts[index]);
+                        items.Add(Altimeter);
+                        index++;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    try
+                    {
+                        RecentWeather = new METARWeather("Recent weather", parts[index]);
+                        items.Add(RecentWeather);
+                        index++;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    try
+                    {
+                        //windshear is particular, there is a space between WS and the windshear definition. ex :WS RWY36
+                        if (parts[index] == "WS")
+                        {
+                            index++; //go to next part for windshear definition
+
+                            WindShear = new METARWindShear("Windshear", parts[index]);
+                            items.Add(WindShear);
+                            index++;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteLine("bad windshear definition " + parts[index]);
+                    }
+
+                    //skip until finding TEMPO.
+                    while ((index < parts.Length) && (parts[index] != CST_TEMPO) && ((parts[index] != CST_BECOMING)))
+                    {
+                        index++;
+                    }
+                    if (index == parts.Length)
+                    {
+                        return;
+                    }
+
+                    string nextpart = "";
+                    if (parts[index] == CST_TEMPO)
+                    {
+                        nextpart = "Temporary";
+                    }
+                    if (parts[index] == CST_BECOMING)
+                    {
+                        nextpart = "Becoming";
+                    }
+                    //evenutally we have reached the end of the elements to parse. stop here.
+
+                    //start parsing temporary values.
+                    index++;
+
+                    //Temporary wind
+                    try
+                    {
+                        TemporaryWind = new METARWind(nextpart + " wind", parts[index]);
+                        items.Add(TemporaryWind);
+                        index++;
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
+                    try
+                    {
+                        TemporaryVisibility = new METARVisibility(nextpart + " visibility", parts[index]);
+                        items.Add(TemporaryVisibility);
+                        index++;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    try
+                    {
+                        TemporaryWeather = new METARWeather(nextpart + " weather", parts[index]);
+                        items.Add(TemporaryWeather);
+                        index++;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    cloudlayersDone = false;
+                    TemporaryCloudLayers = new List<METARCloudLayer>();
+                    while (!cloudlayersDone)
+                    {
+                        try
+                        {
+                            METARCloudLayer layer = new METARCloudLayer(nextpart + " cloud layer", parts[index]);
+                            TemporaryCloudLayers.Add(layer);
+                            items.Add(layer);
+                            index++;
+                        }
+                        catch (Exception ex)
+                        {
+                            cloudlayersDone = true;
+                        }
+                    }
+                }catch(Exception ex)
+                {
+                    Logger.WriteLine("Error while decoding metar " + rawMETAR);
                 }
-
             }
-
         }
 
         private static readonly HttpClient httpClient = new HttpClient();

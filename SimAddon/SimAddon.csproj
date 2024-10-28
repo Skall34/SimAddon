@@ -8,7 +8,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>flightrec.ico</ApplicationIcon>
-    <AssemblyVersion>1.2.3.4</AssemblyVersion>
+    <AssemblyVersion>9.9.9.9</AssemblyVersion>
     <SignAssembly>True</SignAssembly>
     <DelaySign>False</DelaySign>
     <AssemblyOriginatorKeyFile>..\keys\skywings.snk</AssemblyOriginatorKeyFile>

@@ -39,6 +39,9 @@ public partial class LittleNavmap {
             this.itemField = value;
         }
     }
+
+    [JsonProperty("CurrentStep")]
+    public uint  CurrentStep { get; set; }
 }
 
 /// <remarks/>

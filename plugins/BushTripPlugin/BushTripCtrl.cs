@@ -14,6 +14,8 @@ namespace BushTripPlugin
         private uint waypointIndex;
         private LittleNavmap? flightPlan;
 
+        private string filename;
+
         public BushTripCtrl()
         {
             InitializeComponent();
@@ -70,6 +72,10 @@ namespace BushTripPlugin
                     if (waypointIndex < flightPlan.Item.Waypoints.Count())
                     {
                         waypointIndex++;
+                        flightPlan.CurrentStep = waypointIndex;
+                        //save the flightplan with the current status, for a potential next reload (not to restart the whole flight)
+                        saveFlightPlan();
+                        
                         refreshFlightBook();
                     }
                     else
@@ -150,15 +156,22 @@ namespace BushTripPlugin
             if (openFileDialog.ShowDialog(this) == DialogResult.OK)
             {
                 string filePath = openFileDialog.FileName;
+                filename = filePath;
+                waypointIndex = 0;
+
                 if (filePath.EndsWith(".fplan"))
                 {
                     string json = File.ReadAllText(filePath);
                     flightPlan = JsonConvert.DeserializeObject<LittleNavmap>(json);
+                    waypointIndex = flightPlan.CurrentStep;
                     Console.WriteLine("Fichier fplan chargé avec succès !");
                 }
 
                 if (filePath.EndsWith(".lnmpln"))
                 {
+                    //set the save file name to store fileplan & current position;
+                    filename = filePath.Replace(".lnmpln", ".fplan");
+                    
                     // Remplacez 'FlightPlan' par la classe générée à partir du XSD
                     XmlSerializer serializer = new XmlSerializer(typeof(LittleNavmap));
 
@@ -167,9 +180,9 @@ namespace BushTripPlugin
                     {
                         flightPlan = (LittleNavmap)serializer.Deserialize(fileStream);
                     }
+                    flightPlan.CurrentStep = waypointIndex;
                     Console.WriteLine("Fichier XML chargé avec succès !");
                 }
-                waypointIndex = 0;
                 refreshFlightBook();
                 double distance = computeFlightLength();
                 lblDistanceTotale.Text = "Total navigation distance :" + distance.ToString() + " miles";
@@ -184,18 +197,23 @@ namespace BushTripPlugin
 
         }
 
+        private void saveFlightPlan()
+        {
+            string json = JsonConvert.SerializeObject(flightPlan, Formatting.Indented);
+            File.WriteAllText(filename, json);
+        }
+
         private void btnSaveFlightPlan_Click(object sender, EventArgs e)
         {
             if (flightPlan != null)
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.FileName = "noname.fplan";
+                saveFileDialog.FileName = filename;
                 saveFileDialog.Filter = "flight plan|*.fplan";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    string json = JsonConvert.SerializeObject(flightPlan, Formatting.Indented);
-                    File.WriteAllText(saveFileDialog.FileName, json);
-
+                    filename = saveFileDialog.FileName;
+                    saveFlightPlan();
                 }
             }
         }

@@ -8,12 +8,14 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using SimAddonLogger;
+using System.Reflection;
 
 namespace FlightRecPlugin
 {
     public partial class FlightRecCtrl : UserControl,ISimAddonPluginCtrl
     {
         const string name = "FlightRecorder";
+        Version? version;
 
         private bool atLeastOneEngineFiring;
         private int startDisabled; // if startDisabled==0, then start is possible, if not, start is disabled. each 100ms, the counter will be decremented
@@ -52,7 +54,8 @@ namespace FlightRecPlugin
             InitializeComponent();
 
             Logger.WriteLine("Starting...");
-
+            Assembly? assembly = Assembly.GetEntryAssembly();
+            version = assembly.GetName().Version;
             //utilisation de la nouvelle classe de combobox item pour mettre des elements non selectionables
             this.cbImmat.ValueMember = "Immat";
             this.cbImmat.DisplayMember = "Immat";
@@ -443,7 +446,7 @@ namespace FlightRecPlugin
             {
                 tbCommentaires.Text = comment;
             }
-            //tbCommentaires.Text += " (F.R. V" + version.ToString(3) + ")";
+            tbCommentaires.Text += " (F.R. V" + version.ToString(3) + ")";
 
             int note = flightPerfs.getFlightNote();
             cbNote.Text = note.ToString();
