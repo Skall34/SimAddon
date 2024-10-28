@@ -5,6 +5,7 @@ using SimAddonPlugin;
 //using System.Text.Json;
 using System;
 using Newtonsoft.Json;
+using SimAddonLogger;
 
 namespace BushTripPlugin
 {
@@ -15,6 +16,7 @@ namespace BushTripPlugin
         private LittleNavmap? flightPlan;
 
         private string filename;
+        private double declinaison;
 
         public BushTripCtrl()
         {
@@ -44,10 +46,11 @@ namespace BushTripPlugin
             parent.ResumeLayout();
         }
 
-        public void updateSituation(situation data)
+        public async void updateSituation(situation data)
         {
             double distanceToNextWP = 0;
             double routeToWP = 0;
+
             if (flightPlan != null)
             {
                 double wpLat = flightPlan.Item.Waypoints[waypointIndex + 1].Pos.Lat;
@@ -55,7 +58,7 @@ namespace BushTripPlugin
 
                 distanceToNextWP = NavigationHelper.GetDistance(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon);
 
-                routeToWP = NavigationHelper.GetNavRoute(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon);
+                routeToWP = await NavigationHelper.GetNavRouteAsync(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon,declinaison);
 
                 if (waypointIndex < flightPlan.Item.Waypoints.Count())
                 {
@@ -86,10 +89,11 @@ namespace BushTripPlugin
             }
         }
 
-        public void refreshFlightBook()
+        public async void refreshFlightBook()
         {
             if (flightPlan != null)
             {
+
                 lvWaypoints.Items.Clear();
                 tbComment.Text = "";
                 // Vous pouvez maintenant accéder aux propriétés de l'objet flightPlan
@@ -107,7 +111,7 @@ namespace BushTripPlugin
                     double distance = 0;
                     if (nextwp != null)
                     {
-                        route = NavigationHelper.GetNavRoute(wp.Pos.Lat, wp.Pos.Lon, nextwp.Pos.Lat, nextwp.Pos.Lon);
+                        route = await NavigationHelper.GetNavRouteAsync(wp.Pos.Lat, wp.Pos.Lon, nextwp.Pos.Lat, nextwp.Pos.Lon,declinaison);
                         distance = NavigationHelper.GetDistance(wp.Pos.Lat, wp.Pos.Lon, nextwp.Pos.Lat, nextwp.Pos.Lon);
                     }
                     if (wp.Name != string.Empty)
@@ -148,7 +152,7 @@ namespace BushTripPlugin
             return result;
         }
 
-        private void btnImportFlightPLan_Click(object sender, EventArgs e)
+        private async void btnImportFlightPLan_Click(object sender, EventArgs e)
         {
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -183,6 +187,15 @@ namespace BushTripPlugin
                     flightPlan.CurrentStep = waypointIndex;
                     Console.WriteLine("Fichier XML chargé avec succès !");
                 }
+                //recupére la declinaison magnétique du premier point du plan de vol
+                try
+                {
+                    declinaison = (double)await NavigationHelper.GetMagneticDeclinaison(flightPlan.Item.Waypoints[0].Pos.Lat, flightPlan.Item.Waypoints[0].Pos.Lon);
+                }catch(Exception ex)
+                {
+                    Logger.WriteLine("error when getting magnetic declinaison :" + ex.Message);
+                }
+
                 refreshFlightBook();
                 double distance = computeFlightLength();
                 lblDistanceTotale.Text = "Total navigation distance :" + distance.ToString() + " miles";
