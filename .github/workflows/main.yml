@@ -48,13 +48,13 @@ jobs:
       run: dotnet publish SimAddon/SimAddon.csproj --configuration Release --output publish_output
 
     - name: publish FlightRec plugin
-      run: dotnet publish plugins/FlightRecPlugin/FlightRecPlugin.csproj --configuration Release --output publish_output\plugins\FlightRecorder
+      run: dotnet publish plugins/FlightRecPlugin/FlightRecPlugin.csproj --configuration Release --output publish_output\plugins\0_FlightRecorder
 
     - name: publish bushtrip plugin
-      run: dotnet publish plugins/BushTripPlugin/BushTripPlugin.csproj --configuration Release --output publish_output\plugins\BushTrip
+      run: dotnet publish plugins/BushTripPlugin/BushTripPlugin.csproj --configuration Release --output publish_output\plugins\1_BushTrip
 
     - name: publish meteo plugin
-      run: dotnet publish plugins/MeteoPlugin/MeteoPlugin.csproj --configuration Release --output publish_output\plugins\Meteo
+      run: dotnet publish plugins/MeteoPlugin/MeteoPlugin.csproj --configuration Release --output publish_output\plugins\2_Meteo
 
 
     - name: Upload zip artifact
