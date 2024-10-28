@@ -276,7 +276,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SimAddon"
         "ProductCode" = "8:{CB70CE82-ECCA-4349-9F94-B78D76148764}"
-        "PackageCode" = "8:{52C5A924-E6DF-4773-89AE-AD4ACE2C67C1}"
+        "PackageCode" = "8:{187A7297-6DEC-48B7-971A-070AD0FF4DFE}"
         "UpgradeCode" = "8:{2ECD94C2-9C86-4988-A257-8DFFDD363624}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
@@ -396,6 +396,34 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_802A551C920D463C8050D15BB23C5B74"
+            {
+            "Name" = "8:SimAddon"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_F7448C5FE4BE4EA686A5629DB4DA7E5C"
+            "Folder" = "8:_4FA25EDB941F4F59B0E1A49165775363"
+            "WorkingFolder" = "8:_83CB230A9F0B4230A866853DBDFEAAFF"
+            "Icon" = "8:_0738D1574CBA4322934CC8803DFABAF4"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D36712AE8FBB4C9092102DCE7D161AC4"
+            {
+            "Name" = "8:SimAddon"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_F7448C5FE4BE4EA686A5629DB4DA7E5C"
+            "Folder" = "8:_5D1E5F2247984C28B5FB53D5CE60B3B8"
+            "WorkingFolder" = "8:_83CB230A9F0B4230A866853DBDFEAAFF"
+            "Icon" = "8:_0738D1574CBA4322934CC8803DFABAF4"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
@@ -853,7 +881,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D362E65A94224699893EDB8127D5F4DC"
             {
-            "SourcePath" = "8:..\\plugins\\FlightRecPlugin\\obj\\Debug\\net8.0-windows\\FlightRecPlugin.dll"
+            "SourcePath" = "8:..\\plugins\\FlightRecPlugin\\obj\\Debug\\FlightRecPlugin.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_2686F64D265E4483B6DE8334327FBEE8"
