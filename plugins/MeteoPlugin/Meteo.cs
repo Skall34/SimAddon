@@ -939,7 +939,7 @@ namespace MeteoPlugin
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de la récupération du METAR : {ex.Message}");
+                Logger.WriteLine($"Erreur lors de la récupération du METAR : {ex.Message}");
                 return null;
             }
         }
@@ -950,16 +950,19 @@ namespace MeteoPlugin
 
             try
             {
-                METARData data = new METARData(rawMETAR);
-                foreach (METARItem item in data.items)
+                if (rawMETAR != string.Empty)
                 {
-                    try
+                    METARData data = new METARData(rawMETAR);
+                    foreach (METARItem item in data.items)
                     {
-                        decoded += item.ToString() + Environment.NewLine;
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WriteLine(ex.Message);
+                        try
+                        {
+                            decoded += item.ToString() + Environment.NewLine;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.WriteLine(ex.Message);
+                        }
                     }
                 }
 

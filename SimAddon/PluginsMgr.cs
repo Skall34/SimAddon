@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using SimAddonLogger;
 using SimAddonPlugin;
 namespace SimAddon
 {
@@ -41,7 +42,7 @@ namespace SimAddon
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors du chargement des plugins : {ex.Message}");
+                Logger.WriteLine($"Erreur lors du chargement des plugins : {ex.Message}");
             }
         }
 
@@ -74,29 +75,16 @@ namespace SimAddon
                                     {
                                         //just ignore, that's not a plugin file
                                     }
-                                    // Exemple : appeler une méthode publique de la classe
-                                    //MethodInfo method = pluginType.GetMethod("init"); // Remplacer par le nom de la méthode que tu veux appeler
-
-                                    //if (method != null)
-                                    //{
-                                    //    // Appeler la méthode (sans paramètres ici, tu peux ajouter des paramètres si nécessaire)
-                                    //    method.Invoke(pluginInstance, null);
-                                    //    Console.WriteLine("Méthode appelée avec succès.");
-                                    //}
-                                    //else
-                                    //{
-                                    //    Console.WriteLine("Méthode non trouvée dans la classe spécifiée.");
-                                    //}
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Type (classe) non trouvé dans la DLL" + item);
+                                    //Logger.WriteLine("Type (classe) non trouvé dans la DLL" + item);
                                 }
                             }
                         }
                         else
                         {
-                            Console.WriteLine("pas de type exporté dans la dll " + item);
+                            //Logger.WriteLine("pas de type exporté dans la dll " + item);
 
                         }
                     }

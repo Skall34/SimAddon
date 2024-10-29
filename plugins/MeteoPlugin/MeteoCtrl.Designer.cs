@@ -57,10 +57,14 @@ namespace MeteoPlugin
             // 
             // tbICAO
             // 
+            tbICAO.CharacterCasing = CharacterCasing.Upper;
             tbICAO.Location = new Point(153, 3);
             tbICAO.Name = "tbICAO";
+            tbICAO.RightToLeft = RightToLeft.No;
             tbICAO.Size = new Size(94, 23);
             tbICAO.TabIndex = 1;
+            tbICAO.TextChanged += tbICAO_TextChanged;
+            tbICAO.KeyPress += tbICAO_KeyPress;
             // 
             // btnRequest
             // 

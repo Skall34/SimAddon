@@ -765,23 +765,31 @@ namespace FlightRecPlugin
                     endIcao = tbEndICAO.Text
                 };
 
-                int result = await(data.UpdatePlaneStatus(isFlying, planedata));
-                if (0 != result)
+                if (data != null)
                 {
-                    //si tout va bien...
-                    if (isFlying == 1)
+
+                    int result = await (data.UpdatePlaneStatus(isFlying, planedata));
+                    if (0 != result)
                     {
-                        _planeReserved = true;
+                        //si tout va bien...
+                        if (isFlying == 1)
+                        {
+                            _planeReserved = true;
+                        }
+                        else
+                        {
+                            _planeReserved = false;
+                        }
                     }
                     else
                     {
-                        _planeReserved = false;
+                        //si tout va mal ...
+
                     }
                 }
                 else
                 {
-                    //si tout va mal ...
-
+                    //data is null ! we're not connected to a flight simulator
                 }
             }
             catch (Exception ex)

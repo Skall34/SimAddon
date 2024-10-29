@@ -64,9 +64,9 @@
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { tsGlobalStatus });
-            statusStrip1.Location = new Point(0, 428);
+            statusStrip1.Location = new Point(0, 468);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(800, 22);
+            statusStrip1.Size = new Size(521, 22);
             statusStrip1.SizingGrip = false;
             statusStrip1.TabIndex = 2;
             statusStrip1.Text = "statusStrip1";
@@ -92,8 +92,8 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(tbComment);
-            splitContainer1.Size = new Size(794, 369);
-            splitContainer1.SplitterDistance = 160;
+            splitContainer1.Size = new Size(515, 409);
+            splitContainer1.SplitterDistance = 177;
             splitContainer1.TabIndex = 3;
             // 
             // lvWaypoints
@@ -105,7 +105,7 @@
             lvWaypoints.GridLines = true;
             lvWaypoints.Location = new Point(0, 0);
             lvWaypoints.Name = "lvWaypoints";
-            lvWaypoints.Size = new Size(794, 160);
+            lvWaypoints.Size = new Size(515, 177);
             lvWaypoints.SmallImageList = imageList1;
             lvWaypoints.TabIndex = 2;
             lvWaypoints.UseCompatibleStateImageBehavior = false;
@@ -150,7 +150,7 @@
             tbComment.Location = new Point(0, 0);
             tbComment.Multiline = true;
             tbComment.Name = "tbComment";
-            tbComment.Size = new Size(794, 205);
+            tbComment.Size = new Size(515, 228);
             tbComment.TabIndex = 0;
             // 
             // lblDistanceTotale
@@ -166,7 +166,7 @@
             // btnSaveFlightPlan
             // 
             btnSaveFlightPlan.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnSaveFlightPlan.Location = new Point(689, 12);
+            btnSaveFlightPlan.Location = new Point(410, 12);
             btnSaveFlightPlan.Name = "btnSaveFlightPlan";
             btnSaveFlightPlan.Size = new Size(108, 38);
             btnSaveFlightPlan.TabIndex = 6;
@@ -196,7 +196,7 @@
             Controls.Add(statusStrip1);
             Controls.Add(btnImportFlightPLan);
             Name = "BushTripCtrl";
-            Size = new Size(800, 450);
+            Size = new Size(521, 490);
             Load += BushTripCtrl_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();

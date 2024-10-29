@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using SimAddonLogger;
 
 namespace SimDataManager
 {
@@ -144,13 +145,13 @@ namespace SimDataManager
                     }
                     else
                     {
-                        Console.WriteLine($"Erreur lors de la requête : {response.StatusCode}");
+                        Logger.WriteLine($"Erreur lors de la requête : {response.StatusCode}");
                         return null;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Exception : {ex.Message}");
+                    Logger.WriteLine($"Exception : {ex.Message}");
                     return null;
                 }
             }

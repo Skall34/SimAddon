@@ -22,6 +22,8 @@ namespace BushTripPlugin
         {
             InitializeComponent();
             waypointIndex = 0;
+            btnReset.Enabled = false;
+            btnSaveFlightPlan.Enabled = false;
         }
 
         public string getName()
@@ -170,7 +172,7 @@ namespace BushTripPlugin
                     string json = File.ReadAllText(filePath);
                     flightPlan = JsonConvert.DeserializeObject<LittleNavmap>(json);
                     waypointIndex = flightPlan.CurrentStep;
-                    Console.WriteLine("Fichier fplan chargé avec succès !");
+                    Logger.WriteLine("Fichier fplan chargé avec succès !");
                 }
 
                 if (filePath.EndsWith(".lnmpln"))
@@ -187,7 +189,7 @@ namespace BushTripPlugin
                         flightPlan = (LittleNavmap)serializer.Deserialize(fileStream);
                     }
                     flightPlan.CurrentStep = waypointIndex;
-                    Console.WriteLine("Fichier XML chargé avec succès !");
+                    Logger.WriteLine("Fichier XML chargé avec succès !");
                 }
                 //recupére la declinaison magnétique du premier point du plan de vol
                 try
@@ -201,8 +203,10 @@ namespace BushTripPlugin
 
                 refreshFlightBook();
                 double distance = computeFlightLength();
-                lblDistanceTotale.Text = "Total navigation distance :" + distance.ToString() + " miles";
+                lblDistanceTotale.Text = "Total distance :" + distance.ToString() + " miles";
                 tsGlobalStatus.Text = "Flight plan loaded";
+                btnReset.Enabled = true;
+                btnSaveFlightPlan.Enabled = true;
 
             }
 
@@ -255,12 +259,15 @@ namespace BushTripPlugin
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //reset waypoint index;
-            waypointIndex = 0;
-            flightPlan.CurrentStep = waypointIndex;
-            //save the current status in the flight plan
-            saveFlightPlan();
-            refreshFlightBook();
+            if (flightPlan != null)
+            {
+                //reset waypoint index;
+                waypointIndex = 0;
+                flightPlan.CurrentStep = waypointIndex;
+                //save the current status in the flight plan
+                saveFlightPlan();
+                refreshFlightBook();
+            }
         }
     }
 }
