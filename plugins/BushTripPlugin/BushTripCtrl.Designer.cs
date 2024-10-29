@@ -43,6 +43,7 @@
             tbComment = new TextBox();
             lblDistanceTotale = new Label();
             btnSaveFlightPlan = new Button();
+            btnReset = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -155,11 +156,12 @@
             // lblDistanceTotale
             // 
             lblDistanceTotale.AutoSize = true;
-            lblDistanceTotale.Location = new Point(117, 24);
+            lblDistanceTotale.Location = new Point(231, 24);
             lblDistanceTotale.Name = "lblDistanceTotale";
             lblDistanceTotale.Size = new Size(99, 15);
             lblDistanceTotale.TabIndex = 5;
             lblDistanceTotale.Text = "Load a flight plan";
+            lblDistanceTotale.Click += lblDistanceTotale_Click;
             // 
             // btnSaveFlightPlan
             // 
@@ -172,11 +174,22 @@
             btnSaveFlightPlan.UseVisualStyleBackColor = true;
             btnSaveFlightPlan.Click += btnSaveFlightPlan_Click;
             // 
+            // btnReset
+            // 
+            btnReset.Location = new Point(117, 12);
+            btnReset.Name = "btnReset";
+            btnReset.Size = new Size(108, 38);
+            btnReset.TabIndex = 7;
+            btnReset.Text = "Restart trip";
+            btnReset.UseVisualStyleBackColor = true;
+            btnReset.Click += button1_Click;
+            // 
             // BushTripCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(128, 64, 0);
+            Controls.Add(btnReset);
             Controls.Add(btnSaveFlightPlan);
             Controls.Add(lblDistanceTotale);
             Controls.Add(splitContainer1);
@@ -211,5 +224,6 @@
         private ColumnHeader ColName;
         private Button btnSaveFlightPlan;
         private ImageList imageList1;
+        private Button btnReset;
     }
 }

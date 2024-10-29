@@ -155,6 +155,7 @@ namespace SimAddon
 
                 //tell the plugins to update
                 situation currentStatus=new situation();
+                currentStatus.magVariation = _simData.GetMagVariation();
                 currentStatus.readyToFly = _simData.GetReadyToFly();
                 currentStatus.airSpeed = _simData.GetAirSpeed();
                 currentStatus.crashedFlag = _simData.GetCrashedFlag();

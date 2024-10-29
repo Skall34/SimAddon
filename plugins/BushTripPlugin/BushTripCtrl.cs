@@ -50,18 +50,20 @@ namespace BushTripPlugin
         {
             double distanceToNextWP = 0;
             double routeToWP = 0;
+            double magVariation = data.magVariation;
 
             if (flightPlan != null)
             {
-                double wpLat = flightPlan.Item.Waypoints[waypointIndex + 1].Pos.Lat;
-                double wpLon = flightPlan.Item.Waypoints[waypointIndex + 1].Pos.Lon;
-
-                distanceToNextWP = NavigationHelper.GetDistance(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon);
-
-                routeToWP = await NavigationHelper.GetNavRouteAsync(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon,declinaison);
-
-                if (waypointIndex < flightPlan.Item.Waypoints.Count())
+                //s'il y a encore au moins un WP avant la fin
+                if (waypointIndex+1 < flightPlan.Item.Waypoints.Count())
                 {
+                    double wpLat = flightPlan.Item.Waypoints[waypointIndex + 1].Pos.Lat;
+                    double wpLon = flightPlan.Item.Waypoints[waypointIndex + 1].Pos.Lon;
+
+                    distanceToNextWP = NavigationHelper.GetDistance(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon);
+
+                    routeToWP = await NavigationHelper.GetNavRouteAsync(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon, magVariation);
+
                     tsGlobalStatus.Text = "Next waypoint : Route : " + routeToWP.ToString() + "  Distance : " + distanceToNextWP.ToString();
                 }
                 else
@@ -72,13 +74,13 @@ namespace BushTripPlugin
                 //si on est a moins de 3 miles du wp, on affiche le segment suivant.
                 if (distanceToNextWP < 3)
                 {
-                    if (waypointIndex < flightPlan.Item.Waypoints.Count())
+                    if (waypointIndex < flightPlan.Item.Waypoints.Count()-1)
                     {
                         waypointIndex++;
                         flightPlan.CurrentStep = waypointIndex;
                         //save the flightplan with the current status, for a potential next reload (not to restart the whole flight)
                         saveFlightPlan();
-                        
+
                         refreshFlightBook();
                     }
                     else
@@ -97,7 +99,7 @@ namespace BushTripPlugin
                 lvWaypoints.Items.Clear();
                 tbComment.Text = "";
                 // Vous pouvez maintenant accéder aux propriétés de l'objet flightPlan
-                for (int i = 0; i < waypointIndex + 1; i++)
+                for (int i = 0; i <= waypointIndex; i++)
                 {
                     LittleNavmapFlightplanWaypoint? wp = flightPlan.Item.Waypoints[i];
                     LittleNavmapFlightplanWaypoint? nextwp = null;
@@ -111,7 +113,7 @@ namespace BushTripPlugin
                     double distance = 0;
                     if (nextwp != null)
                     {
-                        route = await NavigationHelper.GetNavRouteAsync(wp.Pos.Lat, wp.Pos.Lon, nextwp.Pos.Lat, nextwp.Pos.Lon,declinaison);
+                        route = await NavigationHelper.GetNavRouteAsync(wp.Pos.Lat, wp.Pos.Lon, nextwp.Pos.Lat, nextwp.Pos.Lon, declinaison);
                         distance = NavigationHelper.GetDistance(wp.Pos.Lat, wp.Pos.Lon, nextwp.Pos.Lat, nextwp.Pos.Lon);
                     }
                     if (wp.Name != string.Empty)
@@ -122,7 +124,7 @@ namespace BushTripPlugin
                     item.ImageKey = wp.Type;
 
                     lvWaypoints.Items.Add(item);
-                    tbComment.Text += flightPlan.Item.Waypoints[i].Comment + Environment.NewLine+"-------------------"+Environment.NewLine;
+                    tbComment.Text += flightPlan.Item.Waypoints[i].Comment + Environment.NewLine + "-------------------" + Environment.NewLine;
                 }
             }
 
@@ -175,7 +177,7 @@ namespace BushTripPlugin
                 {
                     //set the save file name to store fileplan & current position;
                     filename = filePath.Replace(".lnmpln", ".fplan");
-                    
+
                     // Remplacez 'FlightPlan' par la classe générée à partir du XSD
                     XmlSerializer serializer = new XmlSerializer(typeof(LittleNavmap));
 
@@ -191,7 +193,8 @@ namespace BushTripPlugin
                 try
                 {
                     declinaison = (double)await NavigationHelper.GetMagneticDeclinaison(flightPlan.Item.Waypoints[0].Pos.Lat, flightPlan.Item.Waypoints[0].Pos.Lon);
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Logger.WriteLine("error when getting magnetic declinaison :" + ex.Message);
                 }
@@ -238,11 +241,26 @@ namespace BushTripPlugin
 
         private void lvWaypoints_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (flightPlan!=null)
+            if (flightPlan != null)
             {
-                waypointIndex = (uint)flightPlan.Item.Waypoints.Count()-1;
+                waypointIndex = (uint)flightPlan.Item.Waypoints.Count() - 1;
                 refreshFlightBook();
             }
+        }
+
+        private void lblDistanceTotale_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //reset waypoint index;
+            waypointIndex = 0;
+            flightPlan.CurrentStep = waypointIndex;
+            //save the current status in the flight plan
+            saveFlightPlan();
+            refreshFlightBook();
         }
     }
 }

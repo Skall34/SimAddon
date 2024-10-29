@@ -74,6 +74,8 @@ namespace SimDataManager
         private readonly Offset<uint> initialized1 = new Offset<uint>(0x04D2);
         private readonly Offset<uint> initialized2 = new Offset<uint>(0x04D4);
 
+        private readonly Offset<short> magVariation = new Offset<short>(0x02A0);
+
         private readonly Offset<uint> airspeed = new Offset<uint>(0x02BC);
         private readonly Offset<string> startSituation = new Offset<string>(0x0024, 256);
         private readonly Offset<uint> avionicsMaster = new Offset<uint>(0x2E80);
@@ -343,6 +345,8 @@ namespace SimDataManager
             }
             return result;
         }
+
+        public double GetMagVariation() => ((double)this.magVariation.Value) * 360 / 65536;
 
         public double GetAirSpeed() => (double)this.airspeed.Value / 128d;
 

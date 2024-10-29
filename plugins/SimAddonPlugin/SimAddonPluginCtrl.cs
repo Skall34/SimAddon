@@ -38,7 +38,7 @@ namespace SimAddonPlugin
 
         public double verticalAcceleration { get; set; }
 
-
+        public double magVariation { get; set; }
 
         public  PositionSnapshot position { get; set; }
 
