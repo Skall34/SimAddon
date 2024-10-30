@@ -965,7 +965,10 @@ namespace MeteoPlugin
                         }
                     }
                 }
-
+                else
+                {
+                    decoded = "No metar information available";
+                }
             }
             catch (Exception ex)
             {
