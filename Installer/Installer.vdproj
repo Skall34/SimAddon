@@ -224,7 +224,7 @@
                         {
                             "{9EF0B969-E518-4E46-987F-47570745A589}:_2686F64D265E4483B6DE8334327FBEE8"
                             {
-                            "Name" = "8:FlightRec"
+                            "Name" = "8:0_FlightRec"
                             "AlwaysCreate" = "11:FALSE"
                             "Condition" = "8:"
                             "Transitive" = "11:FALSE"
@@ -235,7 +235,7 @@
                             }
                             "{9EF0B969-E518-4E46-987F-47570745A589}:_A444C94218AE4148A091B2A842781843"
                             {
-                            "Name" = "8:Bushtrip"
+                            "Name" = "8:1_Bushtrip"
                             "AlwaysCreate" = "11:FALSE"
                             "Condition" = "8:"
                             "Transitive" = "11:FALSE"
@@ -246,7 +246,7 @@
                             }
                             "{9EF0B969-E518-4E46-987F-47570745A589}:_CA06358F1BFD4522BD048CCA0CA261FC"
                             {
-                            "Name" = "8:Meteo"
+                            "Name" = "8:2_Meteo"
                             "AlwaysCreate" = "11:FALSE"
                             "Condition" = "8:"
                             "Transitive" = "11:FALSE"
