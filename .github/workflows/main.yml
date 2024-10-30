@@ -49,11 +49,11 @@ jobs:
     - name: publish meteo plugin
       run: dotnet publish plugins/MeteoPlugin/MeteoPlugin.csproj --configuration Release --output publish_output\plugins\2_Meteo
 
-    - name: Setup VS Dev Environment
-      uses: seanmiddleditch/gha-setup-vsdevenv@v4
+    #- name: Setup VS Dev Environment
+    #  uses: seanmiddleditch/gha-setup-vsdevenv@v4
       
-    - name: Build vdproj installer
-      run: devenv installer.vdproj /build release
+    #- name: Build vdproj installer
+    #  run: devenv installer.vdproj /build release
 
     - name: Upload zip artifact
       uses: actions/upload-artifact@v4.4.3
@@ -61,8 +61,8 @@ jobs:
         name: SimAddon_zip
         path: publish_output/*
 
-    - name: Upload setup
-      uses: actions/upload-artifact@v4.4.3
-      with:
-        name: SimAddon_setup
-        path: setup/*
+    #- name: Upload setup
+    #  uses: actions/upload-artifact@v4.4.3
+    #  with:
+    #    name: SimAddon_setup
+    #    path: setup/*
