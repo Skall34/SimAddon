@@ -98,8 +98,8 @@ jobs:
         name: SimAddon_${{ steps.previoustag.outputs.tag }}
         path: publish_output
 
-#    - name: Upload setup
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: flight_recorder_setup_${{ steps.previoustag.outputs.tag }}
-#        path: Build/flight_recorder_setup_${{ steps.previoustag.outputs.tag }}.exe
+    - name: Upload setup
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: flight_recorder_setup_${{ steps.previoustag.outputs.tag }}
+        path: setup/*.*
