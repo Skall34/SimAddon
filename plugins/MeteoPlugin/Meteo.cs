@@ -692,7 +692,7 @@ namespace MeteoPlugin
             public METARVisibility Visibility { get; set; }
             public METARVisibility TemporaryVisibility { get; set; }
             public METARRunwayVisualRange RunwayVisualRange { get; set; }
-            public METARWeather PresentWeather { get; set; }
+            public List<METARWeather> PresentWeather { get; set; }
             public METARWeather TemporaryWeather { get; set; }
 
             public List<METARCloudLayer> CloudLayers { get; set; }
@@ -763,14 +763,22 @@ namespace MeteoPlugin
                     {
                     }
 
-                    try
+                    bool weatherdone = false;
+                    PresentWeather = new List<METARWeather>();
+                    while (!weatherdone)
                     {
-                        PresentWeather = new METARWeather("Weather", parts[index]);
-                        items.Add(PresentWeather);
-                        index++;
-                    }
-                    catch (Exception ex)
-                    {
+                        try
+                        {
+                            METARWeather PresentWeatherItem = new METARWeather("Weather", parts[index]);
+                            PresentWeather.Add(PresentWeatherItem);
+                            items.Add(PresentWeatherItem);
+                            index++;
+                        }
+                        catch (Exception ex)
+                        {
+                            //if we can't decode that as weather when we're done with weather decoding. 
+                            weatherdone = true;
+                        }
                     }
 
                     bool cloudlayersDone = false;
