@@ -100,4 +100,4 @@ jobs:
       uses: actions/upload-artifact@v4.4.3
       with:
         name: SimAddon_${{ steps.previoustag.outputs.tag }}
-        path: installer/Relase/*.*
+        path: setup/*.*
