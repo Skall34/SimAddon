@@ -101,6 +101,7 @@ namespace SimAddon
             MaximizeBox = false;
             Name = "Form1";
             Text = "SimAddon";
+            FormClosing += FrmMain_FormClosing;
             Load += Form1_Load;
             statusStrip.ResumeLayout(false);
             statusStrip.PerformLayout();

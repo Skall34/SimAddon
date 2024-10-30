@@ -15,6 +15,11 @@ namespace SimAddonPlugin
           void registerPage(TabControl parent);
 
           void updateSituation(situation data);
+
+        //request to terminate to the plugin. 
+        //must return true, if terminate can be done OK,
+        //or false if termination should be canceled
+          void FormClosing(object sender, FormClosingEventArgs e);
     }
 
     public  class situation

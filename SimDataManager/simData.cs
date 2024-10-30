@@ -275,6 +275,11 @@ namespace SimDataManager
             payloadServices.RefreshData();
         }
 
+        public void CloseConnection()
+        {
+            FSUIPCConnection.Close();
+        }
+
         public void Refresh()
         {
             try

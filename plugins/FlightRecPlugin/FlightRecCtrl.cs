@@ -113,6 +113,52 @@ namespace FlightRecPlugin
             RemplirComboMissions();
         }
 
+        public void FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //need to ask for save before close
+            string message = "Confirm close ACARS ?";
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                if (this.btnSubmit.Enabled == true)
+                {
+                    //Le vol n'a PAS été envoyé
+                    message += "\r\n !!! Le vol n'a pas été envoyé !!!";
+                }
+
+                if (e.CloseReason == CloseReason.UserClosing)
+                {
+                    DialogResult res = MessageBox.Show(message, "Flight Recorder", MessageBoxButtons.OKCancel);
+                    if (res == DialogResult.OK)
+                    {
+                        if (atLeastOneEngineFiring)
+                        {
+                            this.Cursor = Cursors.WaitCursor;
+                            // Libère l'avion sur le fichier en cas de fermeture de l'acars avant la fin du vol
+                            // on ne le fait que si un moteur tourne encore ==> vol interrompu avant la fin
+                            UpdatePlaneStatus(0);
+                            cbImmat.Enabled = true;
+                            //tbEndICAO.Enabled = true;
+                            System.Threading.Thread.Sleep(2000);
+                            this.Cursor = Cursors.Default;
+                        }
+                        //arrete les timers.
+                        this.timerConnection.Stop();
+                        this.timerMain.Stop();
+                    }
+                    else
+                    {
+                        // Si l'utilisateur clique sur Annuler, annule la fermeture de la fenêtre.
+                        e.Cancel = true;
+                    }
+                }
+            }
+            else
+            {
+                //close forced. (probably autostart of application by the simulator)
+            }
+        }
+
+
         public void registerPage(TabControl parent)
         {
             parent.SuspendLayout();

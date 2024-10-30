@@ -1,5 +1,6 @@
 ﻿using SimAddonPlugin;
 using SimDataManager;
+using System;
 
 namespace MeteoPlugin
 {
@@ -10,6 +11,7 @@ namespace MeteoPlugin
             InitializeComponent();
         }
 
+
         public string getName()
         {
             return "Meteo";
@@ -17,8 +19,13 @@ namespace MeteoPlugin
 
         public void init(ref simData _data)
         {
-            throw new NotImplementedException();
         }
+
+        public void FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //nothing particular for termination
+        }
+
 
         public void registerPage(TabControl parent)
         {
@@ -41,6 +48,7 @@ namespace MeteoPlugin
         private async void requestForMetar()
         {
             //create a request to https://aviationweather.gov/cgi-bin/data/metar.php?ids=LFMT
+            //https://vfrmap.com/?type=osm&lat=62.321&lon=-150.093&zoom=12&api_key=763xxE1MJHyhr48DlAP2qQ
 
             string metar = await Meteo.getMetar(tbICAO.Text);
             tbMETAR.Text = metar;

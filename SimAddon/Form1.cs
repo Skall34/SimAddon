@@ -1,30 +1,8 @@
-﻿using SimAddon.Properties;
-//using FSUIPC;
-using System;
-using System.Collections.Generic;
-//using System.Collections.Immutable;
-using System.ComponentModel;
-using System.Data;
-using System.Data.Common;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Security.Policy;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml;
-using static System.Net.Mime.MediaTypeNames;
-//using static System.Runtime.InteropServices.JavaScript.JSType;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
-using SimDataManager;
-using static SimDataManager.simData;
-using SimAddonPlugin;
+﻿
 using SimAddonLogger;
+using SimAddonPlugin;
+using SimDataManager;
+using System.Reflection;
 
 namespace SimAddon
 {
@@ -35,7 +13,7 @@ namespace SimAddon
         private bool autostart = false;
 
         PluginsMgr plugsMgr;
-      
+
         private simData _simData;
 
         Version version;
@@ -62,8 +40,8 @@ namespace SimAddon
         {
             InitializeComponent();
 
-            plugsMgr= new PluginsMgr();
-            plugsMgr.LoadPluginsFromFolder("plugins",tabControl1);
+            plugsMgr = new PluginsMgr();
+            plugsMgr.LoadPluginsFromFolder("plugins", tabControl1);
             autostart = isAutoStart();
 
             //initialize the trace mechanism
@@ -154,7 +132,7 @@ namespace SimAddon
                 _simData.Refresh();
 
                 //tell the plugins to update
-                situation currentStatus=new situation();
+                situation currentStatus = new situation();
                 currentStatus.magVariation = _simData.GetMagVariation();
                 currentStatus.readyToFly = _simData.GetReadyToFly();
                 currentStatus.airSpeed = _simData.GetAirSpeed();
@@ -170,16 +148,17 @@ namespace SimAddon
                 currentStatus.onGround = _simData.GetOnground();
                 currentStatus.overSpeedWarning = _simData.GetOverspeedWarning();
                 currentStatus.payload = _simData.GetPayload();
-                currentStatus.planeWeight = _simData.GetPlaneWeight();                    
+                currentStatus.planeWeight = _simData.GetPlaneWeight();
                 currentStatus.stallWarning = _simData.GetStallWarning();
                 currentStatus.position = _simData.GetPosition();
 
-                foreach(ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+                foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
                 {
                     try
                     {
                         plugin.updateSituation(currentStatus);
-                    }catch(Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         Logger.WriteLine(ex.Message);
                     }
@@ -230,15 +209,6 @@ namespace SimAddon
         // Form is closing so stop all the timers and close FSUIPC Connection
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-
-            //string message = "Confirm close ACARS ?";
-            //if (this.btnSubmit.Enabled == true)
-            //{
-            //    //Le vol n'a PAS été envoyé
-            //    message += "\r\n !!! Le vol n'a pas été envoyé !!!";
-            //}
-            //DialogResult res = DialogResult.Cancel;
-
             //if (!autostart)
             //{
             //    res = MessageBox.Show(message, "Flight Recorder", MessageBoxButtons.OKCancel);
@@ -251,38 +221,41 @@ namespace SimAddon
             //        saveFlight();
             //    }
             //}
+            FormClosingEventArgs e2;
+            if (autostart)
+            {
+                //this can't be canceled
+                e2 = new FormClosingEventArgs(CloseReason.ApplicationExitCall, false);
+            }
+            else
+            {
+                //this is normal user closing
+                e2 = new FormClosingEventArgs(CloseReason.UserClosing, false);
+            }
 
+            //request for termination on all plugins
+            //if one replies false, then cancel termination.
+            bool isCanceled = false;
+            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+            {
+                try
+                {
+                    plugin.FormClosing(sender,e2);
+                    isCanceled |= e2.Cancel;
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine(ex.Message);
+                }
+            }
+            e.Cancel = isCanceled;
 
-
-            //if ((res == DialogResult.OK) || (autostart))
-            //{
-            //    if (atLeastOneEngineFiring)
-            //    {
-            //        this.Cursor = Cursors.WaitCursor;
-            //        this.lblConnectionStatus.Text = "Freeing plane...";
-            //        this.lblConnectionStatus.ForeColor = Color.Green;
-            //        // Libère l'avion sur le fichier en cas de fermeture de l'acars avant la fin du vol
-            //        // on ne le fait que si un moteur tourne encore ==> vol interrompu avant la fin
-            //        UpdatePlaneStatus(0);
-            //        cbImmat.Enabled = true;
-            //        //tbEndICAO.Enabled = true;
-            //        System.Threading.Thread.Sleep(2000);
-            //        this.Cursor = Cursors.Default;
-            //    }
-            //    //arrete les timers.
-            //    this.timerConnection.Stop();
-            //    this.timerMain.Stop();
-            //    //ferme la connection vers le simu
-            //    FSUIPCConnection.Close();
-
-            //    //stop and flush the traces 
-            //    Logger.Dispose();
-            //}
-            //else
-            //{
-            //    // Si l'utilisateur clique sur Annuler, annule la fermeture de la fenêtre.
-            //    e.Cancel = true;
-            //}
+            if (!isCanceled)
+            {
+                _simData.CloseConnection();
+                //stop and flush the traces 
+                Logger.Dispose();
+            }
         }
 
         private void Form1_Activated(object sender, EventArgs e)
@@ -316,11 +289,13 @@ namespace SimAddon
             Logger.WriteLine("update form status");
             ConfigureForm();
 
-            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins) {
+            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+            {
                 try
                 {
                     plugin.init(ref _simData);
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Logger.WriteLine(ex.Message);
                 }
@@ -337,6 +312,5 @@ namespace SimAddon
 
 
         }
-
     }
 }

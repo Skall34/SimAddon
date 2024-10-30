@@ -36,6 +36,11 @@ namespace BushTripPlugin
             data = _data;
         }
 
+        public void FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //nothing particular for termination
+        }
+
         public void registerPage(TabControl parent)
         {
             parent.SuspendLayout();
