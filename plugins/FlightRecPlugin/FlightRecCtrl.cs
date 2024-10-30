@@ -155,6 +155,11 @@ namespace FlightRecPlugin
             else
             {
                 //close forced. (probably autostart of application by the simulator)
+                if (btnSubmit.Enabled)
+                {
+                    //if button submit is enabled then we probably have a flight to save.
+                    saveFlight();
+                }
             }
         }
 
