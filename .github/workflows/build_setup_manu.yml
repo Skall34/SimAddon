@@ -66,38 +66,10 @@ jobs:
       uses: seanmiddleditch/gha-setup-vsdevenv@v4
       
     - name: Build vdproj installer
-      run: devenv installer/installer.vdproj /build release
-
-#    - name: Compile .ISS to .EXE Installer
-#      uses: Minionguyjpro/Inno-Setup-Action@v1.2.4
-#      with:
-#        path: Setup/Flight_Recorder.iss
-#        options: /O+
-    
-#    - name: Publish the project
-#      run: dotnet publish FlightRecorder.csproj --configuration Release --output publish_output
-
-#rem sign OK, but verify fails because auto-signed
-#    - name: sign setup
-#      uses: GabrielAcostaEngler/signtool-code-sign@1.0.6
-#      with:
-#       certificate: '${{ secrets.CERTIFICATE }}'
-#       cert-password: '${{ secrets.PASSWORD }}'
-#       cert-sha1: '${{ secrets.SHA1 }}'
-#       cert-description: 'Skywing'
-#       folder: 'Build'
-#       recursive: false
-#       timestamp-server: 'http://timestamp.digicert.com'
-    
-#    - name: Upload setup
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: flight_recorder_setup_${{ steps.previoustag.outputs.tag }}
-#        path: Build/flight_recorder_setup_${{ steps.previoustag.outputs.tag }}.exe
-#        compression-level: 9 # no compression
+      run: devenv installer/installer.vdproj /build release 
 
     - name: Upload archive
       uses: actions/upload-artifact@v4.4.3
       with:
-        name: SimAddon_${{ steps.previoustag.outputs.tag }}
+        name: simaddon_setup_${{ steps.previoustag.outputs.tag }}
         path: setup/*.*
