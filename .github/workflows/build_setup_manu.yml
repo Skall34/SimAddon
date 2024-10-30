@@ -62,11 +62,11 @@ jobs:
     - name: publish meteo plugin
       run: dotnet publish plugins/MeteoPlugin/MeteoPlugin.csproj --configuration Release --output publish_output\plugins\2_Meteo
 
-#    - name: Setup VS Dev Environment
-#      uses: seanmiddleditch/gha-setup-vsdevenv@v4
+    - name: Setup VS Dev Environment
+      uses: seanmiddleditch/gha-setup-vsdevenv@v4
       
-#    - name: Build vdproj installer
-#      run: devenv installer.vdproj /build release
+    - name: Build vdproj installer
+      run: devenv installer/installer.vdproj /build release
 
 #    - name: Compile .ISS to .EXE Installer
 #      uses: Minionguyjpro/Inno-Setup-Action@v1.2.4
@@ -100,4 +100,4 @@ jobs:
       uses: actions/upload-artifact@v4.4.3
       with:
         name: SimAddon_${{ steps.previoustag.outputs.tag }}
-        path: publish_output
+        path: installer/Relase/*.*
