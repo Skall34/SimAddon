@@ -48,8 +48,10 @@ namespace SimAddon
 
         public void LoadPluginsFromFolder(string filePath,TabControl parent)
         {
-            if (Directory.Exists(filePath)) {
-            string[] subfolders = Directory.GetDirectories(filePath);
+            string exePath = Assembly.GetExecutingAssembly().Location;
+            string searchpath = Path.Combine(Path.GetDirectoryName (exePath), filePath);
+            if (Directory.Exists(searchpath)) {
+            string[] subfolders = Directory.GetDirectories(searchpath);
                 foreach (string subfolder in subfolders)
                 {
 
