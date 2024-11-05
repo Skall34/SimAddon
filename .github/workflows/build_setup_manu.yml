@@ -81,6 +81,8 @@ jobs:
 
     - name: setup nsis setup compiler
       uses: repolevedavaj/install-nsis@v1.0.2
+      with:
+        nsis_version: 3.10
 
     - name: compile nsis setup
       run: makensis nsis/installer.nsi   
