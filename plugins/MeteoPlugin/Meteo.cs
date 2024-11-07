@@ -1,17 +1,6 @@
 ﻿using SimAddonLogger;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Security.Policy;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using static MeteoPlugin.Meteo.METARData;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MeteoPlugin
 {
@@ -34,6 +23,7 @@ namespace MeteoPlugin
             public class METARIcao:METARItem
             {
                 public string code { get; set; }
+                public string name { get; set; }
 
                 public METARIcao(string category,string METARPart)
                 {

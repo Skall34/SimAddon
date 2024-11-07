@@ -31,6 +31,12 @@ namespace SimDataManager
         public string Wikipedia_Link { get; set; }
         public float fret { get; set; }
 
+        public string fullName { get
+            {
+                return(ident+" ("+name+")");
+            } 
+        }
+
         private const string DBFILE = "aeroports.json";
 
         private static string DBFILEPATH;
