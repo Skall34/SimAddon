@@ -75,6 +75,11 @@ section "install"
 	createDirectory "$SMPROGRAMS\${COMPANYNAME}"
 	createShortCut "$SMPROGRAMS\${COMPANYNAME}\${APPNAME}.lnk" "$INSTDIR\app.exe" "" "$INSTDIR\flightrec.ico"
 	createShortCut "$SMPROGRAMS\${COMPANYNAME}\uninstall.lnk" "$INSTDIR\uninstall.exe" "" ""
+	
+	#write registry entry for add/remove Program
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon" "DisplayName" "SimAddon : Application to enhance flight sim experience"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon" "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon" "DisplayIcon" "$\"$INSTDIR\flightrec.ico$\""
  
 sectionEnd
  
@@ -82,4 +87,7 @@ Section "Uninstall"
   Delete $INSTDIR\uninstall.exe ; delete self (see explanation below why this works)
   RMDir /r $INSTDIR
   DeleteRegKey HKLM SOFTWARE\myApp
+  
+  //remove registry entry for uninstall
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon"
 SectionEnd
