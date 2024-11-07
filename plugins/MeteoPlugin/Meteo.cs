@@ -464,6 +464,7 @@ namespace MeteoPlugin
                         { "BKN","broken" },
                         { "OVC","overcast" },
                         { "CLR","clear" },
+                        { "NSC","No significant cloud" },
                         { "VV","vertical visibility" }
                     };
                 }
@@ -484,9 +485,9 @@ namespace MeteoPlugin
                     else
                     {
                         IsCAVOK = false;
-                        if (METARPart == "CLR")
+                        if ((METARPart == "CLR")||(METARPart=="NSC"))
                         {
-                            Amount = "CLR";
+                            Amount = METARPart;
                         }
                         else
                         {
@@ -518,7 +519,7 @@ namespace MeteoPlugin
                     {
                         try
                         {
-                            if (Amount == "CLR")
+                            if ((Amount == "CLR")||(Amount == "NSC"))
                             {
                                 result += " : " + CloudAmountValue.Values[Amount];
                             }
@@ -593,7 +594,7 @@ namespace MeteoPlugin
                         }
                         else
                         {
-                            return (int)(rawValue * 33.8639);
+                            return (int)(rawValue * 33.8639 / 100);
                         }
                     }
                 }
@@ -638,7 +639,7 @@ namespace MeteoPlugin
 
                 public override string ToString()
                 {
-                    return _category + " : " + hpaValue.ToString() + "hpa ( "+inHgValue.ToString("0.00")+"inHg )";
+                    return _category + " : " + hpaValue.ToString() + " hpa ( "+inHgValue.ToString("0.00")+" inHg )";
                 }
             }
 

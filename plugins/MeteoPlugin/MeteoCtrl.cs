@@ -1,14 +1,51 @@
-﻿using SimAddonPlugin;
+﻿using SimAddonLogger;
+using SimAddonPlugin;
 using SimDataManager;
 using System;
+using System.Drawing.Text;
+using System.Reflection;
 
 namespace MeteoPlugin
 {
     public partial class MeteoCtrl : UserControl, ISimAddonPluginCtrl
     {
+        private Font customFont;
+        PrivateFontCollection fontCollection;
+
         public MeteoCtrl()
         {
+            LoadCustomFont();
             InitializeComponent();
+            if (fontCollection != null)
+            {
+                lblDecodedMETAR.Font = new Font(fontCollection.Families[0], lblDecodedMETAR.Font.Size);
+                tbMETAR.Font = new Font(fontCollection.Families[0], tbMETAR.Font.Size);
+            }
+            tbMETAR.Text = "Request fo METAR informations...";
+        }
+
+        private void LoadCustomFont()
+        {
+            fontCollection = new PrivateFontCollection();
+
+            // Load font from embedded resource
+            var fontStream = Assembly.GetExecutingAssembly()
+                .GetManifestResourceStream("MeteoPlugin.Font.LCD2B___.TTF");
+
+            if (fontStream != null)
+            {
+                byte[] fontData = new byte[fontStream.Length];
+                fontStream.Read(fontData, 0, (int)fontStream.Length);
+
+                unsafe
+                {
+                    fixed (byte* pFontData = fontData)
+                    {
+                        fontCollection.AddMemoryFont((IntPtr)pFontData, fontData.Length);
+                    }
+                }
+                // Create the font object with desired size
+            }
         }
 
 
@@ -52,7 +89,14 @@ namespace MeteoPlugin
 
             string metar = await Meteo.getMetar(tbICAO.Text);
             tbMETAR.Text = metar;
-            lblDecodedMETAR.Text = Meteo.decodeMetar(metar);
+            try
+            {
+                lblDecodedMETAR.Text = Meteo.decodeMetar(metar);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine(ex.Message);
+            }
         }
 
         private async void btnRequest_Click(object sender, EventArgs e)
@@ -85,6 +129,11 @@ namespace MeteoPlugin
 
         private void tbICAO_TextChanged(object sender, EventArgs e)
         {
+        }
+
+        private void lblDecodedMETAR_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

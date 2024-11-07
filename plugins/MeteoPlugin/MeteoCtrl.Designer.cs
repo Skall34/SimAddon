@@ -39,9 +39,11 @@ namespace MeteoPlugin
             lblDecodedMETAR = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
             tableLayoutPanel2 = new TableLayoutPanel();
+            panel1 = new Panel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -79,11 +81,12 @@ namespace MeteoPlugin
             // tbMETAR
             // 
             tbMETAR.Dock = DockStyle.Fill;
+            tbMETAR.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tbMETAR.Location = new Point(5, 104);
             tbMETAR.Multiline = true;
             tbMETAR.Name = "tbMETAR";
             tbMETAR.ReadOnly = true;
-            tbMETAR.Size = new Size(496, 74);
+            tbMETAR.Size = new Size(496, 54);
             tbMETAR.TabIndex = 7;
             // 
             // statusStrip1
@@ -109,11 +112,15 @@ namespace MeteoPlugin
             // lblDecodedMETAR
             // 
             lblDecodedMETAR.AutoSize = true;
-            lblDecodedMETAR.Location = new Point(5, 183);
+            lblDecodedMETAR.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDecodedMETAR.ForeColor = Color.Black;
+            lblDecodedMETAR.Location = new Point(10, 10);
+            lblDecodedMETAR.Margin = new Padding(10);
             lblDecodedMETAR.Name = "lblDecodedMETAR";
-            lblDecodedMETAR.Size = new Size(16, 15);
+            lblDecodedMETAR.Size = new Size(19, 21);
             lblDecodedMETAR.TabIndex = 12;
             lblDecodedMETAR.Text = "...";
+            lblDecodedMETAR.Click += lblDecodedMETAR_Click;
             // 
             // tableLayoutPanel1
             // 
@@ -124,13 +131,13 @@ namespace MeteoPlugin
             tableLayoutPanel1.Controls.Add(pictureBox1, 0, 0);
             tableLayoutPanel1.Controls.Add(tbMETAR, 0, 2);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
-            tableLayoutPanel1.Controls.Add(lblDecodedMETAR, 0, 3);
+            tableLayoutPanel1.Controls.Add(panel1, 0, 3);
             tableLayoutPanel1.Location = new Point(3, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 4;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.Size = new Size(506, 554);
             tableLayoutPanel1.TabIndex = 13;
@@ -153,6 +160,19 @@ namespace MeteoPlugin
             tableLayoutPanel2.TabIndex = 11;
             tableLayoutPanel2.Paint += tableLayoutPanel2_Paint;
             // 
+            // panel1
+            // 
+            panel1.BackColor = Color.LightGray;
+            panel1.BorderStyle = BorderStyle.Fixed3D;
+            panel1.Controls.Add(lblDecodedMETAR);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            panel1.Location = new Point(12, 173);
+            panel1.Margin = new Padding(10);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(482, 369);
+            panel1.TabIndex = 12;
+            // 
             // MeteoCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -168,6 +188,8 @@ namespace MeteoPlugin
             tableLayoutPanel1.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -185,5 +207,6 @@ namespace MeteoPlugin
         private Label lblDecodedMETAR;
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel2;
+        private Panel panel1;
     }
 }

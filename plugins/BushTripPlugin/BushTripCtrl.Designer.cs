@@ -101,8 +101,10 @@
             lvWaypoints.AutoArrange = false;
             lvWaypoints.Columns.AddRange(new ColumnHeader[] { ColWaypoint, ColName, ColRoute, ColDistance });
             lvWaypoints.Dock = DockStyle.Fill;
+            lvWaypoints.Font = new Font("Segoe Script", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lvWaypoints.FullRowSelect = true;
             lvWaypoints.GridLines = true;
+            lvWaypoints.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             lvWaypoints.Location = new Point(0, 0);
             lvWaypoints.Name = "lvWaypoints";
             lvWaypoints.Size = new Size(515, 177);
@@ -130,8 +132,9 @@
             // 
             // ColDistance
             // 
-            ColDistance.Text = "Distance";
+            ColDistance.Text = "Distance (nm)";
             ColDistance.TextAlign = HorizontalAlignment.Center;
+            ColDistance.Width = 120;
             // 
             // imageList1
             // 
@@ -148,6 +151,7 @@
             // tbComment
             // 
             tbComment.Dock = DockStyle.Fill;
+            tbComment.Font = new Font("Segoe Script", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tbComment.Location = new Point(0, 0);
             tbComment.Multiline = true;
             tbComment.Name = "tbComment";
@@ -196,6 +200,7 @@
             Controls.Add(splitContainer1);
             Controls.Add(statusStrip1);
             Controls.Add(btnImportFlightPLan);
+            ForeColor = Color.White;
             Name = "BushTripCtrl";
             Size = new Size(521, 490);
             Load += BushTripCtrl_Load;

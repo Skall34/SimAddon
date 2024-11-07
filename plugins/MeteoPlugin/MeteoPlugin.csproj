@@ -8,7 +8,19 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <OutputPath>..\..\bin\plugins\2_Meteo</OutputPath>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Font\CFLCD-Regular.ttf" />
+    <None Remove="Font\LCD-N___.TTF" />
+    <None Remove="Font\LCD2B___.TTF" />
+    <None Remove="Font\LCD2N___.TTF" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Font\LCD2B___.TTF" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Logger\SimAddonLogger.csproj" />
@@ -29,6 +41,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Font\LCDWinTT\LCD-N___.TTF">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
