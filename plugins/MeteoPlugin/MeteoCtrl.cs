@@ -1,10 +1,8 @@
 ﻿using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
-using System;
 using System.Drawing.Text;
 using System.Reflection;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MeteoPlugin
 {
