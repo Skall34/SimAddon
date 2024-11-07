@@ -165,7 +165,7 @@ namespace BushTripPlugin
         {
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "flight plan file|*.fplan|little nav map file|*.lnmpln";
+            openFileDialog.Filter = "Any flight plan file|*.fplan;*.lnmpln|Bushtrip file|*.fplan|little nav map file|*.lnmpln";
             if (openFileDialog.ShowDialog(this) == DialogResult.OK)
             {
                 string filePath = openFileDialog.FileName;
@@ -196,22 +196,29 @@ namespace BushTripPlugin
                     flightPlan.CurrentStep = waypointIndex;
                     Logger.WriteLine("Fichier XML chargé avec succès !");
                 }
-                //recupére la declinaison magnétique du premier point du plan de vol
-                try
+                if (flightPlan != null)
                 {
-                    declinaison = (double)await NavigationHelper.GetMagneticDeclinaison(flightPlan.Item.Waypoints[0].Pos.Lat, flightPlan.Item.Waypoints[0].Pos.Lon);
-                }
-                catch (Exception ex)
-                {
-                    Logger.WriteLine("error when getting magnetic declinaison :" + ex.Message);
-                }
+                    //recupére la declinaison magnétique du premier point du plan de vol
+                    try
+                    {
+                        declinaison = (double)await NavigationHelper.GetMagneticDeclinaison(flightPlan.Item.Waypoints[0].Pos.Lat, flightPlan.Item.Waypoints[0].Pos.Lon);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteLine("error when getting magnetic declinaison :" + ex.Message);
+                    }
 
-                refreshFlightBook();
-                double distance = computeFlightLength();
-                lblDistanceTotale.Text = "Total distance :" + distance.ToString() + " miles";
-                tsGlobalStatus.Text = "Flight plan loaded";
-                btnReset.Enabled = true;
-                btnSaveFlightPlan.Enabled = true;
+                    refreshFlightBook();
+                    double distance = computeFlightLength();
+                    lblDistanceTotale.Text = "Total distance :" + distance.ToString() + " miles";
+                    tsGlobalStatus.Text = "Flight plan loaded";
+                    btnReset.Enabled = true;
+                    btnSaveFlightPlan.Enabled = true;
+                }
+                else
+                {
+                    Logger.WriteLine("Error when loading flight plan");
+                }
 
             }
 

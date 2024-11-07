@@ -143,6 +143,7 @@
             imageList1.Images.SetKeyName(2, "USER");
             imageList1.Images.SetKeyName(3, "VOR");
             imageList1.Images.SetKeyName(4, "VORDME");
+            imageList1.Images.SetKeyName(5, "WAYPOINT");
             // 
             // tbComment
             // 
