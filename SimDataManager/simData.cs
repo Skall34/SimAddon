@@ -204,7 +204,6 @@ namespace SimDataManager
             Logger.WriteLine("done loading airports database");
             //this.Cursor = Cursors.Default;
             return result;
-
         }
 
         private async Task<int> LoadDataFromSheet()

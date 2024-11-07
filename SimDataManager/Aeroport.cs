@@ -72,10 +72,6 @@ namespace SimDataManager
 
             return distance;
         }
-        //private double DegreeToRadian(double angle)
-        //{
-        //    return Math.PI * angle / 180.0;
-        //}
 
         public static Aeroport FindClosestAirport(List<Aeroport> airports, double targetLatitude, double targetLongitude)
         {
@@ -93,6 +89,21 @@ namespace SimDataManager
             }
             return closestAirport;
         }
+
+        public static List<Aeroport> FindAirportsInRange(List<Aeroport> airports, double targetLatitude, double targetLongitude,uint range)
+        {
+            List<Aeroport> airportsInRange = new List<Aeroport>();
+            foreach (var airport in airports)
+            {
+                double distance = airport.DistanceTo(targetLatitude, targetLongitude);
+                if (distance < range)
+                {
+                    airportsInRange.Add(airport);
+                }
+            }
+            return airportsInRange;
+        }
+
 
         public static async Task<List<Aeroport>> fetchAirports(string baseUrl, DateTime lastUpdateFileTime)
         {
@@ -188,19 +199,6 @@ namespace SimDataManager
                         a.Observations = GetStringValueOrDefault(item, "Observations", "unknown" + i);
                         a.Wikipedia_Link = GetStringValueOrDefault(item, "wikipedia_link", "unknown" + i);
 
-                        //a.ident = item["ident"];
-                        //a.type = item["type"];
-                        //a.name = item["name"];
-                        //a.municipality = item["municipality"];
-                        //a.latitude_deg = double.Parse(item["latitude_deg"], provider);
-                        //a.longitude_deg = double.Parse(item["longitude_deg"], provider);
-                        //a.elevation_ft = double.Parse(item["elevation_ft"], provider);
-                        //a.Piste = item["Piste"];
-                        //a.LongueurDePiste = item["Longueur de piste"];
-                        //a.TypeDePiste = item["Type de piste"];
-                        //a.Observations = item["Observations"];
-                        //a.Wikipedia_Link = item["wikipedia_link"];
-
                         aeroports.Add(a);
                     }
                     catch (Exception ex)
@@ -217,7 +215,6 @@ namespace SimDataManager
         
         public static float deserializeFreight(string jsonString)
         {
-            //var data = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonString);
             Fret result = JsonConvert.DeserializeObject<Fret>(jsonString);
             if (null != result)
             {

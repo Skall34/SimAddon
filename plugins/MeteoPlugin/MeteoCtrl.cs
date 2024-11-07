@@ -11,6 +11,7 @@ namespace MeteoPlugin
     {
         private Font customFont;
         PrivateFontCollection fontCollection;
+        simData simdata;
 
         public MeteoCtrl()
         {
@@ -22,6 +23,8 @@ namespace MeteoPlugin
                 tbMETAR.Font = new Font(fontCollection.Families[0], tbMETAR.Font.Size);
             }
             tbMETAR.Text = "Request fo METAR informations...";
+            this.cbICAO.ValueMember = "ident";
+            this.cbICAO.DisplayMember = "ident";
         }
 
         private void LoadCustomFont()
@@ -56,6 +59,7 @@ namespace MeteoPlugin
 
         public void init(ref simData _data)
         {
+            simdata = _data;
         }
 
         public void FormClosing(object sender, FormClosingEventArgs e)
@@ -79,7 +83,41 @@ namespace MeteoPlugin
 
         public void updateSituation(situation data)
         {
-            throw new NotImplementedException();
+            //todo : rafraichis la list des aéroports assez proches pour être interrogés.
+            if ((simdata != null) && (simdata.isConnected))
+            {
+
+                uint VHFRange = NavigationHelper.GetVHFRangeNauticalMiles(data.position.Altitude);
+                List<Aeroport> proches = Aeroport.FindAirportsInRange(simdata.aeroports, data.position.Location.Latitude, data.position.Location.Longitude, VHFRange);
+                if (proches.Count > 0)
+                {
+                    foreach (Aeroport a in cbICAO.Items) { 
+                        if (!proches.Contains(a))
+                        {
+                            cbICAO.Items.Remove(a);
+                        }
+                    }
+
+                    foreach (Aeroport a in proches)
+                    {
+                        if (!cbICAO.Items.Contains(a))
+                        {
+                            cbICAO.Items.Add(a);
+                        }
+                    }
+                    //cbICAO.DropDownStyle = ComboBoxStyle.DropDownList;
+                }
+                else
+                {
+                    //cbICAO.DropDownStyle = ComboBoxStyle.DropDown;
+                }
+            }
+            else
+            {
+                //in case of no connexion to flightsim, allow manual edit of combobox
+                //cbICAO.DropDownStyle = ComboBoxStyle.DropDown;
+            }
+
         }
 
         private async void requestForMetar()
@@ -87,7 +125,7 @@ namespace MeteoPlugin
             //create a request to https://aviationweather.gov/cgi-bin/data/metar.php?ids=LFMT
             //https://vfrmap.com/?type=osm&lat=62.321&lon=-150.093&zoom=12&api_key=763xxE1MJHyhr48DlAP2qQ
 
-            string metar = await Meteo.getMetar(tbICAO.Text);
+            string metar = await Meteo.getMetar(cbICAO.Text);
             tbMETAR.Text = metar;
             try
             {
@@ -119,7 +157,7 @@ namespace MeteoPlugin
 
         }
 
-        private void tbICAO_KeyPress(object sender, KeyPressEventArgs e)
+        private void cbICAO_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
             {
@@ -134,6 +172,15 @@ namespace MeteoPlugin
         private void lblDecodedMETAR_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void timerRefreshAirports_Tick(object sender, EventArgs e)
+        {
+        }
+
+        private void cbICAO_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            requestForMetar();
         }
     }
 }

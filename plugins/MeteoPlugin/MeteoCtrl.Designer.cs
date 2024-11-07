@@ -31,7 +31,6 @@ namespace MeteoPlugin
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MeteoCtrl));
             label1 = new Label();
-            tbICAO = new TextBox();
             btnRequest = new Button();
             tbMETAR = new TextBox();
             statusStrip1 = new StatusStrip();
@@ -39,6 +38,7 @@ namespace MeteoPlugin
             lblDecodedMETAR = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
             tableLayoutPanel2 = new TableLayoutPanel();
+            cbICAO = new ComboBox();
             panel1 = new Panel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tableLayoutPanel1.SuspendLayout();
@@ -56,17 +56,6 @@ namespace MeteoPlugin
             label1.TabIndex = 0;
             label1.Text = "Airport ICAO";
             label1.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // tbICAO
-            // 
-            tbICAO.CharacterCasing = CharacterCasing.Upper;
-            tbICAO.Location = new Point(153, 3);
-            tbICAO.Name = "tbICAO";
-            tbICAO.RightToLeft = RightToLeft.No;
-            tbICAO.Size = new Size(94, 23);
-            tbICAO.TabIndex = 1;
-            tbICAO.TextChanged += tbICAO_TextChanged;
-            tbICAO.KeyPress += tbICAO_KeyPress;
             // 
             // btnRequest
             // 
@@ -94,6 +83,7 @@ namespace MeteoPlugin
             statusStrip1.Location = new Point(0, 560);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(512, 22);
+            statusStrip1.SizingGrip = false;
             statusStrip1.TabIndex = 9;
             statusStrip1.Text = "statusStrip1";
             // 
@@ -149,9 +139,9 @@ namespace MeteoPlugin
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel2.Controls.Add(tbICAO, 1, 0);
             tableLayoutPanel2.Controls.Add(btnRequest, 2, 0);
             tableLayoutPanel2.Controls.Add(label1, 0, 0);
+            tableLayoutPanel2.Controls.Add(cbICAO, 1, 0);
             tableLayoutPanel2.Location = new Point(5, 67);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
@@ -159,6 +149,16 @@ namespace MeteoPlugin
             tableLayoutPanel2.Size = new Size(496, 29);
             tableLayoutPanel2.TabIndex = 11;
             tableLayoutPanel2.Paint += tableLayoutPanel2_Paint;
+            // 
+            // cbICAO
+            // 
+            cbICAO.FormattingEnabled = true;
+            cbICAO.Location = new Point(153, 3);
+            cbICAO.Name = "cbICAO";
+            cbICAO.Size = new Size(94, 23);
+            cbICAO.TabIndex = 3;
+            cbICAO.SelectedIndexChanged += cbICAO_SelectedIndexChanged;
+            cbICAO.KeyPress += cbICAO_KeyPress;
             // 
             // panel1
             // 
@@ -199,7 +199,6 @@ namespace MeteoPlugin
         #endregion
 
         private Label label1;
-        private TextBox tbICAO;
         private Button btnRequest;
         private TextBox tbMETAR;
         private StatusStrip statusStrip1;
@@ -208,5 +207,6 @@ namespace MeteoPlugin
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel2;
         private Panel panel1;
+        private ComboBox cbICAO;
     }
 }
