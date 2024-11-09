@@ -76,7 +76,7 @@ namespace SimAddon
                 version = new Version("unknown");
             }
 
-            _simData = new simData();
+            _simData = new simData(Properties.Settings.Default.GSheetAPIUrl);
 
             this.Cursor = Cursors.WaitCursor;
 

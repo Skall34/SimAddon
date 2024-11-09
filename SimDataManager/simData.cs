@@ -147,8 +147,8 @@ namespace SimDataManager
         public readonly List<Avion> avions;
         public readonly List<Aeroport> aeroports;
 
-        private readonly string BASERURL = "https://script.google.com/macros/s/AKfycbyhK_pky8u_OUPNwtQJtpRSiWwE0gF64zHHkbbDJuY6I9-3jjegoiIIfJfV0QKcVC2IAg/exec";
-
+        //private readonly string BASERURL = "https://script.google.com/macros/s/AKfycbyhK_pky8u_OUPNwtQJtpRSiWwE0gF64zHHkbbDJuY6I9-3jjegoiIIfJfV0QKcVC2IAg/exec";
+        private string BASERURL;
 
         private bool _isConnected;
         public bool isConnected { get {
@@ -160,11 +160,11 @@ namespace SimDataManager
         }
 
 
-        public simData()
+        public simData(string GSheetURL)
         {
             _isConnected = false;
 
-            //BASERURL = Settings.Default.GSheetAPIUrl;
+            BASERURL = GSheetURL;
 
             aeroports = new List<Aeroport>();
             avions = new List<Avion>();
@@ -192,15 +192,6 @@ namespace SimDataManager
             //load the airports.
             this.aeroports.AddRange(await Aeroport.fetchAirports(BASERURL, DateTime.MinValue));
             //just in case, reload the statc values
-            if (aeroports.Count > 0)
-            {
-                //ReadStaticValues();
-
-            }
-            else
-            {
-                //MessageBox.Show("airport database is empty !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
             Logger.WriteLine("done loading airports database");
             //this.Cursor = Cursors.Default;
             return result;
@@ -220,11 +211,11 @@ namespace SimDataManager
 
             if (avions.Count == 0)
             {
-                //MessageBox.Show("planes database is empty !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.WriteLine("planes database is empty !");
             }
             if (missions.Count == 0)
             {
-                //MessageBox.Show("No mission available !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.WriteLine("No mission available !");
             }
 
             Logger.WriteLine("done loading planes and missions");

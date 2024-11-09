@@ -200,7 +200,7 @@ namespace SimDataManager
                         a.longitude_deg = GetDoubleValueOrDefault(item,"longitude_deg", "0");
                         a.elevation_ft = GetDoubleValueOrDefault(item,"ekevation_ft", "0");
                         a.Piste = GetStringValueOrDefault(item, "Piste", "unknown" + i);
-                        a.LongueurDePiste = GetStringValueOrDefault(item,"LongueueDePiste", "? " + i);
+                        a.LongueurDePiste = GetStringValueOrDefault(item,"Longueur de piste", "? " + i);
                         a.TypeDePiste = GetStringValueOrDefault(item, "Type de piste", "unknown" + i);
                         a.Observations = GetStringValueOrDefault(item, "Observations", "unknown" + i);
                         a.Wikipedia_Link = GetStringValueOrDefault(item, "wikipedia_link", "unknown" + i);
