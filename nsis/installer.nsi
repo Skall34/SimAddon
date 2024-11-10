@@ -73,7 +73,7 @@ section "install"
  
 	# Start Menu
 	createDirectory "$SMPROGRAMS\${COMPANYNAME}"
-	createShortCut "$SMPROGRAMS\${COMPANYNAME}\${APPNAME}.lnk" "$INSTDIR\app.exe" "" "$INSTDIR\flightrec.ico"
+	createShortCut "$SMPROGRAMS\${COMPANYNAME}\${APPNAME}.lnk" "$INSTDIR\simaddon.exe" "" "$INSTDIR\flightrec.ico"
 	createShortCut "$SMPROGRAMS\${COMPANYNAME}\uninstall.lnk" "$INSTDIR\uninstall.exe" "" ""
 	
 	#write registry entry for add/remove Program

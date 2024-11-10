@@ -399,3 +399,4 @@ FodyWeavers.xsd
 /setup
 SimAddon/Properties/launchSettings.json
 /Build
+*.exe
