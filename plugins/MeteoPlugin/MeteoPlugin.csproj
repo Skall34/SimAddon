@@ -16,14 +16,19 @@
     <None Remove="Font\LCD-N___.TTF" />
     <None Remove="Font\LCD2B___.TTF" />
     <None Remove="Font\LCD2N___.TTF" />
+    <None Remove="Resources\piste.png" />
+    <None Remove="Resources\vent.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Font\LCD2B___.TTF" />
+    <EmbeddedResource Include="Resources\piste.png" />
+    <EmbeddedResource Include="Resources\vent.png" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Logger\SimAddonLogger.csproj" />
+    <ProjectReference Include="..\..\SimAddonControls\SimAddonControls.csproj" />
     <ProjectReference Include="..\..\SimDataManager\SimDataManager.csproj" />
     <ProjectReference Include="..\SimAddonPlugin\SimAddonPlugin.csproj" />
   </ItemGroup>

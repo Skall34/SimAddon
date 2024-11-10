@@ -913,6 +913,32 @@ namespace MeteoPlugin
                     Logger.WriteLine("Error while decoding metar " + rawMETAR);
                 }
             }
+
+            public string toString()
+            {
+                string decoded = "";
+                try
+                {
+                        foreach (METARItem item in items)
+                        {
+                            try
+                            {
+                                decoded += item.ToString() + Environment.NewLine;
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.WriteLine(ex.Message);
+                            }
+                        }
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine(ex.Message);
+                }
+
+                return decoded;
+            }
+
         }
 
         private static readonly HttpClient httpClient = new HttpClient();
@@ -943,38 +969,24 @@ namespace MeteoPlugin
             }
         }
 
-        public static string decodeMetar(string rawMETAR)
+        public static METARData decodeMetar(string rawMETAR)
         {
-            string decoded = "";
-
+            METARData data = null;
             try
             {
                 if (rawMETAR != string.Empty)
                 {
-                    METARData data = new METARData(rawMETAR);
-                    foreach (METARItem item in data.items)
-                    {
-                        try
-                        {
-                            decoded += item.ToString() + Environment.NewLine;
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.WriteLine(ex.Message);
-                        }
-                    }
+                    data = new METARData(rawMETAR);
                 }
                 else
                 {
-                    decoded = "No metar information available";
                 }
             }
             catch (Exception ex)
             {
                 Logger.WriteLine(ex.Message);
             }
-
-            return decoded;
+            return data;
         }
     }
 }

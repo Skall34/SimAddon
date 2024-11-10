@@ -40,7 +40,9 @@
             ColRoute = new ColumnHeader();
             ColDistance = new ColumnHeader();
             imageList1 = new ImageList(components);
+            tableLayoutPanel1 = new TableLayoutPanel();
             tbComment = new TextBox();
+            compas1 = new SimAddonControls.Compas();
             lblDistanceTotale = new Label();
             btnSaveFlightPlan = new Button();
             btnReset = new Button();
@@ -49,6 +51,7 @@
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // btnImportFlightPLan
@@ -64,7 +67,7 @@
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { tsGlobalStatus });
-            statusStrip1.Location = new Point(0, 468);
+            statusStrip1.Location = new Point(0, 658);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(521, 22);
             statusStrip1.SizingGrip = false;
@@ -91,9 +94,9 @@
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(tbComment);
-            splitContainer1.Size = new Size(515, 409);
-            splitContainer1.SplitterDistance = 177;
+            splitContainer1.Panel2.Controls.Add(tableLayoutPanel1);
+            splitContainer1.Size = new Size(515, 599);
+            splitContainer1.SplitterDistance = 259;
             splitContainer1.TabIndex = 3;
             // 
             // lvWaypoints
@@ -107,7 +110,7 @@
             lvWaypoints.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             lvWaypoints.Location = new Point(0, 0);
             lvWaypoints.Name = "lvWaypoints";
-            lvWaypoints.Size = new Size(515, 177);
+            lvWaypoints.Size = new Size(515, 259);
             lvWaypoints.SmallImageList = imageList1;
             lvWaypoints.TabIndex = 2;
             lvWaypoints.UseCompatibleStateImageBehavior = false;
@@ -148,15 +151,44 @@
             imageList1.Images.SetKeyName(4, "VORDME");
             imageList1.Images.SetKeyName(5, "WAYPOINT");
             // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            tableLayoutPanel1.Controls.Add(tbComment, 0, 0);
+            tableLayoutPanel1.Controls.Add(compas1, 1, 0);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new Size(515, 336);
+            tableLayoutPanel1.TabIndex = 0;
+            // 
             // tbComment
             // 
             tbComment.Dock = DockStyle.Fill;
             tbComment.Font = new Font("Segoe Script", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            tbComment.Location = new Point(0, 0);
+            tbComment.Location = new Point(3, 3);
             tbComment.Multiline = true;
             tbComment.Name = "tbComment";
-            tbComment.Size = new Size(515, 228);
+            tbComment.ScrollBars = ScrollBars.Both;
+            tbComment.Size = new Size(354, 330);
             tbComment.TabIndex = 0;
+            // 
+            // compas1
+            // 
+            compas1.Location = new Point(363, 3);
+            compas1.Name = "compas1";
+            compas1.NbNeedles = 1;
+            compas1.Headings[0] = 0;
+            compas1.NeedleImages[0] = (Image)resources.GetObject("compas1.NeedleImage");
+            compas1.NumericValue = 0D;
+            compas1.RectangleSize = new Size(80, 20);
+            compas1.Size = new Size(149, 330);
+            compas1.TabIndex = 1;
+            compas1.Unit = "NM";
             // 
             // lblDistanceTotale
             // 
@@ -202,15 +234,16 @@
             Controls.Add(btnImportFlightPLan);
             ForeColor = Color.White;
             Name = "BushTripCtrl";
-            Size = new Size(521, 490);
+            Size = new Size(521, 680);
             Load += BushTripCtrl_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
-            splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -231,5 +264,7 @@
         private Button btnSaveFlightPlan;
         private ImageList imageList1;
         private Button btnReset;
+        private TableLayoutPanel tableLayoutPanel1;
+        private SimAddonControls.Compas compas1;
     }
 }

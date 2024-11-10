@@ -25,8 +25,8 @@ namespace SimDataManager
         public double longitude_deg { get; set; }
         public double elevation_ft { get; set; }
         public string Piste { get; set; }
-        public string LongueurDePiste { get; set; }
-        public string TypeDePiste { get; set; }
+        public string Longueur_de_piste { get; set; }
+        public string Type_de_piste { get; set; }
         public string Observations { get; set; }
         public string Wikipedia_Link { get; set; }
         public float fret { get; set; }
@@ -118,8 +118,8 @@ namespace SimDataManager
             if (File.Exists(DBFILEPATH))
             {
                 FileInfo fi = new FileInfo(DBFILEPATH);
-                DateTime creationTime = fi.CreationTime;
-                epoch = (long)(creationTime - new DateTime(1970, 1, 1)).TotalMilliseconds;
+                DateTime creationTime = fi.CreationTime.ToUniversalTime();
+                epoch = (long)(creationTime - new DateTime(1970, 1, 1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
             }
 
             string url = baseUrl + "?query=airports&date=" + epoch.ToString();
@@ -200,8 +200,8 @@ namespace SimDataManager
                         a.longitude_deg = GetDoubleValueOrDefault(item,"longitude_deg", "0");
                         a.elevation_ft = GetDoubleValueOrDefault(item,"ekevation_ft", "0");
                         a.Piste = GetStringValueOrDefault(item, "Piste", "unknown" + i);
-                        a.LongueurDePiste = GetStringValueOrDefault(item,"Longueur de piste", "? " + i);
-                        a.TypeDePiste = GetStringValueOrDefault(item, "Type de piste", "unknown" + i);
+                        a.Longueur_de_piste = GetStringValueOrDefault(item,"Longueur_de_piste", "? " + i);
+                        a.Type_de_piste = GetStringValueOrDefault(item, "Type_de_piste", "unknown" + i);
                         a.Observations = GetStringValueOrDefault(item, "Observations", "unknown" + i);
                         a.Wikipedia_Link = GetStringValueOrDefault(item, "wikipedia_link", "unknown" + i);
 

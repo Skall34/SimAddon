@@ -14,6 +14,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\aiguille.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\aiguille.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SimAddonControls\SimAddonControls.csproj" />
     <ProjectReference Include="..\..\SimDataManager\SimDataManager.csproj" />
     <ProjectReference Include="..\SimAddonPlugin\SimAddonPlugin.csproj" />
   </ItemGroup>

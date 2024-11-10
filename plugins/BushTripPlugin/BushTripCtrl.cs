@@ -71,11 +71,21 @@ namespace BushTripPlugin
 
                     routeToWP = await NavigationHelper.GetNavRouteAsync(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon, magVariation);
 
+                    double ecartRoute =  (data.position.HeadingDegreesTrue-magVariation) - routeToWP;
+                    if (ecartRoute < 0)
+                    {
+                        ecartRoute = 360 + ecartRoute;
+                    }
+                    compas1.Headings[0] = (int)ecartRoute;
+                    compas1.NumericValue = distanceToNextWP;
+
                     tsGlobalStatus.Text = "Next waypoint : Route : " + routeToWP.ToString() + "  Distance : " + distanceToNextWP.ToString();
                 }
                 else
                 {
                     tsGlobalStatus.Text = "Flight plan finished !";
+                    compas1.Headings[0] = (int)0;
+                    compas1.NumericValue = 0;
                 }
 
                 //si on est a moins de 3 miles du wp, on affiche le segment suivant.

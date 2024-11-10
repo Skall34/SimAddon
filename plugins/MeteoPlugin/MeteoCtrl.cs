@@ -3,6 +3,9 @@ using SimAddonPlugin;
 using SimDataManager;
 using System.Drawing.Text;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using static MeteoPlugin.Meteo;
 
 namespace MeteoPlugin
 {
@@ -11,6 +14,7 @@ namespace MeteoPlugin
         private Font customFont;
         PrivateFontCollection fontCollection;
         simData simdata;
+        METARData metarData;
 
         public MeteoCtrl()
         {
@@ -20,6 +24,7 @@ namespace MeteoPlugin
             {
                 lblDecodedMETAR.Font = new Font(fontCollection.Families[0], lblDecodedMETAR.Font.Size);
                 tbMETAR.Font = new Font(fontCollection.Families[0], tbMETAR.Font.Size);
+                lbAirportInfo.Font = new Font(fontCollection.Families[0], lbAirportInfo.Font.Size);
             }
             tbMETAR.Text = "Request fo METAR informations...";
             this.cbICAO.ValueMember = "fullName";
@@ -59,6 +64,7 @@ namespace MeteoPlugin
         public void init(ref simData _data)
         {
             simdata = _data;
+            lbAirportInfo.Items.Clear();
         }
 
         public void FormClosing(object sender, FormClosingEventArgs e)
@@ -122,20 +128,91 @@ namespace MeteoPlugin
             //https://vfrmap.com/?type=osm&lat=62.321&lon=-150.093&zoom=12&api_key=763xxE1MJHyhr48DlAP2qQ
 
             string searchItem = "";
-            if (cbICAO.SelectedItem!=null)
+            if (cbICAO.SelectedItem != null)
             {
                 searchItem = ((Aeroport)cbICAO.SelectedItem).ident;
             }
             else
             {
-                searchItem = cbICAO.Text;
+                searchItem = cbICAO.Text.ToUpper();
+                cbICAO.Text = searchItem;
             }
-
-            string metar = await Meteo.getMetar(searchItem);
-            tbMETAR.Text = metar;
+            //clear airport infos.
+            lbAirportInfo.Items.Clear();
+            string rawMetarText = await Meteo.getMetar(searchItem);
+            tbMETAR.Text = rawMetarText;
             try
             {
-                lblDecodedMETAR.Text = Meteo.decodeMetar(metar);
+                //decode into a logical structure
+                try
+                {
+                    metarData = Meteo.decodeMetar(rawMetarText);
+                    if (metarData != null)
+                    {
+                        //build the decoded string humanly understandable
+                        lblDecodedMETAR.Text = metarData.toString();
+
+                        if ((simdata != null) && (simdata.aeroports != null))
+                        {
+                            Aeroport airport = simdata.aeroports.FirstOrDefault(a => a.ident == searchItem);
+                            if (airport != null)
+                            {
+                                string[] runways = airport.Piste.Split('/');
+                                lbAirportInfo.Items.Add(airport.name);
+                                lbAirportInfo.Items.Add($"Runways : {airport.Piste.Replace('/', ' ')}");
+                                lbAirportInfo.Items.Add($"Type : {airport.Type_de_piste.Replace('/', ' ')}");
+                                lbAirportInfo.Items.Add($"Length (ft) :{airport.Longueur_de_piste.Replace('/', ' ')}");
+                                if ((airport.Piste != "?-?") && (airport.Piste != string.Empty))
+                                {
+                                    compas1.LabelText = runways[0];
+                                    string[] pistes = airport.Piste.Split('-');
+                                    if (pistes.Length > 0)
+                                    {
+                                        //petite expression reguliere pour nettoyer l'ax de piste (enlever le L, ou R s'il y en a)
+                                        Regex r = new Regex("^([0-9]+)([A-Z]?)");
+                                        Match result = r.Match(runways[0]);
+                                        if (result.Success)
+                                        {
+                                            int axePiste1 = 10 * int.Parse(result.Groups[1].Value);
+                                            compas1.Headings[0] = axePiste1;
+                                            if (metarData.Wind.Direction == "VRB") {
+                                                variableWindTimer.Start();
+                                            }
+                                            else
+                                            {
+                                                variableWindTimer.Stop();
+                                                compas1.Headings[1] = int.Parse(metarData.Wind.Direction);
+                                            }
+                                            compas1.NumericValue = int.Parse(metarData.Wind.Speed);
+                                            compas1.Unit = "Knts";
+                                        }
+                                        else
+                                        {
+
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                    compas1.Headings[0] = 0;
+                                    compas1.Headings[1] = 0;
+                                    compas1.NumericValue = double.NaN;
+                                    compas1.Unit = "???";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            lbAirportInfo.Items.Add("Still loading airports database");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("Error while decoding metar data " + ex.Message);
+                }
+
             }
             catch (Exception ex)
             {
@@ -161,5 +238,34 @@ namespace MeteoPlugin
             requestForMetar();
         }
 
+        private void lbAirportInfo_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            try
+            {
+                ListBox lb = (ListBox)sender;
+                e.DrawBackground();
+                Font myFont;
+                Brush myBrush;
+                int i = e.Index;
+                if (i >= 0)
+                {
+                    myFont = e.Font;
+                    myBrush = Brushes.Black;
+                    e.Graphics.DrawString(lb.Items[i].ToString(), myFont, myBrush, e.Bounds, StringFormat.GenericDefault);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+
+        private void variableWindTimer_Tick(object sender, EventArgs e)
+        {
+            Random random = new Random();
+            compas1.Headings[1] = (compas1.Headings[1] + random.Next(15) - 7) % 360;
+            compas1.Invalidate();
+        }
     }
 }
