@@ -71,7 +71,7 @@ namespace BushTripPlugin
 
                     routeToWP = await NavigationHelper.GetNavRouteAsync(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon, magVariation);
 
-                    double ecartRoute =  (data.position.HeadingDegreesTrue-magVariation) - routeToWP;
+                    double ecartRoute = routeToWP - (data.position.HeadingDegreesTrue-magVariation)  ;
                     if (ecartRoute < 0)
                     {
                         ecartRoute = 360 + ecartRoute;
