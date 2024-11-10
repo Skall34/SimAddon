@@ -88,6 +88,6 @@ Section "Uninstall"
   RMDir /r $INSTDIR
   DeleteRegKey HKLM SOFTWARE\myApp
   
-  //remove registry entry for uninstall
+  #remove registry entry for uninstall
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon"
 SectionEnd
