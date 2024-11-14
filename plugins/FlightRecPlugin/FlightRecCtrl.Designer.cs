@@ -76,6 +76,7 @@ namespace FlightRecPlugin
             lbTimeAirborn = new Label();
             groupBox7 = new GroupBox();
             tbCommentaires = new TextBox();
+            pictureBox1 = new PictureBox();
             label15 = new Label();
             label12 = new Label();
             cbMission = new ComboBox();
@@ -83,12 +84,12 @@ namespace FlightRecPlugin
             cbNote = new ComboBox();
             lbFret = new Label();
             groupBox3 = new GroupBox();
+            lbDesignationAvion = new Label();
             tbEndICAO = new TextBox();
             lbEndICAO = new Label();
             label5 = new Label();
             lbLibelleAvion = new Label();
             lbPayload = new Label();
-            lbDesignationAvion = new Label();
             cbImmat = new ComboBox();
             toolTip1 = new ToolTip(components);
             btnReset = new Button();
@@ -99,18 +100,17 @@ namespace FlightRecPlugin
             engineStopTimer = new Timer(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox5 = new GroupBox();
-            pictureBox1 = new PictureBox();
             groupBox1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox4.SuspendLayout();
             groupBox6.SuspendLayout();
             groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             groupBox3.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // timerMain
@@ -494,6 +494,16 @@ namespace FlightRecPlugin
             tbCommentaires.Size = new Size(334, 74);
             tbCommentaires.TabIndex = 20;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (System.Drawing.Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(10, 42);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(100, 50);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 50;
+            pictureBox1.TabStop = false;
+            // 
             // label15
             // 
             label15.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -581,6 +591,15 @@ namespace FlightRecPlugin
             groupBox3.TabStop = false;
             groupBox3.Text = "Static data";
             // 
+            // lbDesignationAvion
+            // 
+            lbDesignationAvion.AutoSize = true;
+            lbDesignationAvion.Location = new Point(264, 53);
+            lbDesignationAvion.Name = "lbDesignationAvion";
+            lbDesignationAvion.Size = new Size(152, 18);
+            lbDesignationAvion.TabIndex = 44;
+            lbDesignationAvion.Text = "<no plane selected>";
+            // 
             // tbEndICAO
             // 
             tbEndICAO.BackColor = Color.White;
@@ -633,15 +652,6 @@ namespace FlightRecPlugin
             lbPayload.TabIndex = 45;
             lbPayload.Text = "Not Yet Available";
             // 
-            // lbDesignationAvion
-            // 
-            lbDesignationAvion.AutoSize = true;
-            lbDesignationAvion.Location = new Point(264, 53);
-            lbDesignationAvion.Name = "lbDesignationAvion";
-            lbDesignationAvion.Size = new Size(152, 18);
-            lbDesignationAvion.TabIndex = 44;
-            lbDesignationAvion.Text = "<no plane selected>";
-            // 
             // cbImmat
             // 
             cbImmat.DrawMode = DrawMode.OwnerDrawFixed;
@@ -649,6 +659,7 @@ namespace FlightRecPlugin
             cbImmat.FormattingEnabled = true;
             cbImmat.Items.AddRange(new object[] { "none" });
             cbImmat.Location = new Point(148, 50);
+            cbImmat.MaxDropDownItems = 20;
             cbImmat.Name = "cbImmat";
             cbImmat.Size = new Size(109, 26);
             cbImmat.TabIndex = 2;
@@ -726,16 +737,6 @@ namespace FlightRecPlugin
             groupBox5.TabIndex = 42;
             groupBox5.TabStop = false;
             // 
-            // pictureBox1
-            // 
-            pictureBox1.Image = (System.Drawing.Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(10, 42);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(100, 50);
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.TabIndex = 50;
-            pictureBox1.TabStop = false;
-            // 
             // FlightRecCtrl
             // 
             AutoScaleDimensions = new SizeF(9F, 18F);
@@ -758,12 +759,12 @@ namespace FlightRecPlugin
             groupBox6.PerformLayout();
             groupBox7.ResumeLayout(false);
             groupBox7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             groupBox5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 
