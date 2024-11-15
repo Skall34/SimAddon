@@ -393,7 +393,7 @@ namespace FlightRecPlugin
             // lbEndFuel
             // 
             lbEndFuel.AutoSize = true;
-            lbEndFuel.Location = new Point(137, 75);
+            lbEndFuel.Location = new Point(136, 75);
             lbEndFuel.Name = "lbEndFuel";
             lbEndFuel.Size = new Size(44, 18);
             lbEndFuel.TabIndex = 53;
@@ -403,7 +403,7 @@ namespace FlightRecPlugin
             // lbEndTime
             // 
             lbEndTime.AutoSize = true;
-            lbEndTime.Location = new Point(137, 57);
+            lbEndTime.Location = new Point(136, 57);
             lbEndTime.Name = "lbEndTime";
             lbEndTime.Size = new Size(32, 18);
             lbEndTime.TabIndex = 52;
@@ -552,7 +552,7 @@ namespace FlightRecPlugin
             cbNote.DropDownStyle = ComboBoxStyle.DropDownList;
             cbNote.FormattingEnabled = true;
             cbNote.Items.AddRange(new object[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
-            cbNote.Location = new Point(127, 98);
+            cbNote.Location = new Point(112, 98);
             cbNote.MaxDropDownItems = 10;
             cbNote.Name = "cbNote";
             cbNote.Size = new Size(66, 26);
@@ -706,7 +706,7 @@ namespace FlightRecPlugin
             // 
             // engineStopTimer
             // 
-            engineStopTimer.Interval = 3000;
+            engineStopTimer.Interval = 1500;
             engineStopTimer.Tick += engineStopTimer_Tick;
             // 
             // tableLayoutPanel1
