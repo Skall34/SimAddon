@@ -266,7 +266,7 @@ namespace FlightRecPlugin
             // lbStartFuel
             // 
             lbStartFuel.AutoSize = true;
-            lbStartFuel.Location = new Point(137, 75);
+            lbStartFuel.Location = new Point(135, 75);
             lbStartFuel.Name = "lbStartFuel";
             lbStartFuel.Size = new Size(44, 18);
             lbStartFuel.TabIndex = 52;
@@ -393,7 +393,7 @@ namespace FlightRecPlugin
             // lbEndFuel
             // 
             lbEndFuel.AutoSize = true;
-            lbEndFuel.Location = new Point(136, 75);
+            lbEndFuel.Location = new Point(134, 75);
             lbEndFuel.Name = "lbEndFuel";
             lbEndFuel.Size = new Size(44, 18);
             lbEndFuel.TabIndex = 53;
@@ -403,7 +403,7 @@ namespace FlightRecPlugin
             // lbEndTime
             // 
             lbEndTime.AutoSize = true;
-            lbEndTime.Location = new Point(136, 57);
+            lbEndTime.Location = new Point(135, 57);
             lbEndTime.Name = "lbEndTime";
             lbEndTime.Size = new Size(32, 18);
             lbEndTime.TabIndex = 52;
@@ -427,7 +427,7 @@ namespace FlightRecPlugin
             // lbOnGround
             // 
             lbOnGround.AutoSize = true;
-            lbOnGround.Location = new Point(186, 21);
+            lbOnGround.Location = new Point(267, 19);
             lbOnGround.Margin = new Padding(4, 0, 4, 0);
             lbOnGround.Name = "lbOnGround";
             lbOnGround.Size = new Size(87, 18);
@@ -438,7 +438,7 @@ namespace FlightRecPlugin
             // lbAirborn
             // 
             lbAirborn.AutoSize = true;
-            lbAirborn.Location = new Point(10, 21);
+            lbAirborn.Location = new Point(53, 19);
             lbAirborn.Margin = new Padding(4, 0, 4, 0);
             lbAirborn.Name = "lbAirborn";
             lbAirborn.Size = new Size(60, 18);
@@ -449,7 +449,7 @@ namespace FlightRecPlugin
             // lbTimeOnGround
             // 
             lbTimeOnGround.AutoSize = true;
-            lbTimeOnGround.Location = new Point(295, 21);
+            lbTimeOnGround.Location = new Point(376, 19);
             lbTimeOnGround.Name = "lbTimeOnGround";
             lbTimeOnGround.Size = new Size(32, 18);
             lbTimeOnGround.TabIndex = 46;
@@ -459,7 +459,7 @@ namespace FlightRecPlugin
             // lbTimeAirborn
             // 
             lbTimeAirborn.AutoSize = true;
-            lbTimeAirborn.Location = new Point(83, 21);
+            lbTimeAirborn.Location = new Point(126, 19);
             lbTimeAirborn.Name = "lbTimeAirborn";
             lbTimeAirborn.Size = new Size(32, 18);
             lbTimeAirborn.TabIndex = 43;
@@ -661,7 +661,7 @@ namespace FlightRecPlugin
             cbImmat.Location = new Point(148, 50);
             cbImmat.MaxDropDownItems = 20;
             cbImmat.Name = "cbImmat";
-            cbImmat.Size = new Size(109, 26);
+            cbImmat.Size = new Size(111, 26);
             cbImmat.TabIndex = 2;
             cbImmat.DrawItem += cbImmat_DrawItem;
             cbImmat.SelectedIndexChanged += CbImmat_SelectedIndexChanged;
