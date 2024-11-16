@@ -1,6 +1,7 @@
 ﻿using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
+using System;
 using System.Drawing.Text;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -15,6 +16,28 @@ namespace MeteoPlugin
         PrivateFontCollection fontCollection;
         simData simdata;
         METARData metarData;
+
+        ISimAddonPluginCtrl.UpdateStatusHandler updateStatusHandler;
+        event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
+        {
+            add
+            {
+                updateStatusHandler = value;
+            }
+
+            remove
+            {
+                updateStatusHandler = null;
+            }
+        }
+
+        private void UpdateStatus(string message)
+        {
+            if (updateStatusHandler != null)
+            {
+                updateStatusHandler(this, message);
+            }
+        }
 
         public MeteoCtrl()
         {
@@ -127,6 +150,8 @@ namespace MeteoPlugin
             //create a request to https://aviationweather.gov/cgi-bin/data/metar.php?ids=LFMT
             //https://vfrmap.com/?type=osm&lat=62.321&lon=-150.093&zoom=12&api_key=763xxE1MJHyhr48DlAP2qQ
 
+            UpdateStatus("Requesting METAR informations");
+
             string searchItem = "";
             if (cbICAO.SelectedItem != null)
             {
@@ -139,6 +164,7 @@ namespace MeteoPlugin
             }
             //clear airport infos.
             lbAirportInfo.Items.Clear();
+            lblDecodedMETAR.Text = string.Empty;
             string rawMetarText = await Meteo.getMetar(searchItem);
             tbMETAR.Text = rawMetarText;
             try
@@ -146,41 +172,54 @@ namespace MeteoPlugin
                 //decode into a logical structure
                 try
                 {
+                    //show metar information in panel
                     metarData = Meteo.decodeMetar(rawMetarText);
                     if (metarData != null)
                     {
                         //build the decoded string humanly understandable
                         lblDecodedMETAR.Text = metarData.toString();
+                    }
+                    else
+                    {
+                        lblDecodedMETAR.Text = "No data available";
+                    }
 
-                        if ((simdata != null) && (simdata.aeroports != null))
+                    //show airport information in panel
+                    if ((simdata != null) && (simdata.aeroports != null))
+                    {
+                        Aeroport airport = simdata.aeroports.FirstOrDefault(a => a.ident == searchItem);
+                        if (airport != null)
                         {
-                            Aeroport airport = simdata.aeroports.FirstOrDefault(a => a.ident == searchItem);
-                            if (airport != null)
+                            string[] runways = airport.Piste.Split('/');
+                            lbAirportInfo.Items.Add(airport.name);
+                            lbAirportInfo.Items.Add($"Runways : {airport.Piste.Replace('/', ' ')}");
+                            lbAirportInfo.Items.Add($"Type : {airport.Type_de_piste.Replace('/', ' ')}");
+                            lbAirportInfo.Items.Add($"Length (ft) :{airport.Longueur_de_piste.Replace('/', ' ')}");
+                            if ((airport.Piste != "?-?") && (airport.Piste != string.Empty))
                             {
-                                string[] runways = airport.Piste.Split('/');
-                                lbAirportInfo.Items.Add(airport.name);
-                                lbAirportInfo.Items.Add($"Runways : {airport.Piste.Replace('/', ' ')}");
-                                lbAirportInfo.Items.Add($"Type : {airport.Type_de_piste.Replace('/', ' ')}");
-                                lbAirportInfo.Items.Add($"Length (ft) :{airport.Longueur_de_piste.Replace('/', ' ')}");
-                                if ((airport.Piste != "?-?") && (airport.Piste != string.Empty))
+                                compas1.LabelText = runways[0];
+                                string[] pistes = airport.Piste.Split('-');
+                                if (pistes.Length > 0)
                                 {
-                                    compas1.LabelText = runways[0];
-                                    string[] pistes = airport.Piste.Split('-');
-                                    if (pistes.Length > 0)
+                                    //petite expression reguliere pour nettoyer l'ax de piste (enlever le L, ou R s'il y en a)
+                                    Regex r = new Regex("^([0-9]+)([A-Z]?)");
+                                    Match result = r.Match(runways[0]);
+                                    if (result.Success)
                                     {
-                                        //petite expression reguliere pour nettoyer l'ax de piste (enlever le L, ou R s'il y en a)
-                                        Regex r = new Regex("^([0-9]+)([A-Z]?)");
-                                        Match result = r.Match(runways[0]);
-                                        if (result.Success)
+                                        int axePiste1 = 10 * int.Parse(result.Groups[1].Value);
+                                        compas1.Headings[0] = axePiste1;
+                                        //if we have some meteo data, show it !
+                                        if (metarData != null)
                                         {
-                                            int axePiste1 = 10 * int.Parse(result.Groups[1].Value);
-                                            compas1.Headings[0] = axePiste1;
-                                            if (metarData.Wind.Direction == "VRB") {
-                                                variableWindTimer.Start();
+                                            if (metarData.Wind.Direction == "VRB")
+                                            {
+                                                VariableWindTimer.Start();
+                                                VariableWindAnimation.Start();
                                             }
                                             else
                                             {
-                                                variableWindTimer.Stop();
+                                                VariableWindTimer.Stop();
+                                                VariableWindAnimation.Stop();
                                                 compas1.Headings[1] = int.Parse(metarData.Wind.Direction);
                                             }
                                             compas1.NumericValue = int.Parse(metarData.Wind.Speed);
@@ -188,25 +227,31 @@ namespace MeteoPlugin
                                         }
                                         else
                                         {
-
+                                            VariableWindTimer.Start();
+                                            VariableWindAnimation.Start();
                                         }
+                                    }
+                                    else
+                                    {
 
                                     }
-                                }
-                                else
-                                {
-                                    compas1.Headings[0] = 0;
-                                    compas1.Headings[1] = 0;
-                                    compas1.NumericValue = double.NaN;
-                                    compas1.Unit = "???";
+
                                 }
                             }
-                        }
-                        else
-                        {
-                            lbAirportInfo.Items.Add("Still loading airports database");
+                            else
+                            {
+                                compas1.Headings[0] = 0;
+                                compas1.Headings[1] = 0;
+                                compas1.NumericValue = double.NaN;
+                                compas1.Unit = "???";
+                            }
                         }
                     }
+                    else
+                    {
+                        lbAirportInfo.Items.Add("Still loading airports database");
+                    }
+
                 }
                 catch (Exception ex)
                 {
@@ -218,6 +263,19 @@ namespace MeteoPlugin
             {
                 Logger.WriteLine(ex.Message);
             }
+
+            if (OnStyleChanged != null)
+            {
+            }
+            if (metarData != null)
+            {
+                UpdateStatus("Done METAR informations decoding");
+            }
+            else
+            {
+                UpdateStatus("No METAR available");
+            }
+
         }
 
         private async void btnRequest_Click(object sender, EventArgs e)
@@ -261,10 +319,44 @@ namespace MeteoPlugin
 
         }
 
-        private void variableWindTimer_Tick(object sender, EventArgs e)
+        private int displayedWindDirection;
+        private void VariableWindTimer_Tick(object sender, EventArgs e)
         {
+            int variableMin = 0;
+            int variableMax = 360;
+            if (metarData != null)
+            {
+                if (metarData.WindVariation != null)
+                {
+                    try
+                    {
+                        variableMin = int.Parse(metarData.WindVariation.StartAngle);
+                        variableMax = int.Parse(metarData.WindVariation.EndAngle);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteLine("Error decoding wind variation angle " + ex.Message);
+                    }
+                }
+            }
             Random random = new Random();
-            compas1.Headings[1] = (compas1.Headings[1] + random.Next(15) - 7) % 360;
+            displayedWindDirection = random.Next(variableMin, variableMax);
+        }
+
+        private void VariableWindAnimation_Tick(object sender, EventArgs e)
+        {
+            int delta1 = ((displayedWindDirection - compas1.Headings[1] ));
+            int delta2 = ((compas1.Headings[1] + 360 - displayedWindDirection));
+            int bestDelta = 0;
+            if (Math.Abs(delta1)<Math.Abs(delta2))
+            {
+                bestDelta = delta1;
+            }
+            else
+            {
+                bestDelta = delta2;
+            }
+            compas1.Headings[1] = (compas1.Headings[1] + bestDelta/20) % 360;
             compas1.Invalidate();
         }
     }

@@ -49,6 +49,29 @@ namespace FlightRecPlugin
 
         private simData data;
 
+        ISimAddonPluginCtrl.UpdateStatusHandler updateStatusHandler;
+        event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
+        {
+            add
+            {
+                updateStatusHandler = value;
+            }
+
+            remove
+            {
+                updateStatusHandler = null;
+            }
+        }
+
+        private void UpdateStatus(string message)
+        {
+            if (updateStatusHandler!=null)
+            {
+                updateStatusHandler(this, message);
+            }
+        }
+
+
         public FlightRecCtrl()
         {
             InitializeComponent();
@@ -111,6 +134,8 @@ namespace FlightRecPlugin
 
             RemplirComboImmat();
             RemplirComboMissions();
+
+            UpdateStatus("FlightRecorder is ready");
         }
 
         public void FormClosing(object sender, FormClosingEventArgs e)

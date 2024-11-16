@@ -45,7 +45,8 @@ namespace MeteoPlugin
             compas1 = new SimAddonControls.Compas();
             lbAirportInfo = new ListBox();
             ttAeroport = new ToolTip(components);
-            variableWindTimer = new System.Windows.Forms.Timer(components);
+            VariableWindTimer = new System.Windows.Forms.Timer(components);
+            VariableWindAnimation = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -239,9 +240,14 @@ namespace MeteoPlugin
             lbAirportInfo.TabIndex = 1;
             lbAirportInfo.DrawItem += lbAirportInfo_DrawItem;
             // 
-            // variableWindTimer
+            // VariableWindTimer
             // 
-            variableWindTimer.Tick += variableWindTimer_Tick;
+            VariableWindTimer.Interval = 5000;
+            VariableWindTimer.Tick += VariableWindTimer_Tick;
+            // 
+            // VariableWindAnimation
+            // 
+            VariableWindAnimation.Tick += VariableWindAnimation_Tick;
             // 
             // MeteoCtrl
             // 
@@ -282,6 +288,7 @@ namespace MeteoPlugin
         private TableLayoutPanel tableLayoutPanel3;
         private SimAddonControls.Compas compas1;
         private ListBox lbAirportInfo;
-        private System.Windows.Forms.Timer variableWindTimer;
+        private System.Windows.Forms.Timer VariableWindTimer;
+        private System.Windows.Forms.Timer VariableWindAnimation;
     }
 }

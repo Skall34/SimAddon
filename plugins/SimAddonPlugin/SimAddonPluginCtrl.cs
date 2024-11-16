@@ -9,17 +9,23 @@ namespace SimAddonPlugin
         //simData data;
 
         //const string name = "stubPlugin";
-         string getName();
 
-          void init(ref simData _data);
-          void registerPage(TabControl parent);
+        //methodes
+        string getName();
 
-          void updateSituation(situation data);
+        void init(ref simData _data);
+        void registerPage(TabControl parent);
+
+        void updateSituation(situation data);
 
         //request to terminate to the plugin. 
         //must return true, if terminate can be done OK,
         //or false if termination should be canceled
-          void FormClosing(object sender, FormClosingEventArgs e);
+        void FormClosing(object sender, FormClosingEventArgs e);
+
+        //events
+        public delegate void UpdateStatusHandler(object sender, string statusMessage);
+        public event UpdateStatusHandler OnStatusUpdate;
     }
 
     public  class situation

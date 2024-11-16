@@ -276,6 +276,7 @@ namespace SimAddon
             {
                 try
                 {
+                    plugin.OnStatusUpdate += Plugin_OnStatusUpdate;
                     plugin.registerPage(tabControl1);
                 }
                 catch (Exception ex)
@@ -305,6 +306,12 @@ namespace SimAddon
             //demarre le timer de connection (fait un essai de connexion toutes les 1000ms)
             this.timerConnection.Start();
 
+        }
+
+        //write the message the status bar
+        private void Plugin_OnStatusUpdate(object sender, string statusMessage)
+        {
+            this.lblConnectionStatus.Text = statusMessage;
         }
 
         private void submitBugToolStripMenuItem_Click(object sender, EventArgs e)
