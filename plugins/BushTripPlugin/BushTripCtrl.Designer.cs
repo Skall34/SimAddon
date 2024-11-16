@@ -109,6 +109,7 @@
             lvWaypoints.GridLines = true;
             lvWaypoints.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             lvWaypoints.Location = new Point(0, 0);
+            lvWaypoints.MultiSelect = false;
             lvWaypoints.Name = "lvWaypoints";
             lvWaypoints.Size = new Size(515, 259);
             lvWaypoints.SmallImageList = imageList1;
@@ -179,11 +180,18 @@
             // 
             // compas1
             // 
+            compas1.Headings = new int[]
+    {
+    0
+    };
+            compas1.LabelText = "Compas";
             compas1.Location = new Point(363, 3);
             compas1.Name = "compas1";
             compas1.NbNeedles = 1;
-            compas1.Headings[0] = 0;
-            compas1.NeedleImages[0] = (Image)resources.GetObject("compas1.NeedleImage");
+            compas1.NeedleImages = new Image[]
+    {
+    (Image)resources.GetObject("compas1.NeedleImages")
+    };
             compas1.NumericValue = 0D;
             compas1.RectangleSize = new Size(80, 20);
             compas1.Size = new Size(149, 330);

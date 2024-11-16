@@ -13,6 +13,7 @@ namespace BushTripPlugin
     {
         private simData? data;
         private uint waypointIndex;
+        private int lastWaypointIndex;
         private LittleNavmap? flightPlan;
 
         private string filename;
@@ -22,6 +23,7 @@ namespace BushTripPlugin
         {
             InitializeComponent();
             waypointIndex = 0;
+            lastWaypointIndex = 0;
             btnReset.Enabled = false;
             btnSaveFlightPlan.Enabled = false;
         }
@@ -83,42 +85,50 @@ namespace BushTripPlugin
             if (flightPlan != null)
             {
                 //s'il y a encore au moins un WP avant la fin
-                if (waypointIndex+1 < flightPlan.Item.Waypoints.Count())
+                uint targetWP = waypointIndex + 1;
+                if (waypointIndex < lastWaypointIndex)
                 {
-                    double wpLat = flightPlan.Item.Waypoints[waypointIndex + 1].Pos.Lat;
-                    double wpLon = flightPlan.Item.Waypoints[waypointIndex + 1].Pos.Lon;
+                    targetWP = waypointIndex + 1;
+                }
+                else
+                {
+                    targetWP = waypointIndex;
+                }
+                double wpLat = flightPlan.Item.Waypoints[targetWP].Pos.Lat;
+                double wpLon = flightPlan.Item.Waypoints[targetWP].Pos.Lon;
 
-                    distanceToNextWP = NavigationHelper.GetDistance(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon);
+                distanceToNextWP = NavigationHelper.GetDistance(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon);
+                routeToWP = await NavigationHelper.GetNavRouteAsync(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon, magVariation);
 
-                    routeToWP = await NavigationHelper.GetNavRouteAsync(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon, magVariation);
+                double ecartRoute = routeToWP - (data.position.HeadingDegreesTrue - magVariation);
+                if (ecartRoute < 0)
+                {
+                    ecartRoute = 360 + ecartRoute;
+                }
 
-                    double ecartRoute = routeToWP - (data.position.HeadingDegreesTrue-magVariation)  ;
-                    if (ecartRoute < 0)
-                    {
-                        ecartRoute = 360 + ecartRoute;
-                    }
-                    compas1.Headings[0] = (int)ecartRoute;
-                    compas1.NumericValue = distanceToNextWP;
-
+                if (waypointIndex < lastWaypointIndex)
+                {
                     tsGlobalStatus.Text = "Next waypoint : Route : " + routeToWP.ToString() + "  Distance : " + distanceToNextWP.ToString();
                 }
                 else
                 {
                     tsGlobalStatus.Text = "Flight plan finished !";
-                    compas1.Headings[0] = (int)0;
-                    compas1.NumericValue = 0;
                 }
 
-                //si on est a moins de 3 miles du wp, on affiche le segment suivant.
-                if (distanceToNextWP < 3)
+                compas1.Headings[0] = (int)ecartRoute;
+                compas1.NumericValue = distanceToNextWP;
+
+
+                //si on est a moins de 2 miles du wp, OU si on est a moins de 10 miles du dernier WP.
+                //, on affiche le segment suivant.
+                if ((distanceToNextWP <= 2) || ((distanceToNextWP <= 10)&&(waypointIndex == lastWaypointIndex-1)))
                 {
-                    if (waypointIndex < flightPlan.Item.Waypoints.Count()-1)
+                    if (waypointIndex < lastWaypointIndex )
                     {
                         waypointIndex++;
                         flightPlan.CurrentStep = waypointIndex;
                         //save the flightplan with the current status, for a potential next reload (not to restart the whole flight)
                         saveFlightPlan();
-
                         refreshFlightBook();
                     }
                     else
@@ -173,7 +183,7 @@ namespace BushTripPlugin
             double result = 1;
             if (flightPlan != null)
             {
-                for (int i = 0; i < flightPlan.Item.Waypoints.Count(); i++)
+                for (int i = 0; i <= lastWaypointIndex; i++)
                 {
                     LittleNavmapFlightplanWaypoint? wp = flightPlan.Item.Waypoints[i];
                     LittleNavmapFlightplanWaypoint? nextwp = null;
@@ -202,7 +212,7 @@ namespace BushTripPlugin
                 string filePath = openFileDialog.FileName;
                 filename = filePath;
                 waypointIndex = 0;
-
+                lastWaypointIndex = 0;
                 if (filePath.EndsWith(".fplan"))
                 {
                     string json = File.ReadAllText(filePath);
@@ -238,7 +248,7 @@ namespace BushTripPlugin
                     {
                         Logger.WriteLine("error when getting magnetic declinaison :" + ex.Message);
                     }
-
+                    lastWaypointIndex = flightPlan.Item.Waypoints.Length - 1;
                     refreshFlightBook();
                     double distance = computeFlightLength();
                     lblDistanceTotale.Text = "Total distance :" + distance.ToString() + " miles";
@@ -290,7 +300,14 @@ namespace BushTripPlugin
         {
             if (flightPlan != null)
             {
-                waypointIndex = (uint)flightPlan.Item.Waypoints.Count() - 1;
+                if (waypointIndex == lastWaypointIndex)
+                {
+                    waypointIndex = (uint)lvWaypoints.SelectedIndices[0];
+                }
+                else
+                {
+                    waypointIndex = (uint)lastWaypointIndex;
+                }
                 refreshFlightBook();
             }
         }
