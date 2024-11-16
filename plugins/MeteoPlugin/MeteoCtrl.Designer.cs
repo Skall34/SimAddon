@@ -34,7 +34,6 @@ namespace MeteoPlugin
             label1 = new Label();
             btnRequest = new Button();
             tbMETAR = new TextBox();
-            statusStrip1 = new StatusStrip();
             pictureBox1 = new PictureBox();
             lblDecodedMETAR = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -80,21 +79,13 @@ namespace MeteoPlugin
             // 
             tbMETAR.Dock = DockStyle.Fill;
             tbMETAR.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            tbMETAR.Location = new Point(5, 104);
+            tbMETAR.Location = new Point(12, 104);
+            tbMETAR.Margin = new Padding(10, 3, 10, 3);
             tbMETAR.Multiline = true;
             tbMETAR.Name = "tbMETAR";
             tbMETAR.ReadOnly = true;
-            tbMETAR.Size = new Size(502, 44);
+            tbMETAR.Size = new Size(488, 44);
             tbMETAR.TabIndex = 7;
-            // 
-            // statusStrip1
-            // 
-            statusStrip1.Location = new Point(0, 592);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(512, 22);
-            statusStrip1.SizingGrip = false;
-            statusStrip1.TabIndex = 9;
-            statusStrip1.Text = "statusStrip1";
             // 
             // pictureBox1
             // 
@@ -139,7 +130,7 @@ namespace MeteoPlugin
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(512, 592);
+            tableLayoutPanel1.Size = new Size(512, 614);
             tableLayoutPanel1.TabIndex = 13;
             // 
             // tableLayoutPanel2
@@ -180,10 +171,10 @@ namespace MeteoPlugin
             panel1.Controls.Add(lblDecodedMETAR);
             panel1.Dock = DockStyle.Fill;
             panel1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            panel1.Location = new Point(12, 163);
-            panel1.Margin = new Padding(10);
+            panel1.Location = new Point(12, 156);
+            panel1.Margin = new Padding(10, 3, 10, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(488, 197);
+            panel1.Size = new Size(488, 222);
             panel1.TabIndex = 12;
             // 
             // tableLayoutPanel3
@@ -194,11 +185,11 @@ namespace MeteoPlugin
             tableLayoutPanel3.Controls.Add(compas1, 0, 0);
             tableLayoutPanel3.Controls.Add(lbAirportInfo, 1, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(5, 375);
+            tableLayoutPanel3.Location = new Point(5, 386);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(502, 212);
+            tableLayoutPanel3.Size = new Size(502, 223);
             tableLayoutPanel3.TabIndex = 13;
             // 
             // compas1
@@ -220,7 +211,7 @@ namespace MeteoPlugin
     };
             compas1.NumericValue = 0D;
             compas1.RectangleSize = new Size(60, 20);
-            compas1.Size = new Size(245, 206);
+            compas1.Size = new Size(245, 217);
             compas1.TabIndex = 0;
             compas1.Unit = "NM";
             // 
@@ -234,9 +225,10 @@ namespace MeteoPlugin
             lbAirportInfo.HorizontalScrollbar = true;
             lbAirportInfo.ItemHeight = 34;
             lbAirportInfo.Items.AddRange(new object[] { "Loading airport database" });
-            lbAirportInfo.Location = new Point(254, 3);
+            lbAirportInfo.Location = new Point(257, 6);
+            lbAirportInfo.Margin = new Padding(6);
             lbAirportInfo.Name = "lbAirportInfo";
-            lbAirportInfo.Size = new Size(245, 206);
+            lbAirportInfo.Size = new Size(239, 211);
             lbAirportInfo.TabIndex = 1;
             lbAirportInfo.DrawItem += lbAirportInfo_DrawItem;
             // 
@@ -255,7 +247,6 @@ namespace MeteoPlugin
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Teal;
             Controls.Add(tableLayoutPanel1);
-            Controls.Add(statusStrip1);
             Name = "MeteoCtrl";
             Size = new Size(512, 614);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -267,7 +258,6 @@ namespace MeteoPlugin
             panel1.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
 
 
@@ -277,7 +267,6 @@ namespace MeteoPlugin
         private Label label1;
         private Button btnRequest;
         private TextBox tbMETAR;
-        private StatusStrip statusStrip1;
         private PictureBox pictureBox1;
         private Label lblDecodedMETAR;
         private TableLayoutPanel tableLayoutPanel1;
