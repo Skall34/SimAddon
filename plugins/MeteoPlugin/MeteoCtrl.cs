@@ -88,6 +88,7 @@ namespace MeteoPlugin
         {
             simdata = _data;
             lbAirportInfo.Items.Clear();
+            //Logger.register();
         }
 
         public void FormClosing(object sender, FormClosingEventArgs e)
@@ -151,6 +152,7 @@ namespace MeteoPlugin
             //https://vfrmap.com/?type=osm&lat=62.321&lon=-150.093&zoom=12&api_key=763xxE1MJHyhr48DlAP2qQ
 
             UpdateStatus("Requesting METAR informations");
+            Logger.WriteLine("Requesting METAR informations");
 
             string searchItem = "";
             if (cbICAO.SelectedItem != null)
@@ -218,9 +220,18 @@ namespace MeteoPlugin
                                             }
                                             else
                                             {
-                                                VariableWindTimer.Stop();
-                                                VariableWindAnimation.Stop();
-                                                compas1.Headings[1] = int.Parse(metarData.Wind.Direction);
+                                                if (metarData.WindVariation != null)
+                                                {
+                                                    VariableWindTimer.Start();
+                                                    VariableWindAnimation.Start();
+                                                }
+                                                else
+                                                {
+                                                    VariableWindTimer.Stop();
+                                                    VariableWindAnimation.Stop();
+                                                }
+                                                displayedWindDirection = int.Parse(metarData.Wind.Direction);
+                                                compas1.Headings[1] = displayedWindDirection;
                                             }
                                             compas1.NumericValue = int.Parse(metarData.Wind.Speed);
                                             compas1.Unit = "Knts";
@@ -246,6 +257,7 @@ namespace MeteoPlugin
                                 compas1.Unit = "???";
                             }
                         }
+                        compas1.Invalidate();
                     }
                     else
                     {
@@ -332,6 +344,10 @@ namespace MeteoPlugin
                     {
                         variableMin = int.Parse(metarData.WindVariation.StartAngle);
                         variableMax = int.Parse(metarData.WindVariation.EndAngle);
+                        if (variableMax<variableMin)
+                        {
+                            variableMin -= 360;
+                        }
                     }
                     catch (Exception ex)
                     {

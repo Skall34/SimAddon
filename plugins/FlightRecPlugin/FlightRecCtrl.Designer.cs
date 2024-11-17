@@ -41,8 +41,6 @@ namespace FlightRecPlugin
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlightRecCtrl));
-            timerMain = new Timer(components);
-            timerConnection = new Timer(components);
             label9 = new Label();
             label10 = new Label();
             label11 = new Label();
@@ -100,6 +98,7 @@ namespace FlightRecPlugin
             engineStopTimer = new Timer(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox5 = new GroupBox();
+            timerUpdateStaticValues = new Timer(components);
             groupBox1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -113,14 +112,10 @@ namespace FlightRecPlugin
             groupBox5.SuspendLayout();
             SuspendLayout();
             // 
-            // timerMain
-            // 
-            timerMain.Tick += timerMain_Tick;
-            // 
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(24, 141);
+            label9.Location = new Point(19, 141);
             label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
             label9.Size = new Size(105, 18);
@@ -130,13 +125,12 @@ namespace FlightRecPlugin
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(24, 53);
+            label10.Location = new Point(19, 53);
             label10.Margin = new Padding(4, 0, 4, 0);
             label10.Name = "label10";
             label10.Size = new Size(59, 18);
             label10.TabIndex = 31;
             label10.Text = "Aircraft";
-            label10.Click += label10_Click;
             // 
             // label11
             // 
@@ -272,7 +266,6 @@ namespace FlightRecPlugin
             lbStartFuel.TabIndex = 52;
             lbStartFuel.Text = "????";
             lbStartFuel.TextAlign = ContentAlignment.MiddleCenter;
-            lbStartFuel.Click += lbStartFuel_Click;
             // 
             // lbStartTime
             // 
@@ -562,7 +555,7 @@ namespace FlightRecPlugin
             // lbFret
             // 
             lbFret.AutoSize = true;
-            lbFret.Location = new Point(24, 111);
+            lbFret.Location = new Point(19, 111);
             lbFret.Name = "lbFret";
             lbFret.Size = new Size(110, 18);
             lbFret.TabIndex = 43;
@@ -617,7 +610,7 @@ namespace FlightRecPlugin
             // 
             lbEndICAO.AutoSize = true;
             lbEndICAO.Font = new System.Drawing.Font("Arial", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lbEndICAO.Location = new Point(264, 143);
+            lbEndICAO.Location = new Point(264, 142);
             lbEndICAO.Margin = new Padding(4, 0, 4, 0);
             lbEndICAO.Name = "lbEndICAO";
             lbEndICAO.Size = new Size(104, 16);
@@ -627,7 +620,7 @@ namespace FlightRecPlugin
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(21, 82);
+            label5.Location = new Point(19, 82);
             label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(156, 18);
@@ -658,7 +651,7 @@ namespace FlightRecPlugin
             cbImmat.DropDownStyle = ComboBoxStyle.DropDownList;
             cbImmat.FormattingEnabled = true;
             cbImmat.Items.AddRange(new object[] { "none" });
-            cbImmat.Location = new Point(148, 50);
+            cbImmat.Location = new Point(148, 49);
             cbImmat.MaxDropDownItems = 20;
             cbImmat.Name = "cbImmat";
             cbImmat.Size = new Size(111, 26);
@@ -737,6 +730,11 @@ namespace FlightRecPlugin
             groupBox5.TabIndex = 42;
             groupBox5.TabStop = false;
             // 
+            // timerUpdateStaticValues
+            // 
+            timerUpdateStaticValues.Interval = 3000;
+            timerUpdateStaticValues.Tick += timerUpdateStaticValues_Tick;
+            // 
             // FlightRecCtrl
             // 
             AutoScaleDimensions = new SizeF(9F, 18F);
@@ -769,8 +767,6 @@ namespace FlightRecPlugin
         }
 
         #endregion
-        private System.Windows.Forms.Timer timerMain;
-        private System.Windows.Forms.Timer timerConnection;
         private Label label9;
         private Label label10;
         private Label label11;
@@ -828,5 +824,6 @@ namespace FlightRecPlugin
         private GroupBox groupBox6;
         private GroupBox groupBox7;
         private PictureBox pictureBox1;
+        private Timer timerUpdateStaticValues;
     }
 }

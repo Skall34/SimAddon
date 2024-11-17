@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace FlightRecPlugin
 {
-    public partial class FlightRecCtrl : UserControl,ISimAddonPluginCtrl
+    public partial class FlightRecCtrl : UserControl, ISimAddonPluginCtrl
     {
         const string name = "FlightRecorder";
         Version? version;
@@ -24,7 +24,7 @@ namespace FlightRecPlugin
         PositionSnapshot _currentPosition;
         PositionSnapshot _startPosition;
         PositionSnapshot _endPosition;
-        
+
         private Aeroport localAirport;
 
         private double _startFuel;
@@ -65,7 +65,7 @@ namespace FlightRecPlugin
 
         private void UpdateStatus(string message)
         {
-            if (updateStatusHandler!=null)
+            if (updateStatusHandler != null)
             {
                 updateStatusHandler(this, message);
             }
@@ -119,7 +119,7 @@ namespace FlightRecPlugin
             this.tbCallsign.Text = Settings.Default.callsign;
             //desactive le bouton de maj du setting. Il sera reactivé si le callsign est modifié.
             btnSaveSettings.Enabled = false;
-            
+
             flightPerfs = new FlightPerfs();
         }
 
@@ -136,6 +136,9 @@ namespace FlightRecPlugin
             RemplirComboMissions();
 
             UpdateStatus("FlightRecorder is ready");
+            Logger.WriteLine("FlightRecorder is ready");
+
+            timerUpdateStaticValues.Start();
         }
 
         public void FormClosing(object sender, FormClosingEventArgs e)
@@ -166,13 +169,11 @@ namespace FlightRecPlugin
                             System.Threading.Thread.Sleep(2000);
                             this.Cursor = Cursors.Default;
                         }
-                        //arrete les timers.
-                        this.timerConnection.Stop();
-                        this.timerMain.Stop();
                     }
                     else
                     {
                         // Si l'utilisateur clique sur Annuler, annule la fermeture de la fenêtre.
+                        Logger.WriteLine("close canceled by user");
                         e.Cancel = true;
                     }
                 }
@@ -266,7 +267,7 @@ namespace FlightRecPlugin
                         lbTimeOnGround.Text = "--:--";
 
                     }
-
+                    //constamment mettre à jour la vrtical acceleration et airspeed pendant le vol.
                     flightPerfs.landingVerticalAcceleration = currentFlightStatus.verticalAcceleration;
                     flightPerfs.landingSpeed = currentFlightStatus.airSpeed;
                 }
@@ -293,13 +294,7 @@ namespace FlightRecPlugin
                         submitFlightToolStripMenuItem.Enabled = true;
                     }
 
-                    //si on est au sol, et moteur arretés, alors on continue de rafraichir les données statiques.
-                    //sinon (en vol, ou des que les moteurs sont allumés, on ne change plus ça).
-                    if (!atLeastOneEngineFiring)
-                    {
-                        ReadStaticValues();
 
-                    }
 
                     //si on est au sol, et qu'on a lu une valeur de fuel, ET le fuel augmente, on detecte un refuel !
                     if (!_refuelDetected && (_currentFuel > 0) && (currentFuel > _currentFuel))
@@ -665,7 +660,7 @@ namespace FlightRecPlugin
                     cargo = _endPayload.ToString("0.00")
                 };
 
-                int result = await(data.saveFlight(flightdata));
+                int result = await (data.saveFlight(flightdata));
 
                 //int result = await urlDeserializer.PushFlightAsync(data);
                 if (0 != result)
@@ -1020,11 +1015,11 @@ namespace FlightRecPlugin
 
         public async void ReadStaticValues()
         {
-            Logger.WriteLine("Reading static values");
             try
             {
                 if (data.isConnected && data.GetReadyToFly())
                 {
+                    Logger.WriteLine("Reading static values");
                     //commence à lire qq variables du simu : fuel & cargo, immat avion...
                     this.lbPayload.Text = data.GetPayload().ToString("0.00");
 
@@ -1066,8 +1061,6 @@ namespace FlightRecPlugin
                             }
                         }
                     }
-                    //recupere le type d'avion donné par le simu.
-                    Logger.WriteLine("Simulator aircraft loaded : " + data.GetAircraftType());
                 }
             }
             catch (Exception ex)
@@ -1076,23 +1069,14 @@ namespace FlightRecPlugin
             }
         }
 
-
-
-        private void label10_Click(object sender, EventArgs e)
+        private void timerUpdateStaticValues_Tick(object sender, EventArgs e)
         {
-
+            //si on est au sol, et moteur arretés, alors on continue de rafraichir les données statiques.
+            //sinon (en vol, ou des que les moteurs sont allumés, on ne change plus ça).
+            if (onGround && !atLeastOneEngineFiring)
+            {
+                ReadStaticValues();
+            }
         }
-
-        private void lbStartFuel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void timerMain_Tick(object sender, EventArgs e)
-        {
-
-        }
-
-
     }
 }

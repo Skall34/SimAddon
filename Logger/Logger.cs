@@ -14,11 +14,13 @@ namespace SimAddonLogger
     {
         static TraceListener logger;
 
-        const string logFileName = "FlightRecorder";
+        const string logFileName = "SimAddon";
 
         private static string _logFileName;
 
         private static string lastLine="";
+        private static uint nbLastLine = 0;
+
         static string GetCallingMethodName()
         {
             try
@@ -58,12 +60,18 @@ namespace SimAddonLogger
             if (File.Exists(logFile+".log"))
             {
                 File.Copy(logFile + ".log", logFile + ".bak",true);
+                File.Delete(logFile + ".log");
             }
             logger = new TextWriterTraceListener(logFile + ".log");
             _logFileName = logFile + ".log";
 
             System.Diagnostics.Trace.Listeners.Add(logger);
             Trace.AutoFlush = true;
+        }
+
+        public static void register()
+        {
+            System.Diagnostics.Trace.Listeners.Add(logger);
         }
 
         public static void Dispose()
@@ -94,8 +102,17 @@ namespace SimAddonLogger
             string newLine = callingFunc + " : " + message;
             if (newLine != lastLine)
             {
-                Trace.WriteLine(DateTime.Now.ToLongTimeString() + " : " + lastLine);
+                if (nbLastLine>0)
+                {
+                    Trace.WriteLine(DateTime.Now.ToLongTimeString() + $" : {lastLine} ({nbLastLine})");
+                }
+                Trace.WriteLine(DateTime.Now.ToLongTimeString() + " : " + newLine);
                 lastLine = newLine;
+                nbLastLine = 0;
+            }
+            else
+            {
+                nbLastLine++;
             }
         }
 

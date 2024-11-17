@@ -959,7 +959,7 @@ namespace MeteoPlugin
 
                 // Extraire la section METAR du contenu HTML (selon le format attendu)
                 string metar = responseBody.TrimEnd();
-
+                Logger.WriteLine($"Got metar data : {metar}");
                 return metar;
             }
             catch (Exception ex)
