@@ -246,7 +246,7 @@ namespace FlightRecPlugin
                     if (onGround)
                     {
                         Logger.WriteLine("Takeoff detected !");
-
+                        UpdateStatus("In flight");
                         //we just took off ! read the plane weight
                         flightPerfs.takeOffWeight = currentFlightStatus.planeWeight;
                         //keep memory that we're airborn
@@ -276,7 +276,7 @@ namespace FlightRecPlugin
                     if (!onGround)
                     {
                         Logger.WriteLine("Landing detected !");
-
+                        UpdateStatus("On ground");
                         //only update the touchDownVSpeed if we've been airborn once
                         flightPerfs.touchDownVSpeed = currentFlightStatus.landingVerticalSpeed;
                         flightPerfs.landingWeight = currentFlightStatus.planeWeight;
