@@ -47,6 +47,10 @@ namespace SimAddonPlugin
         public double planeWeight { get; set; }
         public byte stallWarning { get; set; }
 
+        public bool MasterAvionicsOn { get; set; }
+
+        public bool MasterBatteryOn { get; set; }
+
         public double verticalAcceleration { get; set; }
 
         public double magVariation { get; set; }

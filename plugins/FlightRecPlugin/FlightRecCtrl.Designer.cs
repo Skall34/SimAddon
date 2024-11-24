@@ -47,7 +47,7 @@ namespace FlightRecPlugin
             tbCallsign = new TextBox();
             btnSaveSettings = new Button();
             btnSubmit = new Button();
-            groupBox1 = new GroupBox();
+            gbDynamicData = new GroupBox();
             tableLayoutPanel2 = new TableLayoutPanel();
             groupBox2 = new GroupBox();
             label13 = new Label();
@@ -73,6 +73,8 @@ namespace FlightRecPlugin
             lbTimeOnGround = new Label();
             lbTimeAirborn = new Label();
             groupBox7 = new GroupBox();
+            label6 = new Label();
+            ledBulbBattery = new SimAddonControls.LedBulb();
             tbCommentaires = new TextBox();
             pictureBox1 = new PictureBox();
             label15 = new Label();
@@ -99,7 +101,7 @@ namespace FlightRecPlugin
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox5 = new GroupBox();
             timerUpdateStaticValues = new Timer(components);
-            groupBox1.SuspendLayout();
+            gbDynamicData.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox4.SuspendLayout();
@@ -181,16 +183,16 @@ namespace FlightRecPlugin
             btnSubmit.UseVisualStyleBackColor = true;
             btnSubmit.Click += BtnSubmit_Click;
             // 
-            // groupBox1
+            // gbDynamicData
             // 
-            groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            groupBox1.Controls.Add(tableLayoutPanel2);
-            groupBox1.Location = new Point(3, 193);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(484, 460);
-            groupBox1.TabIndex = 39;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Flight summary";
+            gbDynamicData.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            gbDynamicData.Controls.Add(tableLayoutPanel2);
+            gbDynamicData.Location = new Point(3, 193);
+            gbDynamicData.Name = "gbDynamicData";
+            gbDynamicData.Size = new Size(484, 533);
+            gbDynamicData.TabIndex = 39;
+            gbDynamicData.TabStop = false;
+            gbDynamicData.Text = "Flight summary";
             // 
             // tableLayoutPanel2
             // 
@@ -208,7 +210,7 @@ namespace FlightRecPlugin
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 53F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 108F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(472, 415);
+            tableLayoutPanel2.Size = new Size(472, 488);
             tableLayoutPanel2.TabIndex = 54;
             // 
             // groupBox2
@@ -242,40 +244,42 @@ namespace FlightRecPlugin
             // lbStartPosition
             // 
             lbStartPosition.AutoSize = true;
-            lbStartPosition.Location = new Point(137, 39);
+            lbStartPosition.Location = new Point(134, 39);
             lbStartPosition.Name = "lbStartPosition";
             lbStartPosition.Size = new Size(17, 18);
             lbStartPosition.TabIndex = 54;
             lbStartPosition.Text = "?";
+            lbStartPosition.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lbStartIata
             // 
             lbStartIata.AutoSize = true;
-            lbStartIata.Location = new Point(137, 21);
+            lbStartIata.Location = new Point(134, 21);
             lbStartIata.Name = "lbStartIata";
             lbStartIata.Size = new Size(44, 18);
             lbStartIata.TabIndex = 53;
             lbStartIata.Text = "????";
+            lbStartIata.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lbStartFuel
             // 
             lbStartFuel.AutoSize = true;
-            lbStartFuel.Location = new Point(135, 75);
+            lbStartFuel.Location = new Point(134, 75);
             lbStartFuel.Name = "lbStartFuel";
             lbStartFuel.Size = new Size(44, 18);
             lbStartFuel.TabIndex = 52;
             lbStartFuel.Text = "????";
-            lbStartFuel.TextAlign = ContentAlignment.MiddleCenter;
+            lbStartFuel.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lbStartTime
             // 
             lbStartTime.AutoSize = true;
-            lbStartTime.Location = new Point(137, 57);
+            lbStartTime.Location = new Point(134, 57);
             lbStartTime.Name = "lbStartTime";
             lbStartTime.Size = new Size(32, 18);
             lbStartTime.TabIndex = 51;
             lbStartTime.Text = "--:--";
-            lbStartTime.TextAlign = ContentAlignment.MiddleCenter;
+            lbStartTime.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // label8
             // 
@@ -290,7 +294,7 @@ namespace FlightRecPlugin
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(10, 75);
+            label4.Location = new Point(7, 75);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(73, 18);
@@ -368,20 +372,22 @@ namespace FlightRecPlugin
             // lbEndPosition
             // 
             lbEndPosition.AutoSize = true;
-            lbEndPosition.Location = new Point(137, 39);
+            lbEndPosition.Location = new Point(134, 39);
             lbEndPosition.Name = "lbEndPosition";
             lbEndPosition.Size = new Size(17, 18);
             lbEndPosition.TabIndex = 55;
             lbEndPosition.Text = "?";
+            lbEndPosition.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lbEndIata
             // 
             lbEndIata.AutoSize = true;
-            lbEndIata.Location = new Point(137, 21);
+            lbEndIata.Location = new Point(134, 21);
             lbEndIata.Name = "lbEndIata";
             lbEndIata.Size = new Size(44, 18);
             lbEndIata.TabIndex = 54;
             lbEndIata.Text = "????";
+            lbEndIata.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lbEndFuel
             // 
@@ -391,17 +397,17 @@ namespace FlightRecPlugin
             lbEndFuel.Size = new Size(44, 18);
             lbEndFuel.TabIndex = 53;
             lbEndFuel.Text = "????";
-            lbEndFuel.TextAlign = ContentAlignment.MiddleCenter;
+            lbEndFuel.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lbEndTime
             // 
             lbEndTime.AutoSize = true;
-            lbEndTime.Location = new Point(135, 57);
+            lbEndTime.Location = new Point(134, 57);
             lbEndTime.Name = "lbEndTime";
             lbEndTime.Size = new Size(32, 18);
             lbEndTime.TabIndex = 52;
             lbEndTime.Text = "--:--";
-            lbEndTime.TextAlign = ContentAlignment.MiddleCenter;
+            lbEndTime.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // groupBox6
             // 
@@ -462,6 +468,8 @@ namespace FlightRecPlugin
             // groupBox7
             // 
             groupBox7.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox7.Controls.Add(label6);
+            groupBox7.Controls.Add(ledBulbBattery);
             groupBox7.Controls.Add(tbCommentaires);
             groupBox7.Controls.Add(pictureBox1);
             groupBox7.Controls.Add(label15);
@@ -471,10 +479,27 @@ namespace FlightRecPlugin
             groupBox7.Controls.Add(cbNote);
             groupBox7.Location = new Point(3, 273);
             groupBox7.Name = "groupBox7";
-            groupBox7.Size = new Size(466, 139);
+            groupBox7.Size = new Size(466, 212);
             groupBox7.TabIndex = 54;
             groupBox7.TabStop = false;
             groupBox7.Text = "Flight evaluation";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(35, 104);
+            label6.Name = "label6";
+            label6.Size = new Size(59, 18);
+            label6.TabIndex = 52;
+            label6.Text = "Battery";
+            // 
+            // ledBulbBattery
+            // 
+            ledBulbBattery.Location = new Point(9, 101);
+            ledBulbBattery.Name = "ledBulbBattery";
+            ledBulbBattery.On = false;
+            ledBulbBattery.Size = new Size(23, 34);
+            ledBulbBattery.TabIndex = 51;
             // 
             // tbCommentaires
             // 
@@ -484,7 +509,7 @@ namespace FlightRecPlugin
             tbCommentaires.Multiline = true;
             tbCommentaires.Name = "tbCommentaires";
             tbCommentaires.ScrollBars = ScrollBars.Vertical;
-            tbCommentaires.Size = new Size(348, 77);
+            tbCommentaires.Size = new Size(348, 150);
             tbCommentaires.TabIndex = 20;
             // 
             // pictureBox1
@@ -501,7 +526,7 @@ namespace FlightRecPlugin
             // 
             label15.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label15.AutoSize = true;
-            label15.Location = new Point(211, 104);
+            label15.Location = new Point(211, 177);
             label15.Margin = new Padding(4, 0, 4, 0);
             label15.Name = "label15";
             label15.Size = new Size(63, 18);
@@ -523,7 +548,7 @@ namespace FlightRecPlugin
             cbMission.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             cbMission.DropDownStyle = ComboBoxStyle.DropDownList;
             cbMission.FormattingEnabled = true;
-            cbMission.Location = new Point(281, 101);
+            cbMission.Location = new Point(281, 174);
             cbMission.Name = "cbMission";
             cbMission.Size = new Size(179, 26);
             cbMission.TabIndex = 22;
@@ -532,7 +557,7 @@ namespace FlightRecPlugin
             // 
             label2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new Point(20, 104);
+            label2.Location = new Point(20, 177);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(83, 18);
@@ -545,7 +570,7 @@ namespace FlightRecPlugin
             cbNote.DropDownStyle = ComboBoxStyle.DropDownList;
             cbNote.FormattingEnabled = true;
             cbNote.Items.AddRange(new object[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
-            cbNote.Location = new Point(112, 101);
+            cbNote.Location = new Point(112, 174);
             cbNote.MaxDropDownItems = 10;
             cbNote.Name = "cbNote";
             cbNote.Size = new Size(66, 26);
@@ -706,9 +731,9 @@ namespace FlightRecPlugin
             // 
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(groupBox1, 0, 1);
             tableLayoutPanel1.Controls.Add(groupBox5, 0, 2);
             tableLayoutPanel1.Controls.Add(groupBox3, 0, 0);
+            tableLayoutPanel1.Controls.Add(gbDynamicData, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -716,7 +741,7 @@ namespace FlightRecPlugin
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 190F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 55F));
-            tableLayoutPanel1.Size = new Size(490, 711);
+            tableLayoutPanel1.Size = new Size(490, 784);
             tableLayoutPanel1.TabIndex = 42;
             // 
             // groupBox5
@@ -724,7 +749,7 @@ namespace FlightRecPlugin
             groupBox5.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             groupBox5.Controls.Add(btnReset);
             groupBox5.Controls.Add(btnSubmit);
-            groupBox5.Location = new Point(3, 660);
+            groupBox5.Location = new Point(3, 733);
             groupBox5.Name = "groupBox5";
             groupBox5.Size = new Size(484, 48);
             groupBox5.TabIndex = 42;
@@ -746,8 +771,8 @@ namespace FlightRecPlugin
             ForeColor = Color.White;
             Margin = new Padding(5, 4, 5, 4);
             Name = "FlightRecCtrl";
-            Size = new Size(490, 711);
-            groupBox1.ResumeLayout(false);
+            Size = new Size(490, 784);
+            gbDynamicData.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
@@ -773,7 +798,7 @@ namespace FlightRecPlugin
         private TextBox tbCallsign;
         private Button btnSaveSettings;
         private Button btnSubmit;
-        private GroupBox groupBox1;
+        private GroupBox gbDynamicData;
         private GroupBox groupBox3;
         private Label label2;
         private TextBox tbCommentaires;
@@ -825,5 +850,7 @@ namespace FlightRecPlugin
         private GroupBox groupBox7;
         private PictureBox pictureBox1;
         private Timer timerUpdateStaticValues;
+        private Label label6;
+        private SimAddonControls.LedBulb ledBulbBattery;
     }
 }

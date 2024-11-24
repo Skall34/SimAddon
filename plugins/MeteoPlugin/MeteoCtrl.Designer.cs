@@ -43,6 +43,9 @@ namespace MeteoPlugin
             tableLayoutPanel3 = new TableLayoutPanel();
             compas1 = new SimAddonControls.Compas();
             lbAirportInfo = new ListBox();
+            panel2 = new Panel();
+            label2 = new Label();
+            ledBulb1 = new SimAddonControls.LedBulb();
             ttAeroport = new ToolTip(components);
             VariableWindTimer = new System.Windows.Forms.Timer(components);
             VariableWindAnimation = new System.Windows.Forms.Timer(components);
@@ -51,6 +54,7 @@ namespace MeteoPlugin
             tableLayoutPanel2.SuspendLayout();
             panel1.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
+            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -121,15 +125,17 @@ namespace MeteoPlugin
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel1.Controls.Add(panel1, 0, 3);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 0, 4);
+            tableLayoutPanel1.Controls.Add(panel2, 0, 5);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 5;
+            tableLayoutPanel1.RowCount = 6;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tableLayoutPanel1.Size = new Size(512, 614);
             tableLayoutPanel1.TabIndex = 13;
             // 
@@ -174,7 +180,7 @@ namespace MeteoPlugin
             panel1.Location = new Point(12, 156);
             panel1.Margin = new Padding(10, 3, 10, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(488, 222);
+            panel1.Size = new Size(488, 204);
             panel1.TabIndex = 12;
             // 
             // tableLayoutPanel3
@@ -185,11 +191,11 @@ namespace MeteoPlugin
             tableLayoutPanel3.Controls.Add(compas1, 0, 0);
             tableLayoutPanel3.Controls.Add(lbAirportInfo, 1, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(5, 386);
+            tableLayoutPanel3.Location = new Point(5, 368);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(502, 223);
+            tableLayoutPanel3.Size = new Size(502, 204);
             tableLayoutPanel3.TabIndex = 13;
             // 
             // compas1
@@ -211,7 +217,7 @@ namespace MeteoPlugin
     };
             compas1.NumericValue = 0D;
             compas1.RectangleSize = new Size(60, 20);
-            compas1.Size = new Size(245, 217);
+            compas1.Size = new Size(245, 198);
             compas1.TabIndex = 0;
             compas1.Unit = "NM";
             // 
@@ -228,9 +234,36 @@ namespace MeteoPlugin
             lbAirportInfo.Location = new Point(257, 6);
             lbAirportInfo.Margin = new Padding(6);
             lbAirportInfo.Name = "lbAirportInfo";
-            lbAirportInfo.Size = new Size(239, 211);
+            lbAirportInfo.Size = new Size(239, 192);
             lbAirportInfo.TabIndex = 1;
             lbAirportInfo.DrawItem += lbAirportInfo_DrawItem;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(label2);
+            panel2.Controls.Add(ledBulb1);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(5, 580);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(502, 29);
+            panel2.TabIndex = 14;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(44, 8);
+            label2.Name = "label2";
+            label2.Size = new Size(52, 15);
+            label2.TabIndex = 1;
+            label2.Text = "Avionics";
+            // 
+            // ledBulb1
+            // 
+            ledBulb1.Location = new Point(3, 2);
+            ledBulb1.Name = "ledBulb1";
+            ledBulb1.On = false;
+            ledBulb1.Size = new Size(25, 25);
+            ledBulb1.TabIndex = 0;
             // 
             // VariableWindTimer
             // 
@@ -257,6 +290,8 @@ namespace MeteoPlugin
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -279,5 +314,8 @@ namespace MeteoPlugin
         private ListBox lbAirportInfo;
         private System.Windows.Forms.Timer VariableWindTimer;
         private System.Windows.Forms.Timer VariableWindAnimation;
+        private Panel panel2;
+        private Label label2;
+        private SimAddonControls.LedBulb ledBulb1;
     }
 }

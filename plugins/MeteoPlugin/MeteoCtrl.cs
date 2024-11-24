@@ -43,6 +43,8 @@ namespace MeteoPlugin
         {
             LoadCustomFont();
             InitializeComponent();
+            this.Enabled = false;
+
             if (fontCollection != null)
             {
                 lblDecodedMETAR.Font = new Font(fontCollection.Families[0], lblDecodedMETAR.Font.Size);
@@ -112,36 +114,54 @@ namespace MeteoPlugin
 
         public void updateSituation(situation data)
         {
-            //todo : rafraichis la list des aéroports assez proches pour être interrogés.
-            if ((simdata != null) && (simdata.isConnected))
+            try
             {
-
-                uint VHFRange = NavigationHelper.GetVHFRangeNauticalMiles(data.position.Altitude);
-                List<Aeroport> proches = Aeroport.FindAirportsInRange(simdata.aeroports, data.position.Location.Latitude, data.position.Location.Longitude, VHFRange);
-                if (proches.Count > 0)
+                if (data.MasterBatteryOn && data.MasterAvionicsOn && !this.Enabled)
                 {
-                    foreach (Aeroport a in cbICAO.Items)
+                    this.Enabled = true;
+                    ledBulb1.On = true;
+                }
+
+                if (((!data.MasterAvionicsOn) || (!data.MasterBatteryOn)) && this.Enabled)
+                {
+                    this.Enabled = false;
+                    ledBulb1.On = false;
+                }
+
+                //todo : rafraichis la list des aéroports assez proches pour être interrogés.
+                if ((simdata != null) && (simdata.isConnected))
+                {
+
+                    uint VHFRange = NavigationHelper.GetVHFRangeNauticalMiles(data.position.Altitude);
+                    List<Aeroport> proches = Aeroport.FindAirportsInRange(simdata.aeroports, data.position.Location.Latitude, data.position.Location.Longitude, VHFRange);
+                    if (proches.Count > 0)
                     {
-                        if (!proches.Contains(a))
+                        foreach (Aeroport a in cbICAO.Items)
                         {
-                            cbICAO.Items.Remove(a);
+                            if (!proches.Contains(a))
+                            {
+                                cbICAO.Items.Remove(a);
+                            }
+                        }
+
+                        foreach (Aeroport a in proches)
+                        {
+                            if (!cbICAO.Items.Contains(a))
+                            {
+                                cbICAO.Items.Add(a);
+                            }
                         }
                     }
-
-                    foreach (Aeroport a in proches)
+                    else
                     {
-                        if (!cbICAO.Items.Contains(a))
-                        {
-                            cbICAO.Items.Add(a);
-                        }
                     }
                 }
                 else
                 {
                 }
-            }
-            else
+            }catch(Exception ex)
             {
+                Logger.WriteLine(ex.Message);
             }
 
         }

@@ -15,6 +15,7 @@ namespace SimAddon
         PluginsMgr plugsMgr;
 
         private simData _simData;
+        private situation currentStatus;
 
         Version version;
 
@@ -76,7 +77,9 @@ namespace SimAddon
                 version = new Version("unknown");
             }
 
+            //create the object to get the dat from sim and the structure to push situation update to plugins
             _simData = new simData(Properties.Settings.Default.GSheetAPIUrl);
+            currentStatus = new situation();
 
             this.Cursor = Cursors.WaitCursor;
 
@@ -125,14 +128,13 @@ namespace SimAddon
         // This method runs 2 times per second (every 500ms). This is set on the timerMain properties.
         private async void TimerMain_Tick(object sender, EventArgs e)
         {
+
             try
             {
                 ConfigureForm();
                 //rafraichis les données venant du simu
                 _simData.Refresh();
 
-                //tell the plugins to update
-                situation currentStatus = new situation();
                 currentStatus.magVariation = _simData.GetMagVariation();
                 currentStatus.readyToFly = _simData.GetReadyToFly();
                 currentStatus.airSpeed = _simData.GetAirSpeed();
@@ -151,20 +153,11 @@ namespace SimAddon
                 currentStatus.planeWeight = _simData.GetPlaneWeight();
                 currentStatus.stallWarning = _simData.GetStallWarning();
                 currentStatus.position = _simData.GetPosition();
+                currentStatus.MasterAvionicsOn = (0 != _simData.GetAvionicsMaster());
+                currentStatus.MasterBatteryOn = (0 != _simData.GetBatteryMaster());
 
-                foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
-                {
-                    try
-                    {
-                        plugin.updateSituation(currentStatus);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WriteLine(ex.Message);
-                    }
-
-                }
-
+                //byte ViewMode = _simData.GetViewMode();
+                //lblConnectionStatus.Text = "viewMode " + ViewMode;
             }
             catch (Exception ex)
             {
@@ -174,8 +167,27 @@ namespace SimAddon
                 this.timerMain.Stop();
                 // Update the connection status
                 ConfigureForm();
+
+                //send a last update to the plugins.
+                currentStatus.MasterAvionicsOn = false;
+                currentStatus.MasterBatteryOn = false;
+
                 // re-start the connection timer
                 this.timerConnection.Start();
+            }
+
+            //send the update to the plugins.
+            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+            {
+                try
+                {
+                    plugin.updateSituation(currentStatus);
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine(ex.Message);
+                }
+
             }
         }
 

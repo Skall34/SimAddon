@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Logger\SimAddonLogger.csproj" />
+    <ProjectReference Include="..\..\SimAddonControls\SimAddonControls.csproj" />
     <ProjectReference Include="..\..\SimDataManager\SimDataManager.csproj" />
     <ProjectReference Include="..\SimAddonPlugin\SimAddonPlugin.csproj" />
   </ItemGroup>

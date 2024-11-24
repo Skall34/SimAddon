@@ -42,6 +42,9 @@
             imageList1 = new ImageList(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             tbComment = new TextBox();
+            panel1 = new Panel();
+            label1 = new Label();
+            ledBulb1 = new SimAddonControls.LedBulb();
             compas1 = new SimAddonControls.Compas();
             lblDistanceTotale = new Label();
             btnSaveFlightPlan = new Button();
@@ -52,6 +55,7 @@
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // btnImportFlightPLan
@@ -158,7 +162,7 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
             tableLayoutPanel1.Controls.Add(tbComment, 0, 0);
-            tableLayoutPanel1.Controls.Add(compas1, 1, 0);
+            tableLayoutPanel1.Controls.Add(panel1, 1, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -178,14 +182,45 @@
             tbComment.Size = new Size(354, 330);
             tbComment.TabIndex = 0;
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(ledBulb1);
+            panel1.Controls.Add(compas1);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(363, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(149, 330);
+            panel1.TabIndex = 2;
+            // 
+            // label1
+            // 
+            label1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            label1.AutoSize = true;
+            label1.Location = new Point(39, 305);
+            label1.Name = "label1";
+            label1.Size = new Size(52, 15);
+            label1.TabIndex = 3;
+            label1.Text = "Avionics";
+            // 
+            // ledBulb1
+            // 
+            ledBulb1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            ledBulb1.Location = new Point(3, 300);
+            ledBulb1.Name = "ledBulb1";
+            ledBulb1.On = false;
+            ledBulb1.Size = new Size(25, 25);
+            ledBulb1.TabIndex = 2;
+            // 
             // compas1
             // 
+            compas1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             compas1.Headings = new int[]
     {
     0
     };
             compas1.LabelText = "Compas";
-            compas1.Location = new Point(363, 3);
+            compas1.Location = new Point(0, 0);
             compas1.Name = "compas1";
             compas1.NbNeedles = 1;
             compas1.NeedleImages = new Image[]
@@ -194,7 +229,7 @@
     };
             compas1.NumericValue = 0D;
             compas1.RectangleSize = new Size(80, 20);
-            compas1.Size = new Size(149, 330);
+            compas1.Size = new Size(139, 142);
             compas1.TabIndex = 1;
             compas1.Unit = "NM";
             // 
@@ -252,6 +287,8 @@
             splitContainer1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -274,5 +311,8 @@
         private Button btnReset;
         private TableLayoutPanel tableLayoutPanel1;
         private SimAddonControls.Compas compas1;
+        private Panel panel1;
+        private Label label1;
+        private SimAddonControls.LedBulb ledBulb1;
     }
 }

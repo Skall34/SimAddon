@@ -68,17 +68,55 @@ namespace SimDataManager
         // =====================================
         //https://www.projectmagenta.com/all-fsuipc-offsets/
 
-        private readonly Offset<byte> readyToFLy = new Offset<byte>(0x3364);
-        private readonly Offset<byte> inMenu = new Offset<byte>(0x3365);
+        private readonly Offset<string> startSituation = new Offset<string>(0x0024, 256);
+        private readonly Offset<short> magVariation    =  new Offset<short>(0x02A0);
+        private readonly Offset<uint> airspeed         =   new Offset<uint>(0x02BC);
+        private readonly Offset<int> verticalSpeed     =    new Offset<int>(0x02C8);
+
+        private readonly Offset<int> landingVerticalSpeed = new Offset<int>(0x030C);
+
+        private readonly Offset<short> onGround         = new Offset<short>(0x0366);
+        private readonly Offset<byte> stallWarning       = new Offset<byte>(0x036C);
+        private readonly Offset<byte> overSpeedWarning   = new Offset<byte>(0x036D);
 
         private readonly Offset<uint> initialized1 = new Offset<uint>(0x04D2);
         private readonly Offset<uint> initialized2 = new Offset<uint>(0x04D4);
 
-        private readonly Offset<short> magVariation = new Offset<short>(0x02A0);
+        private readonly Offset<uint> gearRetractableFlag = new Offset<uint>(0x060C);
 
-        private readonly Offset<uint> airspeed = new Offset<uint>(0x02BC);
-        private readonly Offset<string> startSituation = new Offset<string>(0x0024, 256);
+        private readonly Offset<uint> flapsAvailable = new Offset<uint>(0x0778);
+
+        private readonly Offset<short> crashed          = new Offset<short>(0x0840);
+        private readonly Offset<short> offRunwayCrashed = new Offset<short>(0x0848);
+
+        private readonly Offset<short> engine1Firing = new Offset<short>(0x0894);
+        private readonly Offset<short> engine2Firing = new Offset<short>(0x092C);
+        private readonly Offset<short> engine3Firing = new Offset<short>(0x09C4);
+        private readonly Offset<short> engine4Firing = new Offset<short>(0x0A5C);
+
+        private readonly Offset<short> engineNumber = new Offset<short>(0x0AEC);
+
+        private readonly Offset<uint> flapsPosition      = new Offset<uint>(0x0BE0);
+        private readonly Offset<uint> gearPosition       = new Offset<uint>(0x0BF0);
+
+
+
+        private readonly Offset<short> verticalAcceleration = new Offset<short>(0x11BA);
+
         private readonly Offset<uint> avionicsMaster = new Offset<uint>(0x2E80);
+        private readonly Offset<uint> batteryMaster  = new Offset<uint>(0x281C);
+
+        private readonly Offset<string> flightNumber = new Offset<string>(0x3130, 12);
+        private readonly Offset<string> tailNumber   = new Offset<string>(0x313C, 12);
+
+        private readonly Offset<byte> readyToFLy = new Offset<byte>(0x3364);
+        private readonly Offset<byte> inMenu =     new Offset<byte>(0x3365);
+
+        private readonly Offset<string> aircraftModel = new Offset<string>(0x3500, 24);
+        private readonly Offset<string> aircraftType =  new Offset<string>(0x3D00, 256);
+
+        private readonly Offset<byte> viewMode = new Offset<byte>(0x8320);
+
         //private Offset<byte> navLights = new Offset<byte>(0x0280);
         //private Offset<byte> beaconStrobe = new Offset<byte>(0x0281);
         //private Offset<byte> landingLights = new Offset<byte>(0x02BC);
@@ -87,21 +125,9 @@ namespace SimDataManager
         //whilst the “on ground” flag(0366) is set.Can be used to check
         //hardness of touchdown(but watch out for bounces which may
         //change this). 
-        private readonly Offset<short> onGround = new Offset<short>(0x0366);
-        private readonly Offset<int> verticalSpeed = new Offset<int>(0x02C8);
-        private readonly Offset<int> landingVerticalSpeed = new Offset<int>(0x30C);
-        private readonly Offset<short> verticalAcceleration = new Offset<short>(0x11BA);
 
-        private readonly Offset<byte> stallWarning = new Offset<byte>(0x036C);
-        private readonly Offset<byte> overSpeedWarning = new Offset<byte>(0x036D);
-        private readonly Offset<short> crashed = new Offset<short>(0x0840);
-        private readonly Offset<short> offRunwayCrashed = new Offset<short>(0x0848);
 
-        private readonly Offset<uint> flapsAvailable = new Offset<uint>(0x778);
-        private readonly Offset<uint> flapsPosition = new Offset<uint>(0xBE0);
 
-        private readonly Offset<uint> gearRetractableFlag = new Offset<uint>(0x60C);
-        private readonly Offset<uint> gearPosition = new Offset<uint>(0xBF0);
 
 
 
@@ -111,12 +137,7 @@ namespace SimDataManager
         //private Offset<uint> heading = new Offset<uint>(0x0580);
 
 
-        private readonly Offset<short> engineNumber = new Offset<short>(0x0AEC);
 
-        private readonly Offset<short> engine1Firing = new Offset<short>(0x0894);
-        private readonly Offset<short> engine2Firing = new Offset<short>(0x092C);
-        private readonly Offset<short> engine3Firing = new Offset<short>(0x09C4);
-        private readonly Offset<short> engine4Firing = new Offset<short>(0x0A5C);
 
         //private readonly Offset<short> fuelWheight = new Offset<short>(0x0AF4); //pounds per gallons * 256
 
@@ -132,11 +153,7 @@ namespace SimDataManager
         //private readonly Offset<uint> payloadNumber = new Offset<uint>(0x13FC);
         //private Offset<FsPayloadStation> payloads = new Offset<FsPayloadStation>(0x1400, 48);
 
-        private readonly Offset<string> aircraftModel = new Offset<string>(0x3500, 24);
 
-        private readonly Offset<string> aircraftType = new Offset<string>(0x3D00, 256);
-        private readonly Offset<string> flightNumber = new Offset<string>(0x3130, 12);
-        private readonly Offset<string> tailNumber = new Offset<string>(0x313C, 12);
         //private readonly Offset<string> airlineName = new Offset<string>(0x3148, 24);
 
         private PayloadServices payloadServices;
@@ -285,7 +302,7 @@ namespace SimDataManager
 
         public bool GetReadyToFly()
         {
-            return ((readyToFLy.Value == 0)&&(inMenu.Value == 0));
+            return ((readyToFLy.Value == 0)&&(inMenu.Value == 0)&&(viewMode.Value < 4));
         }
 
         public double GetFuelWeight()
@@ -360,6 +377,12 @@ namespace SimDataManager
         public short GetOffRunwayCrashed() => offRunwayCrashed.Value;
 
         public uint GetGearRetractableFlag() => gearRetractableFlag.Value;
+
+        public uint GetAvionicsMaster() => avionicsMaster.Value;
+
+        public uint GetBatteryMaster()=> batteryMaster.Value;
+
+        public byte GetViewMode() => viewMode.Value;
 
         public bool GetIsGearUp() =>
             // gear down = 16383

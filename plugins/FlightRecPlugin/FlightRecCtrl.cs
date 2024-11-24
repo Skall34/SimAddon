@@ -75,6 +75,7 @@ namespace FlightRecPlugin
         public FlightRecCtrl()
         {
             InitializeComponent();
+            this.gbDynamicData.Enabled = false;
 
             Logger.WriteLine("Starting...");
             Assembly? assembly = Assembly.GetEntryAssembly();
@@ -204,248 +205,274 @@ namespace FlightRecPlugin
 
         public void updateSituation(situation currentFlightStatus)
         {
-            if (currentFlightStatus.readyToFly)
+            try
             {
-                if (startDisabled > 0)
+                if (currentFlightStatus.MasterBatteryOn && !this.gbDynamicData.Enabled)
                 {
-                    startDisabled -= 1;
-
-                    if (startDisabled <= 0)
-                    {
-                        //the start detection disable timer expired, restore the start textboxes.
-                        lbStartFuel.Enabled = true;
-                        lbStartPosition.Enabled = true;
-                        lbStartTime.Enabled = true;
-                        lbStartIata.Enabled = true;
-                    }
+                    this.gbDynamicData.Enabled = true;
+                    ledBulbBattery.On = true;
                 }
 
-                if (endDisabled > 0)
+                if (!currentFlightStatus.MasterBatteryOn && this.gbDynamicData.Enabled)
                 {
-                    endDisabled -= 1;
-
-                    if (endDisabled <= 0)
-                    {
-                        //the start detection disable timer expired, restore the start textboxes.
-                        lbEndFuel.Enabled = true;
-                        lbEndPosition.Enabled = true;
-                        lbEndTime.Enabled = true;
-                        lbEndIata.Enabled = true;
-                    }
+                    this.gbDynamicData.Enabled = false;
+                    ledBulbBattery.On = false;
                 }
 
-                _currentPosition = currentFlightStatus.position;
-
-                // Airspeed
-                double airspeedKnots = currentFlightStatus.airSpeed;
-                double currentFuel = currentFlightStatus.currentFuel;
-
-                //check if we are in the air
-                if (currentFlightStatus.onGround == 0)
+                if (currentFlightStatus.MasterBatteryOn)
                 {
-                    if (onGround)
+                    if (startDisabled > 0)
                     {
-                        Logger.WriteLine("Takeoff detected !");
-                        UpdateStatus("In flight");
-                        //we just took off ! read the plane weight
-                        flightPerfs.takeOffWeight = currentFlightStatus.planeWeight;
-                        //keep memory that we're airborn
-                        onGround = false;
-                        // on veut afficher la date
-                        _airborn = DateTime.Now;
-                        if (lbTimeAirborn.Text == "--:--")
+                        startDisabled -= 1;
+
+                        if (startDisabled <= 0)
                         {
-                            this.lbTimeAirborn.Text = _airborn.ToString("HH:mm");
-                        }
-
-                        // On cache le label du Fret après le décollage. On en a plus besoin
-                        this.lbFret.Visible = false;
-                        //on grise le bouton save flight en vol
-                        btnSubmit.Enabled = false;
-                        submitFlightToolStripMenuItem.Enabled = false;
-                        //just incase of rebound during takeoff, reset the onground label
-                        lbTimeOnGround.Text = "--:--";
-
-                    }
-                    //constamment mettre à jour la vrtical acceleration et airspeed pendant le vol.
-                    flightPerfs.landingVerticalAcceleration = currentFlightStatus.verticalAcceleration;
-                    flightPerfs.landingSpeed = currentFlightStatus.airSpeed;
-                }
-                else //we're on ground !
-                {
-                    if (!onGround)
-                    {
-                        Logger.WriteLine("Landing detected !");
-                        UpdateStatus("On ground");
-                        //only update the touchDownVSpeed if we've been airborn once
-                        flightPerfs.touchDownVSpeed = currentFlightStatus.landingVerticalSpeed;
-                        flightPerfs.landingWeight = currentFlightStatus.planeWeight;
-
-                        _notAirborn = DateTime.Now;
-                        if (lbTimeOnGround.Text == "--:--")
-                        {
-                            this.lbTimeOnGround.Text = _notAirborn.ToString("HH:mm");
-                        }
-
-                        onGround = true;
-
-                        //enable the save button
-                        btnSubmit.Enabled = true;
-                        submitFlightToolStripMenuItem.Enabled = true;
-                    }
-
-
-
-                    //si on est au sol, et qu'on a lu une valeur de fuel, ET le fuel augmente, on detecte un refuel !
-                    if (!_refuelDetected && (_currentFuel > 0) && (currentFuel > _currentFuel))
-                    {
-                        _refuelDetected = true;
-                        //on detecte un refuel !
-                        //il faut peut-être faire un reset ?
-                        Logger.WriteLine("Refuel detected ! new fuel " + currentFuel + " > " + _currentFuel + " (old fuel))");
-                        //this.WindowState = FormWindowState.Normal;
-                        _currentFuel = currentFuel;
-                        //si on refuel pendant qu'un moteur tourne, c'est suspect. Envoie la popup pour proposer le reset !
-                        if (atLeastOneEngineFiring)
-                        {
-                            MessageBox.Show("Refuel detected ! you should reset the flight !");
-                        }
-                        else
-                        {
-                            //sinon, refuel sans moteur arreté.
-                            // on reste le vol direct ? et s'il n'a pas été soumis ? 
-                            if (btnSubmit.Enabled)
-                            {
-                                //le bouton submit est encore actif, donc peut-etre que le vol n'a pas été soumis. Demande une confirmation
-                                resetFlight(false);
-                            }
-                            else
-                            {
-                                //le bouton submit est encore inactif, donc le vol a été soumis, on peut reset
-                                resetFlight(true);
-                            }
+                            //the start detection disable timer expired, restore the start textboxes.
+                            lbStartFuel.Enabled = true;
+                            lbStartPosition.Enabled = true;
+                            lbStartTime.Enabled = true;
+                            lbStartIata.Enabled = true;
                         }
                     }
 
-                }
-
-                //keep new value of current fuel quantity
-                _currentFuel = currentFuel;
-
-                if (currentFlightStatus.gearRetractableFlag == 1)
-                {
-                    //check gear position, if gear just deployed, get the airspeed
-                    bool currentGearIsUp = gearIsUp;
-                    gearIsUp = currentFlightStatus.gearIsUp;
-                    if (!gearIsUp && currentGearIsUp)
+                    if (endDisabled > 0)
                     {
-                        Logger.WriteLine("Gear down detected. Measure speed");
-                        //get the max air speed while deploying the gears
-                        if (airspeedKnots > flightPerfs.gearDownSpeed)
+                        endDisabled -= 1;
+
+                        if (endDisabled <= 0)
                         {
-                            //gear just went to be deployed ! check the current speed !!!
-                            flightPerfs.gearDownSpeed = airspeedKnots;
+                            //the start detection disable timer expired, restore the start textboxes.
+                            lbEndFuel.Enabled = true;
+                            lbEndPosition.Enabled = true;
+                            lbEndTime.Enabled = true;
+                            lbEndIata.Enabled = true;
                         }
                     }
-                }
 
-                if (currentFlightStatus.flapsAvailableFlag == 1)
-                {
-                    //check the flaps deployment speed
-                    uint currentFlapsPosition = flapsPosition;
-                    flapsPosition = currentFlightStatus.flapsPosition;
-                    //if flaps just went deployed, get the air speed.
-                    if ((currentFlapsPosition == 0) && (flapsPosition > 0))
-                    {
-                        Logger.WriteLine("Flaps down detected. Measure speed");
-                        //only keep the max flaps deployment air speed for this flight
-                        if (airspeedKnots > flightPerfs.flapsDownSpeed)
-                        {
-                            flightPerfs.flapsDownSpeed = airspeedKnots;
-                        }
-                    }
-                }
+                    _currentPosition = currentFlightStatus.position;
 
+                    // Airspeed
+                    double airspeedKnots = currentFlightStatus.airSpeed;
+                    double currentFuel = currentFlightStatus.currentFuel;
 
-                if (currentFlightStatus.overSpeedWarning != 0)
-                {
-                    Logger.WriteLine("overspeed warning detected");
-                    flightPerfs.overspeed = true;
-                }
-                if (currentFlightStatus.offRunwayCrashed != 0)
-                {
-                    Logger.WriteLine("off runway crashed detected");
-                    flightPerfs.overRunwayCrashed = true;
-                    getEndOfFlightData();
-                }
-                if (currentFlightStatus.crashedFlag != 0)
-                {
-                    Logger.WriteLine("crash detected");
-                    flightPerfs.crashed = true;
-                    getEndOfFlightData();
-                }
-                if (currentFlightStatus.stallWarning != 0)
-                {
-                    Logger.WriteLine("stall warning detected");
-                    flightPerfs.stallWarning = true;
-                }
-
-                //on va verifier l'etat des moteurs :
-
-                //sauvegarde l'etat precedent des moteurs
-                bool _previousEngineStatus = atLeastOneEngineFiring;
-                //lit le nouvel etat.
-                atLeastOneEngineFiring = currentFlightStatus.isAtLeastOneEngineFiring;
-
-                //si aucun moteur de tournait, mais que maintenant, au moins un moteur tourne, on commence a enregistrer.
-                //on va memoriser les etats de carburant, et l'heure. On récupere aussi quel est l'aeroport.
-                if ((!_previousEngineStatus && atLeastOneEngineFiring) && (startDisabled == 0))
-                {
-                    if (engineStopTimer.Enabled)
-                    {
-                        Logger.WriteLine("Engine stop canceled. Validation timer stopped");
-                        engineStopTimer.Stop();
-                    }
-                    else
+                    //check if we are in the air
+                    if (currentFlightStatus.onGround == 0)
                     {
                         if (onGround)
                         {
-                            Logger.WriteLine("First engine start detected for plane" + cbImmat.Text);
-                            //this.WindowState = FormWindowState.Minimized;
-                            getStartOfFlightData();
+                            Logger.WriteLine("Takeoff detected !");
+                            UpdateStatus("In flight");
+                            //we just took off ! read the plane weight
+                            flightPerfs.takeOffWeight = currentFlightStatus.planeWeight;
+                            //keep memory that we're airborn
+                            onGround = false;
+                            // on veut afficher la date
+                            _airborn = DateTime.Now;
+                            if (lbTimeAirborn.Text == "--:--")
+                            {
+                                this.lbTimeAirborn.Text = _airborn.ToString("HH:mm");
+                            }
 
-                            //Update the google sheet database indicating that this plane is being used
-                            UpdatePlaneStatus(1);
-                            cbImmat.Enabled = false;
-                            //tbEndICAO.Enabled = false;
+                            // On cache le label du Fret après le décollage. On en a plus besoin
+                            this.lbFret.Visible = false;
+                            //on grise le bouton save flight en vol
+                            btnSubmit.Enabled = false;
+                            submitFlightToolStripMenuItem.Enabled = false;
+                            //just incase of rebound during takeoff, reset the onground label
+                            lbTimeOnGround.Text = "--:--";
+
+                        }
+                        //constamment mettre à jour la vrtical acceleration et airspeed pendant le vol.
+                        flightPerfs.landingVerticalAcceleration = currentFlightStatus.verticalAcceleration;
+                        flightPerfs.landingSpeed = currentFlightStatus.airSpeed;
+                    }
+                    else //we're on ground !
+                    {
+                        if (!onGround)
+                        {
+                            Logger.WriteLine("Landing detected !");
+                            UpdateStatus("On ground");
+                            //only update the touchDownVSpeed if we've been airborn once
+                            flightPerfs.touchDownVSpeed = currentFlightStatus.landingVerticalSpeed;
+                            flightPerfs.landingWeight = currentFlightStatus.planeWeight;
+
+                            _notAirborn = DateTime.Now;
+                            if (lbTimeOnGround.Text == "--:--")
+                            {
+                                this.lbTimeOnGround.Text = _notAirborn.ToString("HH:mm");
+                            }
+
+                            onGround = true;
+
+                            //enable the save button
+                            btnSubmit.Enabled = true;
+                            submitFlightToolStripMenuItem.Enabled = true;
+                        }
+
+
+
+                        //si on est au sol, et qu'on a lu une valeur de fuel, ET le fuel augmente, on detecte un refuel !
+                        if (!_refuelDetected && (_currentFuel > 0) && (currentFuel > _currentFuel))
+                        {
+                            _refuelDetected = true;
+                            //on detecte un refuel !
+                            //il faut peut-être faire un reset ?
+                            Logger.WriteLine("Refuel detected ! new fuel " + currentFuel + " > " + _currentFuel + " (old fuel))");
+                            //this.WindowState = FormWindowState.Normal;
+                            _currentFuel = currentFuel;
+                            //si on refuel pendant qu'un moteur tourne, c'est suspect. Envoie la popup pour proposer le reset !
+                            if (atLeastOneEngineFiring)
+                            {
+                                MessageBox.Show("Refuel detected ! you should reset the flight !");
+                            }
+                            else
+                            {
+                                //sinon, refuel sans moteur arreté.
+                                // on reste le vol direct ? et s'il n'a pas été soumis ? 
+                                if (btnSubmit.Enabled)
+                                {
+                                    //le bouton submit est encore actif, donc peut-etre que le vol n'a pas été soumis. Demande une confirmation
+                                    resetFlight(false);
+                                }
+                                else
+                                {
+                                    //le bouton submit est encore inactif, donc le vol a été soumis, on peut reset
+                                    resetFlight(true);
+                                }
+                            }
+                        }
+
+                    }
+
+                    //keep new value of current fuel quantity
+                    _currentFuel = currentFuel;
+
+                    if (currentFlightStatus.gearRetractableFlag == 1)
+                    {
+                        //check gear position, if gear just deployed, get the airspeed
+                        bool currentGearIsUp = gearIsUp;
+                        gearIsUp = currentFlightStatus.gearIsUp;
+                        if (!gearIsUp && currentGearIsUp)
+                        {
+                            Logger.WriteLine("Gear down detected. Measure speed");
+                            //get the max air speed while deploying the gears
+                            if (airspeedKnots > flightPerfs.gearDownSpeed)
+                            {
+                                //gear just went to be deployed ! check the current speed !!!
+                                flightPerfs.gearDownSpeed = airspeedKnots;
+                            }
+                        }
+                    }
+
+                    if (currentFlightStatus.flapsAvailableFlag == 1)
+                    {
+                        //check the flaps deployment speed
+                        uint currentFlapsPosition = flapsPosition;
+                        flapsPosition = currentFlightStatus.flapsPosition;
+                        //if flaps just went deployed, get the air speed.
+                        if ((currentFlapsPosition == 0) && (flapsPosition > 0))
+                        {
+                            Logger.WriteLine("Flaps down detected. Measure speed");
+                            //only keep the max flaps deployment air speed for this flight
+                            if (airspeedKnots > flightPerfs.flapsDownSpeed)
+                            {
+                                flightPerfs.flapsDownSpeed = airspeedKnots;
+                            }
+                        }
+                    }
+
+
+                    if (currentFlightStatus.overSpeedWarning != 0)
+                    {
+                        Logger.WriteLine("overspeed warning detected");
+                        flightPerfs.overspeed = true;
+                    }
+                    if (currentFlightStatus.offRunwayCrashed != 0)
+                    {
+                        Logger.WriteLine("off runway crashed detected");
+                        flightPerfs.overRunwayCrashed = true;
+                        getEndOfFlightData();
+                    }
+                    if (currentFlightStatus.crashedFlag != 0)
+                    {
+                        Logger.WriteLine("crash detected");
+                        flightPerfs.crashed = true;
+                        getEndOfFlightData();
+                    }
+                    if (currentFlightStatus.stallWarning != 0)
+                    {
+                        Logger.WriteLine("stall warning detected");
+                        flightPerfs.stallWarning = true;
+                    }
+
+                    //on va verifier l'etat des moteurs :
+
+                    //sauvegarde l'etat precedent des moteurs
+                    bool _previousEngineStatus = atLeastOneEngineFiring;
+                    //lit le nouvel etat.
+                    atLeastOneEngineFiring = currentFlightStatus.isAtLeastOneEngineFiring;
+
+                    //si aucun moteur de tournait, mais que maintenant, au moins un moteur tourne, on commence a enregistrer.
+                    //on va memoriser les etats de carburant, et l'heure. On récupere aussi quel est l'aeroport.
+
+                    //test pour savoir si on est vraiment pret à voler. On le sim doit etre pret, et le pilote dans le cockpit
+                    //(viewmode à moins de 4 sur msfs (pas de pb de viewmode avec xplane apparement)
+                    //c'est pour eviter d'etre detecté à DGTK si on demarre directement sur la piste moteurs allumés.
+                    if (currentFlightStatus.readyToFly)
+                    {
+
+                        if ((!_previousEngineStatus && atLeastOneEngineFiring) && (startDisabled == 0))
+                        {
+                            if (engineStopTimer.Enabled)
+                            {
+                                Logger.WriteLine("Engine stop canceled. Validation timer stopped");
+                                engineStopTimer.Stop();
+                            }
+                            else
+                            {
+                                if (onGround)
+                                {
+                                    Logger.WriteLine("First engine start detected for plane" + cbImmat.Text);
+                                    //this.WindowState = FormWindowState.Minimized;
+                                    getStartOfFlightData();
+
+                                    //Update the google sheet database indicating that this plane is being used
+                                    UpdatePlaneStatus(1);
+                                    cbImmat.Enabled = false;
+                                    //tbEndICAO.Enabled = false;
+                                }
+                                else
+                                {
+                                    //demarrage des moteur en vol (redémarrage)... ne rien faire.
+                                    Logger.WriteLine("Engine start during flight. Do nothing");
+                                }
+                            }
+                        }
+                    }
+
+                    // si on detecte un arret moteur
+                    if (_previousEngineStatus && !atLeastOneEngineFiring)
+                    {
+                        // si on est au sol, et qu'on autorise la detection de l'arret moteur
+                        if (onGround && (endDisabled == 0))
+                        {
+                            Logger.WriteLine("Potential engine stop detected. Start validation timer");
+                            engineStopTimer.Start();
                         }
                         else
                         {
-                            //demarrage des moteur en vol (redémarrage)... ne rien faire.
-                            Logger.WriteLine("Engine start during flight. Do nothing");
+                            //si on est en vol, OU si la detection est desactivée, ne rien faire.
+                            Logger.WriteLine("Potential engine stop detected during flight. Do nothing");
                         }
                     }
                 }
-
-                // si on detecte un arret moteur
-                if (_previousEngineStatus && !atLeastOneEngineFiring)
+                else
                 {
-                    // si on est au sol, et qu'on autorise la detection de l'arret moteur
-                    if (onGround && (endDisabled == 0))
-                    {
-                        Logger.WriteLine("Potential engine stop detected. Start validation timer");
-                        engineStopTimer.Start();
-                    }
-                    else
-                    {
-                        //si on est en vol, OU si la detection est desactivée, ne rien faire.
-                        Logger.WriteLine("Potential engine stop detected during flight. Do nothing");
-                    }
+                    //master battery switch is still OFF !
                 }
-            }
-            else
+            }catch(Exception ex)
             {
-                Logger.WriteLine("Sim still loading...");
+                Logger.WriteLine(ex.Message);
             }
 
         }

@@ -6,6 +6,7 @@ using SimAddonPlugin;
 using System;
 using Newtonsoft.Json;
 using SimAddonLogger;
+using SimAddonControls;
 
 namespace BushTripPlugin
 {
@@ -22,6 +23,7 @@ namespace BushTripPlugin
         public BushTripCtrl()
         {
             InitializeComponent();
+            compas1.Enabled = false;
             waypointIndex = 0;
             lastWaypointIndex = 0;
             btnReset.Enabled = false;
@@ -78,64 +80,82 @@ namespace BushTripPlugin
 
         public async void updateSituation(situation data)
         {
-            double distanceToNextWP = 0;
-            double routeToWP = 0;
-            double magVariation = data.magVariation;
-
-            if (flightPlan != null)
+            try
             {
-                //s'il y a encore au moins un WP avant la fin
-                uint targetWP = waypointIndex + 1;
-                if (waypointIndex < lastWaypointIndex)
-                {
-                    targetWP = waypointIndex + 1;
-                }
-                else
-                {
-                    targetWP = waypointIndex;
-                }
-                double wpLat = flightPlan.Item.Waypoints[targetWP].Pos.Lat;
-                double wpLon = flightPlan.Item.Waypoints[targetWP].Pos.Lon;
+                double distanceToNextWP = 0;
+                double routeToWP = 0;
+                double magVariation = data.magVariation;
 
-                distanceToNextWP = NavigationHelper.GetDistance(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon);
-                routeToWP = await NavigationHelper.GetNavRouteAsync(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon, magVariation);
-
-                double ecartRoute = routeToWP - (data.position.HeadingDegreesTrue - magVariation);
-                if (ecartRoute < 0)
+                if (data.MasterBatteryOn && data.MasterAvionicsOn && !compas1.Enabled)
                 {
-                    ecartRoute = 360 + ecartRoute;
+                    compas1.Enabled = true;
+                    ledBulb1.On = true;
                 }
 
-                if (waypointIndex < lastWaypointIndex)
+                if (((!data.MasterAvionicsOn) || (!data.MasterBatteryOn)) && compas1.Enabled)
                 {
-                    tsGlobalStatus.Text = "Next waypoint : Route : " + routeToWP.ToString() + "  Distance : " + distanceToNextWP.ToString();
-                }
-                else
-                {
-                    tsGlobalStatus.Text = "Flight plan finished !";
+                    compas1.Enabled = false;
+                    ledBulb1.On = false;
                 }
 
-                compas1.Headings[0] = (int)ecartRoute;
-                compas1.NumericValue = distanceToNextWP;
-
-
-                //si on est a moins de 2 miles du wp, OU si on est a moins de 10 miles du dernier WP.
-                //, on affiche le segment suivant.
-                if ((distanceToNextWP <= 2) || ((distanceToNextWP <= 10)&&(waypointIndex == lastWaypointIndex-1)))
+                if (flightPlan != null)
                 {
-                    if (waypointIndex < lastWaypointIndex )
+                    //s'il y a encore au moins un WP avant la fin
+                    uint targetWP = waypointIndex + 1;
+                    if (waypointIndex < lastWaypointIndex)
                     {
-                        waypointIndex++;
-                        flightPlan.CurrentStep = waypointIndex;
-                        //save the flightplan with the current status, for a potential next reload (not to restart the whole flight)
-                        saveFlightPlan();
-                        refreshFlightBook();
+                        targetWP = waypointIndex + 1;
                     }
                     else
                     {
-                        tsGlobalStatus.Text = "Land here !";
+                        targetWP = waypointIndex;
+                    }
+                    double wpLat = flightPlan.Item.Waypoints[targetWP].Pos.Lat;
+                    double wpLon = flightPlan.Item.Waypoints[targetWP].Pos.Lon;
+
+                    distanceToNextWP = NavigationHelper.GetDistance(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon);
+                    routeToWP = await NavigationHelper.GetNavRouteAsync(data.position.Location.Latitude, data.position.Location.Longitude, wpLat, wpLon, magVariation);
+
+                    double ecartRoute = routeToWP - (data.position.HeadingDegreesTrue - magVariation);
+                    if (ecartRoute < 0)
+                    {
+                        ecartRoute = 360 + ecartRoute;
+                    }
+
+                    if (waypointIndex < lastWaypointIndex)
+                    {
+                        tsGlobalStatus.Text = "Next waypoint : Route : " + routeToWP.ToString() + "  Distance : " + distanceToNextWP.ToString();
+                    }
+                    else
+                    {
+                        tsGlobalStatus.Text = "Flight plan finished !";
+                    }
+
+                    compas1.Headings[0] = (int)ecartRoute;
+                    compas1.NumericValue = distanceToNextWP;
+
+
+                    //si on est a moins de 2 miles du wp, OU si on est a moins de 10 miles du dernier WP.
+                    //, on affiche le segment suivant.
+                    if ((distanceToNextWP <= 2) || ((distanceToNextWP <= 10) && (waypointIndex == lastWaypointIndex - 1)))
+                    {
+                        if (waypointIndex < lastWaypointIndex)
+                        {
+                            waypointIndex++;
+                            flightPlan.CurrentStep = waypointIndex;
+                            //save the flightplan with the current status, for a potential next reload (not to restart the whole flight)
+                            saveFlightPlan();
+                            refreshFlightBook();
+                        }
+                        else
+                        {
+                            tsGlobalStatus.Text = "Land here !";
+                        }
                     }
                 }
+            }catch(Exception ex)
+            {
+                Logger.WriteLine(ex.Message);
             }
         }
 
