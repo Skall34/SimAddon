@@ -293,7 +293,7 @@ namespace FlightRecPlugin
                             Logger.WriteLine("Landing detected !");
                             UpdateStatus("On ground");
                             //only update the touchDownVSpeed if we've been airborn once
-                            flightPerfs.touchDownVSpeed = currentFlightStatus.landingVerticalSpeed;
+                            flightPerfs.landingVSpeed = currentFlightStatus.landingVerticalSpeed;
                             flightPerfs.landingWeight = currentFlightStatus.planeWeight;
 
                             _notAirborn = DateTime.Now;
@@ -757,10 +757,7 @@ namespace FlightRecPlugin
                 cbNote.SelectedItem = 8;
 
                 //reset flight infos.
-                flightPerfs.overRunwayCrashed = false;
-                flightPerfs.crashed = false;
-                flightPerfs.stallWarning = false;
-                flightPerfs.overspeed = false;
+                flightPerfs.reset();
 
                 atLeastOneEngineFiring = false;
 

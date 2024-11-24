@@ -8,7 +8,23 @@
         public bool overRunwayCrashed { get; set; }
         public bool overspeed { get; set; }
 
-        public double touchDownVSpeed { get; set; }
+        private double _landingVSpeed;
+        public double landingVSpeed { get {
+                return _landingVSpeed;
+            }
+            set {
+                //only keep new value if it's worse that before.
+                //this is to keep the worst value un case of rebound.
+
+                //hack : sometime the sim give a positive vertical speed during landing which is NOT possible.
+                // so reverse it.
+                double newValue = value<=0?value:-value;
+                if (newValue < _landingVSpeed)
+                {
+                    _landingVSpeed = newValue;
+                }
+            }
+        }
         public double landingVerticalAcceleration { get; set; }
         public double landingSpeed { get; set; }
         public double flapsDownSpeed { get; set; }
@@ -19,12 +35,17 @@
 
         public FlightPerfs()
         {
+            reset();
+        }
+
+        public void reset()
+        {
             overspeed = false;
             crashed = false;
             overRunwayCrashed = false;
             stallWarning = false;
 
-            touchDownVSpeed = 0;
+            _landingVSpeed = 0;
             landingVerticalAcceleration = 0;
             landingSpeed = 0;
 
@@ -44,7 +65,7 @@
                 note -= 1;
             }
 
-            if (touchDownVSpeed > 500)
+            if (landingVSpeed > 500)
             {
                 note -= 2;
             }
@@ -63,7 +84,7 @@
             if (stallWarning) result += "Stall warning detected \n";
             if (overRunwayCrashed) result += "Over runway crashed \n";
             if (crashed) result += "Crashed \n";
-            result += "vertical speed at touchdown: " + touchDownVSpeed + " fpm\n";
+            result += "vertical speed at touchdown: " + landingVSpeed + " fpm\n";
             result += "gear down speed : " + gearDownSpeed + " m/s\n";
             result += "flaps down speed : " + flapsDownSpeed + " m/s\n";
 
@@ -75,7 +96,7 @@
             string result = "";
 
             result = "Landing speed : " + landingSpeed.ToString("0.00") + " Knts ";
-            result += " Landing vertical speed : " + touchDownVSpeed.ToString("0.00") + " fpm ";
+            result += " Landing vertical speed : " + landingVSpeed.ToString("0.00") + " fpm ";
             result += " Takeoff weight : " + takeOffWeight.ToString("0.00") + " Kg ";
             result += " Landing weight : " + landingWeight.ToString("0.00") + " Kg ";
 
