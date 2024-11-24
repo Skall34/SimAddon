@@ -231,7 +231,7 @@ namespace MeteoPlugin
                                         int axePiste1 = 10 * int.Parse(result.Groups[1].Value);
                                         compas1.Headings[0] = axePiste1;
                                         //if we have some meteo data, show it !
-                                        if (metarData != null)
+                                        if ((metarData != null)&&(metarData.Wind!=null))
                                         {
                                             if (metarData.Wind.Direction == "VRB")
                                             {
