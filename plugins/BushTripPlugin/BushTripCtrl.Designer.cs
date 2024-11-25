@@ -125,7 +125,7 @@
             // ColWaypoint
             // 
             ColWaypoint.Text = "Waypoint";
-            ColWaypoint.Width = 80;
+            ColWaypoint.Width = 120;
             // 
             // ColName
             // 
