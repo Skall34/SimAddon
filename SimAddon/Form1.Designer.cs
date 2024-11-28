@@ -48,7 +48,6 @@ namespace SimAddon
             // statusStrip
             // 
             statusStrip.Items.AddRange(new ToolStripItem[] { lblConnectionStatus, lblPluginStatus });
-            statusStrip.Location = new Point(0, 808);
             statusStrip.Location = new Point(0, 289);
             statusStrip.Name = "statusStrip";
             statusStrip.Padding = new Padding(1, 0, 22, 0);
