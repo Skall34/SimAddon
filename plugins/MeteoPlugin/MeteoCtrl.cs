@@ -56,6 +56,19 @@ namespace MeteoPlugin
             this.cbICAO.DisplayMember = "fullName";
         }
 
+        public void SetWindowMode(ISimAddonPluginCtrl.WindowMode mode)
+        {
+            if (mode == ISimAddonPluginCtrl.WindowMode.COMPACT)
+            {
+                splitContainer1.Panel1Collapsed = true;
+            }
+            else
+            {
+                splitContainer1.Panel1Collapsed = false;
+            }
+        }
+
+
         private void LoadCustomFont()
         {
             fontCollection = new PrivateFontCollection();
@@ -159,7 +172,8 @@ namespace MeteoPlugin
                 else
                 {
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logger.WriteLine(ex.Message);
             }
@@ -231,7 +245,7 @@ namespace MeteoPlugin
                                         int axePiste1 = 10 * int.Parse(result.Groups[1].Value);
                                         compas1.Headings[0] = axePiste1;
                                         //if we have some meteo data, show it !
-                                        if ((metarData != null)&&(metarData.Wind!=null))
+                                        if ((metarData != null) && (metarData.Wind != null))
                                         {
                                             if (metarData.Wind.Direction == "VRB")
                                             {
@@ -364,7 +378,7 @@ namespace MeteoPlugin
                     {
                         variableMin = int.Parse(metarData.WindVariation.StartAngle);
                         variableMax = int.Parse(metarData.WindVariation.EndAngle);
-                        if (variableMax<variableMin)
+                        if (variableMax < variableMin)
                         {
                             variableMin -= 360;
                         }
@@ -381,10 +395,10 @@ namespace MeteoPlugin
 
         private void VariableWindAnimation_Tick(object sender, EventArgs e)
         {
-            int delta1 = ((displayedWindDirection - compas1.Headings[1] ));
+            int delta1 = ((displayedWindDirection - compas1.Headings[1]));
             int delta2 = ((compas1.Headings[1] + 360 - displayedWindDirection));
             int bestDelta = 0;
-            if (Math.Abs(delta1)<Math.Abs(delta2))
+            if (Math.Abs(delta1) < Math.Abs(delta2))
             {
                 bestDelta = delta1;
             }
@@ -392,8 +406,13 @@ namespace MeteoPlugin
             {
                 bestDelta = delta2;
             }
-            compas1.Headings[1] = (compas1.Headings[1] + bestDelta/20) % 360;
+            compas1.Headings[1] = (compas1.Headings[1] + bestDelta / 20) % 360;
             compas1.Invalidate();
+        }
+
+        private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

@@ -43,6 +43,19 @@ namespace BushTripPlugin
                 updateStatusHandler = null;
             }
         }
+
+        public void SetWindowMode(ISimAddonPluginCtrl.WindowMode mode)
+        {
+            if (mode == ISimAddonPluginCtrl.WindowMode.COMPACT)
+            {
+                splitContainer1.Panel1Collapsed = true;
+            }
+            else
+            {
+                splitContainer1.Panel1Collapsed = false;
+            }
+        }
+
         private void UpdateStatus(string message)
         {
             if (updateStatusHandler != null)

@@ -49,7 +49,7 @@ namespace FlightRecPlugin
 
         private simData data;
 
-        ISimAddonPluginCtrl.UpdateStatusHandler updateStatusHandler;
+        private ISimAddonPluginCtrl.UpdateStatusHandler updateStatusHandler;
         event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
         {
             add
@@ -122,6 +122,18 @@ namespace FlightRecPlugin
             btnSaveSettings.Enabled = false;
 
             flightPerfs = new FlightPerfs();
+        }
+
+        public void SetWindowMode(ISimAddonPluginCtrl.WindowMode mode)
+        {
+            if (mode == ISimAddonPluginCtrl.WindowMode.COMPACT)
+            {
+                splitContainer1.Panel1Collapsed = true;
+            }
+            else
+            {
+                splitContainer1.Panel1Collapsed = false;
+            }
         }
 
         public string getName()

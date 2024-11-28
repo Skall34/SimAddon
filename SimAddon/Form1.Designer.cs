@@ -49,9 +49,11 @@ namespace SimAddon
             // 
             statusStrip.Items.AddRange(new ToolStripItem[] { lblConnectionStatus, lblPluginStatus });
             statusStrip.Location = new Point(0, 808);
+            statusStrip.Location = new Point(0, 289);
             statusStrip.Name = "statusStrip";
             statusStrip.Padding = new Padding(1, 0, 22, 0);
-            statusStrip.Size = new Size(571, 22);
+            statusStrip.Size = new Size(574, 22);
+            statusStrip.SizingGrip = false;
             statusStrip.TabIndex = 6;
             statusStrip.Text = "statusStrip1";
             // 
@@ -88,7 +90,7 @@ namespace SimAddon
             tabControl1.Margin = new Padding(4, 3, 4, 3);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(571, 810);
+            tabControl1.Size = new Size(574, 291);
             tabControl1.TabIndex = 7;
             // 
             // Form1
@@ -96,7 +98,7 @@ namespace SimAddon
             AutoScaleDimensions = new SizeF(9F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(571, 830);
+            ClientSize = new Size(574, 311);
             ContextMenuStrip = contextMenuStrip1;
             Controls.Add(tabControl1);
             Controls.Add(statusStrip);
@@ -105,11 +107,13 @@ namespace SimAddon
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 5, 4, 5);
-            MaximizeBox = false;
+            MaximumSize = new Size(590, 870);
             Name = "Form1";
             Text = "SimAddon";
+            WindowState = FormWindowState.Maximized;
             FormClosing += FrmMain_FormClosing;
             Load += Form1_Load;
+            Resize += Form1_Resize;
             statusStrip.ResumeLayout(false);
             statusStrip.PerformLayout();
             ResumeLayout(false);

@@ -16,6 +16,7 @@ namespace SimAddon
 
         private simData _simData;
         private situation currentStatus;
+        FormWindowState LastWindowState = FormWindowState.Normal;
 
         Version version;
 
@@ -83,7 +84,7 @@ namespace SimAddon
 
             this.Cursor = Cursors.WaitCursor;
 
-
+            LastWindowState = WindowState;
         }
 
 
@@ -254,7 +255,7 @@ namespace SimAddon
             {
                 try
                 {
-                    plugin.FormClosing(sender,e2);
+                    plugin.FormClosing(sender, e2);
                     isCanceled |= e2.Cancel;
                 }
                 catch (Exception ex)
@@ -333,6 +334,45 @@ namespace SimAddon
         {
 
 
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            if (WindowState != LastWindowState)
+            {
+                LastWindowState = WindowState;
+                if (WindowState == FormWindowState.Maximized)
+                {
+                    foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+                    {
+                        try
+                        {
+                            plugin.SetWindowMode(ISimAddonPluginCtrl.WindowMode.FULL);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.WriteLine(ex.Message);
+                        }
+                    }
+                }
+
+                if (WindowState == FormWindowState.Normal)
+                {
+                    foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+                    {
+                        try
+                        {
+                            plugin.SetWindowMode(ISimAddonPluginCtrl.WindowMode.COMPACT);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.WriteLine(ex.Message);
+                        }
+                    }
+
+                }
+
+            }
         }
     }
 }

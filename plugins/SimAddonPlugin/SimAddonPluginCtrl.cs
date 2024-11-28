@@ -9,6 +9,13 @@ namespace SimAddonPlugin
         //simData data;
 
         //const string name = "stubPlugin";
+        enum WindowMode
+        {
+            FULL,
+            COMPACT           
+        }
+
+        void SetWindowMode(WindowMode mode);
 
         //methodes
         string getName();

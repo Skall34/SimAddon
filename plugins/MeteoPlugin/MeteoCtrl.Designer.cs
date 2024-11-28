@@ -42,6 +42,7 @@ namespace MeteoPlugin
             panel1 = new Panel();
             tableLayoutPanel3 = new TableLayoutPanel();
             compas1 = new SimAddonControls.Compas();
+            tableLayoutPanel4 = new TableLayoutPanel();
             lbAirportInfo = new ListBox();
             panel2 = new Panel();
             label2 = new Label();
@@ -49,12 +50,18 @@ namespace MeteoPlugin
             ttAeroport = new ToolTip(components);
             VariableWindTimer = new System.Windows.Forms.Timer(components);
             VariableWindAnimation = new System.Windows.Forms.Timer(components);
+            splitContainer1 = new SplitContainer();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             panel1.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
+            tableLayoutPanel4.SuspendLayout();
             panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -71,7 +78,7 @@ namespace MeteoPlugin
             // btnRequest
             // 
             btnRequest.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnRequest.Location = new Point(424, 3);
+            btnRequest.Location = new Point(637, 3);
             btnRequest.Name = "btnRequest";
             btnRequest.Size = new Size(75, 23);
             btnRequest.TabIndex = 2;
@@ -88,7 +95,7 @@ namespace MeteoPlugin
             tbMETAR.Multiline = true;
             tbMETAR.Name = "tbMETAR";
             tbMETAR.ReadOnly = true;
-            tbMETAR.Size = new Size(488, 44);
+            tbMETAR.Size = new Size(701, 44);
             tbMETAR.TabIndex = 7;
             // 
             // pictureBox1
@@ -98,7 +105,7 @@ namespace MeteoPlugin
             pictureBox1.InitialImage = (Image)resources.GetObject("pictureBox1.InitialImage");
             pictureBox1.Location = new Point(5, 5);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(502, 54);
+            pictureBox1.Size = new Size(715, 54);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 10;
             pictureBox1.TabStop = false;
@@ -124,28 +131,26 @@ namespace MeteoPlugin
             tableLayoutPanel1.Controls.Add(tbMETAR, 0, 2);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel1.Controls.Add(panel1, 0, 3);
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 0, 4);
-            tableLayoutPanel1.Controls.Add(panel2, 0, 5);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 6;
+            tableLayoutPanel1.RowCount = 4;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
-            tableLayoutPanel1.Size = new Size(512, 614);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Size = new Size(725, 406);
             tableLayoutPanel1.TabIndex = 13;
             // 
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tableLayoutPanel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             tableLayoutPanel2.ColumnCount = 3;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 21F));
             tableLayoutPanel2.Controls.Add(btnRequest, 2, 0);
             tableLayoutPanel2.Controls.Add(label1, 0, 0);
             tableLayoutPanel2.Controls.Add(cbICAO, 1, 0);
@@ -153,7 +158,7 @@ namespace MeteoPlugin
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(502, 29);
+            tableLayoutPanel2.Size = new Size(715, 29);
             tableLayoutPanel2.TabIndex = 11;
             // 
             // cbICAO
@@ -180,7 +185,7 @@ namespace MeteoPlugin
             panel1.Location = new Point(12, 156);
             panel1.Margin = new Padding(10, 3, 10, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(488, 204);
+            panel1.Size = new Size(701, 245);
             panel1.TabIndex = 12;
             // 
             // tableLayoutPanel3
@@ -189,14 +194,15 @@ namespace MeteoPlugin
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel3.Controls.Add(compas1, 0, 0);
-            tableLayoutPanel3.Controls.Add(lbAirportInfo, 1, 0);
+            tableLayoutPanel3.Controls.Add(tableLayoutPanel4, 1, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(5, 368);
+            tableLayoutPanel3.Location = new Point(0, 0);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(502, 204);
+            tableLayoutPanel3.Size = new Size(725, 281);
             tableLayoutPanel3.TabIndex = 13;
+            tableLayoutPanel3.Paint += tableLayoutPanel3_Paint;
             // 
             // compas1
             // 
@@ -217,9 +223,24 @@ namespace MeteoPlugin
     };
             compas1.NumericValue = 0D;
             compas1.RectangleSize = new Size(60, 20);
-            compas1.Size = new Size(245, 198);
+            compas1.Size = new Size(356, 275);
             compas1.TabIndex = 0;
             compas1.Unit = "NM";
+            // 
+            // tableLayoutPanel4
+            // 
+            tableLayoutPanel4.ColumnCount = 1;
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel4.Controls.Add(lbAirportInfo, 0, 0);
+            tableLayoutPanel4.Controls.Add(panel2, 0, 1);
+            tableLayoutPanel4.Dock = DockStyle.Fill;
+            tableLayoutPanel4.Location = new Point(365, 3);
+            tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.RowCount = 2;
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutPanel4.Size = new Size(357, 275);
+            tableLayoutPanel4.TabIndex = 1;
             // 
             // lbAirportInfo
             // 
@@ -231,27 +252,29 @@ namespace MeteoPlugin
             lbAirportInfo.HorizontalScrollbar = true;
             lbAirportInfo.ItemHeight = 34;
             lbAirportInfo.Items.AddRange(new object[] { "Loading airport database" });
-            lbAirportInfo.Location = new Point(257, 6);
-            lbAirportInfo.Margin = new Padding(6);
+            lbAirportInfo.Location = new Point(3, 3);
             lbAirportInfo.Name = "lbAirportInfo";
-            lbAirportInfo.Size = new Size(239, 192);
+            lbAirportInfo.Size = new Size(351, 239);
             lbAirportInfo.TabIndex = 1;
             lbAirportInfo.DrawItem += lbAirportInfo_DrawItem;
             // 
             // panel2
             // 
+            panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel2.BackColor = Color.Teal;
             panel2.Controls.Add(label2);
             panel2.Controls.Add(ledBulb1);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(5, 580);
+            panel2.Location = new Point(0, 245);
+            panel2.Margin = new Padding(0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(502, 29);
-            panel2.TabIndex = 14;
+            panel2.Size = new Size(357, 30);
+            panel2.TabIndex = 2;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(44, 8);
+            label2.Location = new Point(31, 5);
+            label2.Margin = new Padding(0);
             label2.Name = "label2";
             label2.Size = new Size(52, 15);
             label2.TabIndex = 1;
@@ -259,7 +282,7 @@ namespace MeteoPlugin
             // 
             // ledBulb1
             // 
-            ledBulb1.Location = new Point(3, 2);
+            ledBulb1.Location = new Point(3, 5);
             ledBulb1.Name = "ledBulb1";
             ledBulb1.On = false;
             ledBulb1.Size = new Size(25, 25);
@@ -274,14 +297,32 @@ namespace MeteoPlugin
             // 
             VariableWindAnimation.Tick += VariableWindAnimation_Tick;
             // 
+            // splitContainer1
+            // 
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Name = "splitContainer1";
+            splitContainer1.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(tableLayoutPanel1);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(tableLayoutPanel3);
+            splitContainer1.Size = new Size(725, 691);
+            splitContainer1.SplitterDistance = 406;
+            splitContainer1.TabIndex = 14;
+            // 
             // MeteoCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Teal;
-            Controls.Add(tableLayoutPanel1);
+            Controls.Add(splitContainer1);
             Name = "MeteoCtrl";
-            Size = new Size(512, 614);
+            Size = new Size(725, 691);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
@@ -290,8 +331,13 @@ namespace MeteoPlugin
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
+            tableLayoutPanel4.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -314,6 +360,8 @@ namespace MeteoPlugin
         private ListBox lbAirportInfo;
         private System.Windows.Forms.Timer VariableWindTimer;
         private System.Windows.Forms.Timer VariableWindAnimation;
+        private SplitContainer splitContainer1;
+        private TableLayoutPanel tableLayoutPanel4;
         private Panel panel2;
         private Label label2;
         private SimAddonControls.LedBulb ledBulb1;
