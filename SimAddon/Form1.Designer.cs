@@ -37,6 +37,7 @@ namespace SimAddon
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             statusStrip = new StatusStrip();
             lblConnectionStatus = new ToolStripStatusLabel();
+            lblPluginStatus = new ToolStripStatusLabel();
             timerMain = new System.Windows.Forms.Timer(components);
             timerConnection = new System.Windows.Forms.Timer(components);
             contextMenuStrip1 = new ContextMenuStrip(components);
@@ -46,7 +47,7 @@ namespace SimAddon
             // 
             // statusStrip
             // 
-            statusStrip.Items.AddRange(new ToolStripItem[] { lblConnectionStatus });
+            statusStrip.Items.AddRange(new ToolStripItem[] { lblConnectionStatus, lblPluginStatus });
             statusStrip.Location = new Point(0, 808);
             statusStrip.Name = "statusStrip";
             statusStrip.Padding = new Padding(1, 0, 22, 0);
@@ -59,6 +60,12 @@ namespace SimAddon
             lblConnectionStatus.Name = "lblConnectionStatus";
             lblConnectionStatus.Size = new Size(104, 17);
             lblConnectionStatus.Text = "Connection Status";
+            // 
+            // lblPluginStatus
+            // 
+            lblPluginStatus.Name = "lblPluginStatus";
+            lblPluginStatus.Size = new Size(76, 17);
+            lblPluginStatus.Text = "Plugin Status";
             // 
             // timerMain
             // 
@@ -117,6 +124,7 @@ namespace SimAddon
         private System.Windows.Forms.Timer timerConnection;
         private ContextMenuStrip contextMenuStrip1;
         private TabControl tabControl1;
+        private ToolStripStatusLabel lblPluginStatus;
     }
 }
 

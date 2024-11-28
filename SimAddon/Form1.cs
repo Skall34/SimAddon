@@ -110,7 +110,7 @@ namespace SimAddon
                 this.timerMain.Start();
 
                 // met à jour le status de connection dans la barre de statut.
-                ConfigureForm();
+                UpdateLabelConnectionStatus();
 
             }
             catch
@@ -131,7 +131,7 @@ namespace SimAddon
 
             try
             {
-                ConfigureForm();
+                UpdateLabelConnectionStatus();
                 //rafraichis les données venant du simu
                 _simData.Refresh();
 
@@ -166,7 +166,7 @@ namespace SimAddon
                 // An error occured. Tell the user and stop this timer.
                 this.timerMain.Stop();
                 // Update the connection status
-                ConfigureForm();
+                UpdateLabelConnectionStatus();
 
                 //send a last update to the plugins.
                 currentStatus.MasterAvionicsOn = false;
@@ -192,9 +192,9 @@ namespace SimAddon
         }
 
         // Configures the status label depending on if we're connected or not 
-        private void ConfigureForm()
+        private void UpdateLabelConnectionStatus()
         {
-            string statusText = "";
+            string statusText = string.Empty;
             //si la connection vers le simu est OK
             if (_simData.isConnected)
             {
@@ -203,19 +203,21 @@ namespace SimAddon
             }
             else
             {
-                statusText = "Disconnected. Looking for Flight Simulator...";
+                statusText = "Disconnected. Looking for Simulator...";
                 this.lblConnectionStatus.ForeColor = Color.Red;
+
             }
 
             if (_simData.GetReadyToFly())
             {
-                statusText += " ready to fly";
+                statusText += " / Ready";
             }
             else
             {
-                statusText += " waiting for flight load...";
+                statusText += " Waiting for flight load...";
             }
             this.lblConnectionStatus.Text = statusText;
+
         }
 
         // Form is closing so stop all the timers and close FSUIPC Connection
@@ -300,7 +302,7 @@ namespace SimAddon
             await _simData.loadDataFromSheet();
             //met à jour l'etat de connection au simu dans la barre de statut
             Logger.WriteLine("update form status");
-            ConfigureForm();
+            UpdateLabelConnectionStatus();
 
             foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
             {
@@ -323,7 +325,8 @@ namespace SimAddon
         //write the message the status bar
         private void Plugin_OnStatusUpdate(object sender, string statusMessage)
         {
-            this.lblConnectionStatus.Text = statusMessage;
+            this.lblPluginStatus.Text = statusMessage;
+            this.lblPluginStatus.ForeColor = Color.Green;
         }
 
         private void submitBugToolStripMenuItem_Click(object sender, EventArgs e)
