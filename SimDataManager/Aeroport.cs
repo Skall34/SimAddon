@@ -37,6 +37,15 @@ namespace SimDataManager
             } 
         }
 
+        private double _distance;
+        public double distance
+        {
+            get
+            {
+                return _distance;
+            }
+        }
+
         private const string DBFILE = "aeroports.json";
 
         private static string DBFILEPATH;
@@ -91,6 +100,7 @@ namespace SimDataManager
                 {
                     shortestDistance = distance;
                     closestAirport = airport;
+                    closestAirport._distance = distance;                  
                 }
             }
             return closestAirport;
@@ -104,6 +114,7 @@ namespace SimDataManager
                 double distance = airport.DistanceTo(targetLatitude, targetLongitude);
                 if (distance < range)
                 {
+                    airport._distance = distance;
                     airportsInRange.Add(airport);
                 }
             }
