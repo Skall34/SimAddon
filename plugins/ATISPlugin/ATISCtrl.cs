@@ -8,13 +8,16 @@ namespace ATISPlugin
     public partial class ATISCtrl : UserControl, ISimAddonPluginCtrl
     {
         private simData simdata;
+
+
+
+
         public ATISCtrl()
         {
             InitializeComponent();
             this.Enabled = false;
             this.cbICAO.ValueMember = "fullName";
             this.cbICAO.DisplayMember = "fullName";
-
         }
 
         ISimAddonPluginCtrl.UpdateStatusHandler updateStatusHandler;
@@ -52,6 +55,14 @@ namespace ATISPlugin
         {
             //nothing particular for init
             simdata = _data;
+            //ask a first refresh of vatsim data
+            VATSIM.refresh();
+
+            //for debug purpose without simulator
+            if (!_data.isConnected)
+            {
+                this.Enabled = true;
+            }
         }
 
         public void registerPage(TabControl parent)
@@ -100,6 +111,16 @@ namespace ATISPlugin
                 {
                     uint VHFRange = NavigationHelper.GetVHFRangeNauticalMiles(data.position.Altitude);
                     List<Aeroport> proches = Aeroport.FindAirportsInRange(simdata.aeroports, data.position.Location.Latitude, data.position.Location.Longitude, VHFRange);
+
+                    foreach (Aeroport a in proches)
+                    {
+                        List<ControllerData> controllers = VATSIM.FindControllers(a.ident);
+                        if (controllers.Count == 0)
+                        {
+                            proches.Remove(a);
+                        }
+                    }
+
                     proches.Sort((x, y) => x.distance.CompareTo(y.distance));
                     if (proches.Count > 0)
                     {
@@ -121,6 +142,7 @@ namespace ATISPlugin
                     }
                     else
                     {
+                        cbICAO.Items.Clear();
                     }
                 }
                 else
@@ -135,7 +157,8 @@ namespace ATISPlugin
 
         private async void requestATIS()
         {
-            bool refreshOK = await ATIS.refresh();
+
+            bool refreshOK = await VATSIM.refresh();
             tbATISText.Text = string.Empty;
             if (refreshOK)
             {
@@ -149,29 +172,53 @@ namespace ATISPlugin
                     searchItem = cbICAO.Text.ToUpper();
                     cbICAO.Text = searchItem;
                 }
-                ATISData atis = ATIS.data.FirstOrDefault(a => a.callsign.StartsWith(searchItem));
-                if (atis != null)
+
+                if (VATSIM.data.atis != null)
                 {
-                    foreach (string s in atis.text_atis)
+                    List<ATISData> atis = VATSIM.FindATIS(searchItem);
+
+                    foreach (ATISData a in atis)
                     {
-                        string atisText = s.Replace("RWY ", "RUNWAY ")
-                            .Replace("DEP", "DEPARTURE")
-                            .Replace("ARR", "ARRIVAL")
-                            .Replace("VIS ", "VISIBILITY ")
-                            .Replace("TRL ", "TRANSITION LEVEL ");
-                        tbATISText.Text += atisText + " ";
+                        foreach (string s in a.text_atis)
+                        {
+                            string atisText = s.Replace("RWY ", "RUNWAY ")
+                                .Replace("DEP", "DEPARTURE")
+                                .Replace("ARR", "ARRIVAL")
+                                .Replace("VIS ", "VISIBILITY ")
+                                .Replace("TRL ", "TRANSITION LEVEL ");
+                            tbATISText.Text += atisText + " ";
+                        }
+                        tbATISText.Text += Environment.NewLine + "-------------------" + Environment.NewLine;
+
                     }
                 }
                 else
                 {
                     tbATISText.Text = "No ATIS available";
                 }
+
+                lvControllers.Items.Clear();
+                if (VATSIM.data.controllers != null)
+                {
+                    List<ControllerData> controlers = VATSIM.FindControllers(searchItem);
+                    foreach (ControllerData controller in controlers)
+                    {
+                        string rating = VATSIM.GetRatingLabel(controller);
+                        string facility = VATSIM.GetFacilityLabel(controller);
+                        string frequency = controller.frequency;
+                        string callsign = controller.callsign;
+                        ListViewItem newItem = new ListViewItem(new string[] { facility, rating, callsign, frequency });
+                        newItem.Tag = controller;
+                        lvControllers.Items.Add(newItem);
+                    }
+                }
+
+
             }
             else
             {
                 UpdateStatus("Failed to get ATIS information");
             }
-
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -187,6 +234,49 @@ namespace ATISPlugin
         private void cbICAO_SelectedIndexChanged(object sender, EventArgs e)
         {
             requestATIS();
+        }
+
+        private void UpdateVATSIMTimer_Tick(object sender, EventArgs e)
+        {
+            //refresh VATSIM data at least every 5 minutes.
+            VATSIM.refresh();
+        }
+
+        private void cbICAO_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                requestATIS();
+            }
+        }
+
+        private void lvControllers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lvControllers.SelectedItems.Count > 0)
+            {
+                ControllerData c = (ControllerData)lvControllers.SelectedItems[0].Tag;
+                if (c != null)
+                {
+                    string text = string.Empty;
+                    if (c.text_atis != null)
+                    {
+                        foreach (string s in c.text_atis)
+                        {
+                            text += s;
+                        }
+                    }
+                    tbController.Text = text;
+                }
+            }
+            else
+            {
+                tbController.Text = string.Empty;
+            }
+        }
+
+        private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

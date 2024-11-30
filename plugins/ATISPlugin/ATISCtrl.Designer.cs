@@ -29,6 +29,7 @@ namespace ATISPlugin
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             splitContainer1 = new SplitContainer();
             tableLayoutPanel1 = new TableLayoutPanel();
             tbATISText = new TextBox();
@@ -37,10 +38,23 @@ namespace ATISPlugin
             ledBulb1 = new SimAddonControls.LedBulb();
             label1 = new Label();
             label2 = new Label();
+            splitContainer2 = new SplitContainer();
+            lvControllers = new ListView();
+            columnType = new ColumnHeader();
+            columnRating = new ColumnHeader();
+            columnCallsign = new ColumnHeader();
+            columnFreq = new ColumnHeader();
+            tbController = new TextBox();
+            UpdateVATSIMTimer = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
+            splitContainer2.SuspendLayout();
             SuspendLayout();
             // 
             // splitContainer1
@@ -58,9 +72,10 @@ namespace ATISPlugin
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.BackColor = Color.FromArgb(64, 64, 64);
+            splitContainer1.Panel2.Controls.Add(splitContainer2);
             splitContainer1.Panel2.Paint += splitContainer1_Panel2_Paint;
             splitContainer1.Size = new Size(534, 714);
-            splitContainer1.SplitterDistance = 211;
+            splitContainer1.SplitterDistance = 355;
             splitContainer1.SplitterWidth = 6;
             splitContainer1.TabIndex = 0;
             // 
@@ -83,18 +98,20 @@ namespace ATISPlugin
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel1.Size = new Size(534, 211);
+            tableLayoutPanel1.Size = new Size(534, 355);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // tbATISText
             // 
             tbATISText.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel1.SetColumnSpan(tbATISText, 3);
+            tbATISText.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tbATISText.Location = new Point(4, 44);
             tbATISText.Margin = new Padding(4);
             tbATISText.Multiline = true;
             tbATISText.Name = "tbATISText";
-            tbATISText.Size = new Size(526, 133);
+            tbATISText.ScrollBars = ScrollBars.Vertical;
+            tbATISText.Size = new Size(526, 277);
             tbATISText.TabIndex = 0;
             // 
             // cbICAO
@@ -107,6 +124,7 @@ namespace ATISPlugin
             cbICAO.Size = new Size(256, 29);
             cbICAO.TabIndex = 1;
             cbICAO.SelectedIndexChanged += cbICAO_SelectedIndexChanged;
+            cbICAO.KeyPress += cbICAO_KeyPress;
             // 
             // btnRequest
             // 
@@ -124,7 +142,7 @@ namespace ATISPlugin
             // ledBulb1
             // 
             ledBulb1.Dock = DockStyle.Fill;
-            ledBulb1.Location = new Point(448, 185);
+            ledBulb1.Location = new Point(448, 329);
             ledBulb1.Margin = new Padding(4);
             ledBulb1.Name = "ledBulb1";
             ledBulb1.On = false;
@@ -149,12 +167,87 @@ namespace ATISPlugin
             label2.AutoSize = true;
             label2.Dock = DockStyle.Fill;
             label2.ForeColor = Color.Black;
-            label2.Location = new Point(183, 181);
+            label2.Location = new Point(183, 325);
             label2.Name = "label2";
             label2.Size = new Size(258, 30);
             label2.TabIndex = 5;
             label2.Text = "Avionics";
             label2.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // splitContainer2
+            // 
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Name = "splitContainer2";
+            splitContainer2.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            splitContainer2.Panel1.Controls.Add(lvControllers);
+            splitContainer2.Panel1.Paint += splitContainer2_Panel1_Paint;
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.Controls.Add(tbController);
+            splitContainer2.Size = new Size(534, 353);
+            splitContainer2.SplitterDistance = 216;
+            splitContainer2.TabIndex = 1;
+            // 
+            // lvControllers
+            // 
+            lvControllers.Columns.AddRange(new ColumnHeader[] { columnType, columnRating, columnCallsign, columnFreq });
+            lvControllers.Dock = DockStyle.Fill;
+            lvControllers.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lvControllers.FullRowSelect = true;
+            lvControllers.GridLines = true;
+            lvControllers.HeaderStyle = ColumnHeaderStyle.Nonclickable;
+            lvControllers.Location = new Point(0, 0);
+            lvControllers.MultiSelect = false;
+            lvControllers.Name = "lvControllers";
+            lvControllers.Size = new Size(534, 216);
+            lvControllers.TabIndex = 0;
+            lvControllers.UseCompatibleStateImageBehavior = false;
+            lvControllers.View = View.Details;
+            lvControllers.SelectedIndexChanged += lvControllers_SelectedIndexChanged;
+            // 
+            // columnType
+            // 
+            columnType.Text = "Facility";
+            columnType.Width = 120;
+            // 
+            // columnRating
+            // 
+            columnRating.Text = "Rating";
+            columnRating.TextAlign = HorizontalAlignment.Center;
+            columnRating.Width = 120;
+            // 
+            // columnCallsign
+            // 
+            columnCallsign.Text = "Callsign";
+            columnCallsign.Width = 120;
+            // 
+            // columnFreq
+            // 
+            columnFreq.Text = "Frequency";
+            columnFreq.TextAlign = HorizontalAlignment.Center;
+            columnFreq.Width = 120;
+            // 
+            // tbController
+            // 
+            tbController.Dock = DockStyle.Fill;
+            tbController.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbController.Location = new Point(0, 0);
+            tbController.Multiline = true;
+            tbController.Name = "tbController";
+            tbController.ScrollBars = ScrollBars.Vertical;
+            tbController.Size = new Size(534, 133);
+            tbController.TabIndex = 0;
+            // 
+            // UpdateVATSIMTimer
+            // 
+            UpdateVATSIMTimer.Enabled = true;
+            UpdateVATSIMTimer.Interval = 300000;
+            UpdateVATSIMTimer.Tick += UpdateVATSIMTimer_Tick;
             // 
             // ATISCtrl
             // 
@@ -166,10 +259,16 @@ namespace ATISPlugin
             Name = "ATISCtrl";
             Size = new Size(534, 714);
             splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
+            splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel2.ResumeLayout(false);
+            splitContainer2.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -186,5 +285,13 @@ namespace ATISPlugin
         private Label label1;
         private TableLayoutPanel tableLayoutPanel1;
         private Label label2;
+        private System.Windows.Forms.Timer UpdateVATSIMTimer;
+        private ListView lvControllers;
+        private ColumnHeader columnType;
+        private ColumnHeader columnRating;
+        private ColumnHeader columnFreq;
+        private ColumnHeader columnCallsign;
+        private SplitContainer splitContainer2;
+        private TextBox tbController;
     }
 }
