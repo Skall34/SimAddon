@@ -201,6 +201,14 @@ namespace SimAddon
             {
                 statusText = "Connected";
                 this.lblConnectionStatus.ForeColor = Color.Green;
+                if (_simData.GetReadyToFly())
+                {
+                    statusText += " / Ready";
+                }
+                else
+                {
+                    statusText += " Waiting for flight load...";
+                }
             }
             else
             {
@@ -208,17 +216,7 @@ namespace SimAddon
                 this.lblConnectionStatus.ForeColor = Color.Red;
 
             }
-
-            if (_simData.GetReadyToFly())
-            {
-                statusText += " / Ready";
-            }
-            else
-            {
-                statusText += " Waiting for flight load...";
-            }
             this.lblConnectionStatus.Text = statusText;
-
         }
 
         // Form is closing so stop all the timers and close FSUIPC Connection
