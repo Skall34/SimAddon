@@ -295,39 +295,45 @@ namespace ATISPlugin
         public static List<ControllerData> FindControllers(string ICAO)
         {
             List<ControllerData> result = new List<ControllerData>();
-            foreach (ControllerData c in data.controllers)
+            if (data.controllers != null)
             {
-                if (c.callsign.StartsWith(ICAO))
+                foreach (ControllerData c in data.controllers)
                 {
-                    result.Add(c);
-                }
-                else
-                {
-                    //look for remote controllers... 
-                    //search for ICAO in ATIS_Text
-                    if ((c.facility >= 4) && (c.facility<=6)) // 4 = tower, 5 = approach, 6 = en route
+                    if (c.callsign.StartsWith(ICAO))
                     {
-                        if (c.text_atis != null)
+                        result.Add(c);
+                    }
+                    else
+                    {
+                        //look for remote controllers... 
+                        //search for ICAO in ATIS_Text
+                        if ((c.facility >= 4) && (c.facility <= 6)) // 4 = tower, 5 = approach, 6 = en route
                         {
-                            // search for the ICAO
-                            foreach (string s in c.text_atis)
+                            if (c.text_atis != null)
                             {
-                                if (s.Contains(ICAO))
+                                // search for the ICAO
+                                foreach (string s in c.text_atis)
                                 {
-                                    result.Add(c);
+                                    if (s.Contains(ICAO))
+                                    {
+                                        result.Add(c);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-            foreach (ControllerData c in data.atis)
+            if (data.atis != null)
             {
-                if (c.callsign.StartsWith(ICAO))
+                foreach (ControllerData c in data.atis)
                 {
-                    result.Add(c);
-                }
+                    if (c.callsign.StartsWith(ICAO))
+                    {
+                        result.Add(c);
+                    }
 
+                }
             }
             return result;
         }

@@ -111,28 +111,34 @@ namespace ATISPlugin
                 {
                     uint VHFRange = NavigationHelper.GetVHFRangeNauticalMiles(data.position.Altitude);
                     List<Aeroport> proches = Aeroport.FindAirportsInRange(simdata.aeroports, data.position.Location.Latitude, data.position.Location.Longitude, VHFRange);
-
+                    List<Aeroport> possibles = new List<Aeroport>();
                     foreach (Aeroport a in proches)
                     {
                         List<ControllerData> controllers = VATSIM.FindControllers(a.ident);
-                        if (controllers.Count == 0)
+                        if (controllers.Count > 0)
                         {
-                            proches.Remove(a);
+                            possibles.Add(a);
                         }
                     }
 
-                    proches.Sort((x, y) => x.distance.CompareTo(y.distance));
-                    if (proches.Count > 0)
+                    if (possibles.Count > 0)
                     {
+                        possibles.Sort((x, y) => x.distance.CompareTo(y.distance));
                         foreach (Aeroport a in cbICAO.Items)
                         {
-                            if (!proches.Contains(a))
+                            if (!possibles.Contains(a))
                             {
-                                cbICAO.Items.Remove(a);
+                                try
+                                {
+                                    cbICAO.Items.Remove(a);
+                                }catch(Exception ex)
+                                {
+
+                                }
                             }
                         }
 
-                        foreach (Aeroport a in proches)
+                        foreach (Aeroport a in possibles)
                         {
                             if (!cbICAO.Items.Contains(a))
                             {
@@ -142,7 +148,6 @@ namespace ATISPlugin
                     }
                     else
                     {
-                        cbICAO.Items.Clear();
                     }
                 }
                 else
@@ -160,6 +165,9 @@ namespace ATISPlugin
 
             bool refreshOK = await VATSIM.refresh();
             tbATISText.Text = string.Empty;
+            tbController.Text = string.Empty;
+            lvControllers.Items.Clear();
+
             if (refreshOK)
             {
                 string searchItem = "";
@@ -197,7 +205,6 @@ namespace ATISPlugin
                     tbATISText.Text = "No ATIS available";
                 }
 
-                lvControllers.Items.Clear();
                 if (VATSIM.data.controllers != null)
                 {
                     List<ControllerData> controlers = VATSIM.FindControllers(searchItem);

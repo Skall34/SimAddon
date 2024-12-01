@@ -38,6 +38,7 @@ namespace ATISPlugin
             ledBulb1 = new SimAddonControls.LedBulb();
             label1 = new Label();
             label2 = new Label();
+            panel1 = new Panel();
             splitContainer2 = new SplitContainer();
             lvControllers = new ListView();
             columnType = new ColumnHeader();
@@ -61,7 +62,7 @@ namespace ATISPlugin
             // 
             splitContainer1.Dock = DockStyle.Fill;
             splitContainer1.Location = new Point(0, 0);
-            splitContainer1.Margin = new Padding(4);
+            splitContainer1.Margin = new Padding(0);
             splitContainer1.Name = "splitContainer1";
             splitContainer1.Orientation = Orientation.Horizontal;
             // 
@@ -84,20 +85,22 @@ namespace ATISPlugin
             tableLayoutPanel1.ColumnCount = 3;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 180F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
             tableLayoutPanel1.Controls.Add(tbATISText, 0, 1);
             tableLayoutPanel1.Controls.Add(cbICAO, 1, 0);
             tableLayoutPanel1.Controls.Add(btnRequest, 2, 0);
             tableLayoutPanel1.Controls.Add(ledBulb1, 2, 2);
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
             tableLayoutPanel1.Controls.Add(label2, 1, 2);
+            tableLayoutPanel1.Controls.Add(panel1, 0, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Margin = new Padding(0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
             tableLayoutPanel1.Size = new Size(534, 355);
             tableLayoutPanel1.TabIndex = 0;
             // 
@@ -111,7 +114,7 @@ namespace ATISPlugin
             tbATISText.Multiline = true;
             tbATISText.Name = "tbATISText";
             tbATISText.ScrollBars = ScrollBars.Vertical;
-            tbATISText.Size = new Size(526, 277);
+            tbATISText.Size = new Size(526, 243);
             tbATISText.TabIndex = 0;
             // 
             // cbICAO
@@ -121,7 +124,7 @@ namespace ATISPlugin
             cbICAO.Location = new Point(184, 4);
             cbICAO.Margin = new Padding(4);
             cbICAO.Name = "cbICAO";
-            cbICAO.Size = new Size(256, 29);
+            cbICAO.Size = new Size(226, 29);
             cbICAO.TabIndex = 1;
             cbICAO.SelectedIndexChanged += cbICAO_SelectedIndexChanged;
             cbICAO.KeyPress += cbICAO_KeyPress;
@@ -141,12 +144,12 @@ namespace ATISPlugin
             // 
             // ledBulb1
             // 
-            ledBulb1.Dock = DockStyle.Fill;
-            ledBulb1.Location = new Point(448, 329);
+            ledBulb1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            ledBulb1.Location = new Point(418, 328);
             ledBulb1.Margin = new Padding(4);
             ledBulb1.Name = "ledBulb1";
             ledBulb1.On = false;
-            ledBulb1.Size = new Size(82, 22);
+            ledBulb1.Size = new Size(21, 23);
             ledBulb1.TabIndex = 3;
             // 
             // label1
@@ -167,12 +170,23 @@ namespace ATISPlugin
             label2.AutoSize = true;
             label2.Dock = DockStyle.Fill;
             label2.ForeColor = Color.Black;
-            label2.Location = new Point(183, 325);
+            label2.Location = new Point(180, 291);
+            label2.Margin = new Padding(0, 0, 0, 6);
             label2.Name = "label2";
-            label2.Size = new Size(258, 30);
+            label2.Size = new Size(234, 58);
             label2.TabIndex = 5;
             label2.Text = "Avionics";
-            label2.TextAlign = ContentAlignment.MiddleRight;
+            label2.TextAlign = ContentAlignment.BottomRight;
+            // 
+            // panel1
+            // 
+            panel1.BackgroundImage = Properties.Resources.Virtual_Air_Traffic_Simulation_Network__logo_;
+            panel1.BackgroundImageLayout = ImageLayout.Stretch;
+            panel1.Location = new Point(0, 291);
+            panel1.Margin = new Padding(0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(180, 64);
+            panel1.TabIndex = 6;
             // 
             // splitContainer2
             // 
@@ -293,5 +307,6 @@ namespace ATISPlugin
         private ColumnHeader columnCallsign;
         private SplitContainer splitContainer2;
         private TextBox tbController;
+        private Panel panel1;
     }
 }
