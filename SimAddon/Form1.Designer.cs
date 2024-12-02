@@ -42,7 +42,9 @@ namespace SimAddon
             timerConnection = new System.Windows.Forms.Timer(components);
             contextMenuStrip1 = new ContextMenuStrip(components);
             tabControl1 = new TabControl();
+            alwaysOnTopToolStripMenuItem = new ToolStripMenuItem();
             statusStrip.SuspendLayout();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip
@@ -79,8 +81,9 @@ namespace SimAddon
             // 
             // contextMenuStrip1
             // 
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(61, 4);
+            contextMenuStrip1.Size = new Size(181, 48);
             // 
             // tabControl1
             // 
@@ -91,6 +94,13 @@ namespace SimAddon
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(574, 291);
             tabControl1.TabIndex = 7;
+            // 
+            // alwaysOnTopToolStripMenuItem
+            // 
+            alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
+            alwaysOnTopToolStripMenuItem.Size = new Size(180, 22);
+            alwaysOnTopToolStripMenuItem.Text = "Always On Top";
+            alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -115,6 +125,7 @@ namespace SimAddon
             Resize += Form1_Resize;
             statusStrip.ResumeLayout(false);
             statusStrip.PerformLayout();
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -128,6 +139,7 @@ namespace SimAddon
         private ContextMenuStrip contextMenuStrip1;
         private TabControl tabControl1;
         private ToolStripStatusLabel lblPluginStatus;
+        private ToolStripMenuItem alwaysOnTopToolStripMenuItem;
     }
 }
 

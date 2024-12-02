@@ -372,5 +372,19 @@ namespace SimAddon
 
             }
         }
+
+        private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.TopMost == false) 
+            {
+                this.TopMost = alwaysOnTopToolStripMenuItem.Checked = true;
+                this.TopMost = true;
+            }
+            else
+            {
+                this.TopMost = alwaysOnTopToolStripMenuItem.Checked = false;
+                this.TopMost = false;
+            }
+        }
     }
 }
