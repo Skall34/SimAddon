@@ -62,6 +62,9 @@ jobs:
     - name: publish meteo plugin
       run: dotnet publish plugins/MeteoPlugin/MeteoPlugin.csproj --configuration Release --output publish_output\plugins\2_Meteo
 
+    - name: publish ATIS plugin
+      run: dotnet publish plugins/ATISPlugin/ATISPlugin.csproj --configuration Release --output publish_output\plugins\3_ATIS
+
     - name: set version in installer
       shell: pwsh
       run: ./updateVersion.ps1 ${{ steps.previoustag.outputs.tag }}
