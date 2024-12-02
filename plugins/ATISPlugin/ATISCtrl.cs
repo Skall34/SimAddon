@@ -9,13 +9,9 @@ namespace ATISPlugin
     {
         private simData simdata;
 
-
-
-
         public ATISCtrl()
         {
             InitializeComponent();
-            this.Enabled = false;
             this.cbICAO.ValueMember = "fullName";
             this.cbICAO.DisplayMember = "fullName";
         }
@@ -57,12 +53,6 @@ namespace ATISPlugin
             simdata = _data;
             //ask a first refresh of vatsim data
             VATSIM.refresh();
-
-            //for debug purpose without simulator
-            if (!_data.isConnected)
-            {
-                this.Enabled = true;
-            }
         }
 
         public void registerPage(TabControl parent)
@@ -94,17 +84,6 @@ namespace ATISPlugin
         {
             try
             {
-                if (data.MasterBatteryOn && data.MasterAvionicsOn && !this.Enabled)
-                {
-                    this.Enabled = true;
-                    ledBulb1.On = true;
-                }
-
-                if (((!data.MasterAvionicsOn) || (!data.MasterBatteryOn)) && this.Enabled)
-                {
-                    this.Enabled = false;
-                    ledBulb1.On = false;
-                }
 
                 //todo : rafraichis la list des aéroports assez proches pour être interrogés.
                 if ((simdata != null) && (simdata.isConnected))

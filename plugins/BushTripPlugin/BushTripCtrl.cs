@@ -7,6 +7,7 @@ using System;
 using Newtonsoft.Json;
 using SimAddonLogger;
 using SimAddonControls;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace BushTripPlugin
 {
@@ -23,7 +24,6 @@ namespace BushTripPlugin
         public BushTripCtrl()
         {
             InitializeComponent();
-            compas1.Enabled = false;
             waypointIndex = 0;
             lastWaypointIndex = 0;
             btnReset.Enabled = false;
@@ -98,18 +98,6 @@ namespace BushTripPlugin
                 double distanceToNextWP = 0;
                 double routeToWP = 0;
                 double magVariation = data.magVariation;
-
-                if (data.MasterBatteryOn && data.MasterAvionicsOn && !compas1.Enabled)
-                {
-                    compas1.Enabled = true;
-                    ledBulb1.On = true;
-                }
-
-                if (((!data.MasterAvionicsOn) || (!data.MasterBatteryOn)) && compas1.Enabled)
-                {
-                    compas1.Enabled = false;
-                    ledBulb1.On = false;
-                }
 
                 if (flightPlan != null)
                 {
@@ -205,8 +193,11 @@ namespace BushTripPlugin
                     item.ImageKey = wp.Type;
 
                     lvWaypoints.Items.Add(item);
-                    tbComment.Text += flightPlan.Item.Waypoints[i].Comment + Environment.NewLine + "-------------------" + Environment.NewLine;
+                    tbComment.AppendText(flightPlan.Item.Waypoints[i].Comment + Environment.NewLine + "-------------------" + Environment.NewLine);
                 }
+                //ensure that text is scrolled down
+                tbComment.SelectionStart = tbComment.TextLength;
+                tbComment.ScrollToCaret();
             }
 
         }

@@ -45,8 +45,6 @@ namespace MeteoPlugin
             tableLayoutPanel4 = new TableLayoutPanel();
             lbAirportInfo = new ListBox();
             panel2 = new Panel();
-            label2 = new Label();
-            ledBulb1 = new SimAddonControls.LedBulb();
             ttAeroport = new ToolTip(components);
             VariableWindTimer = new System.Windows.Forms.Timer(components);
             VariableWindAnimation = new System.Windows.Forms.Timer(components);
@@ -57,7 +55,6 @@ namespace MeteoPlugin
             panel1.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
-            panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -262,31 +259,11 @@ namespace MeteoPlugin
             // 
             panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel2.BackColor = Color.Teal;
-            panel2.Controls.Add(label2);
-            panel2.Controls.Add(ledBulb1);
             panel2.Location = new Point(0, 245);
             panel2.Margin = new Padding(0);
             panel2.Name = "panel2";
             panel2.Size = new Size(357, 30);
             panel2.TabIndex = 2;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(31, 5);
-            label2.Margin = new Padding(0);
-            label2.Name = "label2";
-            label2.Size = new Size(52, 15);
-            label2.TabIndex = 1;
-            label2.Text = "Avionics";
-            // 
-            // ledBulb1
-            // 
-            ledBulb1.Location = new Point(3, 5);
-            ledBulb1.Name = "ledBulb1";
-            ledBulb1.On = false;
-            ledBulb1.Size = new Size(25, 25);
-            ledBulb1.TabIndex = 0;
             // 
             // VariableWindTimer
             // 
@@ -332,8 +309,6 @@ namespace MeteoPlugin
             panel1.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel4.ResumeLayout(false);
-            panel2.ResumeLayout(false);
-            panel2.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
@@ -363,7 +338,5 @@ namespace MeteoPlugin
         private SplitContainer splitContainer1;
         private TableLayoutPanel tableLayoutPanel4;
         private Panel panel2;
-        private Label label2;
-        private SimAddonControls.LedBulb ledBulb1;
     }
 }

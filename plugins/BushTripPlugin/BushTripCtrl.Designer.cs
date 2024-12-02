@@ -34,6 +34,9 @@
             statusStrip1 = new StatusStrip();
             tsGlobalStatus = new ToolStripStatusLabel();
             splitContainer1 = new SplitContainer();
+            btnSaveFlightPlan = new Button();
+            btnReset = new Button();
+            lblDistanceTotale = new Label();
             lvWaypoints = new ListView();
             ColWaypoint = new ColumnHeader();
             ColName = new ColumnHeader();
@@ -43,12 +46,7 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             tbComment = new TextBox();
             panel1 = new Panel();
-            label1 = new Label();
-            ledBulb1 = new SimAddonControls.LedBulb();
             compas1 = new SimAddonControls.Compas();
-            lblDistanceTotale = new Label();
-            btnSaveFlightPlan = new Button();
-            btnReset = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -106,6 +104,37 @@
             splitContainer1.Size = new Size(521, 658);
             splitContainer1.SplitterDistance = 329;
             splitContainer1.TabIndex = 3;
+            // 
+            // btnSaveFlightPlan
+            // 
+            btnSaveFlightPlan.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnSaveFlightPlan.Location = new Point(408, 3);
+            btnSaveFlightPlan.Name = "btnSaveFlightPlan";
+            btnSaveFlightPlan.Size = new Size(108, 38);
+            btnSaveFlightPlan.TabIndex = 6;
+            btnSaveFlightPlan.Text = "Export flight plan";
+            btnSaveFlightPlan.UseVisualStyleBackColor = true;
+            btnSaveFlightPlan.Click += btnSaveFlightPlan_Click;
+            // 
+            // btnReset
+            // 
+            btnReset.Location = new Point(117, 3);
+            btnReset.Name = "btnReset";
+            btnReset.Size = new Size(108, 38);
+            btnReset.TabIndex = 7;
+            btnReset.Text = "Restart trip";
+            btnReset.UseVisualStyleBackColor = true;
+            btnReset.Click += button1_Click;
+            // 
+            // lblDistanceTotale
+            // 
+            lblDistanceTotale.AutoSize = true;
+            lblDistanceTotale.Location = new Point(231, 15);
+            lblDistanceTotale.Name = "lblDistanceTotale";
+            lblDistanceTotale.Size = new Size(99, 15);
+            lblDistanceTotale.TabIndex = 5;
+            lblDistanceTotale.Text = "Load a flight plan";
+            lblDistanceTotale.Click += lblDistanceTotale_Click;
             // 
             // lvWaypoints
             // 
@@ -188,33 +217,12 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(label1);
-            panel1.Controls.Add(ledBulb1);
             panel1.Controls.Add(compas1);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(367, 3);
             panel1.Name = "panel1";
             panel1.Size = new Size(151, 319);
             panel1.TabIndex = 2;
-            // 
-            // label1
-            // 
-            label1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            label1.AutoSize = true;
-            label1.Location = new Point(39, 294);
-            label1.Name = "label1";
-            label1.Size = new Size(52, 15);
-            label1.TabIndex = 3;
-            label1.Text = "Avionics";
-            // 
-            // ledBulb1
-            // 
-            ledBulb1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            ledBulb1.Location = new Point(3, 289);
-            ledBulb1.Name = "ledBulb1";
-            ledBulb1.On = false;
-            ledBulb1.Size = new Size(25, 25);
-            ledBulb1.TabIndex = 2;
             // 
             // compas1
             // 
@@ -237,37 +245,6 @@
             compas1.TabIndex = 1;
             compas1.Unit = "NM";
             // 
-            // lblDistanceTotale
-            // 
-            lblDistanceTotale.AutoSize = true;
-            lblDistanceTotale.Location = new Point(231, 15);
-            lblDistanceTotale.Name = "lblDistanceTotale";
-            lblDistanceTotale.Size = new Size(99, 15);
-            lblDistanceTotale.TabIndex = 5;
-            lblDistanceTotale.Text = "Load a flight plan";
-            lblDistanceTotale.Click += lblDistanceTotale_Click;
-            // 
-            // btnSaveFlightPlan
-            // 
-            btnSaveFlightPlan.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnSaveFlightPlan.Location = new Point(408, 3);
-            btnSaveFlightPlan.Name = "btnSaveFlightPlan";
-            btnSaveFlightPlan.Size = new Size(108, 38);
-            btnSaveFlightPlan.TabIndex = 6;
-            btnSaveFlightPlan.Text = "Export flight plan";
-            btnSaveFlightPlan.UseVisualStyleBackColor = true;
-            btnSaveFlightPlan.Click += btnSaveFlightPlan_Click;
-            // 
-            // btnReset
-            // 
-            btnReset.Location = new Point(117, 3);
-            btnReset.Name = "btnReset";
-            btnReset.Size = new Size(108, 38);
-            btnReset.TabIndex = 7;
-            btnReset.Text = "Restart trip";
-            btnReset.UseVisualStyleBackColor = true;
-            btnReset.Click += button1_Click;
-            // 
             // BushTripCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -289,7 +266,6 @@
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             panel1.ResumeLayout(false);
-            panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -313,7 +289,5 @@
         private TableLayoutPanel tableLayoutPanel1;
         private SimAddonControls.Compas compas1;
         private Panel panel1;
-        private Label label1;
-        private SimAddonControls.LedBulb ledBulb1;
     }
 }

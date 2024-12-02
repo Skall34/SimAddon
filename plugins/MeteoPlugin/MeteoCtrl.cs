@@ -43,7 +43,6 @@ namespace MeteoPlugin
         {
             LoadCustomFont();
             InitializeComponent();
-            this.Enabled = false;
 
             if (fontCollection != null)
             {
@@ -129,18 +128,6 @@ namespace MeteoPlugin
         {
             try
             {
-                if (data.MasterBatteryOn && data.MasterAvionicsOn && !this.Enabled)
-                {
-                    this.Enabled = true;
-                    ledBulb1.On = true;
-                }
-
-                if (((!data.MasterAvionicsOn) || (!data.MasterBatteryOn)) && this.Enabled)
-                {
-                    this.Enabled = false;
-                    ledBulb1.On = false;
-                }
-
                 //todo : rafraichis la list des aéroports assez proches pour être interrogés.
                 if ((simdata != null) && (simdata.isConnected))
                 {

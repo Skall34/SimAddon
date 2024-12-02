@@ -75,7 +75,6 @@ namespace FlightRecPlugin
         public FlightRecCtrl()
         {
             InitializeComponent();
-            this.gbDynamicData.Enabled = false;
 
             Logger.WriteLine("Starting...");
             Assembly? assembly = Assembly.GetEntryAssembly();
@@ -219,17 +218,6 @@ namespace FlightRecPlugin
         {
             try
             {
-                if (currentFlightStatus.MasterBatteryOn && !this.gbDynamicData.Enabled)
-                {
-                    this.gbDynamicData.Enabled = true;
-                    ledBulbBattery.On = true;
-                }
-
-                if (!currentFlightStatus.MasterBatteryOn && this.gbDynamicData.Enabled)
-                {
-                    this.gbDynamicData.Enabled = false;
-                    ledBulbBattery.On = false;
-                }
 
                 if (currentFlightStatus.MasterBatteryOn)
                 {
@@ -482,7 +470,8 @@ namespace FlightRecPlugin
                 {
                     //master battery switch is still OFF !
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logger.WriteLine(ex.Message);
             }
@@ -807,8 +796,7 @@ namespace FlightRecPlugin
             btnSaveSettings.Enabled = true;
         }
 
-        //sauvegarde du callsign comme setting de l'application
-        private void BtnSaveSettings_Click(object sender, EventArgs e)
+        private void SaveCallSign()
         {
             //met le callsign en majuscules
             tbCallsign.Text = tbCallsign.Text.ToUpper();
@@ -818,6 +806,12 @@ namespace FlightRecPlugin
             Settings.Default.Save();
             //desactive le bouton de sauvegarde.
             this.btnSaveSettings.Enabled = false;
+
+        }
+        //sauvegarde du callsign comme setting de l'application
+        private void BtnSaveSettings_Click(object sender, EventArgs e)
+        {
+            SaveCallSign();
         }
 
         private void BtnSubmit_Click(object sender, EventArgs e)
@@ -1112,6 +1106,14 @@ namespace FlightRecPlugin
             if (onGround && !atLeastOneEngineFiring)
             {
                 ReadStaticValues();
+            }
+        }
+
+        private void tbCallsign_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                SaveCallSign();
             }
         }
     }

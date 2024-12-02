@@ -35,9 +35,7 @@ namespace ATISPlugin
             tbATISText = new TextBox();
             cbICAO = new ComboBox();
             btnRequest = new Button();
-            ledBulb1 = new SimAddonControls.LedBulb();
             label1 = new Label();
-            label2 = new Label();
             panel1 = new Panel();
             splitContainer2 = new SplitContainer();
             lvControllers = new ListView();
@@ -89,9 +87,7 @@ namespace ATISPlugin
             tableLayoutPanel1.Controls.Add(tbATISText, 0, 1);
             tableLayoutPanel1.Controls.Add(cbICAO, 1, 0);
             tableLayoutPanel1.Controls.Add(btnRequest, 2, 0);
-            tableLayoutPanel1.Controls.Add(ledBulb1, 2, 2);
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
-            tableLayoutPanel1.Controls.Add(label2, 1, 2);
             tableLayoutPanel1.Controls.Add(panel1, 0, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
@@ -142,16 +138,6 @@ namespace ATISPlugin
             btnRequest.UseVisualStyleBackColor = true;
             btnRequest.Click += button1_Click;
             // 
-            // ledBulb1
-            // 
-            ledBulb1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            ledBulb1.Location = new Point(418, 328);
-            ledBulb1.Margin = new Padding(4);
-            ledBulb1.Name = "ledBulb1";
-            ledBulb1.On = false;
-            ledBulb1.Size = new Size(21, 23);
-            ledBulb1.TabIndex = 3;
-            // 
             // label1
             // 
             label1.AutoSize = true;
@@ -164,19 +150,6 @@ namespace ATISPlugin
             label1.TabIndex = 4;
             label1.Text = "Available ATIS in range";
             label1.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Fill;
-            label2.ForeColor = Color.Black;
-            label2.Location = new Point(180, 291);
-            label2.Margin = new Padding(0, 0, 0, 6);
-            label2.Name = "label2";
-            label2.Size = new Size(234, 58);
-            label2.TabIndex = 5;
-            label2.Text = "Avionics";
-            label2.TextAlign = ContentAlignment.BottomRight;
             // 
             // panel1
             // 
@@ -293,12 +266,10 @@ namespace ATISPlugin
         private SplitContainer splitContainer1;
         private Button btnRequest;
         private ComboBox cbICAO;
-        private SimAddonControls.LedBulb ledBulb1;
         private ComboBox cbVoices;
         private TextBox tbATISText;
         private Label label1;
         private TableLayoutPanel tableLayoutPanel1;
-        private Label label2;
         private System.Windows.Forms.Timer UpdateVATSIMTimer;
         private ListView lvControllers;
         private ColumnHeader columnType;
