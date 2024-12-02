@@ -22,6 +22,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2F8ADAF4A9DA46C29A8861408C47496E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C9D85A415AE54EF585FA6FA6F950E3F5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -276,7 +282,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SimAddon"
         "ProductCode" = "8:{CB70CE82-ECCA-4349-9F94-B78D76148764}"
-        "PackageCode" = "8:{93215849-A3D1-41F7-9337-F92A9B1C95EA}"
+        "PackageCode" = "8:{996F9695-D323-4FD3-A39A-E3F18739A8C1}"
         "UpgradeCode" = "8:{2ECD94C2-9C86-4988-A257-8DFFDD363624}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
@@ -823,9 +829,37 @@
         }
         "ProjectOutput"
         {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_2F8ADAF4A9DA46C29A8861408C47496E"
+            {
+            "SourcePath" = "8:..\\plugins\\ATISPlugin\\obj\\Debug\\ATISPlugin.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_83CB230A9F0B4230A866853DBDFEAAFF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{726F3EF7-B97E-4476-8FA2-2528035C14A1}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C9D85A415AE54EF585FA6FA6F950E3F5"
             {
-            "SourcePath" = "8:..\\plugins\\BushTripPlugin\\obj\\Release\\BushTripPlugin.dll"
+            "SourcePath" = "8:..\\plugins\\BushTripPlugin\\obj\\Debug\\BushTripPlugin.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_A444C94218AE4148A091B2A842781843"
@@ -853,7 +887,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D2D52BB2CFCA43AAA80648CE93014AEB"
             {
-            "SourcePath" = "8:..\\plugins\\MeteoPlugin\\obj\\Release\\MeteoPlugin.dll"
+            "SourcePath" = "8:..\\plugins\\MeteoPlugin\\obj\\Debug\\MeteoPlugin.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_CA06358F1BFD4522BD048CCA0CA261FC"
@@ -881,7 +915,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D362E65A94224699893EDB8127D5F4DC"
             {
-            "SourcePath" = "8:..\\plugins\\FlightRecPlugin\\obj\\Release\\FlightRecPlugin.dll"
+            "SourcePath" = "8:..\\plugins\\FlightRecPlugin\\obj\\Debug\\FlightRecPlugin.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_2686F64D265E4483B6DE8334327FBEE8"
@@ -909,7 +943,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F7448C5FE4BE4EA686A5629DB4DA7E5C"
             {
-            "SourcePath" = "8:..\\SimAddon\\obj\\Release\\apphost.exe"
+            "SourcePath" = "8:..\\SimAddon\\obj\\Debug\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_83CB230A9F0B4230A866853DBDFEAAFF"
