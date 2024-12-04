@@ -160,42 +160,53 @@ namespace ATISPlugin
                     cbICAO.Text = searchItem;
                 }
 
-                if (VATSIM.data.atis != null)
+                //ne pas chercher si aucun critere de recherche n'a été entré.
+                if (searchItem.Trim() != string.Empty)
                 {
-                    List<ATISData> atis = VATSIM.FindATIS(searchItem);
 
-                    foreach (ATISData a in atis)
+                    if (VATSIM.data.atis != null)
                     {
-                        foreach (string s in a.text_atis)
+                        List<ATISData> atis = VATSIM.FindATIS(searchItem);
+                        if (atis.Count > 0)
                         {
-                            string atisText = s.Replace("RWY ", "RUNWAY ")
-                                .Replace("DEP", "DEPARTURE")
-                                .Replace("ARR", "ARRIVAL")
-                                .Replace("VIS ", "VISIBILITY ")
-                                .Replace("TRL ", "TRANSITION LEVEL ");
-                            tbATISText.Text += atisText + " ";
+                            foreach (ATISData a in atis)
+                            {
+                                foreach (string s in a.text_atis)
+                                {
+                                    string atisText = s.Replace("RWY ", "RUNWAY ")
+                                        .Replace("DEP", "DEPARTURE")
+                                        .Replace("ARR", "ARRIVAL")
+                                        .Replace("VIS ", "VISIBILITY ")
+                                        .Replace("TRL ", "TRANSITION LEVEL ");
+                                    tbATISText.Text += atisText + " ";
+                                }
+                                tbATISText.Text += Environment.NewLine + "-------------------" + Environment.NewLine;
+
+                            }
                         }
-                        tbATISText.Text += Environment.NewLine + "-------------------" + Environment.NewLine;
-
+                        else
+                        {
+                            tbATISText.Text = "No ATIS available";
+                        }
                     }
-                }
-                else
-                {
-                    tbATISText.Text = "No ATIS available";
-                }
-
-                if (VATSIM.data.controllers != null)
-                {
-                    List<ControllerData> controlers = VATSIM.FindControllers(searchItem);
-                    foreach (ControllerData controller in controlers)
+                    else
                     {
-                        string rating = VATSIM.GetRatingLabel(controller);
-                        string facility = VATSIM.GetFacilityLabel(controller);
-                        string frequency = controller.frequency;
-                        string callsign = controller.callsign;
-                        ListViewItem newItem = new ListViewItem(new string[] { facility, rating, callsign, frequency });
-                        newItem.Tag = controller;
-                        lvControllers.Items.Add(newItem);
+                        tbATISText.Text = "No ATIS available";
+                    }
+
+                    if (VATSIM.data.controllers != null)
+                    {
+                        List<ControllerData> controlers = VATSIM.FindControllers(searchItem);
+                        foreach (ControllerData controller in controlers)
+                        {
+                            string rating = VATSIM.GetRatingLabel(controller);
+                            string facility = VATSIM.GetFacilityLabel(controller);
+                            string frequency = controller.frequency;
+                            string callsign = controller.callsign;
+                            ListViewItem newItem = new ListViewItem(new string[] { facility, rating, callsign, frequency });
+                            newItem.Tag = controller;
+                            lvControllers.Items.Add(newItem);
+                        }
                     }
                 }
 
