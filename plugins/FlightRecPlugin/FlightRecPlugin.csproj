@@ -11,6 +11,12 @@
     <OutputPath>..\..\bin\plugins\0_FlightRecorder</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\helicopter-solid.png" />
+    <None Remove="Resources\plane-bi.png" />
+    <None Remove="Resources\plane-mono.png" />
+    <None Remove="Resources\plane-solid.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Update="FlightRecCtrl.cs">
       <SubType>UserControl</SubType>
     </Compile>

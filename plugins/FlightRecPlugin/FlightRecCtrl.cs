@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using SimAddonLogger;
 using System.Reflection;
 using System.Windows.Forms.VisualStyles;
+using System.IO;
 
 namespace FlightRecPlugin
 {
@@ -998,6 +999,30 @@ namespace FlightRecPlugin
                 {
                     string planeDesign = selectedPlane.Designation;
                     lbDesignationAvion.Text = planeDesign;
+
+                    //mettre a jour l'icone suivant le type d'avion.
+
+                    switch(selectedPlane.Type)
+                    {
+                        case ("Monomoteur"):
+                            {                               
+                                panelAircraftTypeIcon.BackgroundImage = Properties.Resources.monomoteur;
+                            };break;
+                        case ("Bimoteur"):
+                            {
+                                panelAircraftTypeIcon.BackgroundImage = Properties.Resources.bimoteur;
+                            }; break;
+                        case ("Liner"):
+                            {
+                                panelAircraftTypeIcon.BackgroundImage = Properties.Resources.liner;
+                            }; break;
+                        case ("Helico"):
+                            {
+                                panelAircraftTypeIcon.BackgroundImage = Properties.Resources.helico;
+                            }; break;
+                    }
+
+
                     // #34 sauvegarder la derniere immat utilisée
                     Settings.Default.lastImmat = cbImmat.Text;
                     Settings.Default.Save();
@@ -1117,6 +1142,11 @@ namespace FlightRecPlugin
             {
                 SaveCallSign();
             }
+        }
+
+        private void lbDesignationAvion_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

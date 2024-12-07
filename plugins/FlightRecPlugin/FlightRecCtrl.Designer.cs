@@ -91,6 +91,7 @@ namespace FlightRecPlugin
             lbLibelleAvion = new Label();
             lbEndICAO = new Label();
             label6 = new Label();
+            panelAircraftTypeIcon = new Panel();
             toolTip1 = new ToolTip(components);
             btnReset = new Button();
             contextMenuStrip1 = new ContextMenuStrip(components);
@@ -628,6 +629,7 @@ namespace FlightRecPlugin
             tableLayoutPanel3.Controls.Add(lbEndICAO, 3, 3);
             tableLayoutPanel3.Controls.Add(lbFret, 1, 2);
             tableLayoutPanel3.Controls.Add(label6, 0, 2);
+            tableLayoutPanel3.Controls.Add(panelAircraftTypeIcon, 3, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 21);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -659,15 +661,15 @@ namespace FlightRecPlugin
             // 
             lbDesignationAvion.AutoSize = true;
             lbDesignationAvion.BackColor = Color.FromArgb(255, 128, 0);
-            tableLayoutPanel3.SetColumnSpan(lbDesignationAvion, 2);
             lbDesignationAvion.Dock = DockStyle.Fill;
             lbDesignationAvion.Location = new Point(264, 36);
             lbDesignationAvion.Margin = new Padding(4);
             lbDesignationAvion.Name = "lbDesignationAvion";
-            lbDesignationAvion.Size = new Size(268, 24);
+            lbDesignationAvion.Size = new Size(153, 24);
             lbDesignationAvion.TabIndex = 44;
             lbDesignationAvion.Text = "<no plane selected>";
             lbDesignationAvion.TextAlign = ContentAlignment.MiddleLeft;
+            lbDesignationAvion.Click += lbDesignationAvion_Click;
             // 
             // lbPayload
             // 
@@ -751,6 +753,18 @@ namespace FlightRecPlugin
             label6.TabIndex = 50;
             label6.Text = "Freight on airport :";
             label6.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // panelAircraftTypeIcon
+            // 
+            panelAircraftTypeIcon.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            panelAircraftTypeIcon.BackColor = Color.White;
+            panelAircraftTypeIcon.BackgroundImageLayout = ImageLayout.Stretch;
+            panelAircraftTypeIcon.BorderStyle = BorderStyle.Fixed3D;
+            panelAircraftTypeIcon.Location = new Point(464, 3);
+            panelAircraftTypeIcon.Name = "panelAircraftTypeIcon";
+            tableLayoutPanel3.SetRowSpan(panelAircraftTypeIcon, 2);
+            panelAircraftTypeIcon.Size = new Size(69, 58);
+            panelAircraftTypeIcon.TabIndex = 51;
             // 
             // btnReset
             // 
@@ -944,5 +958,6 @@ namespace FlightRecPlugin
         private SplitContainer splitContainer1;
         private TableLayoutPanel tableLayoutPanel3;
         private Label label6;
+        private Panel panelAircraftTypeIcon;
     }
 }
