@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimAddonControls", "SimAddo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ATISPlugin", "plugins\ATISPlugin\ATISPlugin.csproj", "{726F3EF7-B97E-4476-8FA2-2528035C14A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextToSpeech", "TextToSpeech\TextToSpeech.csproj", "{FA667707-6D36-4C2E-999C-F389AB226D4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{726F3EF7-B97E-4476-8FA2-2528035C14A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{726F3EF7-B97E-4476-8FA2-2528035C14A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{726F3EF7-B97E-4476-8FA2-2528035C14A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA667707-6D36-4C2E-999C-F389AB226D4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA667707-6D36-4C2E-999C-F389AB226D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA667707-6D36-4C2E-999C-F389AB226D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA667707-6D36-4C2E-999C-F389AB226D4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

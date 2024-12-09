@@ -41,8 +41,10 @@ namespace SimAddon
             timerMain = new System.Windows.Forms.Timer(components);
             timerConnection = new System.Windows.Forms.Timer(components);
             contextMenuStrip1 = new ContextMenuStrip(components);
-            tabControl1 = new TabControl();
             alwaysOnTopToolStripMenuItem = new ToolStripMenuItem();
+            tabControl1 = new TabControl();
+            toolStripSeparator1 = new ToolStripSeparator();
+            toolStripComboBox1 = new ToolStripComboBox();
             statusStrip.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
@@ -81,9 +83,16 @@ namespace SimAddon
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, toolStripSeparator1, toolStripComboBox1 });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 48);
+            contextMenuStrip1.Size = new Size(182, 81);
+            // 
+            // alwaysOnTopToolStripMenuItem
+            // 
+            alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
+            alwaysOnTopToolStripMenuItem.Size = new Size(181, 22);
+            alwaysOnTopToolStripMenuItem.Text = "Always On Top";
+            alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
             // 
             // tabControl1
             // 
@@ -95,12 +104,17 @@ namespace SimAddon
             tabControl1.Size = new Size(574, 291);
             tabControl1.TabIndex = 7;
             // 
-            // alwaysOnTopToolStripMenuItem
+            // toolStripSeparator1
             // 
-            alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            alwaysOnTopToolStripMenuItem.Size = new Size(180, 22);
-            alwaysOnTopToolStripMenuItem.Text = "Always On Top";
-            alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(178, 6);
+            // 
+            // toolStripComboBox1
+            // 
+            toolStripComboBox1.Items.AddRange(new object[] { "Light", "Medium", "Strong" });
+            toolStripComboBox1.Name = "toolStripComboBox1";
+            toolStripComboBox1.Size = new Size(121, 23);
+            toolStripComboBox1.SelectedIndexChanged += toolStripComboBox1_SelectedIndexChanged;
             // 
             // Form1
             // 
@@ -140,6 +154,8 @@ namespace SimAddon
         private TabControl tabControl1;
         private ToolStripStatusLabel lblPluginStatus;
         private ToolStripMenuItem alwaysOnTopToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripComboBox toolStripComboBox1;
     }
 }
 

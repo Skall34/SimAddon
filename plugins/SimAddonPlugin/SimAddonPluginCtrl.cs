@@ -33,6 +33,10 @@ namespace SimAddonPlugin
         //events
         public delegate void UpdateStatusHandler(object sender, string statusMessage);
         public event UpdateStatusHandler OnStatusUpdate;
+
+        public delegate void OnTalkHandler(object sender, string texttospeech);
+        public event OnTalkHandler OnTalk;
+
     }
 
     public  class situation

@@ -51,6 +51,8 @@ namespace FlightRecPlugin
 
         private simData data;
 
+        public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
+
         private ISimAddonPluginCtrl.UpdateStatusHandler updateStatusHandler;
         event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
         {

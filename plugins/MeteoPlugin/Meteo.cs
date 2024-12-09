@@ -1,4 +1,5 @@
 ﻿using SimAddonLogger;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using static MeteoPlugin.Meteo.METARData;
 
@@ -18,6 +19,11 @@ namespace MeteoPlugin
             public abstract class METARItem
             {
                 public string _category { get; set; }
+
+                public virtual string ToSpeech()
+                {
+                    return ToString();
+                }
             }
 
             public class METARIcao:METARItem
@@ -34,12 +40,24 @@ namespace MeteoPlugin
                 {
                     return _category + " : " + code;
                 }
+                public override string ToSpeech()
+                {
+                    if (name != string.Empty)
+                    {
+                        return "This is METAR data for " + name + ".";
+                    }
+                    else
+                    {
+                        return "This is METAR data for " + code + ".";
+                    }
+                }
             }
 
             public class METARDate : METARItem
             {
                 public string day { get; set; }
-                public  string time { get; set; }
+                public  string hour { get; set; }
+                public string minutes { get; set; }
 
                 public METARDate (string category, string METARPart) {
                     _category = category;
@@ -48,7 +66,8 @@ namespace MeteoPlugin
                     if (result.Success)
                     {
                         day = result.Groups["day"].Value;
-                        time = result.Groups["hour"].Value+":"+ result.Groups["minute"].Value;
+                        hour = result.Groups["hour"].Value;
+                        minutes = result.Groups["minute"].Value;
                     }
                     else
                     {
@@ -58,7 +77,17 @@ namespace MeteoPlugin
 
                 public override string ToString()
                 {
-                    return _category + " : " + day+"/"+ time;                   
+                    return _category + " : " + day+"/"+ hour+":"+minutes;                   
+                }
+
+                public override string ToSpeech()
+                {
+                    string speechMinutes = minutes;
+                    if (minutes=="00")
+                    {
+                        minutes = " 0 0";
+                    }
+                    return "at " + hour+" "+minutes+" .";
                 }
             }
             public class METARWind : METARItem
@@ -109,10 +138,36 @@ namespace MeteoPlugin
                     }
                     if (HasGusts)
                     {
-                        result += string.Format("with {0} {1} gusts",GustsSpeed,Unit);
+                        result += string.Format(" with {0} {1} gusts",GustsSpeed,Unit);
                     }
                     return result;
                 }
+
+                public override string ToSpeech()
+                {
+                    string speechUnit = string.Empty;
+                    if (Unit == "KT")
+                    {
+                        speechUnit = "knots";
+                    }
+
+                    string result = _category;
+                    if (Direction == "VRB")
+                    {
+                        result += string.Format(" : {0} {1} variable direction", Speed, speechUnit);
+                    }
+                    else
+                    {
+                        result += string.Format(" : {0} {1} at {2}", Speed, speechUnit, Direction);
+                    }
+                    if (HasGusts)
+                    {
+                        result += string.Format(" with {0} {1} gusts", GustsSpeed, speechUnit);
+                    }
+                    result += " .";
+                    return result;
+                }
+
             }
 
             public class METARWindVariation : METARItem
@@ -142,6 +197,12 @@ namespace MeteoPlugin
                     return result;
                 }
 
+                public override string ToSpeech()
+                {
+                    string result = _category + string.Format(" between {0} and {1} .", StartAngle, EndAngle);
+                    return result;
+                }
+
 
             }
 
@@ -162,12 +223,12 @@ namespace MeteoPlugin
                         if (Unit=="")
                         {
                             //in case of no unit, use meters
-                            Unit = "m";
+                            Unit = "M";
                         }
                         if (Distance == "9999")
                         {
                             Distance = ">10";
-                            Unit = "km";
+                            Unit = "KM";
                         }
                     }
                     else
@@ -180,6 +241,19 @@ namespace MeteoPlugin
                 public override string ToString()
                 {
                         return _category + " : " + Distance + " " + Unit;
+                }
+                public override string ToSpeech()
+                {
+                    string speechUnit = "meters";
+                    if (Unit=="KM")
+                    {
+                        speechUnit = "kilometers";
+                    }
+                    if (Unit == "SM")
+                    {
+                        speechUnit = "miles";
+                    }
+                    return _category + " : " + Distance + " " + speechUnit+" .";
                 }
             }
 
@@ -437,7 +511,28 @@ namespace MeteoPlugin
                         result += Other + " ";
                     }
                     return result;
-
+                }
+                public override string ToSpeech()
+                {
+                    string result = _category + " : " + Qualifier + " ";
+                    if (Descriptor != string.Empty)
+                    {
+                        result += Descriptor + " ";
+                    }
+                    if (Precipitation != string.Empty)
+                    {
+                        result += Precipitation + " ";
+                    }
+                    if (Obscuration != string.Empty)
+                    {
+                        result += Obscuration + " ";
+                    }
+                    if (Other != string.Empty)
+                    {
+                        result += Other + " ";
+                    }
+                    result += " .";
+                    return result;
                 }
             }
 
@@ -463,7 +558,7 @@ namespace MeteoPlugin
 
                 public string Amount { get; set; }
 
-                public string Level { get; set; }
+                public int Level { get; set; }
                 public string cloud { get; set; }
                 public METARCloudLayer(string category, string METARPart)
                 {
@@ -486,8 +581,9 @@ namespace MeteoPlugin
                             if (result.Success)
                             {
                                 Amount = result.Groups["amount"].Value;
-                                Level = result.Groups["level"].Value;
+                                Level = 100 * int.Parse(result.Groups["level"].Value);
                                 cloud = result.Groups["cloud"].Value;
+
                             }
                             else
                             {
@@ -515,7 +611,7 @@ namespace MeteoPlugin
                             }
                             else
                             {
-                                if (Amount != "///") result += " : " + CloudAmountValue.Values[Amount] + " at " + Level + "00 FT";
+                                if (Amount != "///") result += " : " + CloudAmountValue.Values[Amount] + " at " + Level + " FT";
                             }
                         }
                         catch (Exception ex)
@@ -528,6 +624,51 @@ namespace MeteoPlugin
                     }
                     return result;
                 }
+                public override string ToSpeech()
+                {
+                    string result = _category;
+
+                    if (IsCAVOK)
+                    {
+                        result += " : Ceiling And Visibility OK";
+                    }
+                    else
+                    {
+                        try
+                        {
+                            if ((Amount == "CLR") || (Amount == "NSC"))
+                            {
+                                result += " : " + CloudAmountValue.Values[Amount];
+                            }
+                            else
+                            {
+                                string sLevel = Level.ToString();
+
+                                if (sLevel.EndsWith("000"))
+                                {
+                                    sLevel = Level.ToString();
+                                }
+                                else
+                                {
+                                    char[] temp = sLevel.ToCharArray();
+                                    sLevel = string.Join(" ", temp);
+                                }
+
+                                if (Amount != "///") result += " : " + CloudAmountValue.Values[Amount] + " at " + sLevel + " feet";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.WriteLine(ex.Message);
+                        }
+
+                        if (cloud == "CB") result += " cumulonimbus";
+                        if (cloud == "TCU") result += " towering cumulus";
+                    }
+                    result += " .";
+                    return result;
+                }
+
             }
 
             public class METARTemperature : METARItem
@@ -571,6 +712,14 @@ namespace MeteoPlugin
                         AirTemperature.ToString(),
                         DewPointTemperature.ToString());
                 }
+
+                public override string ToSpeech()
+                {
+                    return string.Format(" Air temperature : {0}°C, Dew point : {1}°C .",
+                        AirTemperature.ToString(),
+                        DewPointTemperature.ToString());
+                }
+
             }
 
             public class METARAltimeter : METARItem
@@ -631,6 +780,10 @@ namespace MeteoPlugin
                 {
                     return _category + " : " + hpaValue.ToString() + " hpa ( "+inHgValue.ToString("0.00")+" inHg )";
                 }
+                public override string ToSpeech()
+                {
+                    return  "QNH : " + hpaValue.ToString() + " hectopascal .";
+                }
             }
 
             public class METARWindShear : METARItem
@@ -676,6 +829,7 @@ namespace MeteoPlugin
             public List<METARItem> items;
             public  string ICAO { get; set; }
             public METARDate Date { get; set; }
+            public METARIcao icao { get; set; }
 
             public METARWind Wind { get; set; }
             public METARWind TemporaryWind { get; set; }
@@ -705,7 +859,7 @@ namespace MeteoPlugin
                     string[] parts = rawMETAR.Split(' ');
                     int index = 0;
 
-                    METARIcao icao = new METARIcao("Station", parts[(int)index]);
+                     icao = new METARIcao("Station", parts[(int)index]);
                     items.Add(icao);
                     index++;
 
@@ -778,7 +932,7 @@ namespace MeteoPlugin
                     {
                         try
                         {
-                            METARCloudLayer layer = new METARCloudLayer("Cloud layer", parts[index]);
+                            METARCloudLayer layer = new METARCloudLayer("Cloud layers", parts[index]);
                             CloudLayers.Add(layer);
                             items.Add(layer);
                             index++;
@@ -791,7 +945,7 @@ namespace MeteoPlugin
 
                     try
                     {
-                        Temperature = new METARTemperature("Temperature", parts[index]);
+                        Temperature = new METARTemperature("Temperatures", parts[index]);
                         items.Add(Temperature);
                         index++;
                     }
@@ -801,7 +955,7 @@ namespace MeteoPlugin
 
                     try
                     {
-                        Altimeter = new METARAltimeter("Altimeter setting", parts[index]);
+                        Altimeter = new METARAltimeter("QNH", parts[index]);
                         items.Add(Altimeter);
                         index++;
                     }
@@ -937,6 +1091,31 @@ namespace MeteoPlugin
                 }
 
                 return decoded;
+            }
+
+            public string toSpeech()
+            {
+                string tts = "";
+                try
+                {
+                    foreach (METARItem item in items)
+                    {
+                        try
+                        {
+                            tts += item.ToSpeech() + Environment.NewLine;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.WriteLine(ex.Message);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine(ex.Message);
+                }
+
+                return tts;
             }
 
         }

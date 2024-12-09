@@ -1,6 +1,8 @@
-﻿using SimAddonLogger;
+﻿using Newtonsoft.Json;
+using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace ATISPlugin
@@ -9,12 +11,80 @@ namespace ATISPlugin
     {
         private simData simdata;
 
+        //ecoded.Replace("RWY", "RUNWAY")
+        //                            .Replace("DEP", "DEPARTURE")
+        //                            .Replace("ARR", "ARRIVAL")
+        //                            .Replace("VIS ", "VISIBILITY ")
+        //                            .Replace("SID", "STANDARD INSTRUMENT DEPARTURE")
+        //                            .Replace("RNP", "REQUIRED NAVIGATION PERFORMANCE")
+        //                            .Replace("VPT", "VISUAL PATH")
+        //                            .Replace("CAVOK"," CEILING AND VISIBILITY OK.")
+        //                            .Replace("SCT", "SCATTERED AT")
+        //                            .Replace("BKN", "BROKEN AT")
+        //                            .Replace(" /",". ");
+
+        private Dictionary<string, string> abbreviations = new Dictionary<string,string>{
+            {@" \",". " },
+            {"ACK",". ACKNOWLEDGE " },
+            {"ADVS",". ADVISE" },
+            {"ARR","ARRIVAL " },
+            {"APCH","APPROACH" },
+            {"BKN", "BKOKEN ATR" },
+            {"BTN", "BETWEEN" },
+            {"DP",", DEW POINT" },
+            {"DEP","DEPARTURE " },
+            {"DEG","° " },
+            {"EXP","EXPECT " },
+            {"ILS","I L S" },
+            {"KT","KNOTS." },
+            {"LDG","LANDING" },
+            {"QNH",". QNH" },
+            {"RNP", ". REQUIRED NAVIGATION PERFORMANCE" },
+            {"RWY","RUNWAY" },
+            {"SCT","SCATTERED AT" },
+            {"SID", "STANDARD INSTRUMENT DEPARTURE" },
+            {"TEMP",". TEMPERATURE " },
+            {"VRB", "VARIABLE " },
+            {"VIS", "VISIBILITY " },
+            {"VPT", "VISUAL PATH" },
+            {"CAVOK", ". CEILING AND VISIBILITY OK" },
+            {"WND", ". WIND" }
+        };
+
+        static void SaveDictionaryToJsonFile(Dictionary<string, string> dictionary, string filePath)
+        {
+            // Serialize the dictionary to a JSON string
+            string jsonString = JsonConvert.SerializeObject(dictionary, Formatting.Indented);
+
+            // Write the JSON string to the specified file
+            File.WriteAllText(filePath, jsonString);
+        }
+
+        static Dictionary<string, string> LoadDictionaryFromJsonFile(string filePath)
+        {
+            // Read the JSON string from the specified file
+            string jsonString = File.ReadAllText(filePath);
+
+            // Deserialize the JSON string back into a dictionary
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
+        }
+
         public ATISCtrl()
         {
             InitializeComponent();
             this.cbICAO.ValueMember = "fullName";
             this.cbICAO.DisplayMember = "fullName";
+            //if (!File.Exists("dictionnary.json"))
+            //{
+            //    SaveDictionaryToJsonFile(abbreviations, "dictionnary.json");
+            //}
+            //else
+            //{
+            //    abbreviations = LoadDictionaryFromJsonFile("dictionnary.json");
+            //}
         }
+
+        public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
 
         ISimAddonPluginCtrl.UpdateStatusHandler updateStatusHandler;
         event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
@@ -80,6 +150,14 @@ namespace ATISPlugin
             }
         }
 
+        private void annonce(string textToSpeech)
+        {
+            if (OnTalk!=null)
+            {
+                OnTalk(this, textToSpeech);
+            }
+        }
+
         public void updateSituation(situation data)
         {
             try
@@ -139,6 +217,127 @@ namespace ATISPlugin
             }
         }
 
+        private string decodeATIS(string rawATIS)
+        {
+            string decoded = rawATIS;
+
+            //first, change the date
+            Regex r = new Regex(@"^(?<start>.+)(?<hour>\d{2})(?<minute>\d{2})Z(?<end>.*)");
+
+            Match result = r.Match(rawATIS);
+            if (result.Success)
+            {
+                string debut = result.Groups["start"].Value;
+                string hour = result.Groups["hour"].Value;
+                string minute = result.Groups["minute"].Value;
+                string fin = result.Groups["end"].Value;
+
+                if (minute == "00")
+                {
+                    minute = "0 0 .";
+                    decoded = debut + hour + " " + minute + fin;
+                }
+                else
+                {
+                    decoded = debut + hour + ":" + minute+ " ." + fin;
+                }
+            }
+
+            r = new Regex(@"^(?<start>.+)(?<temp>\d{2})/(?<dew>\d{2})(?<end>.*)");
+            result = r.Match(decoded);
+            if (result.Success)
+            {
+                string debut = result.Groups["start"].Value;
+                string temp = result.Groups["temp"].Value;
+                string dew = result.Groups["dew"].Value;
+                string fin = result.Groups["end"].Value;
+                decoded = debut +" AIR TEMPERATURE "+ temp + "°C, DEW POINT " + dew+"°C ." + fin;
+            }
+
+            r = new Regex(@"^(?<start>.+)(?<dir>\d{3})(?<speed>\d{2})KT(?<end>.*)");
+            result = r.Match(decoded);
+            if (result.Success)
+            {
+                string debut = result.Groups["start"].Value;
+                string dir = result.Groups["dir"].Value;
+                string speed = result.Groups["speed"].Value;
+                string fin = result.Groups["end"].Value;
+                decoded = debut + ". WIND : " + speed + " KNOTS AT " + dir+ " ." + fin;
+            }
+
+            r = new Regex(@"^(?<start>.+)(?<startdir>\d{3})V(?<stopdir>\d{3})(?<end>.*)");
+            result = r.Match(decoded);
+            if (result.Success)
+            {
+                string debut = result.Groups["start"].Value;
+                string startdir = result.Groups["startdir"].Value;
+                string stopdir = result.Groups["stopdir"].Value;
+                string fin = result.Groups["end"].Value;
+                decoded = debut + " VARIABLE BETWEEN " + startdir + " AND " + stopdir+ " ." + fin;
+            }
+
+            r = new Regex(@"^(?<start>.+)TRL (?<trl>\d{2})(?<end>.+)");
+            result = r.Match(decoded);
+            if (result.Success)
+            {
+                string debut = result.Groups["start"].Value;
+                string trl = result.Groups["trl"].Value;
+                string fin = result.Groups["end"].Value;
+                decoded = debut + ". TRANSITION LEVEL " + trl +" ."+ Environment.NewLine + fin;
+            }
+
+            r = new Regex(@"^(?<start>.+)BKN(?<level>\d{3})(?<end>.+)");
+            result = r.Match(decoded);
+            if (result.Success)
+            {
+                string debut = result.Groups["start"].Value;
+                string level = result.Groups["level"].Value;
+                string fin = result.Groups["end"].Value;
+                decoded = debut + ". BROKEN AT " + level + "00 ." + Environment.NewLine + fin;
+            }
+
+            r = new Regex(@"^(?<start>.+)SCT(?<level>\d{3})(?<end>.+)");
+            result = r.Match(decoded);
+            if (result.Success)
+            {
+                string debut = result.Groups["start"].Value;
+                string level = result.Groups["level"].Value;
+                string fin = result.Groups["end"].Value;
+                decoded = debut + ". SCATTERED AT " + level + "00 ." + Environment.NewLine + fin;
+            }
+
+            r = new Regex(@"^(?<start>.+)Q(?<qnh>\d{4})(?<end>.+)");
+            result = r.Match(decoded);
+            if (result.Success)
+            {
+                string debut = result.Groups["start"].Value;
+                string qnh = result.Groups["qnh"].Value;
+                string fin = result.Groups["end"].Value;
+                decoded = debut + ". QNH " + qnh + " ." + Environment.NewLine + fin;
+            }
+
+            //then replace some abbreviations.
+            foreach (string key in abbreviations.Keys)
+            {
+                string[] elements = decoded.Split(" ");
+                string[] newElements=new string[elements.Length];
+
+                for (int i= 0; i < elements.Length; i++)
+                {
+                    if (elements[i] != key)
+                    {
+                        newElements[i] = elements[i].Trim();
+                    }
+                    else
+                    {
+                        newElements[i] = abbreviations[key];
+                    }
+                }
+                decoded = string.Join(" ",newElements);
+            }
+            return decoded;
+        }
+
         private async void requestATIS()
         {
 
@@ -171,15 +370,14 @@ namespace ATISPlugin
                         {
                             foreach (ATISData a in atis)
                             {
+                                string speechText = string.Empty;
                                 foreach (string s in a.text_atis)
                                 {
-                                    string atisText = s.Replace("RWY ", "RUNWAY ")
-                                        .Replace("DEP", "DEPARTURE")
-                                        .Replace("ARR", "ARRIVAL")
-                                        .Replace("VIS ", "VISIBILITY ")
-                                        .Replace("TRL ", "TRANSITION LEVEL ");
+                                    string atisText = decodeATIS(s);
                                     tbATISText.Text += atisText + " ";
+                                    speechText += atisText+Environment.NewLine;
                                 }
+                                annonce(speechText);
                                 tbATISText.Text += Environment.NewLine + "-------------------" + Environment.NewLine;
 
                             }

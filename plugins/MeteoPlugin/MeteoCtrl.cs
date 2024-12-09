@@ -17,6 +17,8 @@ namespace MeteoPlugin
         simData simdata;
         METARData metarData;
 
+        public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
+
         ISimAddonPluginCtrl.UpdateStatusHandler updateStatusHandler;
         event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
         {
@@ -36,6 +38,14 @@ namespace MeteoPlugin
             if (updateStatusHandler != null)
             {
                 updateStatusHandler(this, message);
+            }
+        }
+
+        private void annonce(string textToSpeech)
+        {
+            if (OnTalk != null)
+            {
+                OnTalk(this, textToSpeech);
             }
         }
 
@@ -213,6 +223,7 @@ namespace MeteoPlugin
                         Aeroport airport = simdata.aeroports.FirstOrDefault(a => a.ident == searchItem);
                         if (airport != null)
                         {
+                            metarData.icao.name = airport.name;
                             string[] runways = airport.Piste.Split('/');
                             lbAirportInfo.Items.Add(airport.name);
                             lbAirportInfo.Items.Add($"Runways : {airport.Piste.Replace('/', ' ')}");
@@ -279,12 +290,17 @@ namespace MeteoPlugin
                             }
                         }
                         compas1.Invalidate();
+
                     }
                     else
                     {
                         lbAirportInfo.Items.Add("Still loading airports database");
                     }
-
+                    //envoyer le text au speaker
+                    if (metarData != null)
+                    {
+                        annonce(metarData.toSpeech());
+                    }
                 }
                 catch (Exception ex)
                 {

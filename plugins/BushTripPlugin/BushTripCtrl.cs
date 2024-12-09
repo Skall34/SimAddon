@@ -30,6 +30,8 @@ namespace BushTripPlugin
             btnSaveFlightPlan.Enabled = false;
         }
 
+        public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
+
         ISimAddonPluginCtrl.UpdateStatusHandler updateStatusHandler;
         event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
         {
