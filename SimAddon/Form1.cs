@@ -3,7 +3,6 @@ using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
 using System.Reflection;
-using TextToSpeech;
 
 namespace SimAddon
 {
@@ -14,7 +13,6 @@ namespace SimAddon
         private bool autostart = false;
 
         PluginsMgr plugsMgr;
-        Speaker speaker;
         List<ToolStripMenuItem> voiceMenuItems;
 
         private simData _simData;
@@ -46,51 +44,6 @@ namespace SimAddon
             InitializeComponent();
             string settingVoice = Properties.Settings.Default.Voice;
 
-            speaker = new Speaker();
-            List<string> voices = speaker.GetVoices();
-            if (!string.IsNullOrEmpty(settingVoice))
-            {
-                if (voices.Contains(settingVoice))
-                {
-                    speaker.SetVoice(settingVoice);
-                }
-            }
-            int voiceVolume = Properties.Settings.Default.VoiceVolume;
-            speaker.SetVolume(voiceVolume);
-            switch(voiceVolume)
-            {
-                case 25:
-                    {
-                        toolStripComboBox1.SelectedIndex = 0;
-                    };break;
-                case 50:
-                    {
-                        toolStripComboBox1.SelectedIndex = 1;
-                    }; break;
-                case 75:
-                    {
-                        toolStripComboBox1.SelectedIndex = 2;
-                    }; break;
-            }
-
-            voiceMenuItems = new List<ToolStripMenuItem>();
-            if (voices.Count > 0)
-            {
-                contextMenuStrip1.Items.Add(new ToolStripSeparator());
-                foreach (string voice in voices)
-                {
-                    ToolStripMenuItem voiceItem = new ToolStripMenuItem(voice);
-                    voiceItem.CheckOnClick = false;
-                    voiceItem.Click += VoiceItem_Click;
-                    if (voice == speaker.GetCurrentVoice())
-                    {
-                        voiceItem.Checked = true;
-                    }
-                    voiceMenuItems.Add(voiceItem);
-                    contextMenuStrip1.Items.Add(voiceItem);
-                }
-            }
-
             plugsMgr = new PluginsMgr();
             plugsMgr.LoadPluginsFromFolder("plugins", tabControl1);
 
@@ -101,8 +54,6 @@ namespace SimAddon
             Logger.init();
 
             Logger.WriteLine("Starting SimAddon");
-
-            speaker.Say("It is a great day to fly !");
 
             if (autostart)
             {
@@ -140,21 +91,6 @@ namespace SimAddon
 
             LastWindowState = WindowState;
         }
-
-        private void VoiceItem_Click(object? sender, EventArgs e)
-        {
-            foreach (ToolStripMenuItem item in voiceMenuItems)
-            {
-                item.Checked = false;
-            }
-            ToolStripMenuItem selectedItem = (ToolStripMenuItem)sender;
-            selectedItem.Checked = true;
-            string voice = (string)selectedItem.Text;
-            speaker.SetVoice(voice);
-            Properties.Settings.Default.Voice = voice;
-            Properties.Settings.Default.Save();
-        }
-
 
         // appelé chaque 1s par le timer de connection
         private void TimerConnection_Tick(object sender, EventArgs e)
@@ -358,7 +294,6 @@ namespace SimAddon
                 try
                 {
                     plugin.OnStatusUpdate += Plugin_OnStatusUpdate;
-                    plugin.OnTalk += Plugin_OnTalk;
                     plugin.registerPage(tabControl1);
                 }
                 catch (Exception ex)
@@ -388,12 +323,6 @@ namespace SimAddon
             //demarre le timer de connection (fait un essai de connexion toutes les 1000ms)
             this.timerConnection.Start();
 
-        }
-
-        private void Plugin_OnTalk(object sender, string texttospeech)
-        {
-            //call the text to speech, to say the text.
-            speaker.Say(texttospeech);
         }
 
         //write the message the status bar
@@ -460,26 +389,6 @@ namespace SimAddon
                 this.TopMost = alwaysOnTopToolStripMenuItem.Checked = false;
                 this.TopMost = false;
             }
-        }
-
-        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int volume = 0;
-            if (toolStripComboBox1.SelectedIndex == 0)
-            {
-                volume = 25;
-            }
-            if (toolStripComboBox1.SelectedIndex == 1)
-            {
-                volume = 50;
-            }
-            if (toolStripComboBox1.SelectedIndex == 2)
-            {
-                volume = 75;
-            }
-            speaker.SetVolume(volume);
-            Properties.Settings.Default.VoiceVolume = volume;
-            Properties.Settings.Default.Save();
         }
     }
 }

@@ -31,7 +31,6 @@
     <ProjectReference Include="..\Logger\SimAddonLogger.csproj" />
     <ProjectReference Include="..\plugins\SimAddonPlugin\SimAddonPlugin.csproj" />
     <ProjectReference Include="..\SimDataManager\SimDataManager.csproj" />
-    <ProjectReference Include="..\TextToSpeech\TextToSpeech.csproj" />
   </ItemGroup>
 
   <ItemGroup>
