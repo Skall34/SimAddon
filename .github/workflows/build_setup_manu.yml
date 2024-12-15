@@ -80,7 +80,7 @@ jobs:
       with:
         name: simaddon_setup_${{ steps.previoustag.outputs.tag }}
         compression-level: 0
-        path: setup/*.*
+        path: setup/*.msi
 
     #- name: setup nsis setup compiler
     #  uses: repolevedavaj/install-nsis@v1.0.2
