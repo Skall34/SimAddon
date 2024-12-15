@@ -93,7 +93,7 @@ jobs:
         nsis-version: '3.10'
 
     - name: compile nsis setup
-      run: makensis nsis/installer.nsi   
+      run: makensis /V4 nsis/installer.nsi   
 
     - name: Generate artifact attestation
       uses: actions/attest-build-provenance@v2
