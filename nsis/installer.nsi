@@ -10,7 +10,7 @@
 !define APPNAME "SimAddon"
 !define COMPANYNAME "Skywings"
 !define DESCRIPTION "A small tool to record sim flights."
-!define VERSION "3.1.2"
+!define VERSION "3.0.1"
 
 # These three must be integers
 #!define VERSIONMAJOR 3
@@ -77,17 +77,17 @@ section "install"
 	createShortCut "$SMPROGRAMS\${COMPANYNAME}\uninstall.lnk" "$INSTDIR\uninstall.exe" "" ""
 	
 	#write registry entry for add/remove Program
-	#WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon" "DisplayName" "SimAddon : Application to enhance flight sim experience"
-	#WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon" "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
-	#WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon" "DisplayIcon" "$\"$INSTDIR\flightrec.ico$\""
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon" "DisplayName" "SimAddon : Application to enhance flight sim experience"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon" "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon" "DisplayIcon" "$\"$INSTDIR\flightrec.ico$\""
  
 sectionEnd
  
 Section "Uninstall"
   Delete $INSTDIR\uninstall.exe ; delete self (see explanation below why this works)
   RMDir /r $INSTDIR
-  #DeleteRegKey HKLM SOFTWARE\myApp
+  DeleteRegKey HKLM SOFTWARE\myApp
   
   #remove registry entry for uninstall
-  #DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SimAddon"
 SectionEnd
