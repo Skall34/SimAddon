@@ -400,3 +400,4 @@ FodyWeavers.xsd
 SimAddon/Properties/launchSettings.json
 /Build
 *.exe
+*.zip
