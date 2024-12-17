@@ -53,8 +53,8 @@
             landingWeight = 0;
         }
 
-        public int getFlightNote() {
-            int note = 10;
+        public short getFlightNote() {
+            short note = 10;
             if (flapsDownSpeed > 130)
             {
                 note -= 1; // pareil que note = note -1

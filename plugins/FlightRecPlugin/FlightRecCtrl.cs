@@ -19,6 +19,9 @@ namespace FlightRecPlugin
         const string name = "FlightRecorder";
         Version? version;
 
+        List<string> missions;
+        List<string> immats;
+
         private bool atLeastOneEngineFiring;
         private int startDisabled; // if startDisabled==0, then start is possible, if not, start is disabled. each 100ms, the counter will be decremented
         private int endDisabled;
@@ -32,6 +35,7 @@ namespace FlightRecPlugin
         private double _startFuel;
         private double _endFuel;
         private double _endPayload;
+        private short _note;
 
         private DateTime _startTime;
         private DateTime _endTime;
@@ -124,6 +128,9 @@ namespace FlightRecPlugin
             //desactive le bouton de maj du setting. Il sera reactivé si le callsign est modifié.
             btnSaveSettings.Enabled = false;
 
+            missions = new List<string>();
+            immats= new List<string>();
+
             flightPerfs = new FlightPerfs();
         }
 
@@ -151,6 +158,8 @@ namespace FlightRecPlugin
             RemplirComboImmat();
             RemplirComboMissions();
 
+            this.Enabled = true;
+
             UpdateStatus("FlightRecorder is ready");
             Logger.WriteLine("FlightRecorder is ready");
 
@@ -163,11 +172,11 @@ namespace FlightRecPlugin
             string message = "Confirm close ACARS ?";
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                if (this.btnSubmit.Enabled == true)
-                {
-                    //Le vol n'a PAS été envoyé
-                    message += "\r\n !!! Le vol n'a pas été envoyé !!!";
-                }
+                //if (this.btnSubmit.Enabled == true)
+                //{
+                //    //Le vol n'a PAS été envoyé
+                //    message += "\r\n !!! Le vol n'a pas été envoyé !!!";
+                //}
 
                 if (e.CloseReason == CloseReason.UserClosing)
                 {
@@ -505,6 +514,7 @@ namespace FlightRecPlugin
                     {
                         //immatriculations.Add(avion.Immat);
                         cbImmat.Items.Add(avion);
+                        immats.Add(avion.Immat);
                     }
                 }
                 cbImmat.DisplayMember = "Immat";
@@ -527,6 +537,7 @@ namespace FlightRecPlugin
             if (data.missions != null)
             {
                 cbMission.Items.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
+                missions.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
             }
             //await dataReader.FillComboBoxMissionsAsync(cbMission);
             cbMission.DisplayMember = "Libelle";
@@ -534,7 +545,7 @@ namespace FlightRecPlugin
         }
 
 
-        private int AnalyseFlight()
+        private short AnalyseFlight()
         {
 
             string comment = flightPerfs.getFlightComment();
@@ -549,10 +560,9 @@ namespace FlightRecPlugin
             }
             tbCommentaires.Text += " (F.R. V" + version.ToString(3) + ")";
 
-            int note = flightPerfs.getFlightNote();
+            short note = flightPerfs.getFlightNote();
             cbNote.Text = note.ToString();
             return note;
-
         }
 
         private void getStartOfFlightData()
@@ -617,7 +627,7 @@ namespace FlightRecPlugin
             this.lbEndFuel.Text = _endFuel.ToString("0.00");
             _endPayload = data.GetPayload();
             //compute the note of the flight
-            AnalyseFlight();
+            _note = AnalyseFlight();
             Logger.WriteLine("End of flight data updated");
         }
 
@@ -638,15 +648,15 @@ namespace FlightRecPlugin
                 throw new Exception("The string starts with 'SKY' followed by four numbers.");
             }
 
-            if (cbMission.Text == string.Empty)
-            {
-                throw new Exception("Please select a mission.");
-            }
+            //if (cbMission.Text == string.Empty)
+            //{
+            //    throw new Exception("Please select a mission.");
+            //}
 
-            if (cbImmat.Text == string.Empty)
-            {
-                throw new Exception("Please select a plane immatriculation.");
-            }
+            //if (cbImmat.Text == string.Empty)
+            //{
+            //    throw new Exception("Please select a plane immatriculation.");
+            //}
 
             return true;
         }
@@ -670,48 +680,76 @@ namespace FlightRecPlugin
                     //tbCommentaires.Text = flightComment + " " + autoComment;
                 }
 
+                //cet appel declenche une exception si une conditio nde save n'es tpas remplie.
                 CheckBeforeSave();
 
                 string fullComment = tbCommentaires.Text;
                 //crée un dictionnaire des valeurs à envoyer
-                Dictionary<string, string> values = new Dictionary<string, string>();
-                UrlDeserializer.SaveFlightQuery flightdata = new UrlDeserializer.SaveFlightQuery
+                SaveFlightDialog saveFlightDialog = new SaveFlightDialog()
                 {
-                    query = "save",
-                    qtype = "json",
-                    cs = tbCallsign.Text,
-                    plane = cbImmat.Text,
-                    sicao = lbStartIata.Text,
-                    sfuel = lbStartFuel.Text,
-                    stime = lbStartTime.Text,
-                    eicao = lbEndIata.Text,
-                    efuel = lbEndFuel.Text,
-                    etime = lbEndTime.Text,
-                    note = cbNote.Text,
-                    mission = cbMission.Text,
-                    comment = fullComment,
-                    cargo = _endPayload.ToString("0.00")
+                    Immat = cbImmat.Text,
+                    Comment = fullComment,
+                    Cargo = _endPayload,
+                    DepartureICAO = lbStartIata.Text,
+                    DepartureTime = _startTime,
+                    DepartureFuel = _startFuel,
+                    ArrivalICAO = lbEndIata.Text,
+                    ArrivalTime = _endTime,
+                    ArrivalFuel = _endFuel,
+                    Note = _note,
+                    Missions = missions,
+                    Mission = cbMission.Text,
+                    Planes = immats
                 };
 
-                int result = await (data.saveFlight(flightdata));
-
-                //int result = await urlDeserializer.PushFlightAsync(data);
-                if (0 != result)
+                if (saveFlightDialog.ShowDialog() == DialogResult.OK)
                 {
-                    //si tout va bien...
-                    MessageBox.Show("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder");
 
-                    //reset le vol sans demande de confirmation
-                    resetFlight(true);
+                    Dictionary<string, string> values = new Dictionary<string, string>();
+                    UrlDeserializer.SaveFlightQuery flightdata = new UrlDeserializer.SaveFlightQuery
+                    {
+                        query = "save",
+                        qtype = "json",
+                        cs = tbCallsign.Text,
+                        plane = saveFlightDialog.Immat,
+                        sicao = saveFlightDialog.DepartureICAO,
+                        sfuel = saveFlightDialog.DepartureFuel.ToString("0.00"),
+                        stime = saveFlightDialog.DepartureTime.ToShortTimeString(),
+                        eicao = saveFlightDialog.ArrivalICAO,
+                        efuel = saveFlightDialog.ArrivalFuel.ToString("0.00"),
+                        etime = saveFlightDialog.ArrivalTime.ToShortTimeString(),
+                        note = saveFlightDialog.Note.ToString("0.00"),
+                        mission = saveFlightDialog.Mission,
+                        comment = saveFlightDialog.Comment,
+                        cargo = saveFlightDialog.Cargo.ToString("0.00")
+                    };
+
+                    int result = await (data.saveFlight(flightdata));
+
+                    //int result = await urlDeserializer.PushFlightAsync(data);
+                    if (0 != result)
+                    {
+                        //si tout va bien...
+                        MessageBox.Show("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder");
+
+                        //reset le vol sans demande de confirmation
+                        resetFlight(true);
+                    }
+                    else
+                    {
+                        //en, cas d'erreur, affiche une popup avec le message
+                        MessageBox.Show("Error while sending flight data.");
+                    }
+                    // On grise le bouton save flight pour éviter les doubles envois
+                    //btnSubmit.Enabled = false;
+                    submitFlightToolStripMenuItem.Enabled = false;
+
                 }
                 else
                 {
-                    //en, cas d'erreur, affiche une popup avec le message
-                    MessageBox.Show("Error while sending flight data.");
+                    //save canceled
                 }
-                // On grise le bouton save flight pour éviter les doubles envois
-                btnSubmit.Enabled = false;
-                submitFlightToolStripMenuItem.Enabled = false;
+
             }
             catch (Exception ex)
             {
@@ -778,7 +816,7 @@ namespace FlightRecPlugin
                 tbEndICAO.Enabled = true;
                 lbPayload.Enabled = true;
 
-                btnSubmit.Enabled = false;
+                //btnSubmit.Enabled = false;
                 submitFlightToolStripMenuItem.Enabled = false;
                 Logger.WriteLine("Flight reset");
             }
@@ -1004,12 +1042,12 @@ namespace FlightRecPlugin
 
                     //mettre a jour l'icone suivant le type d'avion.
 
-                    switch(selectedPlane.Type)
+                    switch (selectedPlane.Type)
                     {
                         case ("Monomoteur"):
-                            {                               
+                            {
                                 panelAircraftTypeIcon.BackgroundImage = Properties.Resources.monomoteur;
-                            };break;
+                            }; break;
                         case ("Bimoteur"):
                             {
                                 panelAircraftTypeIcon.BackgroundImage = Properties.Resources.bimoteur;
@@ -1147,6 +1185,11 @@ namespace FlightRecPlugin
         }
 
         private void lbDesignationAvion_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbEndICAO_Click(object sender, EventArgs e)
         {
 
         }

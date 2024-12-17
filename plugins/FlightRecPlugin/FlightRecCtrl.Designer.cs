@@ -89,9 +89,9 @@ namespace FlightRecPlugin
             cbImmat = new ComboBox();
             label5 = new Label();
             lbLibelleAvion = new Label();
-            lbEndICAO = new Label();
             label6 = new Label();
             panelAircraftTypeIcon = new Panel();
+            lbEndICAO = new Label();
             toolTip1 = new ToolTip(components);
             btnReset = new Button();
             contextMenuStrip1 = new ContextMenuStrip(components);
@@ -129,7 +129,7 @@ namespace FlightRecPlugin
             label9.Location = new Point(4, 132);
             label9.Margin = new Padding(4);
             label9.Name = "label9";
-            label9.Size = new Size(152, 24);
+            label9.Size = new Size(141, 24);
             label9.TabIndex = 24;
             label9.Text = "Payload (Kg) :";
             label9.TextAlign = ContentAlignment.MiddleRight;
@@ -142,7 +142,7 @@ namespace FlightRecPlugin
             label10.Location = new Point(4, 36);
             label10.Margin = new Padding(4);
             label10.Name = "label10";
-            label10.Size = new Size(152, 24);
+            label10.Size = new Size(141, 24);
             label10.TabIndex = 31;
             label10.Text = "ACARS Aircraft :";
             label10.TextAlign = ContentAlignment.MiddleRight;
@@ -155,7 +155,7 @@ namespace FlightRecPlugin
             label11.Location = new Point(4, 4);
             label11.Margin = new Padding(4);
             label11.Name = "label11";
-            label11.Size = new Size(152, 24);
+            label11.Size = new Size(141, 24);
             label11.TabIndex = 33;
             label11.Text = "Pilot callsign :";
             label11.TextAlign = ContentAlignment.MiddleRight;
@@ -164,11 +164,11 @@ namespace FlightRecPlugin
             // 
             tbCallsign.BackColor = Color.FromArgb(192, 255, 192);
             tbCallsign.Dock = DockStyle.Fill;
-            tbCallsign.Location = new Point(164, 4);
+            tbCallsign.Location = new Point(153, 4);
             tbCallsign.Margin = new Padding(4);
             tbCallsign.Name = "tbCallsign";
             tbCallsign.ShortcutsEnabled = false;
-            tbCallsign.Size = new Size(92, 25);
+            tbCallsign.Size = new Size(134, 25);
             tbCallsign.TabIndex = 0;
             tbCallsign.TextChanged += TextBox1_TextChanged;
             tbCallsign.KeyPress += tbCallsign_KeyPress;
@@ -177,7 +177,7 @@ namespace FlightRecPlugin
             // 
             btnSaveSettings.Enabled = false;
             btnSaveSettings.ForeColor = Color.Gray;
-            btnSaveSettings.Location = new Point(264, 4);
+            btnSaveSettings.Location = new Point(295, 4);
             btnSaveSettings.Margin = new Padding(4);
             btnSaveSettings.Name = "btnSaveSettings";
             btnSaveSettings.Size = new Size(58, 24);
@@ -189,7 +189,6 @@ namespace FlightRecPlugin
             // btnSubmit
             // 
             btnSubmit.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnSubmit.Enabled = false;
             btnSubmit.ForeColor = Color.Black;
             btnSubmit.Location = new Point(437, 15);
             btnSubmit.Margin = new Padding(4);
@@ -589,10 +588,10 @@ namespace FlightRecPlugin
             lbFret.BackColor = Color.FromArgb(255, 128, 0);
             tableLayoutPanel3.SetColumnSpan(lbFret, 3);
             lbFret.Dock = DockStyle.Fill;
-            lbFret.Location = new Point(164, 68);
+            lbFret.Location = new Point(153, 68);
             lbFret.Margin = new Padding(4);
             lbFret.Name = "lbFret";
-            lbFret.Size = new Size(368, 24);
+            lbFret.Size = new Size(379, 24);
             lbFret.TabIndex = 43;
             lbFret.Text = "Available freight at ---- : ----";
             lbFret.TextAlign = ContentAlignment.MiddleLeft;
@@ -611,10 +610,10 @@ namespace FlightRecPlugin
             // tableLayoutPanel3
             // 
             tableLayoutPanel3.ColumnCount = 4;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 149F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 142F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 78F));
             tableLayoutPanel3.Controls.Add(label11, 0, 0);
             tableLayoutPanel3.Controls.Add(tbEndICAO, 3, 4);
             tableLayoutPanel3.Controls.Add(lbDesignationAvion, 2, 1);
@@ -626,10 +625,10 @@ namespace FlightRecPlugin
             tableLayoutPanel3.Controls.Add(cbImmat, 1, 1);
             tableLayoutPanel3.Controls.Add(label5, 0, 3);
             tableLayoutPanel3.Controls.Add(lbLibelleAvion, 1, 3);
-            tableLayoutPanel3.Controls.Add(lbEndICAO, 3, 3);
             tableLayoutPanel3.Controls.Add(lbFret, 1, 2);
             tableLayoutPanel3.Controls.Add(label6, 0, 2);
             tableLayoutPanel3.Controls.Add(panelAircraftTypeIcon, 3, 0);
+            tableLayoutPanel3.Controls.Add(lbEndICAO, 2, 4);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 21);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -647,11 +646,11 @@ namespace FlightRecPlugin
             // 
             tbEndICAO.BackColor = Color.White;
             tbEndICAO.Dock = DockStyle.Fill;
-            tbEndICAO.Location = new Point(425, 132);
+            tbEndICAO.Location = new Point(462, 132);
             tbEndICAO.Margin = new Padding(4);
             tbEndICAO.Name = "tbEndICAO";
             tbEndICAO.ShortcutsEnabled = false;
-            tbEndICAO.Size = new Size(107, 25);
+            tbEndICAO.Size = new Size(70, 25);
             tbEndICAO.TabIndex = 48;
             tbEndICAO.TextAlign = HorizontalAlignment.Right;
             tbEndICAO.TextChanged += tbEndICAO_TextChanged;
@@ -662,10 +661,10 @@ namespace FlightRecPlugin
             lbDesignationAvion.AutoSize = true;
             lbDesignationAvion.BackColor = Color.FromArgb(255, 128, 0);
             lbDesignationAvion.Dock = DockStyle.Fill;
-            lbDesignationAvion.Location = new Point(264, 36);
+            lbDesignationAvion.Location = new Point(295, 36);
             lbDesignationAvion.Margin = new Padding(4);
             lbDesignationAvion.Name = "lbDesignationAvion";
-            lbDesignationAvion.Size = new Size(153, 24);
+            lbDesignationAvion.Size = new Size(159, 24);
             lbDesignationAvion.TabIndex = 44;
             lbDesignationAvion.Text = "<no plane selected>";
             lbDesignationAvion.TextAlign = ContentAlignment.MiddleLeft;
@@ -675,12 +674,11 @@ namespace FlightRecPlugin
             // 
             lbPayload.AutoSize = true;
             lbPayload.BackColor = Color.FromArgb(255, 128, 0);
-            tableLayoutPanel3.SetColumnSpan(lbPayload, 2);
             lbPayload.Dock = DockStyle.Fill;
-            lbPayload.Location = new Point(164, 132);
+            lbPayload.Location = new Point(153, 132);
             lbPayload.Margin = new Padding(4);
             lbPayload.Name = "lbPayload";
-            lbPayload.Size = new Size(253, 24);
+            lbPayload.Size = new Size(134, 24);
             lbPayload.TabIndex = 45;
             lbPayload.Text = "Not Yet Available";
             lbPayload.TextAlign = ContentAlignment.MiddleLeft;
@@ -692,10 +690,10 @@ namespace FlightRecPlugin
             cbImmat.DropDownStyle = ComboBoxStyle.DropDownList;
             cbImmat.FormattingEnabled = true;
             cbImmat.Items.AddRange(new object[] { "none" });
-            cbImmat.Location = new Point(163, 35);
+            cbImmat.Location = new Point(152, 35);
             cbImmat.MaxDropDownItems = 20;
             cbImmat.Name = "cbImmat";
-            cbImmat.Size = new Size(94, 26);
+            cbImmat.Size = new Size(136, 26);
             cbImmat.TabIndex = 2;
             cbImmat.DrawItem += cbImmat_DrawItem;
             cbImmat.SelectedIndexChanged += CbImmat_SelectedIndexChanged;
@@ -708,7 +706,7 @@ namespace FlightRecPlugin
             label5.Location = new Point(4, 100);
             label5.Margin = new Padding(4);
             label5.Name = "label5";
-            label5.Size = new Size(152, 24);
+            label5.Size = new Size(141, 24);
             label5.TabIndex = 47;
             label5.Text = "SIM Aircraft  :";
             label5.TextAlign = ContentAlignment.MiddleRight;
@@ -717,29 +715,15 @@ namespace FlightRecPlugin
             // 
             lbLibelleAvion.AutoSize = true;
             lbLibelleAvion.BackColor = Color.FromArgb(255, 128, 0);
-            tableLayoutPanel3.SetColumnSpan(lbLibelleAvion, 2);
+            tableLayoutPanel3.SetColumnSpan(lbLibelleAvion, 3);
             lbLibelleAvion.Dock = DockStyle.Fill;
-            lbLibelleAvion.Location = new Point(164, 100);
+            lbLibelleAvion.Location = new Point(153, 100);
             lbLibelleAvion.Margin = new Padding(4);
             lbLibelleAvion.Name = "lbLibelleAvion";
-            lbLibelleAvion.Size = new Size(253, 24);
+            lbLibelleAvion.Size = new Size(379, 24);
             lbLibelleAvion.TabIndex = 46;
             lbLibelleAvion.Text = "Not Yet Available";
             lbLibelleAvion.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // lbEndICAO
-            // 
-            lbEndICAO.AutoSize = true;
-            lbEndICAO.BackColor = Color.FromArgb(255, 128, 0);
-            lbEndICAO.Dock = DockStyle.Fill;
-            lbEndICAO.Font = new System.Drawing.Font("Arial", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lbEndICAO.Location = new Point(425, 100);
-            lbEndICAO.Margin = new Padding(4);
-            lbEndICAO.Name = "lbEndICAO";
-            lbEndICAO.Size = new Size(107, 24);
-            lbEndICAO.TabIndex = 49;
-            lbEndICAO.Text = "Opt: End ICAO";
-            lbEndICAO.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label6
             // 
@@ -749,9 +733,9 @@ namespace FlightRecPlugin
             label6.Location = new Point(4, 68);
             label6.Margin = new Padding(4);
             label6.Name = "label6";
-            label6.Size = new Size(152, 24);
+            label6.Size = new Size(141, 24);
             label6.TabIndex = 50;
-            label6.Text = "Freight on airport :";
+            label6.Text = "Freight :";
             label6.TextAlign = ContentAlignment.MiddleRight;
             // 
             // panelAircraftTypeIcon
@@ -765,6 +749,21 @@ namespace FlightRecPlugin
             tableLayoutPanel3.SetRowSpan(panelAircraftTypeIcon, 2);
             panelAircraftTypeIcon.Size = new Size(69, 58);
             panelAircraftTypeIcon.TabIndex = 51;
+            // 
+            // lbEndICAO
+            // 
+            lbEndICAO.AutoSize = true;
+            lbEndICAO.BackColor = Color.FromArgb(255, 128, 0);
+            lbEndICAO.Dock = DockStyle.Fill;
+            lbEndICAO.Font = new System.Drawing.Font("Arial", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lbEndICAO.Location = new Point(295, 132);
+            lbEndICAO.Margin = new Padding(4);
+            lbEndICAO.Name = "lbEndICAO";
+            lbEndICAO.Size = new Size(159, 24);
+            lbEndICAO.TabIndex = 49;
+            lbEndICAO.Text = "Opt: End ICAO";
+            lbEndICAO.TextAlign = ContentAlignment.MiddleRight;
+            lbEndICAO.Click += lbEndICAO_Click;
             // 
             // btnReset
             // 
@@ -867,6 +866,7 @@ namespace FlightRecPlugin
             BackColor = Color.FromArgb(255, 128, 0);
             ContextMenuStrip = contextMenuStrip1;
             Controls.Add(splitContainer1);
+            Enabled = false;
             Font = new System.Drawing.Font("Arial", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             ForeColor = Color.White;
             Margin = new Padding(5, 4, 5, 4);
