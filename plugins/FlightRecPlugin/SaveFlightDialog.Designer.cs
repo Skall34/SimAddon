@@ -108,6 +108,7 @@
             valDepFuel.Name = "valDepFuel";
             valDepFuel.Size = new System.Drawing.Size(200, 23);
             valDepFuel.TabIndex = 5;
+            valDepFuel.ValueChanged += valDepFuel_ValueChanged;
             // 
             // label3
             // 
@@ -175,6 +176,7 @@
             valArrFuel.Name = "valArrFuel";
             valArrFuel.Size = new System.Drawing.Size(200, 23);
             valArrFuel.TabIndex = 11;
+            valArrFuel.ValueChanged += valArrFuel_ValueChanged;
             // 
             // label4
             // 
@@ -251,6 +253,7 @@
             // 
             // cbImmat
             // 
+            cbImmat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             cbImmat.FormattingEnabled = true;
             cbImmat.Location = new System.Drawing.Point(52, 16);
             cbImmat.Name = "cbImmat";
@@ -308,6 +311,7 @@
             // 
             // cbMission
             // 
+            cbMission.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             cbMission.FormattingEnabled = true;
             cbMission.Location = new System.Drawing.Point(62, 135);
             cbMission.Name = "cbMission";

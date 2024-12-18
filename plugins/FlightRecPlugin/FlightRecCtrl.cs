@@ -350,22 +350,27 @@ namespace FlightRecPlugin
                         //si on refuel pendant qu'un moteur tourne, c'est suspect. Envoie la popup pour proposer le reset !
                         if (atLeastOneEngineFiring)
                         {
-                            MessageBox.Show("Refuel detected ! you should reset the flight !");
+                            if (DialogResult.OK == MessageBox.Show("Refuel detected ! do you want to reset the flight !","Refuel detected",MessageBoxButtons.OKCancel)) {
+                                resetFlight(true);
+                            }
                         }
                         else
                         {
+                            //PB 18/12 : ignore le refuel en cas de moteur arreté. 
+                            // ca sera géré lors de l'envoi des données à la fin.
+
                             //sinon, refuel sans moteur arreté.
-                            // on reste le vol direct ? et s'il n'a pas été soumis ? 
-                            if (btnSubmit.Enabled)
-                            {
-                                //le bouton submit est encore actif, donc peut-etre que le vol n'a pas été soumis. Demande une confirmation
-                                resetFlight(false);
-                            }
-                            else
-                            {
-                                //le bouton submit est encore inactif, donc le vol a été soumis, on peut reset
-                                resetFlight(true);
-                            }
+                            // on reset le vol direct ? et s'il n'a pas été soumis ? 
+                            //if (btnSubmit.Enabled)
+                            //{
+                            //    //le bouton submit est encore actif, donc peut-etre que le vol n'a pas été soumis. Demande une confirmation
+                            //    //resetFlight(false);
+                            //}
+                            //else
+                            //{
+                            //    //le bouton submit est encore inactif, donc le vol a été soumis, on peut reset
+                            //    resetFlight(true);
+                            //}
                         }
                     }
 
@@ -701,10 +706,23 @@ namespace FlightRecPlugin
                     Mission = cbMission.Text,
                     Planes = immats
                 };
+                bool isTopMost = false;
+                Form parentForm = (Form)this.TopLevelControl; 
+                //en cas de "always on top"
+                if (parentForm.TopMost)
+                    {
+                        //temporairement desactive la always on top
+                        isTopMost = true;
+                        parentForm.TopMost = false;
+                    }
 
                 if (saveFlightDialog.ShowDialog() == DialogResult.OK)
                 {
-
+                    if (isTopMost)
+                    {
+                        //reactive le always on top
+                        parentForm.TopMost = true;
+                    }
                     Dictionary<string, string> values = new Dictionary<string, string>();
                     UrlDeserializer.SaveFlightQuery flightdata = new UrlDeserializer.SaveFlightQuery
                     {
@@ -1101,6 +1119,9 @@ namespace FlightRecPlugin
         {
             //if this happen, then the engine are definitively stopped.
             getEndOfFlightData();
+
+            //restore the window
+            SetWindowMode(ISimAddonPluginCtrl.WindowMode.FULL);
 
             //Update the google sheet database indicating that this plane is no more used
             UpdatePlaneStatus(0);

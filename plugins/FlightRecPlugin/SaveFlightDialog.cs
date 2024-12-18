@@ -171,19 +171,23 @@ namespace FlightRecPlugin
             {
                 MessageBox.Show("Please select a mission");
                 result = false;
-            }else if (Immat == string.Empty)
+            }
+            else if (Immat == string.Empty)
             {
                 MessageBox.Show("Please select a plane");
                 result = false;
-            }else if (ArrivalFuel>=DepartureFuel)
+            }
+            else if (ArrivalFuel >= DepartureFuel)
             {
                 MessageBox.Show("Departure fuel can't be lower than arrival fuel");
                 result = false;
-            }else if ((DepartureICAO==string.Empty)||(ArrivalICAO==string.Empty))
+            }
+            else if ((DepartureICAO == string.Empty) || (ArrivalICAO == string.Empty))
             {
                 MessageBox.Show("Please check departure and arrival ICAOs");
                 result = false;
-            } else if (DepartureTime>=ArrivalTime)
+            }
+            else if (DepartureTime >= ArrivalTime)
             {
                 MessageBox.Show("Departure time must be before arrival time");
                 result = false;
@@ -193,6 +197,23 @@ namespace FlightRecPlugin
             {
                 this.DialogResult = DialogResult.OK;
                 this.Close();
+            }
+        }
+
+        private void valArrFuel_ValueChanged(object sender, EventArgs e)
+        {          
+            if (valArrFuel.Value > valDepFuel.Value)
+            {
+                valDepFuel.Value = valArrFuel.Value;
+            }
+        }
+
+        private void valDepFuel_ValueChanged(object sender, EventArgs e)
+        {
+           
+            if (valArrFuel.Value > valDepFuel.Value)
+            {
+                valArrFuel.Value =valDepFuel.Value ;
             }
         }
     }

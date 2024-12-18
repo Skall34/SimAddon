@@ -190,12 +190,12 @@ namespace FlightRecPlugin
             // 
             btnSubmit.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnSubmit.ForeColor = Color.Black;
-            btnSubmit.Location = new Point(437, 15);
+            btnSubmit.Location = new Point(370, 15);
             btnSubmit.Margin = new Padding(4);
             btnSubmit.Name = "btnSubmit";
-            btnSubmit.Size = new Size(96, 27);
+            btnSubmit.Size = new Size(163, 27);
             btnSubmit.TabIndex = 24;
-            btnSubmit.Text = "Save flight";
+            btnSubmit.Text = "Review flight record";
             btnSubmit.UseVisualStyleBackColor = true;
             btnSubmit.Click += BtnSubmit_Click;
             // 
