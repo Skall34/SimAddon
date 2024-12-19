@@ -4,6 +4,19 @@ using System.Windows.Forms;
 
 namespace SimAddonPlugin
 {
+    public class SimEventArg : System.EventArgs
+    {
+        public enum EventType
+        {
+            ENGINESTART,
+            ENGINESTOP,
+            TAKEOFF,
+            LANDING
+        }
+
+        public EventType reason{ get; set; }
+    }
+
     public interface ISimAddonPluginCtrl
     {
         //simData data;
@@ -36,6 +49,9 @@ namespace SimAddonPlugin
 
         public delegate void OnTalkHandler(object sender, string texttospeech);
         public event OnTalkHandler OnTalk;
+
+        public delegate void OnSimEventHandler(object sender, SimEventArg eventArg);
+        public event OnSimEventHandler OnSimEvent;
 
     }
 

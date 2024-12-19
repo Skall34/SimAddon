@@ -57,25 +57,38 @@ namespace FlightRecPlugin
 
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
 
-        private ISimAddonPluginCtrl.UpdateStatusHandler updateStatusHandler;
-        event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
-        {
-            add
-            {
-                updateStatusHandler = value;
-            }
+        public event ISimAddonPluginCtrl.UpdateStatusHandler OnStatusUpdate;
+        //event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
+        //{
+        //    add
+        //    {
+        //        updateStatusHandler = value;
+        //    }
 
-            remove
-            {
-                updateStatusHandler = null;
-            }
-        }
+        //    remove
+        //    {
+        //        updateStatusHandler = null;
+        //    }
+        //}
+
+        public event ISimAddonPluginCtrl.OnSimEventHandler OnSimEvent;
+        //{
+        //    add
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+
+        //    remove
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
 
         private void UpdateStatus(string message)
         {
-            if (updateStatusHandler != null)
+            if (OnStatusUpdate != null)
             {
-                updateStatusHandler(this, message);
+                OnStatusUpdate(this, message);
             }
         }
 
@@ -1119,9 +1132,6 @@ namespace FlightRecPlugin
         {
             //if this happen, then the engine are definitively stopped.
             getEndOfFlightData();
-
-            //restore the window
-            SetWindowMode(ISimAddonPluginCtrl.WindowMode.FULL);
 
             //Update the google sheet database indicating that this plane is no more used
             UpdatePlaneStatus(0);

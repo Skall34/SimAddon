@@ -43,6 +43,7 @@ namespace SimAddon
             contextMenuStrip1 = new ContextMenuStrip(components);
             alwaysOnTopToolStripMenuItem = new ToolStripMenuItem();
             tabControl1 = new TabControl();
+            autoHideToolStripMenuItem = new ToolStripMenuItem();
             statusStrip.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
@@ -81,14 +82,14 @@ namespace SimAddon
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(153, 26);
+            contextMenuStrip1.Size = new Size(181, 70);
             // 
             // alwaysOnTopToolStripMenuItem
             // 
             alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            alwaysOnTopToolStripMenuItem.Size = new Size(152, 22);
+            alwaysOnTopToolStripMenuItem.Size = new Size(180, 22);
             alwaysOnTopToolStripMenuItem.Text = "Always On Top";
             alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
             // 
@@ -101,6 +102,13 @@ namespace SimAddon
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(574, 289);
             tabControl1.TabIndex = 7;
+            // 
+            // autoHideToolStripMenuItem
+            // 
+            autoHideToolStripMenuItem.Name = "autoHideToolStripMenuItem";
+            autoHideToolStripMenuItem.Size = new Size(180, 22);
+            autoHideToolStripMenuItem.Text = "Auto hide";
+            autoHideToolStripMenuItem.Click += autoHideToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -140,6 +148,7 @@ namespace SimAddon
         private TabControl tabControl1;
         private ToolStripStatusLabel lblPluginStatus;
         private ToolStripMenuItem alwaysOnTopToolStripMenuItem;
+        private ToolStripMenuItem autoHideToolStripMenuItem;
     }
 }
 

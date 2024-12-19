@@ -18,26 +18,27 @@ namespace MeteoPlugin
         METARData metarData;
 
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
+        public event ISimAddonPluginCtrl.OnSimEventHandler OnSimEvent;
 
-        ISimAddonPluginCtrl.UpdateStatusHandler updateStatusHandler;
-        event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
-        {
-            add
-            {
-                updateStatusHandler = value;
-            }
+        public event ISimAddonPluginCtrl.UpdateStatusHandler OnStatusUpdate;
+        //event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
+        //{
+        //    add
+        //    {
+        //        updateStatusHandler = value;
+        //    }
 
-            remove
-            {
-                updateStatusHandler = null;
-            }
-        }
+        //    remove
+        //    {
+        //        updateStatusHandler = null;
+        //    }
+        //}
 
         private void UpdateStatus(string message)
         {
-            if (updateStatusHandler != null)
+            if (OnStatusUpdate != null)
             {
-                updateStatusHandler(this, message);
+                OnStatusUpdate(this, message);
             }
         }
 

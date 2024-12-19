@@ -11,6 +11,7 @@ namespace SimAddon
     public partial class Form1 : Form
     {
         private bool autostart = false;
+        private bool autoHide = false;
 
         PluginsMgr plugsMgr;
         List<ToolStripMenuItem> voiceMenuItems;
@@ -43,6 +44,8 @@ namespace SimAddon
         {
             InitializeComponent();
             string settingVoice = Properties.Settings.Default.Voice;
+            autoHide = Properties.Settings.Default.AutoHide;
+            autoHideToolStripMenuItem.Checked = autoHide;
 
             plugsMgr = new PluginsMgr();
             plugsMgr.LoadPluginsFromFolder("plugins", tabControl1);
@@ -294,6 +297,7 @@ namespace SimAddon
                 try
                 {
                     plugin.OnStatusUpdate += Plugin_OnStatusUpdate;
+                    plugin.OnSimEvent += Plugin_OnSimEvent;
                     plugin.registerPage(tabControl1);
                 }
                 catch (Exception ex)
@@ -323,6 +327,55 @@ namespace SimAddon
             //demarre le timer de connection (fait un essai de connexion toutes les 1000ms)
             this.timerConnection.Start();
 
+        }
+
+        private void Plugin_OnSimEvent(object sender, SimEventArg eventArg)
+        {
+            switch (eventArg.reason)
+            {
+                case SimEventArg.EventType.ENGINESTART:
+                    SetEngineStart();
+                    break;
+                case SimEventArg.EventType.ENGINESTOP:
+                    SetEngineStop();
+                    break;
+                case SimEventArg.EventType.TAKEOFF:
+                    SetTakeoff();
+                    break;
+                case SimEventArg.EventType.LANDING:
+                    SetLanding();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void SetEngineStart()
+        {
+            //what to do in application if flight recorder detected an engine start ?
+            if (autoHide)
+            {
+                this.WindowState = FormWindowState.Minimized;
+            }
+        }
+
+        public void SetEngineStop()
+        {
+            //what to do in application if flight recorder detected an engine stop ?
+            if (autoHide)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        public void SetTakeoff()
+        {
+            //what to do in application if flight recorder detected a takeoff ?
+        }
+
+        public void SetLanding()
+        {
+            //what to do in application if flight recorder detected a landing ?
         }
 
         //write the message the status bar
@@ -389,6 +442,14 @@ namespace SimAddon
                 this.TopMost = alwaysOnTopToolStripMenuItem.Checked = false;
                 this.TopMost = false;
             }
+        }
+
+        private void autoHideToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            autoHide = !autoHide;
+            autoHideToolStripMenuItem.Checked = autoHide;
+            Properties.Settings.Default.AutoHide = autoHide;
+            Properties.Settings.Default.Save();
         }
     }
 }
