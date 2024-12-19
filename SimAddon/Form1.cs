@@ -14,7 +14,6 @@ namespace SimAddon
         private bool autoHide = false;
 
         PluginsMgr plugsMgr;
-        List<ToolStripMenuItem> voiceMenuItems;
 
         private simData _simData;
         private situation currentStatus;
@@ -43,9 +42,14 @@ namespace SimAddon
         public Form1()
         {
             InitializeComponent();
-            string settingVoice = Properties.Settings.Default.Voice;
+
+            this.TopMost = Properties.Settings.Default.AlwaysOnTop;
+            alwaysOnTopToolStripMenuItem.Checked = Properties.Settings.Default.AlwaysOnTop;
+
             autoHide = Properties.Settings.Default.AutoHide;
             autoHideToolStripMenuItem.Checked = autoHide;
+
+
 
             plugsMgr = new PluginsMgr();
             plugsMgr.LoadPluginsFromFolder("plugins", tabControl1);
@@ -442,6 +446,8 @@ namespace SimAddon
                 this.TopMost = alwaysOnTopToolStripMenuItem.Checked = false;
                 this.TopMost = false;
             }
+            Properties.Settings.Default.AlwaysOnTop = this.TopMost;
+            Properties.Settings.Default.Save();
         }
 
         private void autoHideToolStripMenuItem_Click(object sender, EventArgs e)
