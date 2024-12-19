@@ -91,6 +91,13 @@ namespace FlightRecPlugin
                 OnStatusUpdate(this, message);
             }
         }
+        private void SimEvent(SimEventArg.EventType eventType)
+        {
+            if (OnSimEvent != null)
+            {
+                OnSimEvent(this, new SimEventArg() { reason = eventType });
+            }
+        }
 
 
         public FlightRecCtrl()
@@ -307,6 +314,7 @@ namespace FlightRecPlugin
                         //just incase of rebound during takeoff, reset the onground label
                         lbTimeOnGround.Text = "--:--";
 
+                        SimEvent(SimEventArg.EventType.TAKEOFF);
                     }
                     //constamment mettre à jour la vrtical acceleration et airspeed pendant le vol.
                     flightPerfs.landingVerticalAcceleration = currentFlightStatus.verticalAcceleration;
@@ -347,6 +355,7 @@ namespace FlightRecPlugin
                         //enable the save button
                         btnSubmit.Enabled = true;
                         submitFlightToolStripMenuItem.Enabled = true;
+                        SimEvent(SimEventArg.EventType.LANDING);
                     }
 
 
@@ -474,6 +483,8 @@ namespace FlightRecPlugin
                                 UpdatePlaneStatus(1);
                                 cbImmat.Enabled = false;
                                 //tbEndICAO.Enabled = false;
+
+                                SimEvent(SimEventArg.EventType.ENGINESTART);
                             }
                             else
                             {
@@ -705,20 +716,22 @@ namespace FlightRecPlugin
                 //crée un dictionnaire des valeurs à envoyer
                 SaveFlightDialog saveFlightDialog = new SaveFlightDialog()
                 {
-                    Immat = cbImmat.Text,
-                    Comment = fullComment,
-                    Cargo = _endPayload,
-                    DepartureICAO = lbStartIata.Text,
-                    DepartureTime = _startTime,
-                    DepartureFuel = _startFuel,
-                    ArrivalICAO = lbEndIata.Text,
-                    ArrivalTime = _endTime,
-                    ArrivalFuel = _endFuel,
-                    Note = _note,
                     Missions = missions,
-                    Mission = cbMission.Text,
                     Planes = immats
                 };
+
+                saveFlightDialog.Immat = cbImmat.Text;
+                saveFlightDialog.Comment = fullComment;
+                saveFlightDialog.Cargo = _endPayload;
+                saveFlightDialog.DepartureICAO = lbStartIata.Text;
+                saveFlightDialog.DepartureTime = _startTime;
+                saveFlightDialog.DepartureFuel = _startFuel;
+                saveFlightDialog.ArrivalICAO = lbEndIata.Text;
+                saveFlightDialog.ArrivalTime = _endTime;
+                saveFlightDialog.ArrivalFuel = _endFuel;
+                saveFlightDialog.Note = _note;
+                saveFlightDialog.Mission = cbMission.Text;
+
                 bool isTopMost = false;
                 Form parentForm = (Form)this.TopLevelControl; 
                 //en cas de "always on top"
@@ -1139,6 +1152,8 @@ namespace FlightRecPlugin
             tbEndICAO.Enabled = true;
             //stop this timer
             engineStopTimer.Stop();
+
+            SimEvent(SimEventArg.EventType.ENGINESTOP);
         }
 
         public async void ReadStaticValues()
