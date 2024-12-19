@@ -224,7 +224,11 @@ namespace MeteoPlugin
                         Aeroport airport = simdata.aeroports.FirstOrDefault(a => a.ident == searchItem);
                         if (airport != null)
                         {
-                            metarData.icao.name = airport.name;
+                            //update the name of the airport in the metar data if there any
+                            if (metarData != null)
+                            {
+                                metarData.icao.name = airport.name;
+                            }
                             string[] runways = airport.Piste.Split('/');
                             lbAirportInfo.Items.Add(airport.name);
                             lbAirportInfo.Items.Add($"Runways : {airport.Piste.Replace('/', ' ')}");
