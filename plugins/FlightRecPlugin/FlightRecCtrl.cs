@@ -452,8 +452,6 @@ namespace FlightRecPlugin
 
                 //sauvegarde l'etat precedent des moteurs
                 bool _previousEngineStatus = atLeastOneEngineFiring;
-                //lit le nouvel etat.
-                atLeastOneEngineFiring = currentFlightStatus.isAtLeastOneEngineFiring;
 
                 //si aucun moteur de tournait, mais que maintenant, au moins un moteur tourne, on commence a enregistrer.
                 //on va memoriser les etats de carburant, et l'heure. On récupere aussi quel est l'aeroport.
@@ -464,8 +462,11 @@ namespace FlightRecPlugin
                 if (currentFlightStatus.readyToFly)
                 {
 
-                    if ((!_previousEngineStatus && atLeastOneEngineFiring) && (startDisabled == 0))
+                    if ((!_previousEngineStatus && currentFlightStatus.isAtLeastOneEngineFiring) && (startDisabled == 0))
                     {
+                        //garde le nouvel etat.
+                        atLeastOneEngineFiring = currentFlightStatus.isAtLeastOneEngineFiring;
+
                         if (engineStopTimer.Enabled)
                         {
                             Logger.WriteLine("Engine stop canceled. Validation timer stopped");
@@ -494,21 +495,41 @@ namespace FlightRecPlugin
                         }
                     }
                 }
+                else
+                {
+                    //not ready to fly
+                    //clear the flight recorder infos ?
+                }
 
                 // si on detecte un arret moteur
-                if (_previousEngineStatus && !atLeastOneEngineFiring)
+                if (currentFlightStatus.readyToFly)
                 {
-                    // si on est au sol, et qu'on autorise la detection de l'arret moteur
-                    if (onGround && (endDisabled == 0))
+                    if (_previousEngineStatus && !currentFlightStatus.isAtLeastOneEngineFiring)
                     {
-                        Logger.WriteLine("Potential engine stop detected. Start validation timer");
-                        engineStopTimer.Start();
+                        //garde le nouvel etat.
+                        atLeastOneEngineFiring = currentFlightStatus.isAtLeastOneEngineFiring;
+
+                        // si on est au sol, et qu'on autorise la detection de l'arret moteur
+                        if (onGround && (endDisabled == 0))
+                        {
+                            Logger.WriteLine("Potential engine stop detected. Start validation timer");
+                            engineStopTimer.Start();
+                        }
+                        else
+                        {
+                            //si on est en vol, OU si la detection est desactivée, ne rien faire.
+                            Logger.WriteLine("Potential engine stop detected during flight. Do nothing");
+                        }
                     }
                     else
                     {
-                        //si on est en vol, OU si la detection est desactivée, ne rien faire.
-                        Logger.WriteLine("Potential engine stop detected during flight. Do nothing");
+                        //no change on engine status.
                     }
+                }
+                else
+                {
+                    //not ready to fly
+
                 }
             }
             catch (Exception ex)
@@ -637,7 +658,7 @@ namespace FlightRecPlugin
             //lbStartIata.Enabled = false;
 
             //on recupere les etats de fin de vol : heure, carbu, position.
-            _endPosition = data.GetPosition();
+            _endPosition = _currentPosition; // data.GetPosition();
             double lat = _endPosition.Location.Latitude;
             double lon = _endPosition.Location.Longitude;
 
@@ -649,7 +670,9 @@ namespace FlightRecPlugin
                 lbEndIata.Text = localAirport.ident;
             }
 
-            _endFuel = data.GetFuelWeight();
+            //store the end of flight fuel value
+            _endFuel = _currentFuel;
+
             _endTime = DateTime.Now;
             this.lbEndTime.Text = _endTime.ToShortTimeString();
             //0.00 => only keep 2 decimals for the fuel
@@ -676,16 +699,6 @@ namespace FlightRecPlugin
             {
                 throw new Exception("The string starts with 'SKY' followed by four numbers.");
             }
-
-            //if (cbMission.Text == string.Empty)
-            //{
-            //    throw new Exception("Please select a mission.");
-            //}
-
-            //if (cbImmat.Text == string.Empty)
-            //{
-            //    throw new Exception("Please select a plane immatriculation.");
-            //}
 
             return true;
         }
