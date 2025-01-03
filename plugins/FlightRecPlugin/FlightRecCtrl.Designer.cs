@@ -581,6 +581,7 @@ namespace FlightRecPlugin
             cbNote.Name = "cbNote";
             cbNote.Size = new Size(66, 26);
             cbNote.TabIndex = 21;
+            cbNote.SelectedIndexChanged += cbNote_SelectedIndexChanged;
             cbNote.MouseHover += CbNote_MouseHover;
             // 
             // lbFret

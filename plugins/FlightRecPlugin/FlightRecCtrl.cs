@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Windows.Forms.VisualStyles;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Threading.Tasks;
 
 namespace FlightRecPlugin
 {
@@ -83,7 +84,7 @@ namespace FlightRecPlugin
         {
             if (OnShowMsgbox != null)
             {
-                return OnShowMsgbox(this,title,caption, buttons);
+                return OnShowMsgbox(this, title, caption, buttons);
             }
             else
             {
@@ -180,7 +181,7 @@ namespace FlightRecPlugin
             timerUpdateStaticValues.Start();
         }
 
-        public void FormClosing(object sender, FormClosingEventArgs e)
+        public async void FormClosing(object sender, FormClosingEventArgs e)
         {
             //need to ask for save before close
             string message = "Confirm close ACARS ?";
@@ -222,8 +223,13 @@ namespace FlightRecPlugin
                 //close forced. (probably autostart of application by the simulator)
                 if (btnSubmit.Enabled)
                 {
-                    //if button submit is enabled then we probably have a flight to save.
-                    saveFlight();
+                    ////if button submit is enabled then we probably have a flight to save.
+                    //bool saveOK = await saveFlight();
+                    //if (!saveOK)
+                    //{
+                    //    //if user hit cancel while closing, dismiss the flight
+                    //    resetFlight(true);
+                    //}
                 }
             }
         }
@@ -703,9 +709,9 @@ namespace FlightRecPlugin
             return true;
         }
 
-        private async void saveFlight()
+        private async Task<bool> saveFlight()
         {
-
+            bool saveOK = false;
             this.Cursor = Cursors.WaitCursor;
             try
             {
@@ -787,7 +793,7 @@ namespace FlightRecPlugin
                     if (0 != result)
                     {
                         //si tout va bien...
-                        ShowMsgBox("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder",MessageBoxButtons.OK);
+                        ShowMsgBox("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder", MessageBoxButtons.OK);
 
                         //reset le vol sans demande de confirmation
                         resetFlight(true);
@@ -795,25 +801,27 @@ namespace FlightRecPlugin
                     else
                     {
                         //en, cas d'erreur, affiche une popup avec le message
-                        ShowMsgBox("Error","Error while sending flight data.",MessageBoxButtons.OK);
+                        ShowMsgBox("Error", "Error while sending flight data.", MessageBoxButtons.OK);
                     }
                     // On grise le bouton save flight pour éviter les doubles envois
                     //btnSubmit.Enabled = false;
                     submitFlightToolStripMenuItem.Enabled = false;
-
+                    saveOK = true;
                 }
                 else
                 {
                     //save canceled
+                    saveOK = false;
                 }
 
             }
             catch (Exception ex)
             {
                 //in case if check error, or exception durong save, show a messagebox containing the error message
-                ShowMsgBox("Exception caught ",ex.Message,MessageBoxButtons.OK);
+                ShowMsgBox("Exception caught ", ex.Message, MessageBoxButtons.OK);
             }
             this.Cursor = Cursors.Default;
+            return saveOK;
 
         }
 
@@ -996,7 +1004,7 @@ namespace FlightRecPlugin
             catch (Exception ex)
             {
                 //in case if check error, or exception durong save, show a messagebox containing the error message
-                ShowMsgBox("Exception caught",ex.Message, MessageBoxButtons.OK);
+                ShowMsgBox("Exception caught", ex.Message, MessageBoxButtons.OK);
             }
         }
 
@@ -1256,6 +1264,11 @@ namespace FlightRecPlugin
         private void screenshotToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void cbNote_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _note = short.Parse(cbNote.Text);
         }
     }
 }
