@@ -2,6 +2,7 @@
 using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
+using System.Drawing.Imaging;
 using System.Reflection;
 
 namespace SimAddon
@@ -302,6 +303,7 @@ namespace SimAddon
                 {
                     plugin.OnStatusUpdate += Plugin_OnStatusUpdate;
                     plugin.OnSimEvent += Plugin_OnSimEvent;
+                    plugin.OnShowMsgbox += Plugin_OnShowMsgbox;
                     plugin.registerPage(tabControl1);
                 }
                 catch (Exception ex)
@@ -331,6 +333,22 @@ namespace SimAddon
             //demarre le timer de connection (fait un essai de connexion toutes les 1000ms)
             this.timerConnection.Start();
 
+        }
+
+        private DialogResult Plugin_OnShowMsgbox(object sender, string title, string caption, MessageBoxButtons buttons)
+        {
+            //if the window is top most, disable the topmost before showing the message box.
+            bool wasWindowTopMost = this.TopMost;
+
+            if (this.TopMost)
+            {
+                this.TopMost = false;
+            }
+            DialogResult result = MessageBox.Show(title, caption, buttons);
+
+            //restore the topmost as it was before the popup.
+            this.TopMost = wasWindowTopMost;
+            return result;
         }
 
         private void Plugin_OnSimEvent(object sender, SimEventArg eventArg)
@@ -456,6 +474,36 @@ namespace SimAddon
             autoHideToolStripMenuItem.Checked = autoHide;
             Properties.Settings.Default.AutoHide = autoHide;
             Properties.Settings.Default.Save();
+        }
+
+        private void screenshotToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Get the primary screen
+            var primaryScreen = Screen.PrimaryScreen;
+
+            // Get the bounds of the primary screen
+            var bounds = primaryScreen.Bounds;
+
+            // Create a bitmap with the size of the primary screen
+            using (var bitmap = new Bitmap(bounds.Width, bounds.Height))
+            {
+                // Draw the screen into the bitmap
+                using (var g = Graphics.FromImage(bitmap))
+                {
+                    g.CopyFromScreen(bounds.Location, Point.Empty, bounds.Size);
+                }
+
+                // Save the screenshot (e.g., as a PNG file)
+                string filePath = "screenshot.png";
+                bitmap.Save(filePath, ImageFormat.Png);
+
+                // Load the screenshot into the clipboard
+                Clipboard.SetImage(bitmap);
+
+                Logger.WriteLine($"Screenshot saved to {filePath}");
+                Console.WriteLine($"Screenshot saved to {filePath}");
+                Plugin_OnShowMsgbox(this,  $"Screenshot copied to clipboard", "Screenshort copied", MessageBoxButtons.OK);
+            }
         }
     }
 }

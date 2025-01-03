@@ -97,7 +97,6 @@ namespace FlightRecPlugin
             contextMenuStrip1 = new ContextMenuStrip(components);
             resetFlightToolStripMenuItem = new ToolStripMenuItem();
             submitFlightToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator1 = new ToolStripSeparator();
             engineStopTimer = new Timer(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox5 = new GroupBox();
@@ -509,10 +508,12 @@ namespace FlightRecPlugin
             // tbCommentaires
             // 
             tbCommentaires.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tbCommentaires.BackColor = Color.FromArgb(255, 192, 128);
             tbCommentaires.Location = new Point(112, 25);
             tbCommentaires.Margin = new Padding(5, 4, 5, 4);
             tbCommentaires.Multiline = true;
             tbCommentaires.Name = "tbCommentaires";
+            tbCommentaires.ReadOnly = true;
             tbCommentaires.ScrollBars = ScrollBars.Vertical;
             tbCommentaires.Size = new Size(420, 160);
             tbCommentaires.TabIndex = 20;
@@ -779,9 +780,9 @@ namespace FlightRecPlugin
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { resetFlightToolStripMenuItem, submitFlightToolStripMenuItem, toolStripSeparator1 });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { resetFlightToolStripMenuItem, submitFlightToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(134, 54);
+            contextMenuStrip1.Size = new Size(134, 48);
             // 
             // resetFlightToolStripMenuItem
             // 
@@ -797,11 +798,6 @@ namespace FlightRecPlugin
             submitFlightToolStripMenuItem.Size = new Size(133, 22);
             submitFlightToolStripMenuItem.Text = "Save Flight";
             submitFlightToolStripMenuItem.Click += submitFlightToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator1
-            // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(130, 6);
             // 
             // engineStopTimer
             // 
@@ -944,7 +940,6 @@ namespace FlightRecPlugin
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem resetFlightToolStripMenuItem;
         private ToolStripMenuItem submitFlightToolStripMenuItem;
-        private ToolStripSeparator toolStripSeparator1;
         private TextBox tbEndICAO;
         private Label lbEndICAO;
         private System.Windows.Forms.Timer engineStopTimer;

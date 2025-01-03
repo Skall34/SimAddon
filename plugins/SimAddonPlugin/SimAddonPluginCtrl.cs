@@ -53,6 +53,8 @@ namespace SimAddonPlugin
         public delegate void OnSimEventHandler(object sender, SimEventArg eventArg);
         public event OnSimEventHandler OnSimEvent;
 
+        public delegate DialogResult OnShowMsgboxHandler(object sender, string title, string caption,  MessageBoxButtons buttons);
+        public event OnShowMsgboxHandler OnShowMsgbox;
     }
 
     public  class situation

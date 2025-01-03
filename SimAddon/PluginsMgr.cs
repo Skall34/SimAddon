@@ -58,36 +58,43 @@ namespace SimAddon
                     string[] dllFiles = Directory.GetFiles(subfolder, "*.dll", SearchOption.TopDirectoryOnly);
                     foreach (string item in dllFiles)
                     {
-                        Assembly assembly = Assembly.LoadFrom(item);
-                        if (assembly.GetExportedTypes().Count() > 0)
+                        try
                         {
-                            foreach (Type pluginType in assembly.GetExportedTypes())
+                            Assembly assembly = Assembly.LoadFrom(item);
+                            if (assembly.GetExportedTypes().Count() > 0)
                             {
-                                //Type pluginType = assembly.GetExportedTypes()[0]; // Remplacer par le namespace et le nom de la classe
-                                if (pluginType != null)
+                                foreach (Type pluginType in assembly.GetExportedTypes())
                                 {
-                                    try
+                                    //Type pluginType = assembly.GetExportedTypes()[0]; // Remplacer par le namespace et le nom de la classe
+                                    if (pluginType != null)
                                     {
-                                        // Créer une instance de la classe dynamiquement
-                                        ISimAddonPluginCtrl pluginInstance = (ISimAddonPluginCtrl)Activator.CreateInstance(pluginType);
-                                        _plugins.Add(pluginInstance);
+                                        try
+                                        {
+                                            // Créer une instance de la classe dynamiquement
+                                            ISimAddonPluginCtrl pluginInstance = (ISimAddonPluginCtrl)Activator.CreateInstance(pluginType);
+                                            _plugins.Add(pluginInstance);
 
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            //just ignore, that's not a plugin file
+                                        }
                                     }
-                                    catch (Exception ex)
+                                    else
                                     {
-                                        //just ignore, that's not a plugin file
+                                        //Logger.WriteLine("Type (classe) non trouvé dans la DLL" + item);
                                     }
-                                }
-                                else
-                                {
-                                    //Logger.WriteLine("Type (classe) non trouvé dans la DLL" + item);
                                 }
                             }
-                        }
-                        else
-                        {
-                            //Logger.WriteLine("pas de type exporté dans la dll " + item);
+                            else
+                            {
+                                //Logger.WriteLine("pas de type exporté dans la dll " + item);
 
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //invalid format of a DLL
                         }
                     }
                 }

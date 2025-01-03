@@ -11,6 +11,7 @@ using SimAddonLogger;
 using System.Reflection;
 using System.Windows.Forms.VisualStyles;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace FlightRecPlugin
 {
@@ -58,31 +59,10 @@ namespace FlightRecPlugin
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
 
         public event ISimAddonPluginCtrl.UpdateStatusHandler OnStatusUpdate;
-        //event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
-        //{
-        //    add
-        //    {
-        //        updateStatusHandler = value;
-        //    }
-
-        //    remove
-        //    {
-        //        updateStatusHandler = null;
-        //    }
-        //}
 
         public event ISimAddonPluginCtrl.OnSimEventHandler OnSimEvent;
-        //{
-        //    add
-        //    {
-        //        throw new NotImplementedException();
-        //    }
 
-        //    remove
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
+        public event ISimAddonPluginCtrl.OnShowMsgboxHandler OnShowMsgbox;
 
         private void UpdateStatus(string message)
         {
@@ -96,6 +76,19 @@ namespace FlightRecPlugin
             if (OnSimEvent != null)
             {
                 OnSimEvent(this, new SimEventArg() { reason = eventType });
+            }
+        }
+
+        private DialogResult ShowMsgBox(string title, string caption, MessageBoxButtons buttons)
+        {
+            if (OnShowMsgbox != null)
+            {
+                return OnShowMsgbox(this,title,caption, buttons);
+            }
+            else
+            {
+                //if the caller did not managed this, consider a cancel. (could have been ignore also ?)
+                return DialogResult.Cancel;
             }
         }
 
@@ -149,10 +142,11 @@ namespace FlightRecPlugin
             btnSaveSettings.Enabled = false;
 
             missions = new List<string>();
-            immats= new List<string>();
+            immats = new List<string>();
 
             flightPerfs = new FlightPerfs();
         }
+
 
         public void SetWindowMode(ISimAddonPluginCtrl.WindowMode mode)
         {
@@ -200,7 +194,7 @@ namespace FlightRecPlugin
 
                 if (e.CloseReason == CloseReason.UserClosing)
                 {
-                    DialogResult res = MessageBox.Show(message, "Flight Recorder", MessageBoxButtons.OKCancel);
+                    DialogResult res = ShowMsgBox(message, "Closing", MessageBoxButtons.OKCancel);
                     if (res == DialogResult.OK)
                     {
                         if (atLeastOneEngineFiring)
@@ -372,7 +366,8 @@ namespace FlightRecPlugin
                         //si on refuel pendant qu'un moteur tourne, c'est suspect. Envoie la popup pour proposer le reset !
                         if (atLeastOneEngineFiring)
                         {
-                            if (DialogResult.OK == MessageBox.Show("Refuel detected ! do you want to reset the flight !","Refuel detected",MessageBoxButtons.OKCancel)) {
+                            if (DialogResult.OK == ShowMsgBox("Refuel detected ! do you want to reset the flight !", "Refuel detected", MessageBoxButtons.OKCancel))
+                            {
                                 resetFlight(true);
                             }
                         }
@@ -479,6 +474,7 @@ namespace FlightRecPlugin
                                 Logger.WriteLine("First engine start detected for plane" + cbImmat.Text);
                                 //this.WindowState = FormWindowState.Minimized;
                                 getStartOfFlightData();
+                                resetEndOfFlightData();
 
                                 //Update the google sheet database indicating that this plane is being used
                                 UpdatePlaneStatus(1);
@@ -600,14 +596,8 @@ namespace FlightRecPlugin
 
             string comment = flightPerfs.getFlightComment();
 
-            if (tbCommentaires.Text.Length > 0)
-            {
-                tbCommentaires.Text += " " + comment;
-            }
-            else
-            {
-                tbCommentaires.Text = comment;
-            }
+            tbCommentaires.Text = comment;
+
             tbCommentaires.Text += " (F.R. V" + version.ToString(3) + ")";
 
             short note = flightPerfs.getFlightNote();
@@ -644,7 +634,17 @@ namespace FlightRecPlugin
             //0.00 => only keep 2 decimals for the fuel
 
             this.lbStartFuel.Text = _startFuel.ToString("0.00");
+        }
 
+        private void resetEndOfFlightData()
+        {
+
+            lbEndFuel.Text = "Waiting end...";
+            lbEndPosition.Text = "Waiting end..."; ;
+            lbEndTime.Text = "--:--";
+            lbEndIata.Text = "Waiting end...";
+
+            tbCommentaires.Text = string.Empty;
         }
 
         private void getEndOfFlightData()
@@ -746,14 +746,14 @@ namespace FlightRecPlugin
                 saveFlightDialog.Mission = cbMission.Text;
 
                 bool isTopMost = false;
-                Form parentForm = (Form)this.TopLevelControl; 
+                Form parentForm = (Form)this.TopLevelControl;
                 //en cas de "always on top"
                 if (parentForm.TopMost)
-                    {
-                        //temporairement desactive la always on top
-                        isTopMost = true;
-                        parentForm.TopMost = false;
-                    }
+                {
+                    //temporairement desactive la always on top
+                    isTopMost = true;
+                    parentForm.TopMost = false;
+                }
 
                 if (saveFlightDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -787,7 +787,7 @@ namespace FlightRecPlugin
                     if (0 != result)
                     {
                         //si tout va bien...
-                        MessageBox.Show("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder");
+                        ShowMsgBox("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder",MessageBoxButtons.OK);
 
                         //reset le vol sans demande de confirmation
                         resetFlight(true);
@@ -795,7 +795,7 @@ namespace FlightRecPlugin
                     else
                     {
                         //en, cas d'erreur, affiche une popup avec le message
-                        MessageBox.Show("Error while sending flight data.");
+                        ShowMsgBox("Error","Error while sending flight data.",MessageBoxButtons.OK);
                     }
                     // On grise le bouton save flight pour éviter les doubles envois
                     //btnSubmit.Enabled = false;
@@ -811,7 +811,7 @@ namespace FlightRecPlugin
             catch (Exception ex)
             {
                 //in case if check error, or exception durong save, show a messagebox containing the error message
-                MessageBox.Show(ex.Message);
+                ShowMsgBox("Exception caught ",ex.Message,MessageBoxButtons.OK);
             }
             this.Cursor = Cursors.Default;
 
@@ -823,7 +823,7 @@ namespace FlightRecPlugin
             DialogResult res = DialogResult.OK;
             if (!force)
             {
-                res = MessageBox.Show("Confirm flight reset ?", "Flight Recorder", MessageBoxButtons.OKCancel);
+                res = ShowMsgBox("Confirm flight reset ?", "Flight Recorder", MessageBoxButtons.OKCancel);
             }
 
             if (res == DialogResult.OK)
@@ -850,8 +850,8 @@ namespace FlightRecPlugin
                 lbEndIata.Text = "Waiting end ...";
                 lbStartPosition.Text = "Waiting start";
                 lbEndPosition.Text = "Waiting end ...";
-                lbStartTime.Text = "Waiting start";
-                lbEndTime.Text = "Waiting end ...";
+                lbStartTime.Text = "--:--";
+                lbEndTime.Text = "--:--";
                 lbTimeAirborn.Text = "--:--";
                 lbTimeOnGround.Text = "--:--";
                 lbFret.Visible = true;
@@ -996,7 +996,7 @@ namespace FlightRecPlugin
             catch (Exception ex)
             {
                 //in case if check error, or exception durong save, show a messagebox containing the error message
-                MessageBox.Show(ex.Message);
+                ShowMsgBox("Exception caught",ex.Message, MessageBoxButtons.OK);
             }
         }
 
@@ -1249,6 +1249,11 @@ namespace FlightRecPlugin
         }
 
         private void lbEndICAO_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void screenshotToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }

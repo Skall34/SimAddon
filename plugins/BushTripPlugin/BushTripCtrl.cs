@@ -34,6 +34,8 @@ namespace BushTripPlugin
         public event ISimAddonPluginCtrl.OnSimEventHandler OnSimEvent;
 
         public event ISimAddonPluginCtrl.UpdateStatusHandler OnStatusUpdate;
+        public event ISimAddonPluginCtrl.OnShowMsgboxHandler OnShowMsgbox;
+
         //event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
         //{
         //    add

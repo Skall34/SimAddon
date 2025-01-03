@@ -42,8 +42,10 @@ namespace SimAddon
             timerConnection = new System.Windows.Forms.Timer(components);
             contextMenuStrip1 = new ContextMenuStrip(components);
             alwaysOnTopToolStripMenuItem = new ToolStripMenuItem();
-            tabControl1 = new TabControl();
             autoHideToolStripMenuItem = new ToolStripMenuItem();
+            tabControl1 = new TabControl();
+            toolStripSeparator1 = new ToolStripSeparator();
+            screenshotToolStripMenuItem = new ToolStripMenuItem();
             statusStrip.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
@@ -82,9 +84,9 @@ namespace SimAddon
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1, screenshotToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 70);
+            contextMenuStrip1.Size = new Size(181, 98);
             // 
             // alwaysOnTopToolStripMenuItem
             // 
@@ -92,6 +94,13 @@ namespace SimAddon
             alwaysOnTopToolStripMenuItem.Size = new Size(180, 22);
             alwaysOnTopToolStripMenuItem.Text = "Always On Top";
             alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
+            // 
+            // autoHideToolStripMenuItem
+            // 
+            autoHideToolStripMenuItem.Name = "autoHideToolStripMenuItem";
+            autoHideToolStripMenuItem.Size = new Size(180, 22);
+            autoHideToolStripMenuItem.Text = "Auto hide";
+            autoHideToolStripMenuItem.Click += autoHideToolStripMenuItem_Click;
             // 
             // tabControl1
             // 
@@ -103,12 +112,17 @@ namespace SimAddon
             tabControl1.Size = new Size(574, 289);
             tabControl1.TabIndex = 7;
             // 
-            // autoHideToolStripMenuItem
+            // toolStripSeparator1
             // 
-            autoHideToolStripMenuItem.Name = "autoHideToolStripMenuItem";
-            autoHideToolStripMenuItem.Size = new Size(180, 22);
-            autoHideToolStripMenuItem.Text = "Auto hide";
-            autoHideToolStripMenuItem.Click += autoHideToolStripMenuItem_Click;
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(177, 6);
+            // 
+            // screenshotToolStripMenuItem
+            // 
+            screenshotToolStripMenuItem.Name = "screenshotToolStripMenuItem";
+            screenshotToolStripMenuItem.Size = new Size(180, 22);
+            screenshotToolStripMenuItem.Text = "Screenshot";
+            screenshotToolStripMenuItem.Click += screenshotToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -149,6 +163,8 @@ namespace SimAddon
         private ToolStripStatusLabel lblPluginStatus;
         private ToolStripMenuItem alwaysOnTopToolStripMenuItem;
         private ToolStripMenuItem autoHideToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem screenshotToolStripMenuItem;
     }
 }
 
