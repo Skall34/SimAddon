@@ -92,6 +92,11 @@ namespace FlightRecPlugin
             label6 = new Label();
             panelAircraftTypeIcon = new Panel();
             lbEndICAO = new Label();
+            ledCheckCallsign = new SimAddonControls.LedBulb();
+            ledCheckImmat = new SimAddonControls.LedBulb();
+            ledCheckFreight = new SimAddonControls.LedBulb();
+            ledCheckAircraft = new SimAddonControls.LedBulb();
+            ledCheckPayload = new SimAddonControls.LedBulb();
             toolTip1 = new ToolTip(components);
             btnReset = new Button();
             contextMenuStrip1 = new ContextMenuStrip(components);
@@ -593,7 +598,7 @@ namespace FlightRecPlugin
             lbFret.Location = new Point(153, 68);
             lbFret.Margin = new Padding(4);
             lbFret.Name = "lbFret";
-            lbFret.Size = new Size(379, 24);
+            lbFret.Size = new Size(359, 24);
             lbFret.TabIndex = 43;
             lbFret.Text = "Available freight at ---- : ----";
             lbFret.TextAlign = ContentAlignment.MiddleLeft;
@@ -611,11 +616,12 @@ namespace FlightRecPlugin
             // 
             // tableLayoutPanel3
             // 
-            tableLayoutPanel3.ColumnCount = 4;
+            tableLayoutPanel3.ColumnCount = 5;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 149F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 142F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 78F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel3.Controls.Add(label11, 0, 0);
             tableLayoutPanel3.Controls.Add(tbEndICAO, 3, 4);
             tableLayoutPanel3.Controls.Add(lbDesignationAvion, 2, 1);
@@ -631,6 +637,11 @@ namespace FlightRecPlugin
             tableLayoutPanel3.Controls.Add(label6, 0, 2);
             tableLayoutPanel3.Controls.Add(panelAircraftTypeIcon, 3, 0);
             tableLayoutPanel3.Controls.Add(lbEndICAO, 2, 4);
+            tableLayoutPanel3.Controls.Add(ledCheckCallsign, 4, 0);
+            tableLayoutPanel3.Controls.Add(ledCheckImmat, 4, 1);
+            tableLayoutPanel3.Controls.Add(ledCheckFreight, 4, 2);
+            tableLayoutPanel3.Controls.Add(ledCheckAircraft, 4, 3);
+            tableLayoutPanel3.Controls.Add(ledCheckPayload, 4, 4);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 21);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -648,7 +659,7 @@ namespace FlightRecPlugin
             // 
             tbEndICAO.BackColor = Color.White;
             tbEndICAO.Dock = DockStyle.Fill;
-            tbEndICAO.Location = new Point(462, 132);
+            tbEndICAO.Location = new Point(442, 132);
             tbEndICAO.Margin = new Padding(4);
             tbEndICAO.Name = "tbEndICAO";
             tbEndICAO.ShortcutsEnabled = false;
@@ -666,7 +677,7 @@ namespace FlightRecPlugin
             lbDesignationAvion.Location = new Point(295, 36);
             lbDesignationAvion.Margin = new Padding(4);
             lbDesignationAvion.Name = "lbDesignationAvion";
-            lbDesignationAvion.Size = new Size(159, 24);
+            lbDesignationAvion.Size = new Size(139, 24);
             lbDesignationAvion.TabIndex = 44;
             lbDesignationAvion.Text = "<no plane selected>";
             lbDesignationAvion.TextAlign = ContentAlignment.MiddleLeft;
@@ -722,7 +733,7 @@ namespace FlightRecPlugin
             lbLibelleAvion.Location = new Point(153, 100);
             lbLibelleAvion.Margin = new Padding(4);
             lbLibelleAvion.Name = "lbLibelleAvion";
-            lbLibelleAvion.Size = new Size(379, 24);
+            lbLibelleAvion.Size = new Size(359, 24);
             lbLibelleAvion.TabIndex = 46;
             lbLibelleAvion.Text = "Not Yet Available";
             lbLibelleAvion.TextAlign = ContentAlignment.MiddleLeft;
@@ -746,7 +757,7 @@ namespace FlightRecPlugin
             panelAircraftTypeIcon.BackColor = Color.White;
             panelAircraftTypeIcon.BackgroundImageLayout = ImageLayout.Stretch;
             panelAircraftTypeIcon.BorderStyle = BorderStyle.Fixed3D;
-            panelAircraftTypeIcon.Location = new Point(464, 3);
+            panelAircraftTypeIcon.Location = new Point(444, 3);
             panelAircraftTypeIcon.Name = "panelAircraftTypeIcon";
             tableLayoutPanel3.SetRowSpan(panelAircraftTypeIcon, 2);
             panelAircraftTypeIcon.Size = new Size(69, 58);
@@ -761,11 +772,56 @@ namespace FlightRecPlugin
             lbEndICAO.Location = new Point(295, 132);
             lbEndICAO.Margin = new Padding(4);
             lbEndICAO.Name = "lbEndICAO";
-            lbEndICAO.Size = new Size(159, 24);
+            lbEndICAO.Size = new Size(139, 24);
             lbEndICAO.TabIndex = 49;
             lbEndICAO.Text = "Opt: End ICAO";
             lbEndICAO.TextAlign = ContentAlignment.MiddleRight;
             lbEndICAO.Click += lbEndICAO_Click;
+            // 
+            // ledCheckCallsign
+            // 
+            ledCheckCallsign.Color = Color.LightGray;
+            ledCheckCallsign.Location = new Point(519, 3);
+            ledCheckCallsign.Name = "ledCheckCallsign";
+            ledCheckCallsign.On = true;
+            ledCheckCallsign.Size = new Size(14, 26);
+            ledCheckCallsign.TabIndex = 52;
+            // 
+            // ledCheckImmat
+            // 
+            ledCheckImmat.Color = Color.LightGray;
+            ledCheckImmat.Location = new Point(519, 35);
+            ledCheckImmat.Name = "ledCheckImmat";
+            ledCheckImmat.On = true;
+            ledCheckImmat.Size = new Size(14, 26);
+            ledCheckImmat.TabIndex = 53;
+            // 
+            // ledCheckFreight
+            // 
+            ledCheckFreight.Color = Color.LightGray;
+            ledCheckFreight.Location = new Point(519, 67);
+            ledCheckFreight.Name = "ledCheckFreight";
+            ledCheckFreight.On = true;
+            ledCheckFreight.Size = new Size(14, 26);
+            ledCheckFreight.TabIndex = 54;
+            // 
+            // ledCheckAircraft
+            // 
+            ledCheckAircraft.Color = Color.LightGray;
+            ledCheckAircraft.Location = new Point(519, 99);
+            ledCheckAircraft.Name = "ledCheckAircraft";
+            ledCheckAircraft.On = true;
+            ledCheckAircraft.Size = new Size(14, 26);
+            ledCheckAircraft.TabIndex = 55;
+            // 
+            // ledCheckPayload
+            // 
+            ledCheckPayload.Color = Color.LightGray;
+            ledCheckPayload.Location = new Point(519, 131);
+            ledCheckPayload.Name = "ledCheckPayload";
+            ledCheckPayload.On = true;
+            ledCheckPayload.Size = new Size(14, 26);
+            ledCheckPayload.TabIndex = 56;
             // 
             // btnReset
             // 
@@ -955,5 +1011,10 @@ namespace FlightRecPlugin
         private TableLayoutPanel tableLayoutPanel3;
         private Label label6;
         private Panel panelAircraftTypeIcon;
+        private SimAddonControls.LedBulb ledCheckCallsign;
+        private SimAddonControls.LedBulb ledCheckImmat;
+        private SimAddonControls.LedBulb ledCheckFreight;
+        private SimAddonControls.LedBulb ledCheckAircraft;
+        private SimAddonControls.LedBulb ledCheckPayload;
     }
 }

@@ -13,6 +13,7 @@ using System.Windows.Forms.VisualStyles;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace FlightRecPlugin
 {
@@ -792,6 +793,13 @@ namespace FlightRecPlugin
                     //int result = await urlDeserializer.PushFlightAsync(data);
                     if (0 != result)
                     {
+                        //store last plane used
+                        string SimPlane = lbLibelleAvion.Text;
+                        Properties.Settings.Default.lastSimPlane = SimPlane;
+                        // #34 sauvegarder la derniere immat utilisée
+                        Settings.Default.lastImmat = cbImmat.Text;
+                        Settings.Default.Save();
+
                         //si tout va bien...
                         ShowMsgBox("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder", MessageBoxButtons.OK);
 
@@ -1128,9 +1136,8 @@ namespace FlightRecPlugin
                     }
 
 
-                    // #34 sauvegarder la derniere immat utilisée
-                    Settings.Default.lastImmat = cbImmat.Text;
-                    Settings.Default.Save();
+
+                    checkParameters();
 
                     //si cet avion est marqué comme deja en vol, c'est par l'utilisateur courant. 
                     //marque cet avion comme n'etant plus en vol.
@@ -1177,6 +1184,59 @@ namespace FlightRecPlugin
             SimEvent(SimEventArg.EventType.ENGINESTOP);
         }
 
+        private void checkParameters()
+        {
+            string planeNomComplet = data.GetAircraftType();
+
+
+
+            if (tbCallsign.Text == string.Empty)
+            {
+                ledCheckCallsign.Color = Color.Red;
+            }
+            else
+            {
+                ledCheckCallsign.Color = Color.LightGreen;
+            }
+
+
+
+            if (Properties.Settings.Default.lastSimPlane != string.Empty)
+            {
+                bool foundError = false;
+
+                if (planeNomComplet == Properties.Settings.Default.lastSimPlane)
+                {
+                    if (Settings.Default.lastImmat != cbImmat.Text)
+                    {
+                        foundError = true;
+                    }
+                }
+                else
+                {
+                    if (Settings.Default.lastImmat == cbImmat.Text)
+                    {
+                        foundError = true;
+                    }
+                }
+
+                if (foundError)
+                {
+                    lbLibelleAvion.ForeColor = Color.Red;
+                    lbDesignationAvion.ForeColor = Color.Red;
+                    ledCheckAircraft.Color = Color.Red;
+                    ledCheckImmat.Color = Color.Red;
+                }
+                else
+                {
+                    lbLibelleAvion.ForeColor = Color.White;
+                    lbDesignationAvion.ForeColor = Color.White;
+                    ledCheckAircraft.Color = Color.LightGreen;
+                    ledCheckImmat.Color = Color.LightGreen;
+                }
+            }
+        }
+
         public async void ReadStaticValues()
         {
             try
@@ -1186,6 +1246,7 @@ namespace FlightRecPlugin
                     Logger.WriteLine("Reading static values");
                     //commence à lire qq variables du simu : fuel & cargo, immat avion...
                     this.lbPayload.Text = data.GetPayload().ToString("0.00");
+                    ledCheckPayload.Color = Color.LightGreen;
 
                     //recupere l'emplacement courant :
                     _currentPosition = data.GetPosition(); ;
@@ -1193,6 +1254,8 @@ namespace FlightRecPlugin
                     //Recupere le libellé de l'avion
                     string planeNomComplet = data.GetAircraftType();
                     lbLibelleAvion.Text = planeNomComplet;
+
+                    checkParameters();
 
                     double lat = _currentPosition.Location.Latitude;
                     double lon = _currentPosition.Location.Longitude;
@@ -1209,17 +1272,20 @@ namespace FlightRecPlugin
                             {
                                 // Votre code pour utiliser les avions et les aéroports
                                 float fretOnAirport = await data.GetFretOnAirport(localAirport.ident);
-                                lbFret.Text = fretOnAirport.ToString() + " Kg available " + startAirportname;
+                                //lbFret.Text = fretOnAirport.ToString() + " Kg available " + startAirportname;
 
                                 if (fretOnAirport > 0)
                                 {
                                     lbFret.Text = "Available freight at " + localAirport.ident + " : " + fretOnAirport.ToString();
                                     Logger.WriteLine(lbFret.Text);
-
+                                    ledCheckFreight.Color = Color.LightGreen;
+                                    ledCheckFreight.On = true;
                                 }
                                 else
                                 {
                                     lbFret.Text = "No freight here";
+                                    ledCheckFreight.Color = Color.LightGreen;
+                                    ledCheckFreight.On = false;
                                 }
 
                             }

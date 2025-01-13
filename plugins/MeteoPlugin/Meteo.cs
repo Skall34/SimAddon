@@ -101,7 +101,7 @@ namespace MeteoPlugin
                 public METARWind(string category, string METARPart)
                 {
                     _category = category;
-                    Regex r = new Regex("^(?<direction>\\S{3})(?<speed>\\d{2,3})(?<gusts>G\\d{2})?KT");
+                    Regex r = new Regex("^(?<direction>\\S{3})(?<speed>\\d{2,3})(?<gusts>G\\d{2})?(?<unit>KT|MPS)");
                     Match result = r.Match(METARPart);
                     if (result.Success)
                     {
@@ -116,7 +116,7 @@ namespace MeteoPlugin
                         {
                             HasGusts = false;
                         }
-                        Unit = METARPart.Substring(METARPart.Length - 2, 2);
+                        Unit = result.Groups["unit"].Value;
                     }
                     else
                     {
