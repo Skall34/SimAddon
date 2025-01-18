@@ -68,6 +68,9 @@ jobs:
     - name: publish ATIS plugin
       run: dotnet publish plugins/ATISPlugin/ATISPlugin.csproj --configuration Release --output publish_output\plugins\3_ATIS
 
+    - name: publish ChartFox plugin
+      run: dotnet publish plugins/ChartFoxPlugin/ChartFoxPlugin.csproj --configuration Release --output publish_output\plugins\4_ChartFox
+
     - name: Upload archive
       uses: actions/upload-artifact@v4.4.3
       with:
