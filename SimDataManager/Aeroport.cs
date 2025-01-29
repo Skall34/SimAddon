@@ -55,6 +55,11 @@ namespace SimDataManager
         {
         }
 
+        public override string ToString()
+        {
+            return fullName;
+        }
+
         private static void initPath()
         {
             // Get the application name

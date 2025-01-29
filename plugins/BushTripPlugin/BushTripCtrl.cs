@@ -159,7 +159,8 @@ namespace BushTripPlugin
                         }
                     }
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logger.WriteLine(ex.Message);
             }
@@ -231,6 +232,33 @@ namespace BushTripPlugin
             return result;
         }
 
+        private async void useFlightPlan()
+        {
+            if (flightPlan != null)
+            {
+                //recupére la declinaison magnétique du premier point du plan de vol
+                try
+                {
+                    declinaison = (double)await NavigationHelper.GetMagneticDeclinaison(flightPlan.Item.Waypoints[0].Pos.Lat, flightPlan.Item.Waypoints[0].Pos.Lon);
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("error when getting magnetic declinaison :" + ex.Message);
+                }
+                lastWaypointIndex = flightPlan.Item.Waypoints.Length - 1;
+                refreshFlightBook();
+                double distance = computeFlightLength();
+                lblDistanceTotale.Text = "Total distance :" + distance.ToString() + " miles";
+                tsGlobalStatus.Text = "Flight plan loaded";
+                btnReset.Enabled = true;
+                btnSaveFlightPlan.Enabled = true;
+            }
+            else
+            {
+                Logger.WriteLine("Error when loading flight plan");
+            }
+        }
+
         private async void btnImportFlightPLan_Click(object sender, EventArgs e)
         {
 
@@ -266,29 +294,7 @@ namespace BushTripPlugin
                     flightPlan.CurrentStep = waypointIndex;
                     Logger.WriteLine("Fichier XML chargé avec succès !");
                 }
-                if (flightPlan != null)
-                {
-                    //recupére la declinaison magnétique du premier point du plan de vol
-                    try
-                    {
-                        declinaison = (double)await NavigationHelper.GetMagneticDeclinaison(flightPlan.Item.Waypoints[0].Pos.Lat, flightPlan.Item.Waypoints[0].Pos.Lon);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WriteLine("error when getting magnetic declinaison :" + ex.Message);
-                    }
-                    lastWaypointIndex = flightPlan.Item.Waypoints.Length - 1;
-                    refreshFlightBook();
-                    double distance = computeFlightLength();
-                    lblDistanceTotale.Text = "Total distance :" + distance.ToString() + " miles";
-                    tsGlobalStatus.Text = "Flight plan loaded";
-                    btnReset.Enabled = true;
-                    btnSaveFlightPlan.Enabled = true;
-                }
-                else
-                {
-                    Logger.WriteLine("Error when loading flight plan");
-                }
+                useFlightPlan();
 
             }
 
@@ -356,6 +362,58 @@ namespace BushTripPlugin
                 //save the current status in the flight plan
                 saveFlightPlan();
                 refreshFlightBook();
+            }
+        }
+
+        private LittleNavmap createFlightPlan(Aeroport dep, Aeroport arr)
+        {
+            LittleNavmap fp = new LittleNavmap();
+            LittleNavmapFlightplan lfp = new LittleNavmapFlightplan();
+            lfp.SimData = "simaddon";
+            lfp.NavData = "simaddon";
+            lfp.Waypoints = new LittleNavmapFlightplanWaypoint[2];
+            lfp.Waypoints[0] = new LittleNavmapFlightplanWaypoint();
+            lfp.Waypoints[1] = new LittleNavmapFlightplanWaypoint();
+            lfp.Waypoints[0].Name = dep.name;
+            lfp.Waypoints[0].Ident = dep.ident;
+            lfp.Waypoints[0].Type = "AIRPORT";
+            lfp.Waypoints[0].Pos = new LittleNavmapFlightplanWaypointPos();
+            lfp.Waypoints[0].Pos.Lon = dep.longitude_deg;
+            lfp.Waypoints[0].Pos.LonSpecified= true;
+            lfp.Waypoints[0].Pos.Lat = dep.latitude_deg;
+            lfp.Waypoints[0].Pos.LatSpecified= true;
+            lfp.Waypoints[0].Pos.AltSpecified = false;
+
+            lfp.Waypoints[1].Name = arr.name;
+            lfp.Waypoints[1].Ident = arr.ident;
+            lfp.Waypoints[1].Type = "AIRPORT";
+            lfp.Waypoints[1].Pos = new LittleNavmapFlightplanWaypointPos();
+            lfp.Waypoints[1].Pos.Lon = arr.longitude_deg;
+            lfp.Waypoints[1].Pos.LonSpecified = true;
+            lfp.Waypoints[1].Pos.Lat = arr.latitude_deg;
+            lfp.Waypoints[1].Pos.LatSpecified = true;
+            lfp.Waypoints[1].Pos.AltSpecified = false;
+
+            fp.Item = lfp;
+            fp.CurrentStep = 0;
+
+            return fp;
+        }
+
+        private void btnCreateTrip_Click(object sender, EventArgs e)
+        {
+            BushtripCreator creator = new BushtripCreator(data);
+            DialogResult result =  creator.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                Aeroport departure = creator.Departure;
+                Aeroport arrival = creator.Arrival;
+
+                flightPlan = createFlightPlan(departure,arrival);
+                filename = "autogen.fplan";
+                //saveFlightPlan();
+                useFlightPlan();
+
             }
         }
     }
