@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimDataManager;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,11 +9,13 @@ using System.Net.Quic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FlightRecPlugin
 {
     public partial class SaveFlightDialog : Form
     {
+        simData data;
         public string Immat
         {
             get
@@ -155,10 +158,11 @@ namespace FlightRecPlugin
         }
 
 
-        public SaveFlightDialog()
+        public SaveFlightDialog(simData _data)
         {
             InitializeComponent();
             //set default values for properties
+            data = _data;
             dtDeparture.Value = DateTime.Now;
             dtArrival.Value = DateTime.Now;
             valNote.Value = 8;
@@ -167,6 +171,23 @@ namespace FlightRecPlugin
         private void btnSave_Click(object sender, EventArgs e)
         {
             bool result = true;
+
+            //check the departure ICAO
+            Aeroport? start = data.aeroports.Find(a => a.ident.ToLower() == DepartureICAO.ToLower());
+            if (start == null)
+            {
+                MessageBox.Show("Can't find start ICAO in database");
+                result = false;
+            }
+
+            //check the departure ICAO
+            Aeroport? end = data.aeroports.Find(a => a.ident.ToLower() == ArrivalICAO.ToLower());
+            if (end == null)
+            {
+                MessageBox.Show("Can't find end ICAO in database");
+                result = false;
+            }
+
             if (Mission == string.Empty)
             {
                 MessageBox.Show("Please select a mission");

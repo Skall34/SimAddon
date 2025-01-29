@@ -14,6 +14,7 @@ using System.IO;
 using System.Drawing.Imaging;
 using System.Threading.Tasks;
 using System.Text;
+using FSUIPC;
 
 namespace FlightRecPlugin
 {
@@ -734,7 +735,7 @@ namespace FlightRecPlugin
 
                 string fullComment = tbCommentaires.Text;
                 //crée un dictionnaire des valeurs à envoyer
-                SaveFlightDialog saveFlightDialog = new SaveFlightDialog()
+                SaveFlightDialog saveFlightDialog = new SaveFlightDialog(data)
                 {
                     Missions = missions,
                     Planes = immats
@@ -826,7 +827,7 @@ namespace FlightRecPlugin
             catch (Exception ex)
             {
                 //in case if check error, or exception durong save, show a messagebox containing the error message
-                ShowMsgBox("Exception caught ", ex.Message, MessageBoxButtons.OK);
+                ShowMsgBox( ex.Message, "Exception caught ", MessageBoxButtons.OK);
             }
             this.Cursor = Cursors.Default;
             return saveOK;
@@ -932,7 +933,9 @@ namespace FlightRecPlugin
 
         private void BtnSubmit_Click(object sender, EventArgs e)
         {
+            btnSubmit.Enabled = false;
             saveFlight();
+            btnSubmit.Enabled = true;
         }
 
         private void CbNote_MouseHover(object sender, EventArgs e)
