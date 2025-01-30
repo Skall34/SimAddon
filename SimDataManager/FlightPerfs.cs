@@ -1,4 +1,6 @@
-﻿namespace SimDataManager
+﻿using System;
+
+namespace SimDataManager
 {
     public class FlightPerfs
     {
@@ -32,6 +34,9 @@
 
         public double takeOffWeight { get; set; }
         public double landingWeight { get; set; }
+
+        public DateTime takeOffTime{ get; set; }
+        public DateTime landingTime { get; set; }
 
         public FlightPerfs()
         {
@@ -99,6 +104,8 @@
             result += " Landing vertical speed : " + landingVSpeed.ToString("0.00") + " fpm ";
             result += " Takeoff weight : " + takeOffWeight.ToString("0.00") + " Kg ";
             result += " Landing weight : " + landingWeight.ToString("0.00") + " Kg ";
+            result += " OFF : " + takeOffTime.ToShortTimeString();
+            result += " ON : " + landingTime.ToShortTimeString();
 
             return result;
         }

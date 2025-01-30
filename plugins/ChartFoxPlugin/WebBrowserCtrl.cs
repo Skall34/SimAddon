@@ -1,8 +1,11 @@
-﻿using SimAddonLogger;
+﻿using Microsoft.Web.WebView2.Core;
+using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
 using System.Net.Http.Json;
+using System.Reflection;
 using System.Text.Json;
+using System.Windows.Forms;
 
 namespace ChartFoxPlugin
 {
@@ -98,7 +101,17 @@ namespace ChartFoxPlugin
         }
         private async void InitializeWebView2()
         {
-            await webView21.EnsureCoreWebView2Async(null); // Initializes the control
+            // Get the application name
+            string appName = Assembly.GetEntryAssembly().GetName().Name;
+
+            // Get the path to the user's AppData folder
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            // Combine the AppData path with the folder name
+            string fullPath = Path.Combine(appDataPath, appName);
+
+            CoreWebView2Environment cwv2Environment = await CoreWebView2Environment.CreateAsync(null, fullPath, new CoreWebView2EnvironmentOptions());
+            await webView21.EnsureCoreWebView2Async(cwv2Environment);
             webView21.Source = new Uri(settings.Url);
         }
     }

@@ -108,7 +108,7 @@ namespace MeteoPlugin
 
         public string getName()
         {
-            return "Meteo";
+            return "METAR";
         }
 
         public void init(ref simData _data)

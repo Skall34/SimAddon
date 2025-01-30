@@ -30,10 +30,31 @@ namespace BushTripPlugin
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Departure = (Aeroport)comboBox1.SelectedItem;
-            Arrival = (Aeroport)lbArrivals.SelectedItem;
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            bool OK = true;
+            if (comboBox1.SelectedItem != null)
+            {
+                Departure = (Aeroport)comboBox1.SelectedItem;
+            }
+            else
+            {
+                MessageBox.Show("Please select a departure");
+                OK = false;
+            }
+            if (lbArrivals.SelectedItem != null)
+            {
+                Arrival = (Aeroport)lbArrivals.SelectedItem;
+            }
+            else
+            {
+                MessageBox.Show("Please select a destination");
+                OK = false;
+            }
+
+            if (OK)
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
         }
 
         private void groupBox2_Enter(object sender, EventArgs e)

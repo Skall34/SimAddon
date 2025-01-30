@@ -303,6 +303,8 @@ namespace FlightRecPlugin
                         onGround = false;
                         // on veut afficher la date
                         _airborn = DateTime.Now;
+                        flightPerfs.takeOffTime = _airborn;
+
                         if (lbTimeAirborn.Text == "--:--")
                         {
                             this.lbTimeAirborn.Text = _airborn.ToString("HH:mm");
@@ -333,6 +335,8 @@ namespace FlightRecPlugin
                         flightPerfs.landingWeight = currentFlightStatus.planeWeight;
 
                         _notAirborn = DateTime.Now;
+                        flightPerfs.landingTime = _notAirborn;
+
                         if (lbTimeOnGround.Text == "--:--")
                         {
                             this.lbTimeOnGround.Text = _notAirborn.ToString("HH:mm");
