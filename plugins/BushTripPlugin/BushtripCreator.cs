@@ -109,13 +109,19 @@ namespace BushTripPlugin
             double hours = flightTime.Hour + (double)flightTime.Minute / 60;
             double miles = hours * speed;
             Aeroport start = (Aeroport)comboBox1.SelectedItem;
-            foreach (Aeroport a in data.aeroports)
-            {
-                double distance = a.DistanceTo(start.latitude_deg,start.longitude_deg);
-                if ((distance<miles*1.1)&&(distance>miles*0.9))
+
+            if (start != null) { 
+                foreach (Aeroport a in data.aeroports)
                 {
-                    lbArrivals.Items.Add(a);
+                    double distance = a.DistanceTo(start.latitude_deg,start.longitude_deg);
+                    if ((distance<miles*1.1)&&(distance>miles*0.9))
+                    {
+                        lbArrivals.Items.Add(a);
+                    }
                 }
+            } else
+            {
+                MessageBox.Show("ICAO départ non renseigné !", "SimAddon", MessageBoxButtons.OK,MessageBoxIcon.Warning); ;
             }
         }
     }
