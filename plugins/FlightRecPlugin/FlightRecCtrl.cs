@@ -849,7 +849,7 @@ namespace FlightRecPlugin
 
             if (res == DialogResult.OK)
             {
-
+                localAirport = null;
                 lbStartIata.Text = string.Empty;
                 lbStartFuel.Text = string.Empty;
                 lbStartPosition.Text = string.Empty;
