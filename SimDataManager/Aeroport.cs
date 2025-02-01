@@ -7,12 +7,55 @@ using SimAddonLogger;
 
 //using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Net;
+using System.Linq;
 
 namespace SimDataManager
 {
     public class Fret
     {
         public float fret { get; set; }
+    }
+
+    public class lien()
+    {
+        private Aeroport _Departure;
+        public  Aeroport Departure{ get {
+                return _Departure;
+            }
+            set
+            {
+                _Departure = value;
+                if (_Arrival!=null)
+                {
+                    _Length = _Departure.DistanceTo(_Arrival);
+                }
+            }
+        }
+        private Aeroport _Arrival;
+        public Aeroport Arrival { get
+            {
+                return _Arrival;
+            }
+
+            set
+            {
+                _Arrival = value;
+                if (_Departure != null)
+                {
+                    _Length = _Departure.DistanceTo(_Arrival);
+                }
+            }
+        }
+
+        private double _Length = double.MaxValue;
+        public double Length { get
+            {
+                return _Length;
+            }
+        }
     }
 
     public class Aeroport
@@ -37,6 +80,7 @@ namespace SimDataManager
             } 
         }
 
+        //Needed to sort an airport list by distance
         private double _distance;
         public double distance
         {
@@ -46,13 +90,15 @@ namespace SimDataManager
             }
         }
 
-        private const string DBFILE = "aeroports.json";
+        public List<Aeroport> AirportsInRange;
 
+        private const string DBFILE = "aeroports.json";
         private static string DBFILEPATH;
 
 
         public Aeroport()
         {
+            AirportsInRange = new List<Aeroport>();
         }
 
         public override string ToString()
@@ -88,9 +134,14 @@ namespace SimDataManager
 
         public double DistanceTo(double targetLatitude, double targetLongitude)
         {
-            double distance = NavigationHelper.GetDistance(this.latitude_deg,this.longitude_deg,targetLatitude,targetLongitude);
+            double _dist = NavigationHelper.GetDistance(this.latitude_deg,this.longitude_deg,targetLatitude,targetLongitude);
+            return _dist;
+        }
 
-            return distance;
+        public double DistanceTo(Aeroport target)
+        {
+            double _dist = NavigationHelper.GetDistance(this.latitude_deg, this.longitude_deg, target.latitude_deg, target.longitude_deg);
+            return _dist;
         }
 
         public static Aeroport FindClosestAirport(List<Aeroport> airports, double targetLatitude, double targetLongitude)
@@ -100,30 +151,55 @@ namespace SimDataManager
 
             foreach (var airport in airports)
             {
-                double distance = airport.DistanceTo(targetLatitude, targetLongitude);
-                if (distance < shortestDistance)
+                double _dist = airport.DistanceTo(targetLatitude, targetLongitude);
+                if (_dist < shortestDistance)
                 {
-                    shortestDistance = distance;
+                    shortestDistance = _dist;
                     closestAirport = airport;
-                    closestAirport._distance = distance;                  
+                    closestAirport._distance = _dist;                  
                 }
             }
             return closestAirport;
         }
 
+        public Aeroport FindClosestAirport(List<Aeroport> airports)
+        {
+            return Aeroport.FindClosestAirport(airports,this.latitude_deg,this.longitude_deg) ;
+        }
+
         public static List<Aeroport> FindAirportsInRange(List<Aeroport> airports, double targetLatitude, double targetLongitude,uint range)
         {
-            List<Aeroport> airportsInRange = new List<Aeroport>();
+            List<Aeroport> _InRange = new List<Aeroport>();
             foreach (var airport in airports)
             {
-                double distance = airport.DistanceTo(targetLatitude, targetLongitude);
-                if (distance < range)
+                double _dist = airport.DistanceTo(targetLatitude, targetLongitude);
+                if (_dist < range)
                 {
-                    airport._distance = distance;
-                    airportsInRange.Add(airport);
+                    airport._distance = _dist;
+                    _InRange.Add(airport);
                 }
             }
-            return airportsInRange;
+            return _InRange;
+        }
+
+        public int FindAirportsInRange(List<Aeroport> airports, double range)
+        {
+            AirportsInRange.Clear();
+            int num = 0;
+            foreach (var airport in airports)
+            {
+                if (airport != this)
+                {
+                    double _dist = airport.DistanceTo(this);
+                    if (_dist < range)
+                    {
+                        airport._distance = _dist;
+                        AirportsInRange.Add(airport);
+                    }
+                }
+            }
+            AirportsInRange.Sort((a, b) => b.distance.CompareTo(a.distance));
+            return AirportsInRange.Count;
         }
 
 

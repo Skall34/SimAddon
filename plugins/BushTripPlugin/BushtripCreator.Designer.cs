@@ -32,6 +32,10 @@
             btnCancel = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox1 = new GroupBox();
+            checkMultiHop = new CheckBox();
+            btnRandomArrival = new Button();
+            comboBox2 = new ComboBox();
+            label1 = new Label();
             btnRandomDeparture = new Button();
             comboBox1 = new ComboBox();
             lblDeparture = new Label();
@@ -54,7 +58,7 @@
             // btnOK
             // 
             btnOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnOK.Location = new Point(564, 415);
+            btnOK.Location = new Point(564, 527);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(75, 23);
             btnOK.TabIndex = 0;
@@ -65,7 +69,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(483, 415);
+            btnCancel.Location = new Point(483, 527);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 1;
@@ -83,24 +87,71 @@
             tableLayoutPanel1.Location = new Point(12, 12);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 110F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(627, 397);
+            tableLayoutPanel1.Size = new Size(627, 509);
             tableLayoutPanel1.TabIndex = 2;
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(checkMultiHop);
+            groupBox1.Controls.Add(btnRandomArrival);
+            groupBox1.Controls.Add(comboBox2);
+            groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(btnRandomDeparture);
             groupBox1.Controls.Add(comboBox1);
             groupBox1.Controls.Add(lblDeparture);
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(621, 54);
+            groupBox1.Size = new Size(621, 104);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Departure";
+            // 
+            // checkMultiHop
+            // 
+            checkMultiHop.AutoSize = true;
+            checkMultiHop.Location = new Point(11, 50);
+            checkMultiHop.Name = "checkMultiHop";
+            checkMultiHop.Size = new Size(99, 19);
+            checkMultiHop.TabIndex = 6;
+            checkMultiHop.Text = "Multi hop trip";
+            checkMultiHop.UseVisualStyleBackColor = true;
+            checkMultiHop.CheckedChanged += checkMultiHop_CheckedChanged;
+            // 
+            // btnRandomArrival
+            // 
+            btnRandomArrival.Enabled = false;
+            btnRandomArrival.Location = new Point(541, 75);
+            btnRandomArrival.Name = "btnRandomArrival";
+            btnRandomArrival.Size = new Size(75, 23);
+            btnRandomArrival.TabIndex = 5;
+            btnRandomArrival.Text = "Random";
+            btnRandomArrival.UseVisualStyleBackColor = true;
+            btnRandomArrival.Click += btnRandomArrival_Click;
+            // 
+            // comboBox2
+            // 
+            comboBox2.CausesValidation = false;
+            comboBox2.Enabled = false;
+            comboBox2.FormattingEnabled = true;
+            comboBox2.Location = new Point(102, 75);
+            comboBox2.Name = "comboBox2";
+            comboBox2.Size = new Size(433, 23);
+            comboBox2.TabIndex = 4;
+            comboBox2.KeyPress += comboBox_KeyPress;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(6, 78);
+            label1.Name = "label1";
+            label1.Size = new Size(72, 15);
+            label1.TabIndex = 3;
+            label1.Text = "Arrival ICAO";
+            label1.Click += label1_Click;
             // 
             // btnRandomDeparture
             // 
@@ -120,9 +171,7 @@
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(433, 23);
             comboBox1.TabIndex = 1;
-            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
-            comboBox1.TextChanged += comboBox1_TextChanged;
-            comboBox1.KeyPress += comboBox1_KeyPress;
+            comboBox1.KeyPress += comboBox_KeyPress;
             // 
             // lblDeparture
             // 
@@ -137,9 +186,9 @@
             // 
             groupBox2.Controls.Add(lbArrivals);
             groupBox2.Dock = DockStyle.Fill;
-            groupBox2.Location = new Point(3, 153);
+            groupBox2.Location = new Point(3, 203);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(621, 241);
+            groupBox2.Size = new Size(621, 303);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Possible arrivals";
@@ -152,7 +201,7 @@
             lbArrivals.ItemHeight = 15;
             lbArrivals.Location = new Point(3, 19);
             lbArrivals.Name = "lbArrivals";
-            lbArrivals.Size = new Size(615, 219);
+            lbArrivals.Size = new Size(615, 281);
             lbArrivals.TabIndex = 0;
             // 
             // groupBox3
@@ -164,7 +213,7 @@
             groupBox3.Controls.Add(trackBar1);
             groupBox3.Controls.Add(lblSpeed);
             groupBox3.Dock = DockStyle.Fill;
-            groupBox3.Location = new Point(3, 63);
+            groupBox3.Location = new Point(3, 113);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(621, 84);
             groupBox3.TabIndex = 2;
@@ -238,7 +287,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(128, 64, 0);
             CancelButton = btnCancel;
-            ClientSize = new Size(651, 450);
+            ClientSize = new Size(651, 562);
             ControlBox = false;
             Controls.Add(tableLayoutPanel1);
             Controls.Add(btnCancel);
@@ -276,5 +325,9 @@
         private DateTimePicker dateTimePicker1;
         private Button btnRandomDeparture;
         private Button btnSearchFlights;
+        private Button btnRandomArrival;
+        private ComboBox comboBox2;
+        private Label label1;
+        private CheckBox checkMultiHop;
     }
 }

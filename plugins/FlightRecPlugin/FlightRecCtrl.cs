@@ -769,11 +769,7 @@ namespace FlightRecPlugin
 
                 if (saveFlightDialog.ShowDialog() == DialogResult.OK)
                 {
-                    if (isTopMost)
-                    {
-                        //reactive le always on top
-                        parentForm.TopMost = true;
-                    }
+
                     Dictionary<string, string> values = new Dictionary<string, string>();
                     UrlDeserializer.SaveFlightQuery flightdata = new UrlDeserializer.SaveFlightQuery
                     {
@@ -825,6 +821,12 @@ namespace FlightRecPlugin
                 {
                     //save canceled
                     saveOK = false;
+                }
+
+                if (isTopMost)
+                {
+                    //reactive le always on top
+                    parentForm.TopMost = true;
                 }
 
             }

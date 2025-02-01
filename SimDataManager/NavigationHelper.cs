@@ -113,8 +113,12 @@ namespace SimDataManager
             return Math.Floor(azimut);
         }
 
+        public static async Task<double> GetApproxNavRouteAsync(double lat1, double lon1, double lat2, double lon2)
+        {
+            return await GetNavRouteAsync(lat1, lon1, lat2, lon2, 0);
+        }
 
-        public static async Task<double?> GetMagneticDeclinaison(double latitude, double longitude, double altitude = 0, int year = 2024)
+        public static async Task<double> GetMagneticDeclinaison(double latitude, double longitude, double altitude = 0, int year = 2025)
         {
             // Créer une instance HttpClient
             using (HttpClient client = new HttpClient())
@@ -139,20 +143,20 @@ namespace SimDataManager
                         JObject json = JObject.Parse(content);
 
                         // Extraire la déclinaison magnétique en degrés
-                        double? declinaison = (double?)json["result"][0]["declination"];
+                        double declinaison = (double)json["result"][0]["declination"];
 
                         return declinaison;
                     }
                     else
                     {
                         Logger.WriteLine($"Erreur lors de la requête : {response.StatusCode}");
-                        return null;
+                        return 0;
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.WriteLine($"Exception : {ex.Message}");
-                    return null;
+                    return 0;
                 }
             }
         }

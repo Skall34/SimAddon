@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using SimAddonLogger;
 using SimAddonControls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Runtime.Intrinsics.Arm;
+using System.Globalization;
 
 namespace BushTripPlugin
 {
@@ -244,6 +246,7 @@ namespace BushTripPlugin
                 catch (Exception ex)
                 {
                     Logger.WriteLine("error when getting magnetic declinaison :" + ex.Message);
+                    declinaison = 0;
                 }
                 lastWaypointIndex = flightPlan.Item.Waypoints.Length - 1;
                 refreshFlightBook();
@@ -307,8 +310,24 @@ namespace BushTripPlugin
 
         private void saveFlightPlan()
         {
-            string json = JsonConvert.SerializeObject(flightPlan, Formatting.Indented);
-            File.WriteAllText(filename, json);
+            if (filename.EndsWith(".json"))
+            {
+                string json = JsonConvert.SerializeObject(flightPlan, Formatting.Indented);
+                File.WriteAllText(filename, json);
+            }
+            if (filename.EndsWith(".csv"))
+            {
+                using (StreamWriter writer = new StreamWriter(filename))
+                {
+                    writer.WriteLine("Name,Latitude,Longitude"); // Header
+
+                    foreach (LittleNavmapFlightplanWaypoint waypoint in flightPlan.Item.Waypoints)
+                    {
+                        writer.WriteLine($"{waypoint.Name} ({waypoint.Ident}),{waypoint.Pos.Lat.ToString(CultureInfo.InvariantCulture)},{waypoint.Pos.Lon.ToString(CultureInfo.InvariantCulture)}");
+                    }
+                }
+
+            }
         }
 
         private void btnSaveFlightPlan_Click(object sender, EventArgs e)
@@ -317,7 +336,7 @@ namespace BushTripPlugin
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.FileName = filename;
-                saveFileDialog.Filter = "flight plan|*.fplan";
+                saveFileDialog.Filter = "flight plan|*.fplan|csv|*.csv";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filename = saveFileDialog.FileName;
@@ -365,55 +384,64 @@ namespace BushTripPlugin
             }
         }
 
-        private LittleNavmap createFlightPlan(Aeroport dep, Aeroport arr)
+        private LittleNavmap createFlightPlan(List<Aeroport> trip)
         {
+            
             LittleNavmap fp = new LittleNavmap();
             LittleNavmapFlightplan lfp = new LittleNavmapFlightplan();
             lfp.SimData = "simaddon";
             lfp.NavData = "simaddon";
-            lfp.Waypoints = new LittleNavmapFlightplanWaypoint[2];
-            lfp.Waypoints[0] = new LittleNavmapFlightplanWaypoint();
-            lfp.Waypoints[1] = new LittleNavmapFlightplanWaypoint();
-            lfp.Waypoints[0].Name = dep.name;
-            lfp.Waypoints[0].Ident = dep.ident;
-            lfp.Waypoints[0].Type = "AIRPORT";
-            lfp.Waypoints[0].Pos = new LittleNavmapFlightplanWaypointPos();
-            lfp.Waypoints[0].Pos.Lon = dep.longitude_deg;
-            lfp.Waypoints[0].Pos.LonSpecified= true;
-            lfp.Waypoints[0].Pos.Lat = dep.latitude_deg;
-            lfp.Waypoints[0].Pos.LatSpecified= true;
-            lfp.Waypoints[0].Pos.AltSpecified = false;
-
-            lfp.Waypoints[1].Name = arr.name;
-            lfp.Waypoints[1].Ident = arr.ident;
-            lfp.Waypoints[1].Type = "AIRPORT";
-            lfp.Waypoints[1].Pos = new LittleNavmapFlightplanWaypointPos();
-            lfp.Waypoints[1].Pos.Lon = arr.longitude_deg;
-            lfp.Waypoints[1].Pos.LonSpecified = true;
-            lfp.Waypoints[1].Pos.Lat = arr.latitude_deg;
-            lfp.Waypoints[1].Pos.LatSpecified = true;
-            lfp.Waypoints[1].Pos.AltSpecified = false;
+            lfp.Waypoints = new LittleNavmapFlightplanWaypoint[trip.Count];
+            for (int i = 0; i < trip.Count; i++)
+            {
+                lfp.Waypoints[i] = new LittleNavmapFlightplanWaypoint();
+                lfp.Waypoints[i].Name = trip[i].name;
+                lfp.Waypoints[i].Ident = trip[i].ident;
+                lfp.Waypoints[i].Type = "AIRPORT";
+                lfp.Waypoints[i].Pos = new LittleNavmapFlightplanWaypointPos();
+                lfp.Waypoints[i].Pos.Lon = trip[i].longitude_deg;
+                lfp.Waypoints[i].Pos.LonSpecified = true;
+                lfp.Waypoints[i].Pos.Lat = trip[i].latitude_deg;
+                lfp.Waypoints[i].Pos.LatSpecified = true;
+                lfp.Waypoints[i].Pos.AltSpecified = false;
+            }
 
             fp.Item = lfp;
             fp.CurrentStep = 0;
-
+            waypointIndex = 0;
             return fp;
         }
 
         private void btnCreateTrip_Click(object sender, EventArgs e)
         {
+            bool isTopMost = false;
+            Form parentForm = (Form)this.TopLevelControl;
+            //en cas de "always on top"
+            if (parentForm.TopMost)
+            {
+                //temporairement desactive la always on top
+                isTopMost = true;
+                parentForm.TopMost = false;
+            }
+
+
             BushtripCreator creator = new BushtripCreator(data);
             DialogResult result =  creator.ShowDialog();
             if (result == DialogResult.OK)
             {
-                Aeroport departure = creator.Departure;
-                Aeroport arrival = creator.Arrival;
+                List<Aeroport> trip = creator.Trip;
 
-                flightPlan = createFlightPlan(departure,arrival);
+                flightPlan = createFlightPlan(trip);
                 filename = "autogen.fplan";
                 //saveFlightPlan();
                 useFlightPlan();
 
+            }
+            
+            if (isTopMost)
+            {
+                //reactive le always on top
+                parentForm.TopMost = true;
             }
         }
     }
