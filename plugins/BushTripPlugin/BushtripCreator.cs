@@ -268,26 +268,29 @@ namespace BushTripPlugin
 
         private void comboBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            ComboBox comboBox = sender as ComboBox;
-            searched = comboBox.Text.ToLower();
-            if (data != null)
+            if (e.KeyChar != (char)Keys.Back)
             {
-                // search = comboBox1.Text;
-                List<Aeroport> possible = data.aeroports.FindAll(a => (a.fullName.ToLower().Contains(searched)));
-                comboBox.Items.Clear();
-                if (possible.Count > 0)
+                ComboBox comboBox = sender as ComboBox;
+                searched = comboBox.Text.ToLower();
+                if (data != null)
                 {
-                    comboBox.Items.AddRange(possible.ToArray());
-                    comboBox.DroppedDown = true;
+                    // search = comboBox1.Text;
+                    List<Aeroport> possible = data.aeroports.FindAll(a => (a.fullName.ToLower().Contains(searched)));
+                    comboBox.Items.Clear();
+                    if (possible.Count > 0)
+                    {
+                        comboBox.Items.AddRange(possible.ToArray());
+                        comboBox.DroppedDown = true;
+                    }
+                    else
+                    {
+                    }
+                    comboBox.SelectionStart = comboBox.Text.Length;
                 }
                 else
                 {
+                    MessageBox.Show("No airport database loaded");
                 }
-                comboBox.SelectionStart = comboBox.Text.Length;
-            }
-            else
-            {
-                MessageBox.Show("No airport database loaded");
             }
         }
 
