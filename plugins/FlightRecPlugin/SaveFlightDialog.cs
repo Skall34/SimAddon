@@ -1,4 +1,5 @@
-﻿using SimDataManager;
+﻿using SimAddonLogger;
+using SimDataManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -173,20 +174,39 @@ namespace FlightRecPlugin
             bool result = true;
 
             //check the departure ICAO
-            Aeroport? start = data.aeroports.Find(a => a.ident.ToLower() == DepartureICAO.ToLower());
-            if (start == null)
+            if (data.aeroports != null)
+            {
+                Aeroport? start = data.aeroports.Find(a => a.ident.ToLower() == DepartureICAO.ToLower());
+                if (start == null)
+                {
+                    MessageBox.Show("Can't find start ICAO in database");
+                    result = false;
+                }
+            }
+            else
             {
                 MessageBox.Show("Can't find start ICAO in database");
+                Logger.WriteLine("can't check departure, aeroport DB is empty");
                 result = false;
             }
 
-            //check the departure ICAO
-            Aeroport? end = data.aeroports.Find(a => a.ident.ToLower() == ArrivalICAO.ToLower());
-            if (end == null)
+            if (data.aeroports != null)
             {
-                MessageBox.Show("Can't find end ICAO in database");
+                //check the departure ICAO
+                Aeroport? end = data.aeroports.Find(a => a.ident.ToLower() == ArrivalICAO.ToLower());
+                if (end == null)
+                {
+                    MessageBox.Show("Can't find end ICAO in database");
+                    result = false;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Can't find start ICAO in database");
+                Logger.WriteLine("can't check departure, aeroport DB is empty");
                 result = false;
             }
+
 
             if (Mission == string.Empty)
             {
