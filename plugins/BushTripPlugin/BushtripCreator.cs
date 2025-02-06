@@ -1,4 +1,6 @@
-﻿using SimDataManager;
+﻿using Microsoft.VisualBasic.Logging;
+using SimAddonLogger;
+using SimDataManager;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -101,14 +103,23 @@ namespace BushTripPlugin
             if (data != null)
             {
                 int nbAirports = data.aeroports.Count;
-                int choses = Random.Shared.Next(nbAirports);
-                Aeroport a = data.aeroports[choses];
-                comboBox1.Items.Clear();
-                comboBox1.Items.Add(a);
-                comboBox1.SelectedIndex = 0;
+                if (nbAirports > 0)
+                {
+                    int choses = Random.Shared.Next(nbAirports);
+                    Aeroport a = data.aeroports[choses];
+                    comboBox1.Items.Clear();
+                    comboBox1.Items.Add(a);
+                    comboBox1.SelectedIndex = 0;
+                }
+                else
+                {
+                    Logger.WriteLine("No Airport database loaded");
+                    MessageBox.Show("No airport database loaded");
+                }
             }
             else
             {
+                Logger.WriteLine("No Airport database loaded");
                 MessageBox.Show("No airport database loaded");
             }
         }
@@ -253,14 +264,23 @@ namespace BushTripPlugin
             if (data != null)
             {
                 int nbAirports = data.aeroports.Count;
-                int choses = Random.Shared.Next(nbAirports);
-                Aeroport a = data.aeroports[choses];
-                comboBox2.Items.Clear();
-                comboBox2.Items.Add(a);
-                comboBox2.SelectedIndex = 0;
+                if (nbAirports > 0)
+                {
+                    int choses = Random.Shared.Next(nbAirports);
+                    Aeroport a = data.aeroports[choses];
+                    comboBox2.Items.Clear();
+                    comboBox2.Items.Add(a);
+                    comboBox2.SelectedIndex = 0;
+                }
+                else
+                {
+                    Logger.WriteLine("No airport database loaded");
+                    MessageBox.Show("No airport database loaded");
+                }
             }
             else
             {
+                Logger.WriteLine("No airport database loaded");
                 MessageBox.Show("No airport database loaded");
             }
 
