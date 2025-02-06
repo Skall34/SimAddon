@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Net;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace SimDataManager
 {
@@ -90,6 +91,7 @@ namespace SimDataManager
             }
         }
 
+        [IgnoreDataMember]
         public List<Aeroport> AirportsInRange;
 
         private const string DBFILE = "aeroports.json";
