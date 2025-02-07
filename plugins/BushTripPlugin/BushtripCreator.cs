@@ -141,17 +141,26 @@ namespace BushTripPlugin
 
                 //in this short list, find the one closest to the destination.
                 Aeroport Next = arrival.FindClosestAirport(departure.AirportsInRange);
-                localRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, Next.latitude_deg, Next.longitude_deg);
-                ecart = Math.Abs((localRoute - globalRoute) % 360);
-                while ((ecart > 90) && (Next != null))
+                if (Next != null)
                 {
-                    departure.AirportsInRange.Remove(Next);
-                    Next = arrival.FindClosestAirport(departure.AirportsInRange);
-                    if (Next != null)
+                    localRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, Next.latitude_deg, Next.longitude_deg);
+                    ecart = Math.Abs((localRoute - globalRoute) % 360);
+
+                    //supprime tous les aeroports qui ne sont pas dans la bonne direction, par rapport à ou on veut aller.
+                    while ((ecart > 90) && (Next != null))
                     {
-                        localRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, Next.latitude_deg, Next.longitude_deg);
-                        ecart = Math.Abs((localRoute - globalRoute) % 360);
+                        departure.AirportsInRange.Remove(Next);
+                        Next = arrival.FindClosestAirport(departure.AirportsInRange);
+                        if (Next != null)
+                        {
+                            localRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, Next.latitude_deg, Next.longitude_deg);
+                            ecart = Math.Abs((localRoute - globalRoute) % 360);
+                        }
                     }
+                }
+                else
+                {
+                    Logger.WriteLine("No next airport near " + arrival.name+" from airports near "+departure.name);
                 }
 
                 if (Next != null)
@@ -181,17 +190,26 @@ namespace BushTripPlugin
                                 departure.AirportsInRange.Remove(Next);
 
                                 Next = arrival.FindClosestAirport(departure.AirportsInRange);
-                                localRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, Next.latitude_deg, Next.longitude_deg);
-                                ecart = Math.Abs((localRoute - globalRoute) % 360);
-                                while ((ecart > 90) && (Next != null))
+                                if (Next != null)
                                 {
-                                    departure.AirportsInRange.Remove(Next);
-                                    Next = arrival.FindClosestAirport(departure.AirportsInRange);
-                                    if (Next != null)
+                                    localRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, Next.latitude_deg, Next.longitude_deg);
+                                    ecart = Math.Abs((localRoute - globalRoute) % 360);
+
+                                    //supprime tous les aeroports qui ne sont pas dans la bonne direction, par rapport à ou on veut aller.
+                                    while ((ecart > 90) && (Next != null))
                                     {
-                                        localRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, Next.latitude_deg, Next.longitude_deg);
-                                        ecart = Math.Abs((localRoute - globalRoute) % 360);
+                                        departure.AirportsInRange.Remove(Next);
+                                        Next = arrival.FindClosestAirport(departure.AirportsInRange);
+                                        if (Next != null)
+                                        {
+                                            localRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, Next.latitude_deg, Next.longitude_deg);
+                                            ecart = Math.Abs((localRoute - globalRoute) % 360);
+                                        }
                                     }
+                                }
+                                else
+                                {
+                                    Logger.WriteLine("No airport found near " + arrival.name + " from airports near " + departure.name);
                                 }
 
                             }
@@ -206,8 +224,28 @@ namespace BushTripPlugin
             return result;
         }
 
+        private async void buildMultiHopBushTrip(Aeroport start, Aeroport end,double miles)
+        {
+            btnSearchFlights.Enabled = false;
+            Cursor = Cursors.WaitCursor;
+            if ((start == null) || (end == null))
+            {
+                MessageBox.Show("ICAO départ ou arrivée non renseigné !", "SimAddon", MessageBoxButtons.OK, MessageBoxIcon.Warning); ;
+            }
+            else
+            {
+                List<Aeroport> temp = new List<Aeroport>(data.aeroports);
+                List<Aeroport> trip = await BuildBushtrip(temp, start, end, miles);
+                foreach (Aeroport trip2 in trip)
+                {
+                    lbArrivals.Items.Add(trip2);
+                }
+            }
+            Cursor = Cursors.Default;
+            btnSearchFlights.Enabled = true;
+        }
 
-        private async void btnSearchFlights_Click(object sender, EventArgs e)
+        private void btnSearchFlights_Click(object sender, EventArgs e)
         {
             lbArrivals.Items.Clear();
             DateTime flightTime = dateTimePicker1.Value;
@@ -219,19 +257,7 @@ namespace BushTripPlugin
 
             if (checkMultiHop.Checked)
             {
-                if ((start == null) || (end == null))
-                {
-                    MessageBox.Show("ICAO départ ou arrivée non renseigné !", "SimAddon", MessageBoxButtons.OK, MessageBoxIcon.Warning); ;
-                }
-                else
-                {
-                    List<Aeroport> temp = new List<Aeroport>(data.aeroports);
-                    List<Aeroport> trip = await BuildBushtrip(temp, start, end, miles);
-                    foreach (Aeroport trip2 in trip)
-                    {
-                        lbArrivals.Items.Add(trip2);
-                    }
-                }
+                buildMultiHopBushTrip(start,end,miles);
             }
             else
             {

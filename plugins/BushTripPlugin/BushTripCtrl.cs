@@ -323,7 +323,10 @@ namespace BushTripPlugin
 
                     foreach (LittleNavmapFlightplanWaypoint waypoint in flightPlan.Item.Waypoints)
                     {
-                        writer.WriteLine($"{waypoint.Name} ({waypoint.Ident}),{waypoint.Pos.Lat.ToString(CultureInfo.InvariantCulture)},{waypoint.Pos.Lon.ToString(CultureInfo.InvariantCulture)}");
+                        writer.WriteLine($"{waypoint.Name} ({waypoint.Ident})," +
+                            $"{waypoint.Pos.Lat.ToString(CultureInfo.InvariantCulture)}," +
+                            $"{waypoint.Pos.Lon.ToString(CultureInfo.InvariantCulture)}"
+                            );
                     }
                 }
 
@@ -430,11 +433,17 @@ namespace BushTripPlugin
             if (result == DialogResult.OK)
             {
                 List<Aeroport> trip = creator.Trip;
-
-                flightPlan = createFlightPlan(trip);
-                filename = "autogen.fplan";
-                //saveFlightPlan();
-                useFlightPlan();
+                if (trip.Count > 0)
+                {
+                    flightPlan = createFlightPlan(trip);
+                    filename = "autogen_" + trip[0].ident + "-" + trip[trip.Count - 1].ident + ".fplan";
+                    //saveFlightPlan();
+                    useFlightPlan();
+                }
+                else
+                {
+                    MessageBox.Show("Nothing to export");
+                }
 
             }
             
