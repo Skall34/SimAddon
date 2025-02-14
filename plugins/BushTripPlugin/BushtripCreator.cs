@@ -1,16 +1,19 @@
-﻿using Microsoft.VisualBasic.Logging;
+﻿using FSUIPC;
+using Microsoft.VisualBasic.Logging;
 using SimAddonLogger;
 using SimDataManager;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace BushTripPlugin
 {
@@ -18,6 +21,8 @@ namespace BushTripPlugin
     {
         simData data;
         string searched;
+
+        bool cancel = false;
 
         //public Aeroport Departure { get; set; }
         //public Aeroport Arrival { get; set; }
@@ -124,108 +129,79 @@ namespace BushTripPlugin
             }
         }
 
-        public static async Task<List<Aeroport>> BuildBushtrip(List<Aeroport> airports, Aeroport departure, Aeroport arrival, double maxHop)
+        private  double Heuristic(Aeroport a, Aeroport b)
         {
-
-            List<Aeroport> result = new List<Aeroport>();
-            //remove the start airport from the global list of airports.
-            airports.Remove(departure);
-            double globalRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, arrival.latitude_deg, arrival.longitude_deg);
-            double localRoute;
-            double ecart;
-
-            if (departure != arrival)
+            return a.DistanceTo(b); // Distance en ligne droite
+        }
+        private  List<Aeroport> ReconstructPath(Dictionary<Aeroport, Aeroport> cameFrom, Aeroport current)
+        {
+            var path = new List<Aeroport> { current };
+            while (cameFrom.ContainsKey(current))
             {
-                //build the list of airports within the required range.
-                departure.FindAirportsInRange(airports, maxHop);
-
-                //in this short list, find the one closest to the destination.
-                Aeroport Next = arrival.FindClosestAirport(departure.AirportsInRange);
-                if (Next != null)
-                {
-                    localRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, Next.latitude_deg, Next.longitude_deg);
-                    ecart = Math.Abs((localRoute - globalRoute) % 360);
-
-                    //supprime tous les aeroports qui ne sont pas dans la bonne direction, par rapport à ou on veut aller.
-                    while ((ecart > 90) && (Next != null))
-                    {
-                        departure.AirportsInRange.Remove(Next);
-                        Next = arrival.FindClosestAirport(departure.AirportsInRange);
-                        if (Next != null)
-                        {
-                            localRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, Next.latitude_deg, Next.longitude_deg);
-                            ecart = Math.Abs((localRoute - globalRoute) % 360);
-                        }
-                    }
-                }
-                else
-                {
-                    Logger.WriteLine("No next airport near " + arrival.name+" from airports near "+departure.name);
-                }
-
-                if (Next != null)
-                {
-                    //remove it from the short list
-                    departure.AirportsInRange.Remove(Next);
-
-                    //if we're arrived, then just add the last point to the result.
-                    if (Next == arrival)
-                    {
-                        result.Add(Next);
-                    }
-                    else
-                    {
-                        while (Next != null)
-                        {
-                            //try to build the rest of the bushtrip starting now from this new point
-                            List<Aeroport> nextHops = await BuildBushtrip(airports, Next, arrival, maxHop);
-                            if (nextHops.Count > 0)
-                            {
-                                result.Add(departure);
-                                result.AddRange(nextHops);
-                                break;
-                            }
-                            else
-                            {   //if this leads to nowhere, then remove this point, and find the next closest one.
-                                departure.AirportsInRange.Remove(Next);
-
-                                Next = arrival.FindClosestAirport(departure.AirportsInRange);
-                                if (Next != null)
-                                {
-                                    localRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, Next.latitude_deg, Next.longitude_deg);
-                                    ecart = Math.Abs((localRoute - globalRoute) % 360);
-
-                                    //supprime tous les aeroports qui ne sont pas dans la bonne direction, par rapport à ou on veut aller.
-                                    while ((ecart > 90) && (Next != null))
-                                    {
-                                        departure.AirportsInRange.Remove(Next);
-                                        Next = arrival.FindClosestAirport(departure.AirportsInRange);
-                                        if (Next != null)
-                                        {
-                                            localRoute = await NavigationHelper.GetApproxNavRouteAsync(departure.latitude_deg, departure.longitude_deg, Next.latitude_deg, Next.longitude_deg);
-                                            ecart = Math.Abs((localRoute - globalRoute) % 360);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    Logger.WriteLine("No airport found near " + arrival.name + " from airports near " + departure.name);
-                                }
-
-                            }
-                        }
-                    }
-                }
+                current = cameFrom[current];
+                path.Add(current);
             }
-            else
-            {
-                result.Add(arrival);
-            }
-            return result;
+            path.Reverse();
+            return path;
         }
 
-        private async void buildMultiHopBushTrip(Aeroport start, Aeroport end,double miles)
+        // A* algorithm implementé via chatgpt !
+        public async Task<List<Aeroport>> BuildBushtrip3(List<Aeroport> airports, Aeroport start, Aeroport goal, double maxHop, int depth = 0)
         {
+
+            var openSet = new SortedSet<(double F, Aeroport Airport)>(Comparer<(double, Aeroport)>.Create((a, b) => a.Item1.CompareTo(b.Item1)));
+            var cameFrom = new Dictionary<Aeroport, Aeroport>();
+            var gScore = new Dictionary<Aeroport, double>();
+            var fScore = new Dictionary<Aeroport, double>();
+
+            gScore[start] = 0;
+            fScore[start] = Heuristic(start, goal);
+            openSet.Add((fScore[start], start));
+
+                while (openSet.Count > 0)
+                {
+                    Aeroport current = openSet.First().Airport;
+                    openSet.Remove(openSet.First());
+
+                    if (current == goal)
+                        return ReconstructPath(cameFrom, current);
+
+                    current.FindAirportsInRange(airports, maxHop);
+                    progressBar1.Value = 0;
+                    progressBar1.Maximum = current.AirportsInRange.Count;
+
+                    if (cancel)
+                    {
+                        break;
+                    }
+
+                    foreach (var neighbor in current.AirportsInRange)
+                    {
+                        double tentativeGScore = gScore[current] + current.DistanceTo(neighbor);
+                        progressBar1.Value++;
+                        if (progressBar1.Value >= progressBar1.Maximum)
+                        {
+                            progressBar1.Value = progressBar1.Minimum;
+                        }
+
+                        if (!gScore.ContainsKey(neighbor) || tentativeGScore < gScore[neighbor])
+                        {
+                            cameFrom[neighbor] = current;
+                            gScore[neighbor] = tentativeGScore;
+                            fScore[neighbor] = tentativeGScore + Heuristic(neighbor, goal);
+
+                            if (!openSet.Any(n => n.Airport == neighbor))
+                                openSet.Add((fScore[neighbor], neighbor));
+                        }
+                    }
+                }
+
+            return null; // Aucun chemin trouvé
+        }
+
+        private async void buildMultiHopBushTrip(Aeroport start, Aeroport end, double miles)
+        {
+            CancellationTokenSource s_cts = new CancellationTokenSource();
             btnSearchFlights.Enabled = false;
             Cursor = Cursors.WaitCursor;
             if ((start == null) || (end == null))
@@ -235,11 +211,16 @@ namespace BushTripPlugin
             else
             {
                 List<Aeroport> temp = new List<Aeroport>(data.aeroports);
-                List<Aeroport> trip = await BuildBushtrip(temp, start, end, miles);
-                foreach (Aeroport trip2 in trip)
+                List<Aeroport> trip;
+                    trip = await BuildBushtrip3(temp, start, end, miles);
+                if (trip != null)
                 {
-                    lbArrivals.Items.Add(trip2);
+                    foreach (Aeroport etape in trip)
+                    {
+                        lbArrivals.Items.Add(etape);
+                    }
                 }
+
             }
             Cursor = Cursors.Default;
             btnSearchFlights.Enabled = true;
@@ -257,7 +238,7 @@ namespace BushTripPlugin
 
             if (checkMultiHop.Checked)
             {
-                buildMultiHopBushTrip(start,end,miles);
+                buildMultiHopBushTrip(start, end, miles);
             }
             else
             {
@@ -344,6 +325,46 @@ namespace BushTripPlugin
         {
             comboBox2.Enabled = checkMultiHop.Checked;
             btnRandomArrival.Enabled = checkMultiHop.Checked;
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            cancel = false;
+            lbArrivals.Items.Clear();
+            DateTime flightTime = dateTimePicker1.Value;
+            double speed = trackBar1.Value;
+            double hours = flightTime.Hour + (double)flightTime.Minute / 60;
+            double miles = hours * speed;
+            Aeroport start = (Aeroport)comboBox1.SelectedItem;
+            Aeroport end = (Aeroport)comboBox2.SelectedItem;
+
+            if (checkMultiHop.Checked)
+            {
+                buildMultiHopBushTrip(start, end, miles);
+            }
+            else
+            {
+                if (start != null)
+                {
+                    foreach (Aeroport a in data.aeroports)
+                    {
+                        double distance = a.DistanceTo(start.latitude_deg, start.longitude_deg);
+                        if ((distance < miles * 1.1) && (distance > miles * 0.9))
+                        {
+                            lbArrivals.Items.Add(a);
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("ICAO départ non renseigné !", "SimAddon", MessageBoxButtons.OK, MessageBoxIcon.Warning); ;
+                }
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            cancel = true;
         }
     }
 }

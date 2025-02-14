@@ -436,7 +436,7 @@ namespace BushTripPlugin
                 if (trip.Count > 0)
                 {
                     flightPlan = createFlightPlan(trip);
-                    filename = "autogen_" + trip[0].ident + "-" + trip[trip.Count - 1].ident + ".fplan";
+                    filename = "bushtrip_" + trip[0].ident + "-" + trip[trip.Count - 1].ident + ".fplan";
                     //saveFlightPlan();
                     useFlightPlan();
                 }

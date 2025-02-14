@@ -48,6 +48,7 @@
             lblGndSpeed = new Label();
             trackBar1 = new TrackBar();
             lblSpeed = new Label();
+            progressBar1 = new ProgressBar();
             tableLayoutPanel1.SuspendLayout();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -75,6 +76,7 @@
             btnCancel.TabIndex = 1;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // tableLayoutPanel1
             // 
@@ -222,13 +224,13 @@
             // 
             // btnSearchFlights
             // 
-            btnSearchFlights.Location = new Point(513, 19);
+            btnSearchFlights.Location = new Point(510, 19);
             btnSearchFlights.Name = "btnSearchFlights";
-            btnSearchFlights.Size = new Size(103, 53);
-            btnSearchFlights.TabIndex = 5;
-            btnSearchFlights.Text = "Search Flights";
+            btnSearchFlights.Size = new Size(105, 53);
+            btnSearchFlights.TabIndex = 6;
+            btnSearchFlights.Text = "Search flights";
             btnSearchFlights.UseVisualStyleBackColor = true;
-            btnSearchFlights.Click += btnSearchFlights_Click;
+            btnSearchFlights.Click += button1_Click_1;
             // 
             // dateTimePicker1
             // 
@@ -280,6 +282,13 @@
             lblSpeed.TabIndex = 0;
             lblSpeed.Text = "Average ground speed";
             // 
+            // progressBar1
+            // 
+            progressBar1.Location = new Point(11, 527);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(449, 23);
+            progressBar1.TabIndex = 3;
+            // 
             // BushtripCreator
             // 
             AcceptButton = btnOK;
@@ -289,6 +298,7 @@
             CancelButton = btnCancel;
             ClientSize = new Size(651, 562);
             ControlBox = false;
+            Controls.Add(progressBar1);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(btnCancel);
             Controls.Add(btnOK);
@@ -324,10 +334,11 @@
         private Label lblFlightTime;
         private DateTimePicker dateTimePicker1;
         private Button btnRandomDeparture;
-        private Button btnSearchFlights;
         private Button btnRandomArrival;
         private ComboBox comboBox2;
         private Label label1;
         private CheckBox checkMultiHop;
+        private Button btnSearchFlights;
+        private ProgressBar progressBar1;
     }
 }

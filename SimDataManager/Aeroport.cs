@@ -184,7 +184,7 @@ namespace SimDataManager
             return _InRange;
         }
 
-        public int FindAirportsInRange(List<Aeroport> airports, double range)
+        public int FindAirportsInRange(List<Aeroport> airports, double rangeMax,double rangeMin=0)
         {
             AirportsInRange.Clear();
             int num = 0;
@@ -193,7 +193,7 @@ namespace SimDataManager
                 if (airport != this)
                 {
                     double _dist = airport.DistanceTo(this);
-                    if (_dist < range)
+                    if ((_dist < rangeMax)&&(_dist>rangeMin))
                     {
                         airport._distance = _dist;
                         AirportsInRange.Add(airport);
