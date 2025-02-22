@@ -53,7 +53,7 @@ jobs:
       run: dotnet publish plugins/ATISPlugin/ATISPlugin.csproj --configuration Release --output publish_output\plugins\3_ATIS
 
     - name: publish Chartfox plugin
-      run: dotnet publish plugins/ChartFoxPlugin/ChartFoxPlugin.csproj --configuration Release --output publish_output\plugins\4_ChartFox
+      run: dotnet publish plugins/ChartFoxPlugin/WebBrowserPlugin.csproj --configuration Release --output publish_output\plugins\4_ChartFox
 
     #- name: Setup VS Dev Environment
     #  uses: seanmiddleditch/gha-setup-vsdevenv@v4
