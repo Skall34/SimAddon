@@ -28,6 +28,8 @@ namespace SimAddonPlugin
             COMPACT           
         }
 
+        void SetExecutionFolder(string path);
+
         void SetWindowMode(WindowMode mode);
 
         //methodes

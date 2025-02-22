@@ -17,21 +17,20 @@ namespace ChartFoxPlugin
             public string Url { get; set; }
         }
 
+        private string executionFolder;
+
         JsonData settings;
 
         public WebBrowserCtrl()
         {
-            loadSettings();
             InitializeComponent();
-
-            InitializeWebView2();
         }
 
         void loadSettings()
         {
-            string currentDir = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string currentDir = executionFolder;
             
-            string filePath = Path.Combine(Path.GetDirectoryName(currentDir),"settings.json"); // Path to your JSON file
+            string filePath = Path.Combine(currentDir,"settings.json"); // Path to your JSON file
             try
             {
                 // Read the JSON file content
@@ -77,6 +76,8 @@ namespace ChartFoxPlugin
 
         public void init(ref simData _data)
         {
+
+            InitializeWebView2();
         }
 
         public void registerPage(TabControl parent)
@@ -102,7 +103,8 @@ namespace ChartFoxPlugin
         private async void InitializeWebView2()
         {
             // Get the application name
-            string appName = Assembly.GetEntryAssembly().GetName().Name;
+            //string appName = Assembly.GetEntryAssembly().GetName().Name;
+            string appName = settings.Name;
 
             // Get the path to the user's AppData folder
             string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -113,6 +115,12 @@ namespace ChartFoxPlugin
             CoreWebView2Environment cwv2Environment = await CoreWebView2Environment.CreateAsync(null, fullPath, new CoreWebView2EnvironmentOptions());
             await webView21.EnsureCoreWebView2Async(cwv2Environment);
             webView21.Source = new Uri(settings.Url);
+        }
+
+        void ISimAddonPluginCtrl.SetExecutionFolder(string path)
+        {
+            executionFolder = path;
+            loadSettings();
         }
     }
 }

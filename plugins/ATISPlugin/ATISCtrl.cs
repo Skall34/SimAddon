@@ -476,5 +476,10 @@ namespace ATISPlugin
         {
 
         }
+
+        void ISimAddonPluginCtrl.SetExecutionFolder(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

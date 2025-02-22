@@ -73,6 +73,14 @@ namespace SimAddon
                                             // Créer une instance de la classe dynamiquement
                                             ISimAddonPluginCtrl pluginInstance = (ISimAddonPluginCtrl)Activator.CreateInstance(pluginType);
                                             _plugins.Add(pluginInstance);
+                                            string path = Path.GetDirectoryName(item);
+                                            try
+                                            {
+                                                pluginInstance.SetExecutionFolder(path);
+                                            }catch(NotImplementedException ex)
+                                            {
+                                                //not implemented... just ignore.
+                                            }
 
                                         }
                                         catch (Exception ex)

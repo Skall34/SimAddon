@@ -453,5 +453,10 @@ namespace BushTripPlugin
                 parentForm.TopMost = true;
             }
         }
+
+        void ISimAddonPluginCtrl.SetExecutionFolder(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -424,5 +424,10 @@ namespace MeteoPlugin
         {
 
         }
+
+        void ISimAddonPluginCtrl.SetExecutionFolder(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

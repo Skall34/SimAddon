@@ -111,10 +111,11 @@ namespace FlightRecPlugin
             //initialise des variables qui servent à garder un état.
             cbNote.SelectedItem = 8;
             atLeastOneEngineFiring = false;
-            _startTime = DateTime.Now;
-            _endTime = DateTime.Now;
-            _airborn = DateTime.Now;
-            _notAirborn = DateTime.Now;
+
+            _startTime = DateTime.UnixEpoch;
+            _endTime = DateTime.UnixEpoch;
+            _airborn = DateTime.UnixEpoch;
+            _notAirborn = DateTime.UnixEpoch;
 
             _startFuel = 0;
             _endFuel = 0;
@@ -295,30 +296,34 @@ namespace FlightRecPlugin
                 {
                     if (onGround)
                     {
-                        Logger.WriteLine("Takeoff detected !");
-                        UpdateStatus("In flight");
-                        //we just took off ! read the plane weight
-                        flightPerfs.takeOffWeight = currentFlightStatus.planeWeight;
-                        //keep memory that we're airborn
-                        onGround = false;
-                        // on veut afficher la date
-                        _airborn = DateTime.Now;
-                        flightPerfs.takeOffTime = _airborn;
-
-                        if (lbTimeAirborn.Text == "--:--")
+                        //only take the first takeoff for takeoff time. To manage rebounds when landing.
+                        if (_airborn == DateTime.UnixEpoch)
                         {
-                            this.lbTimeAirborn.Text = _airborn.ToString("HH:mm");
+                            Logger.WriteLine("Takeoff detected !");
+                            UpdateStatus("In flight");
+                            //we just took off ! read the plane weight
+                            flightPerfs.takeOffWeight = currentFlightStatus.planeWeight;
+                            //keep memory that we're airborn
+                            onGround = false;
+                            // on veut afficher la date
+                            _airborn = DateTime.Now;
+                            flightPerfs.takeOffTime = _airborn;
+
+                            if (lbTimeAirborn.Text == "--:--")
+                            {
+                                this.lbTimeAirborn.Text = _airborn.ToString("HH:mm");
+                            }
+
+                            // On cache le label du Fret après le décollage. On en a plus besoin
+                            this.lbFret.Visible = false;
+                            //on grise le bouton save flight en vol
+                            btnSubmit.Enabled = false;
+                            submitFlightToolStripMenuItem.Enabled = false;
+                            //just incase of rebound during takeoff, reset the onground label
+                            lbTimeOnGround.Text = "--:--";
+
+                            SimEvent(SimEventArg.EventType.TAKEOFF);
                         }
-
-                        // On cache le label du Fret après le décollage. On en a plus besoin
-                        this.lbFret.Visible = false;
-                        //on grise le bouton save flight en vol
-                        btnSubmit.Enabled = false;
-                        submitFlightToolStripMenuItem.Enabled = false;
-                        //just incase of rebound during takeoff, reset the onground label
-                        lbTimeOnGround.Text = "--:--";
-
-                        SimEvent(SimEventArg.EventType.TAKEOFF);
                     }
                     //constamment mettre à jour la vrtical acceleration et airspeed pendant le vol.
                     flightPerfs.landingVerticalAcceleration = currentFlightStatus.verticalAcceleration;
@@ -328,40 +333,41 @@ namespace FlightRecPlugin
                 {
                     if (!onGround)
                     {
-                        Logger.WriteLine("Landing detected !");
-                        UpdateStatus("On ground");
-                        //only update the touchDownVSpeed if we've been airborn once
-                        flightPerfs.landingVSpeed = currentFlightStatus.landingVerticalSpeed;
-                        flightPerfs.landingWeight = currentFlightStatus.planeWeight;
+                            Logger.WriteLine("Landing detected !");
+                            UpdateStatus("On ground");
+                            //only update the touchDownVSpeed if we've been airborn once
+                            flightPerfs.landingVSpeed = currentFlightStatus.landingVerticalSpeed;
+                            flightPerfs.landingWeight = currentFlightStatus.planeWeight;
 
-                        _notAirborn = DateTime.Now;
-                        flightPerfs.landingTime = _notAirborn;
+                            _notAirborn = DateTime.Now;
+                            flightPerfs.landingTime = _notAirborn;
 
-                        if (lbTimeOnGround.Text == "--:--")
-                        {
-                            this.lbTimeOnGround.Text = _notAirborn.ToString("HH:mm");
-                        }
+                            if (lbTimeOnGround.Text == "--:--")
+                            {
+                                this.lbTimeOnGround.Text = _notAirborn.ToString("HH:mm");
+                            }
 
-                        //check for crashes
-                        if (currentFlightStatus.offRunwayCrashed != 0)
-                        {
-                            Logger.WriteLine("off runway crashed detected");
-                            flightPerfs.overRunwayCrashed = true;
-                            getEndOfFlightData();
-                        }
-                        if (currentFlightStatus.crashedFlag != 0)
-                        {
-                            Logger.WriteLine("crash detected");
-                            flightPerfs.crashed = true;
-                            getEndOfFlightData();
-                        }
+                            //check for crashes
+                            if (currentFlightStatus.offRunwayCrashed != 0)
+                            {
+                                Logger.WriteLine("off runway crashed detected");
+                                flightPerfs.overRunwayCrashed = true;
+                                getEndOfFlightData();
+                            }
+                            if (currentFlightStatus.crashedFlag != 0)
+                            {
+                                Logger.WriteLine("crash detected");
+                                flightPerfs.crashed = true;
+                                getEndOfFlightData();
+                            }
 
-                        onGround = true;
+                            onGround = true;
 
-                        //enable the save button
-                        btnSubmit.Enabled = true;
-                        submitFlightToolStripMenuItem.Enabled = true;
-                        SimEvent(SimEventArg.EventType.LANDING);
+                            //enable the save button
+                            btnSubmit.Enabled = true;
+                            submitFlightToolStripMenuItem.Enabled = true;
+                            SimEvent(SimEventArg.EventType.LANDING);
+                        
                     }
 
 
@@ -873,7 +879,14 @@ namespace FlightRecPlugin
                 lbEndIata.Text = "Waiting end ...";
                 lbStartPosition.Text = "Waiting start";
                 lbEndPosition.Text = "Waiting end ...";
+
                 lbStartTime.Text = "--:--";
+
+                _airborn = DateTime.UnixEpoch;
+                _notAirborn = DateTime.UnixEpoch;
+                _startTime = DateTime.UnixEpoch;
+                _endTime = DateTime.UnixEpoch;
+
                 lbEndTime.Text = "--:--";
                 lbTimeAirborn.Text = "--:--";
                 lbTimeOnGround.Text = "--:--";
@@ -1344,6 +1357,11 @@ namespace FlightRecPlugin
         private void cbNote_SelectedIndexChanged(object sender, EventArgs e)
         {
             _note = short.Parse(cbNote.Text);
+        }
+
+        void ISimAddonPluginCtrl.SetExecutionFolder(string path)
+        {
+            throw new NotImplementedException();
         }
     }
 }

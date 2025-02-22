@@ -1133,7 +1133,9 @@ namespace MeteoPlugin
         public static async  Task<string> getMetar(string ICAO)
         {
             // Construire l'URL avec le code ICAO
-            string url = $"https://aviationweather.gov/cgi-bin/data/metar.php?ids={ICAO}";
+            //string url = $"https://aviationweather.gov/cgi-bin/data/metar.php?ids={ICAO}";
+            //use vatsim METAR
+            string url = $"https://metar.vatsim.net/{ICAO}";
 
             try
             {
