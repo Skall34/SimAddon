@@ -102,6 +102,7 @@ namespace FlightRecPlugin
             contextMenuStrip1 = new ContextMenuStrip(components);
             resetFlightToolStripMenuItem = new ToolStripMenuItem();
             submitFlightToolStripMenuItem = new ToolStripMenuItem();
+            debugToolStripMenuItem = new ToolStripMenuItem();
             engineStopTimer = new Timer(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox5 = new GroupBox();
@@ -837,9 +838,9 @@ namespace FlightRecPlugin
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { resetFlightToolStripMenuItem, submitFlightToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { resetFlightToolStripMenuItem, submitFlightToolStripMenuItem, debugToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(134, 48);
+            contextMenuStrip1.Size = new Size(134, 70);
             // 
             // resetFlightToolStripMenuItem
             // 
@@ -855,6 +856,13 @@ namespace FlightRecPlugin
             submitFlightToolStripMenuItem.Size = new Size(133, 22);
             submitFlightToolStripMenuItem.Text = "Save Flight";
             submitFlightToolStripMenuItem.Click += submitFlightToolStripMenuItem_Click;
+            // 
+            // debugToolStripMenuItem
+            // 
+            debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            debugToolStripMenuItem.Size = new Size(133, 22);
+            debugToolStripMenuItem.Text = "Debug";
+            debugToolStripMenuItem.Click += debugToolStripMenuItem_Click;
             // 
             // engineStopTimer
             // 
@@ -1016,5 +1024,6 @@ namespace FlightRecPlugin
         private SimAddonControls.LedBulb ledCheckFreight;
         private SimAddonControls.LedBulb ledCheckAircraft;
         private SimAddonControls.LedBulb ledCheckPayload;
+        private ToolStripMenuItem debugToolStripMenuItem;
     }
 }

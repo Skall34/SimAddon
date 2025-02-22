@@ -44,6 +44,12 @@ namespace SimAddon
         {
             InitializeComponent();
 
+            this.StartPosition = FormStartPosition.Manual;
+            Point startlocation = new Point();
+            startlocation.X = Properties.Settings.Default.xpos;
+            startlocation.Y = Properties.Settings.Default.ypos;
+            this.Location = startlocation;
+
             this.TopMost = Properties.Settings.Default.AlwaysOnTop;
             alwaysOnTopToolStripMenuItem.Checked = Properties.Settings.Default.AlwaysOnTop;
 
@@ -502,8 +508,15 @@ namespace SimAddon
 
                 Logger.WriteLine($"Screenshot saved to {filePath}");
                 Console.WriteLine($"Screenshot saved to {filePath}");
-                Plugin_OnShowMsgbox(this,  $"Screenshot copied to clipboard", "Screenshort copied", MessageBoxButtons.OK);
+                Plugin_OnShowMsgbox(this, $"Screenshot copied to clipboard", "Screenshort copied", MessageBoxButtons.OK);
             }
+        }
+
+        private void Form1_LocationChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.xpos = this.Location.X;
+            Properties.Settings.Default.ypos = this.Location.Y;
+            Properties.Settings.Default.Save();
         }
     }
 }

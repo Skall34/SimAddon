@@ -59,5 +59,29 @@ namespace SimAddon.Properties {
                 this["AlwaysOnTop"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int xpos {
+            get {
+                return ((int)(this["xpos"]));
+            }
+            set {
+                this["xpos"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ypos {
+            get {
+                return ((int)(this["ypos"]));
+            }
+            set {
+                this["ypos"] = value;
+            }
+        }
     }
 }

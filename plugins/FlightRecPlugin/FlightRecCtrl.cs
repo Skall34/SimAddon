@@ -23,6 +23,9 @@ namespace FlightRecPlugin
         const string name = "FlightRecorder";
         Version? version;
 
+        DebugForm dbg;
+
+
         List<string> missions;
         List<string> immats;
 
@@ -254,6 +257,10 @@ namespace FlightRecPlugin
         {
             try
             {
+                if (dbg!=null && dbg.Visible)
+                {
+                    dbg.updateInfos(currentFlightStatus);
+                }
 
                 if (startDisabled > 0)
                 {
@@ -297,33 +304,30 @@ namespace FlightRecPlugin
                     if (onGround)
                     {
                         //only take the first takeoff for takeoff time. To manage rebounds when landing.
-                        if (_airborn == DateTime.UnixEpoch)
+                        Logger.WriteLine("Takeoff detected !");
+                        UpdateStatus("In flight");
+                        //we just took off ! read the plane weight
+                        flightPerfs.takeOffWeight = currentFlightStatus.planeWeight;
+                        //keep memory that we're airborn
+                        onGround = false;
+                        // on veut afficher la date
+                        _airborn = DateTime.Now;
+                        flightPerfs.takeOffTime = _airborn;
+
+                        if (lbTimeAirborn.Text == "--:--")
                         {
-                            Logger.WriteLine("Takeoff detected !");
-                            UpdateStatus("In flight");
-                            //we just took off ! read the plane weight
-                            flightPerfs.takeOffWeight = currentFlightStatus.planeWeight;
-                            //keep memory that we're airborn
-                            onGround = false;
-                            // on veut afficher la date
-                            _airborn = DateTime.Now;
-                            flightPerfs.takeOffTime = _airborn;
-
-                            if (lbTimeAirborn.Text == "--:--")
-                            {
-                                this.lbTimeAirborn.Text = _airborn.ToString("HH:mm");
-                            }
-
-                            // On cache le label du Fret après le décollage. On en a plus besoin
-                            this.lbFret.Visible = false;
-                            //on grise le bouton save flight en vol
-                            btnSubmit.Enabled = false;
-                            submitFlightToolStripMenuItem.Enabled = false;
-                            //just incase of rebound during takeoff, reset the onground label
-                            lbTimeOnGround.Text = "--:--";
-
-                            SimEvent(SimEventArg.EventType.TAKEOFF);
+                            this.lbTimeAirborn.Text = _airborn.ToString("HH:mm");
                         }
+
+                        // On cache le label du Fret après le décollage. On en a plus besoin
+                        this.lbFret.Visible = false;
+                        //on grise le bouton save flight en vol
+                        btnSubmit.Enabled = false;
+                        submitFlightToolStripMenuItem.Enabled = false;
+                        //just incase of rebound during takeoff, reset the onground label
+                        lbTimeOnGround.Text = "--:--";
+
+                        SimEvent(SimEventArg.EventType.TAKEOFF);
                     }
                     //constamment mettre à jour la vrtical acceleration et airspeed pendant le vol.
                     flightPerfs.landingVerticalAcceleration = currentFlightStatus.verticalAcceleration;
@@ -333,41 +337,41 @@ namespace FlightRecPlugin
                 {
                     if (!onGround)
                     {
-                            Logger.WriteLine("Landing detected !");
-                            UpdateStatus("On ground");
-                            //only update the touchDownVSpeed if we've been airborn once
-                            flightPerfs.landingVSpeed = currentFlightStatus.landingVerticalSpeed;
-                            flightPerfs.landingWeight = currentFlightStatus.planeWeight;
+                        Logger.WriteLine("Landing detected !");
+                        UpdateStatus("On ground");
+                        //only update the touchDownVSpeed if we've been airborn once
+                        flightPerfs.landingVSpeed = currentFlightStatus.landingVerticalSpeed;
+                        flightPerfs.landingWeight = currentFlightStatus.planeWeight;
 
-                            _notAirborn = DateTime.Now;
-                            flightPerfs.landingTime = _notAirborn;
+                        _notAirborn = DateTime.Now;
+                        flightPerfs.landingTime = _notAirborn;
 
-                            if (lbTimeOnGround.Text == "--:--")
-                            {
-                                this.lbTimeOnGround.Text = _notAirborn.ToString("HH:mm");
-                            }
+                        if (lbTimeOnGround.Text == "--:--")
+                        {
+                            this.lbTimeOnGround.Text = _notAirborn.ToString("HH:mm");
+                        }
 
-                            //check for crashes
-                            if (currentFlightStatus.offRunwayCrashed != 0)
-                            {
-                                Logger.WriteLine("off runway crashed detected");
-                                flightPerfs.overRunwayCrashed = true;
-                                getEndOfFlightData();
-                            }
-                            if (currentFlightStatus.crashedFlag != 0)
-                            {
-                                Logger.WriteLine("crash detected");
-                                flightPerfs.crashed = true;
-                                getEndOfFlightData();
-                            }
+                        //check for crashes
+                        if (currentFlightStatus.offRunwayCrashed != 0)
+                        {
+                            Logger.WriteLine("off runway crashed detected");
+                            flightPerfs.overRunwayCrashed = true;
+                            getEndOfFlightData();
+                        }
+                        if (currentFlightStatus.crashedFlag != 0)
+                        {
+                            Logger.WriteLine("crash detected");
+                            flightPerfs.crashed = true;
+                            getEndOfFlightData();
+                        }
 
-                            onGround = true;
+                        onGround = true;
 
-                            //enable the save button
-                            btnSubmit.Enabled = true;
-                            submitFlightToolStripMenuItem.Enabled = true;
-                            SimEvent(SimEventArg.EventType.LANDING);
-                        
+                        //enable the save button
+                        btnSubmit.Enabled = true;
+                        submitFlightToolStripMenuItem.Enabled = true;
+                        SimEvent(SimEventArg.EventType.LANDING);
+
                     }
 
 
@@ -391,21 +395,7 @@ namespace FlightRecPlugin
                         }
                         else
                         {
-                            //PB 18/12 : ignore le refuel en cas de moteur arreté. 
-                            // ca sera géré lors de l'envoi des données à la fin.
 
-                            //sinon, refuel sans moteur arreté.
-                            // on reset le vol direct ? et s'il n'a pas été soumis ? 
-                            //if (btnSubmit.Enabled)
-                            //{
-                            //    //le bouton submit est encore actif, donc peut-etre que le vol n'a pas été soumis. Demande une confirmation
-                            //    //resetFlight(false);
-                            //}
-                            //else
-                            //{
-                            //    //le bouton submit est encore inactif, donc le vol a été soumis, on peut reset
-                            //    resetFlight(true);
-                            //}
                         }
                     }
 
@@ -839,7 +829,7 @@ namespace FlightRecPlugin
             catch (Exception ex)
             {
                 //in case if check error, or exception durong save, show a messagebox containing the error message
-                ShowMsgBox( ex.Message, "Exception caught ", MessageBoxButtons.OK);
+                ShowMsgBox(ex.Message, "Exception caught ", MessageBoxButtons.OK);
             }
             this.Cursor = Cursors.Default;
             return saveOK;
@@ -1357,6 +1347,13 @@ namespace FlightRecPlugin
         private void cbNote_SelectedIndexChanged(object sender, EventArgs e)
         {
             _note = short.Parse(cbNote.Text);
+        }
+
+        private void debugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dbg = new DebugForm();
+            if (dbg.Visible) return;
+            dbg.Show();
         }
 
         void ISimAddonPluginCtrl.SetExecutionFolder(string path)
