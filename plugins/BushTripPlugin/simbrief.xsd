@@ -1,0 +1,1217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="pdf">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name" type="xs:string" minOccurs="0" />
+        <xs:element name="link" type="xs:string" minOccurs="0" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OFP">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="alternate" type="xs:string" minOccurs="0" />
+        <xs:element name="alternate_navlog" type="xs:string" minOccurs="0" />
+        <xs:element name="takeoff_altn" type="xs:string" minOccurs="0" />
+        <xs:element name="enroute_altn" type="xs:string" minOccurs="0" />
+        <xs:element name="etops" type="xs:string" minOccurs="0" />
+        <xs:element name="tlr" type="xs:string" minOccurs="0" />
+        <xs:element name="sigmets" type="xs:string" minOccurs="0" />
+        <xs:element name="tracks" type="xs:string" minOccurs="0" />
+        <xs:element name="vatsim_prefile" type="xs:string" minOccurs="0" />
+        <xs:element name="ivao_prefile" type="xs:string" minOccurs="0" />
+        <xs:element name="pilotedge_prefile" type="xs:string" minOccurs="0" />
+        <xs:element name="poscon_prefile" type="xs:string" minOccurs="0" />
+        <xs:element name="map_data" type="xs:string" minOccurs="0" />
+        <xs:element name="params" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="request_id" type="xs:string" minOccurs="0" />
+              <xs:element name="sequence_id" type="xs:string" minOccurs="0" />
+              <xs:element name="static_id" type="xs:string" minOccurs="0" />
+              <xs:element name="user_id" type="xs:string" minOccurs="0" />
+              <xs:element name="time_generated" type="xs:string" minOccurs="0" />
+              <xs:element name="xml_file" type="xs:string" minOccurs="0" />
+              <xs:element name="ofp_layout" type="xs:string" minOccurs="0" />
+              <xs:element name="airac" type="xs:string" minOccurs="0" />
+              <xs:element name="units" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="general" minOccurs="1" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="release" type="xs:string" minOccurs="0" />
+              <xs:element name="icao_airline" type="xs:string" minOccurs="0" />
+              <xs:element name="flight_number" type="xs:string" minOccurs="0" />
+              <xs:element name="is_etops" type="xs:string" minOccurs="0" />
+              <xs:element name="dx_rmk" type="xs:string" minOccurs="0" />
+              <xs:element name="sys_rmk" type="xs:string" minOccurs="0" />
+              <xs:element name="is_detailed_profile" type="xs:string" minOccurs="0" />
+              <xs:element name="cruise_profile" type="xs:string" minOccurs="0" />
+              <xs:element name="climb_profile" type="xs:string" minOccurs="0" />
+              <xs:element name="descent_profile" type="xs:string" minOccurs="0" />
+              <xs:element name="alternate_profile" type="xs:string" minOccurs="0" />
+              <xs:element name="reserve_profile" type="xs:string" minOccurs="0" />
+              <xs:element name="costindex" type="xs:string" minOccurs="0" />
+              <xs:element name="cont_rule" type="xs:string" minOccurs="0" />
+              <xs:element name="initial_altitude" type="xs:string" minOccurs="0" />
+              <xs:element name="stepclimb_string" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_temp_dev" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_tropopause" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_wind_comp" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_wind_dir" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_wind_spd" type="xs:string" minOccurs="0" />
+              <xs:element name="gc_distance" type="xs:string" minOccurs="0" />
+              <xs:element name="route_distance" type="xs:string" minOccurs="0" />
+              <xs:element name="air_distance" type="xs:string" minOccurs="0" />
+              <xs:element name="total_burn" type="xs:string" minOccurs="0" />
+              <xs:element name="cruise_tas" type="xs:string" minOccurs="0" />
+              <xs:element name="cruise_mach" type="xs:string" minOccurs="0" />
+              <xs:element name="passengers" type="xs:string" minOccurs="0" />
+              <xs:element name="route" type="xs:string" minOccurs="0" />
+              <xs:element name="route_ifps" type="xs:string" minOccurs="0" />
+              <xs:element name="route_navigraph" type="xs:string" minOccurs="0" />
+              <xs:element name="sid_ident" type="xs:string" minOccurs="0" />
+              <xs:element name="sid_trans" type="xs:string" minOccurs="0" />
+              <xs:element name="star_ident" type="xs:string" minOccurs="0" />
+              <xs:element name="star_trans" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="origin" minOccurs="1" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="icao_code" type="xs:string" minOccurs="0" />
+              <xs:element name="iata_code" type="xs:string" minOccurs="0" />
+              <xs:element name="faa_code" type="xs:string" minOccurs="0" />
+              <xs:element name="icao_region" type="xs:string" minOccurs="0" />
+              <xs:element name="elevation" type="xs:string" minOccurs="0" />
+              <xs:element name="pos_lat" type="xs:double" minOccurs="0" />
+              <xs:element name="pos_long" type="xs:double" minOccurs="0" />
+              <xs:element name="name" type="xs:string" minOccurs="0" />
+              <xs:element name="timezone" type="xs:string" minOccurs="0" />
+              <xs:element name="plan_rwy" type="xs:string" minOccurs="0" />
+              <xs:element name="trans_alt" type="xs:string" minOccurs="0" />
+              <xs:element name="trans_level" type="xs:string" minOccurs="0" />
+              <xs:element name="metar" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_time" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_category" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_visibility" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_ceiling" type="xs:string" minOccurs="0" />
+              <xs:element name="taf" type="xs:string" minOccurs="0" />
+              <xs:element name="taf_time" type="xs:string" minOccurs="0" />
+              <xs:element name="atis" type="xs:string" minOccurs="0" />
+              <xs:element name="notam" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="destination" minOccurs="1" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="icao_code" type="xs:string" minOccurs="0" />
+              <xs:element name="iata_code" type="xs:string" minOccurs="0" />
+              <xs:element name="faa_code" type="xs:string" minOccurs="0" />
+              <xs:element name="icao_region" type="xs:string" minOccurs="0" />
+              <xs:element name="elevation" type="xs:string" minOccurs="0" />
+              <xs:element name="pos_lat" type="xs:double" minOccurs="0" />
+              <xs:element name="pos_long" type="xs:double" minOccurs="0" />
+              <xs:element name="name" type="xs:string" minOccurs="0" />
+              <xs:element name="timezone" type="xs:string" minOccurs="0" />
+              <xs:element name="plan_rwy" type="xs:string" minOccurs="0" />
+              <xs:element name="trans_alt" type="xs:string" minOccurs="0" />
+              <xs:element name="trans_level" type="xs:string" minOccurs="0" />
+              <xs:element name="metar" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_time" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_category" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_visibility" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_ceiling" type="xs:string" minOccurs="0" />
+              <xs:element name="taf" type="xs:string" minOccurs="0" />
+              <xs:element name="taf_time" type="xs:string" minOccurs="0" />
+              <xs:element name="atis" type="xs:string" minOccurs="0" />
+              <xs:element name="notam" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="navlog" minOccurs="1" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="fix" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="ident" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="type" type="xs:string" minOccurs="0" />
+                    <xs:element name="icao_region" type="xs:string" minOccurs="0" />
+                    <xs:element name="frequency" type="xs:string" minOccurs="0" />
+                    <xs:element name="pos_lat" type="xs:double" minOccurs="0" />
+                    <xs:element name="pos_long" type="xs:double" minOccurs="0" />
+                    <xs:element name="stage" type="xs:string" minOccurs="0" />
+                    <xs:element name="via_airway" type="xs:string" minOccurs="0" />
+                    <xs:element name="is_sid_star" type="xs:string" minOccurs="0" />
+                    <xs:element name="distance" type="xs:string" minOccurs="0" />
+                    <xs:element name="track_true" type="xs:string" minOccurs="0" />
+                    <xs:element name="track_mag" type="xs:string" minOccurs="0" />
+                    <xs:element name="heading_true" type="xs:string" minOccurs="0" />
+                    <xs:element name="heading_mag" type="xs:string" minOccurs="0" />
+                    <xs:element name="altitude_feet" type="xs:string" minOccurs="0" />
+                    <xs:element name="ind_airspeed" type="xs:string" minOccurs="0" />
+                    <xs:element name="true_airspeed" type="xs:string" minOccurs="0" />
+                    <xs:element name="mach" type="xs:string" minOccurs="0" />
+                    <xs:element name="mach_thousandths" type="xs:string" minOccurs="0" />
+                    <xs:element name="wind_component" type="xs:string" minOccurs="0" />
+                    <xs:element name="groundspeed" type="xs:string" minOccurs="0" />
+                    <xs:element name="time_leg" type="xs:string" minOccurs="0" />
+                    <xs:element name="time_total" type="xs:string" minOccurs="0" />
+                    <xs:element name="fuel_flow" type="xs:string" minOccurs="0" />
+                    <xs:element name="fuel_leg" type="xs:string" minOccurs="0" />
+                    <xs:element name="fuel_totalused" type="xs:string" minOccurs="0" />
+                    <xs:element name="fuel_min_onboard" type="xs:string" minOccurs="0" />
+                    <xs:element name="fuel_plan_onboard" type="xs:string" minOccurs="0" />
+                    <xs:element name="oat" type="xs:string" minOccurs="0" />
+                    <xs:element name="oat_isa_dev" type="xs:string" minOccurs="0" />
+                    <xs:element name="wind_dir" type="xs:string" minOccurs="0" />
+                    <xs:element name="wind_spd" type="xs:string" minOccurs="0" />
+                    <xs:element name="shear" type="xs:string" minOccurs="0" />
+                    <xs:element name="tropopause_feet" type="xs:string" minOccurs="0" />
+                    <xs:element name="ground_height" type="xs:string" minOccurs="0" />
+                    <xs:element name="fir" type="xs:string" minOccurs="0" />
+                    <xs:element name="fir_units" type="xs:string" minOccurs="0" />
+                    <xs:element name="fir_valid_levels" type="xs:string" minOccurs="0" />
+                    <xs:element name="mora" type="xs:string" minOccurs="0" />
+                    <xs:element name="fir_crossing" type="xs:string" minOccurs="0" />
+                    <xs:element name="wind_data" minOccurs="0" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="level" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="altitude" type="xs:string" minOccurs="0" />
+                                <xs:element name="wind_dir" type="xs:string" minOccurs="0" />
+                                <xs:element name="wind_spd" type="xs:string" minOccurs="0" />
+                                <xs:element name="oat" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="atc" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="flightplan_text" type="xs:string" minOccurs="0" />
+              <xs:element name="route" type="xs:string" minOccurs="0" />
+              <xs:element name="route_ifps" type="xs:string" minOccurs="0" />
+              <xs:element name="callsign" type="xs:string" minOccurs="0" />
+              <xs:element name="flight_type" type="xs:string" minOccurs="0" />
+              <xs:element name="flight_rules" type="xs:string" minOccurs="0" />
+              <xs:element name="initial_spd" type="xs:string" minOccurs="0" />
+              <xs:element name="initial_spd_unit" type="xs:string" minOccurs="0" />
+              <xs:element name="initial_alt" type="xs:string" minOccurs="0" />
+              <xs:element name="initial_alt_unit" type="xs:string" minOccurs="0" />
+              <xs:element name="section18" type="xs:string" minOccurs="0" />
+              <xs:element name="fir_orig" type="xs:string" minOccurs="0" />
+              <xs:element name="fir_dest" type="xs:string" minOccurs="0" />
+              <xs:element name="fir_altn" type="xs:string" minOccurs="0" />
+              <xs:element name="fir_etops" type="xs:string" minOccurs="0" />
+              <xs:element name="fir_enroute" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="aircraft" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="icaocode" type="xs:string" minOccurs="0" />
+              <xs:element name="iatacode" type="xs:string" minOccurs="0" />
+              <xs:element name="base_type" type="xs:string" minOccurs="0" />
+              <xs:element name="icao_code" type="xs:string" minOccurs="0" />
+              <xs:element name="iata_code" type="xs:string" minOccurs="0" />
+              <xs:element name="name" type="xs:string" minOccurs="0" />
+              <xs:element name="reg" type="xs:string" minOccurs="0" />
+              <xs:element name="fin" type="xs:string" minOccurs="0" />
+              <xs:element name="selcal" type="xs:string" minOccurs="0" />
+              <xs:element name="equip" type="xs:string" minOccurs="0" />
+              <xs:element name="equip_category" type="xs:string" minOccurs="0" />
+              <xs:element name="equip_navigation" type="xs:string" minOccurs="0" />
+              <xs:element name="equip_transponder" type="xs:string" minOccurs="0" />
+              <xs:element name="fuelfact" type="xs:string" minOccurs="0" />
+              <xs:element name="fuelfactor" type="xs:string" minOccurs="0" />
+              <xs:element name="max_passengers" type="xs:string" minOccurs="0" />
+              <xs:element name="supports_tlr" type="xs:string" minOccurs="0" />
+              <xs:element name="internal_id" type="xs:string" minOccurs="0" />
+              <xs:element name="is_custom" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="fuel" minOccurs="1" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="taxi" type="xs:string" minOccurs="0" />
+              <xs:element name="enroute_burn" type="xs:string" minOccurs="0" />
+              <xs:element name="contingency" type="xs:string" minOccurs="0" />
+              <xs:element name="alternate_burn" type="xs:string" minOccurs="0" />
+              <xs:element name="reserve" type="xs:string" minOccurs="0" />
+              <xs:element name="etops" type="xs:string" minOccurs="0" />
+              <xs:element name="extra" type="xs:string" minOccurs="0" />
+              <xs:element name="extra_required" type="xs:string" minOccurs="0" />
+              <xs:element name="extra_optional" type="xs:string" minOccurs="0" />
+              <xs:element name="min_takeoff" type="xs:string" minOccurs="0" />
+              <xs:element name="plan_takeoff" type="xs:string" minOccurs="0" />
+              <xs:element name="plan_ramp" type="xs:string" minOccurs="0" />
+              <xs:element name="plan_landing" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_fuel_flow" type="xs:string" minOccurs="0" />
+              <xs:element name="max_tanks" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="fuel_extra" minOccurs="1" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="bucket" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="label" type="xs:string" minOccurs="0" />
+                    <xs:element name="fuel" type="xs:string" minOccurs="0" />
+                    <xs:element name="time" type="xs:string" minOccurs="0" />
+                    <xs:element name="required" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="times" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="est_time_enroute" type="xs:string" minOccurs="0" />
+              <xs:element name="sched_time_enroute" type="xs:string" minOccurs="0" />
+              <xs:element name="sched_out" type="xs:string" minOccurs="0" />
+              <xs:element name="sched_off" type="xs:string" minOccurs="0" />
+              <xs:element name="sched_on" type="xs:string" minOccurs="0" />
+              <xs:element name="sched_in" type="xs:string" minOccurs="0" />
+              <xs:element name="sched_block" type="xs:string" minOccurs="0" />
+              <xs:element name="est_out" type="xs:string" minOccurs="0" />
+              <xs:element name="est_off" type="xs:string" minOccurs="0" />
+              <xs:element name="est_on" type="xs:string" minOccurs="0" />
+              <xs:element name="est_in" type="xs:string" minOccurs="0" />
+              <xs:element name="est_block" type="xs:string" minOccurs="0" />
+              <xs:element name="orig_timezone" type="xs:string" minOccurs="0" />
+              <xs:element name="dest_timezone" type="xs:string" minOccurs="0" />
+              <xs:element name="taxi_out" type="xs:string" minOccurs="0" />
+              <xs:element name="taxi_in" type="xs:string" minOccurs="0" />
+              <xs:element name="reserve_time" type="xs:string" minOccurs="0" />
+              <xs:element name="endurance" type="xs:string" minOccurs="0" />
+              <xs:element name="contfuel_time" type="xs:string" minOccurs="0" />
+              <xs:element name="etopsfuel_time" type="xs:string" minOccurs="0" />
+              <xs:element name="extrafuel_time" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="weights" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="oew" type="xs:string" minOccurs="0" />
+              <xs:element name="pax_count" type="xs:string" minOccurs="0" />
+              <xs:element name="bag_count" type="xs:string" minOccurs="0" />
+              <xs:element name="pax_count_actual" type="xs:string" minOccurs="0" />
+              <xs:element name="bag_count_actual" type="xs:string" minOccurs="0" />
+              <xs:element name="pax_weight" type="xs:string" minOccurs="0" />
+              <xs:element name="bag_weight" type="xs:string" minOccurs="0" />
+              <xs:element name="freight_added" type="xs:string" minOccurs="0" />
+              <xs:element name="cargo" type="xs:string" minOccurs="0" />
+              <xs:element name="payload" type="xs:string" minOccurs="0" />
+              <xs:element name="est_zfw" type="xs:string" minOccurs="0" />
+              <xs:element name="max_zfw" type="xs:string" minOccurs="0" />
+              <xs:element name="est_tow" type="xs:string" minOccurs="0" />
+              <xs:element name="max_tow" type="xs:string" minOccurs="0" />
+              <xs:element name="max_tow_struct" type="xs:string" minOccurs="0" />
+              <xs:element name="tow_limit_code" type="xs:string" minOccurs="0" />
+              <xs:element name="est_ldw" type="xs:string" minOccurs="0" />
+              <xs:element name="max_ldw" type="xs:string" minOccurs="0" />
+              <xs:element name="est_ramp" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="impacts" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="plus_2000ft" type="xs:string" minOccurs="0" />
+              <xs:element name="plus_4000ft" type="xs:string" minOccurs="0" />
+              <xs:element name="plus_6000ft" type="xs:string" minOccurs="0" />
+              <xs:element name="higher_ci" type="xs:string" minOccurs="0" />
+              <xs:element name="lower_ci" type="xs:string" minOccurs="0" />
+              <xs:element name="minus_6000ft" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="time_enroute" type="xs:string" minOccurs="0" />
+                    <xs:element name="time_difference" type="xs:string" minOccurs="0" />
+                    <xs:element name="enroute_burn" type="xs:string" minOccurs="0" />
+                    <xs:element name="burn_difference" type="xs:string" minOccurs="0" />
+                    <xs:element name="ramp_fuel" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_fl" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_tas" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_mach" type="xs:string" minOccurs="0" />
+                    <xs:element name="cost_index" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="minus_4000ft" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="time_enroute" type="xs:string" minOccurs="0" />
+                    <xs:element name="time_difference" type="xs:string" minOccurs="0" />
+                    <xs:element name="enroute_burn" type="xs:string" minOccurs="0" />
+                    <xs:element name="burn_difference" type="xs:string" minOccurs="0" />
+                    <xs:element name="ramp_fuel" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_fl" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_tas" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_mach" type="xs:string" minOccurs="0" />
+                    <xs:element name="cost_index" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="minus_2000ft" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="time_enroute" type="xs:string" minOccurs="0" />
+                    <xs:element name="time_difference" type="xs:string" minOccurs="0" />
+                    <xs:element name="enroute_burn" type="xs:string" minOccurs="0" />
+                    <xs:element name="burn_difference" type="xs:string" minOccurs="0" />
+                    <xs:element name="ramp_fuel" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_fl" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_tas" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_mach" type="xs:string" minOccurs="0" />
+                    <xs:element name="cost_index" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="zfw_plus_1000" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="time_enroute" type="xs:string" minOccurs="0" />
+                    <xs:element name="time_difference" type="xs:string" minOccurs="0" />
+                    <xs:element name="enroute_burn" type="xs:string" minOccurs="0" />
+                    <xs:element name="burn_difference" type="xs:string" minOccurs="0" />
+                    <xs:element name="ramp_fuel" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_fl" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_tas" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_mach" type="xs:string" minOccurs="0" />
+                    <xs:element name="cost_index" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="zfw_minus_1000" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="time_enroute" type="xs:string" minOccurs="0" />
+                    <xs:element name="time_difference" type="xs:string" minOccurs="0" />
+                    <xs:element name="enroute_burn" type="xs:string" minOccurs="0" />
+                    <xs:element name="burn_difference" type="xs:string" minOccurs="0" />
+                    <xs:element name="ramp_fuel" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_fl" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_tas" type="xs:string" minOccurs="0" />
+                    <xs:element name="initial_mach" type="xs:string" minOccurs="0" />
+                    <xs:element name="cost_index" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="crew" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="pilot_id" type="xs:string" minOccurs="0" />
+              <xs:element name="cpt" type="xs:string" minOccurs="0" />
+              <xs:element name="fo" type="xs:string" minOccurs="0" />
+              <xs:element name="dx" type="xs:string" minOccurs="0" />
+              <xs:element name="pu" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="notams" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="rec-count" type="xs:string" minOccurs="0" />
+              <xs:element name="notamdrec" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="source_id" type="xs:string" minOccurs="0" />
+                    <xs:element name="account_id" type="xs:string" minOccurs="0" />
+                    <xs:element name="notam_id" type="xs:string" minOccurs="0" />
+                    <xs:element name="notam_part" type="xs:string" minOccurs="0" />
+                    <xs:element name="cns_location_id" type="xs:string" minOccurs="0" />
+                    <xs:element name="icao_id" type="xs:string" minOccurs="0" />
+                    <xs:element name="icao_name" type="xs:string" minOccurs="0" />
+                    <xs:element name="total_parts" type="xs:string" minOccurs="0" />
+                    <xs:element name="notam_created_dtg" type="xs:string" minOccurs="0" />
+                    <xs:element name="notam_effective_dtg" type="xs:string" minOccurs="0" />
+                    <xs:element name="notam_expire_dtg_estimated" type="xs:string" minOccurs="0" />
+                    <xs:element name="notam_expire_dtg" type="xs:string" minOccurs="0" />
+                    <xs:element name="notam_lastmod_dtg" type="xs:string" minOccurs="0" />
+                    <xs:element name="notam_inserted_dtg" type="xs:string" minOccurs="0" />
+                    <xs:element name="notam_text" type="xs:string" minOccurs="0" />
+                    <xs:element name="notam_report" type="xs:string" minOccurs="0" />
+                    <xs:element name="notam_nrc" type="xs:string" minOccurs="0" />
+                    <xs:element name="notam_qcode" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="weather" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="orig_metar" type="xs:string" minOccurs="0" />
+              <xs:element name="orig_taf" type="xs:string" minOccurs="0" />
+              <xs:element name="dest_metar" type="xs:string" minOccurs="0" />
+              <xs:element name="dest_taf" type="xs:string" minOccurs="0" />
+              <xs:element name="altn_metar" type="xs:string" minOccurs="0" />
+              <xs:element name="altn_taf" type="xs:string" minOccurs="0" />
+              <xs:element name="toaltn_metar" type="xs:string" minOccurs="0" />
+              <xs:element name="toaltn_taf" type="xs:string" minOccurs="0" />
+              <xs:element name="eualtn_metar" type="xs:string" minOccurs="0" />
+              <xs:element name="eualtn_taf" type="xs:string" minOccurs="0" />
+              <xs:element name="etops_metar" type="xs:string" minOccurs="0" />
+              <xs:element name="etops_taf" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="text" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="nat_tracks" type="xs:string" minOccurs="0" />
+              <xs:element name="tlr_section" type="xs:string" minOccurs="0" />
+              <xs:element name="plan_html" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="database_updates" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="metar_taf" type="xs:string" minOccurs="0" />
+              <xs:element name="winds" type="xs:string" minOccurs="0" />
+              <xs:element name="sigwx" type="xs:string" minOccurs="0" />
+              <xs:element name="sigmet" type="xs:string" minOccurs="0" />
+              <xs:element name="notams" type="xs:string" minOccurs="0" />
+              <xs:element name="tracks" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="files" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="directory" type="xs:string" minOccurs="0" />
+              <xs:element ref="pdf" minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="file" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="fms_downloads" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="directory" type="xs:string" minOccurs="0" />
+              <xs:element ref="pdf" minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="abx" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="a3e" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="crx" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="cra" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="psx" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="efb" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ef2" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="bbs" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="csf" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ftr" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="gtn" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="vm5" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="vmx" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ffa" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="fsc" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="fs9" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="mfs" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="mfn" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="m24" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="fsl" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="fsx" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="fsn" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="gfs" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="kml" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ify" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="i74" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ifa" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ifw" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="inb" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ina" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ivo" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="xvd" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="xvp" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ixg" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="jar" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="jhe" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="jfb" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="mdr" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="mda" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="lvd" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="mjc" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="mjq" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="atm" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="mvz" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="vms" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="pmo" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="pmr" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="pmw" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="pgt" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="mga" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="psm" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="qty" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="rmd" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="sbr" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="sfp" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="tdg" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="tfd" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ufc" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="vas" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="vfp" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="wae" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="xfm" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="xpe" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="xpn" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="xp9" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="zbo" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="images" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="directory" type="xs:string" minOccurs="0" />
+              <xs:element name="map" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="links" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="skyvector" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="prefile" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="vatsim" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="site" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                    <xs:element name="form" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ivao" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="site" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                    <xs:element name="form" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="pilotedge" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="site" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                    <xs:element name="form" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="poscon" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="site" type="xs:string" minOccurs="0" />
+                    <xs:element name="link" type="xs:string" minOccurs="0" />
+                    <xs:element name="form" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="api_params" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="airline" type="xs:string" minOccurs="0" />
+              <xs:element name="fltnum" type="xs:string" minOccurs="0" />
+              <xs:element name="type" type="xs:string" minOccurs="0" />
+              <xs:element name="orig" type="xs:string" minOccurs="0" />
+              <xs:element name="dest" type="xs:string" minOccurs="0" />
+              <xs:element name="date" type="xs:string" minOccurs="0" />
+              <xs:element name="dephour" type="xs:string" minOccurs="0" />
+              <xs:element name="depmin" type="xs:string" minOccurs="0" />
+              <xs:element name="route" type="xs:string" minOccurs="0" />
+              <xs:element name="stehour" type="xs:string" minOccurs="0" />
+              <xs:element name="stemin" type="xs:string" minOccurs="0" />
+              <xs:element name="reg" type="xs:string" minOccurs="0" />
+              <xs:element name="fin" type="xs:string" minOccurs="0" />
+              <xs:element name="selcal" type="xs:string" minOccurs="0" />
+              <xs:element name="pax" type="xs:string" minOccurs="0" />
+              <xs:element name="altn" type="xs:string" minOccurs="0" />
+              <xs:element name="fl" type="xs:string" minOccurs="0" />
+              <xs:element name="cpt" type="xs:string" minOccurs="0" />
+              <xs:element name="pid" type="xs:string" minOccurs="0" />
+              <xs:element name="fuelfactor" type="xs:string" minOccurs="0" />
+              <xs:element name="manualpayload" type="xs:string" minOccurs="0" />
+              <xs:element name="manualzfw" type="xs:string" minOccurs="0" />
+              <xs:element name="taxifuel" type="xs:string" minOccurs="0" />
+              <xs:element name="minfob" type="xs:string" minOccurs="0" />
+              <xs:element name="minfob_units" type="xs:string" minOccurs="0" />
+              <xs:element name="minfod" type="xs:string" minOccurs="0" />
+              <xs:element name="minfod_units" type="xs:string" minOccurs="0" />
+              <xs:element name="melfuel" type="xs:string" minOccurs="0" />
+              <xs:element name="melfuel_units" type="xs:string" minOccurs="0" />
+              <xs:element name="atcfuel" type="xs:string" minOccurs="0" />
+              <xs:element name="atcfuel_units" type="xs:string" minOccurs="0" />
+              <xs:element name="wxxfuel" type="xs:string" minOccurs="0" />
+              <xs:element name="wxxfuel_units" type="xs:string" minOccurs="0" />
+              <xs:element name="addedfuel" type="xs:string" minOccurs="0" />
+              <xs:element name="addedfuel_units" type="xs:string" minOccurs="0" />
+              <xs:element name="addedfuel_label" type="xs:string" minOccurs="0" />
+              <xs:element name="tankering" type="xs:string" minOccurs="0" />
+              <xs:element name="tankering_units" type="xs:string" minOccurs="0" />
+              <xs:element name="flightrules" type="xs:string" minOccurs="0" />
+              <xs:element name="flighttype" type="xs:string" minOccurs="0" />
+              <xs:element name="contpct" type="xs:string" minOccurs="0" />
+              <xs:element name="resvrule" type="xs:string" minOccurs="0" />
+              <xs:element name="taxiout" type="xs:string" minOccurs="0" />
+              <xs:element name="taxiin" type="xs:string" minOccurs="0" />
+              <xs:element name="cargo" type="xs:string" minOccurs="0" />
+              <xs:element name="origrwy" type="xs:string" minOccurs="0" />
+              <xs:element name="destrwy" type="xs:string" minOccurs="0" />
+              <xs:element name="climb" type="xs:string" minOccurs="0" />
+              <xs:element name="descent" type="xs:string" minOccurs="0" />
+              <xs:element name="cruisemode" type="xs:string" minOccurs="0" />
+              <xs:element name="cruisesub" type="xs:string" minOccurs="0" />
+              <xs:element name="planformat" type="xs:string" minOccurs="0" />
+              <xs:element name="pounds" type="xs:string" minOccurs="0" />
+              <xs:element name="navlog" type="xs:string" minOccurs="0" />
+              <xs:element name="etops" type="xs:string" minOccurs="0" />
+              <xs:element name="stepclimbs" type="xs:string" minOccurs="0" />
+              <xs:element name="tlr" type="xs:string" minOccurs="0" />
+              <xs:element name="notams_opt" type="xs:string" minOccurs="0" />
+              <xs:element name="firnot" type="xs:string" minOccurs="0" />
+              <xs:element name="maps" type="xs:string" minOccurs="0" />
+              <xs:element name="turntoflt" type="xs:string" minOccurs="0" />
+              <xs:element name="turntoapt" type="xs:string" minOccurs="0" />
+              <xs:element name="turntotime" type="xs:string" minOccurs="0" />
+              <xs:element name="turnfrflt" type="xs:string" minOccurs="0" />
+              <xs:element name="turnfrapt" type="xs:string" minOccurs="0" />
+              <xs:element name="turnfrtime" type="xs:string" minOccurs="0" />
+              <xs:element name="fuelstats" type="xs:string" minOccurs="0" />
+              <xs:element name="contlabel" type="xs:string" minOccurs="0" />
+              <xs:element name="static_id" type="xs:string" minOccurs="0" />
+              <xs:element name="acdata" type="xs:string" minOccurs="0" />
+              <xs:element name="acdata_parsed" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="pdf" />
+        <xs:element ref="OFP" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -7,511 +7,612 @@
 //     le code est régénéré.
 // </auto-generated>
 //------------------------------------------------------------------------------
+namespace flightplan
+{
+    using System.Xml.Serialization;
+    using Newtonsoft.Json;
 
-using System.Xml.Serialization;
-using Newtonsoft.Json;
-
-// 
-// Ce code source a été automatiquement généré par xsd, Version=4.8.3928.0.
-// 
+    // 
+    // Ce code source a été automatiquement généré par xsd, Version=4.8.3928.0.
+    // 
 
 
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-[System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
-[JsonObject(MemberSerialization.OptIn)]
-public partial class LittleNavmap {
-    
-    private LittleNavmapFlightplan itemField;
-    
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("Flightplan", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("Item")]
-    public LittleNavmapFlightplan Item {
-        get {
-            return this.itemField;
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+    [JsonObject(MemberSerialization.OptIn)]
+    public partial class LittleNavmap
+    {
+
+        private LittleNavmapFlightplan itemField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Flightplan", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("Item")]
+        public LittleNavmapFlightplan Item
+        {
+            get
+            {
+                return this.itemField;
+            }
+            set
+            {
+                this.itemField = value;
+            }
         }
-        set {
-            this.itemField = value;
+
+        [JsonProperty("CurrentStep")]
+        public uint CurrentStep { get; set; }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [JsonObject(MemberSerialization.OptIn)]
+    public partial class LittleNavmapFlightplan
+    {
+
+        private string simDataField;
+
+        private string navDataField;
+
+        private LittleNavmapFlightplanHeader headerField;
+
+        private LittleNavmapFlightplanAircraftPerformance aircraftPerformanceField;
+
+        private LittleNavmapFlightplanWaypoint[] waypointsField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("SimData")]
+        public string SimData
+        {
+            get
+            {
+                return this.simDataField;
+            }
+            set
+            {
+                this.simDataField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("NavData")]
+        public string NavData
+        {
+            get
+            {
+                return this.navDataField;
+            }
+            set
+            {
+                this.navDataField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("Header")]
+        public LittleNavmapFlightplanHeader Header
+        {
+            get
+            {
+                return this.headerField;
+            }
+            set
+            {
+                this.headerField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("AircraftPerformance")]
+        public LittleNavmapFlightplanAircraftPerformance AircraftPerformance
+        {
+            get
+            {
+                return this.aircraftPerformanceField;
+            }
+            set
+            {
+                this.aircraftPerformanceField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Waypoint", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        [JsonProperty("Waypoints")]
+        public LittleNavmapFlightplanWaypoint[] Waypoints
+        {
+            get
+            {
+                return this.waypointsField;
+            }
+            set
+            {
+                this.waypointsField = value;
+            }
         }
     }
 
-    [JsonProperty("CurrentStep")]
-    public uint  CurrentStep { get; set; }
-}
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [JsonObject(MemberSerialization.OptIn)]
 
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-[JsonObject(MemberSerialization.OptIn)]
-public partial class LittleNavmapFlightplan {
-    
-    private string simDataField;
-    
-    private string navDataField;
-    
-    private LittleNavmapFlightplanHeader headerField;
-    
-    private LittleNavmapFlightplanAircraftPerformance aircraftPerformanceField;
-    
-    private LittleNavmapFlightplanWaypoint[] waypointsField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("SimData")]
-    public string SimData {
-        get {
-            return this.simDataField;
-        }
-        set {
-            this.simDataField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("NavData")]
-    public string NavData {
-        get {
-            return this.navDataField;
-        }
-        set {
-            this.navDataField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("Header")]
-    public LittleNavmapFlightplanHeader Header {
-        get {
-            return this.headerField;
-        }
-        set {
-            this.headerField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("AircraftPerformance")]
-    public LittleNavmapFlightplanAircraftPerformance AircraftPerformance {
-        get {
-            return this.aircraftPerformanceField;
-        }
-        set {
-            this.aircraftPerformanceField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [System.Xml.Serialization.XmlArrayItemAttribute("Waypoint", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-    [JsonProperty("Waypoints")]
-    public LittleNavmapFlightplanWaypoint[] Waypoints {
-        get {
-            return this.waypointsField;
-        }
-        set {
-            this.waypointsField = value;
-        }
-    }
-}
+    public partial class LittleNavmapFlightplanHeader
+    {
 
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-[JsonObject(MemberSerialization.OptIn)]
+        private string flightplanTypeField;
 
-public partial class LittleNavmapFlightplanHeader {
-    
-    private string flightplanTypeField;
-    
-    private int cruisingAltField;
-    
-    private bool cruisingAltFieldSpecified;
-    
-    private decimal cruisingAltFField;
-    
-    private bool cruisingAltFFieldSpecified;
-    
-    private string creationDateField;
-    
-    private string fileVersionField;
-    
-    private string programNameField;
-    
-    private string programVersionField;
-    
-    private string documentationField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("FlightplanType")]
-    public string FlightplanType {
-        get {
-            return this.flightplanTypeField;
-        }
-        set {
-            this.flightplanTypeField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("CruisingAlt")]
-    public int CruisingAlt {
-        get {
-            return this.cruisingAltField;
-        }
-        set {
-            this.cruisingAltField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
-    [JsonProperty("CruisingAltSpecified")]
-    public bool CruisingAltSpecified {
-        get {
-            return this.cruisingAltFieldSpecified;
-        }
-        set {
-            this.cruisingAltFieldSpecified = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("CruisingAltF")]
-    public decimal CruisingAltF {
-        get {
-            return this.cruisingAltFField;
-        }
-        set {
-            this.cruisingAltFField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
-    [JsonProperty("CruisingAltFSpecified")]
-    public bool CruisingAltFSpecified {
-        get {
-            return this.cruisingAltFFieldSpecified;
-        }
-        set {
-            this.cruisingAltFFieldSpecified = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("CreationDate")]
-    public string CreationDate {
-        get {
-            return this.creationDateField;
-        }
-        set {
-            this.creationDateField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("FileVersion")]
-    public string FileVersion {
-        get {
-            return this.fileVersionField;
-        }
-        set {
-            this.fileVersionField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("ProgramName")]
-    public string ProgramName {
-        get {
-            return this.programNameField;
-        }
-        set {
-            this.programNameField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("ProgramVersion")]
-    public string ProgramVersion {
-        get {
-            return this.programVersionField;
-        }
-        set {
-            this.programVersionField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("Documentation")]
-    public string Documentation {
-        get {
-            return this.documentationField;
-        }
-        set {
-            this.documentationField = value;
-        }
-    }
-}
+        private int cruisingAltField;
 
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-[JsonObject(MemberSerialization.OptIn)]
-public partial class LittleNavmapFlightplanAircraftPerformance {
-    
-    private string filePathField;
-    
-    private string typeField;
-    
-    private string nameField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("FilePath")]
-    public string FilePath {
-        get {
-            return this.filePathField;
-        }
-        set {
-            this.filePathField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("Type")]
-    public string Type {
-        get {
-            return this.typeField;
-        }
-        set {
-            this.typeField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("Name")]
-    public string Name {
-        get {
-            return this.nameField;
-        }
-        set {
-            this.nameField = value;
-        }
-    }
-}
+        private bool cruisingAltFieldSpecified;
 
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-[JsonObject(MemberSerialization.OptIn)]
-public partial class LittleNavmapFlightplanWaypoint {
-    
-    private string nameField;
-    
-    private string identField;
-    
-    private string regionField;
-    
-    private string typeField;
-    
-    private string commentField;
-    
-    private LittleNavmapFlightplanWaypointPos posField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("Name")]
-    public string Name {
-        get {
-            return this.nameField;
-        }
-        set {
-            this.nameField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("Ident")]
-    public string Ident {
-        get {
-            return this.identField;
-        }
-        set {
-            this.identField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("Region")]
-    public string Region {
-        get {
-            return this.regionField;
-        }
-        set {
-            this.regionField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("Type")]
-    public string Type {
-        get {
-            return this.typeField;
-        }
-        set {
-            this.typeField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("Comment")]
-    public string Comment {
-        get {
-            return this.commentField;
-        }
-        set {
-            this.commentField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [JsonProperty("Pos")]
-    public LittleNavmapFlightplanWaypointPos Pos {
-        get {
-            return this.posField;
-        }
-        set {
-            this.posField = value;
-        }
-    }
-}
+        private decimal cruisingAltFField;
 
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-[JsonObject(MemberSerialization.OptIn)]
-public partial class LittleNavmapFlightplanWaypointPos {
-    
-    private double lonField;
-    
-    private bool lonFieldSpecified;
-    
-    private double latField;
-    
-    private bool latFieldSpecified;
-    
-    private double altField;
-    
-    private bool altFieldSpecified;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    [JsonProperty("Lon")]
-    public double Lon {
-        get {
-            return this.lonField;
+        private bool cruisingAltFFieldSpecified;
+
+        private string creationDateField;
+
+        private string fileVersionField;
+
+        private string programNameField;
+
+        private string programVersionField;
+
+        private string documentationField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("FlightplanType")]
+        public string FlightplanType
+        {
+            get
+            {
+                return this.flightplanTypeField;
+            }
+            set
+            {
+                this.flightplanTypeField = value;
+            }
         }
-        set {
-            this.lonField = value;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("CruisingAlt")]
+        public int CruisingAlt
+        {
+            get
+            {
+                return this.cruisingAltField;
+            }
+            set
+            {
+                this.cruisingAltField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [JsonProperty("CruisingAltSpecified")]
+        public bool CruisingAltSpecified
+        {
+            get
+            {
+                return this.cruisingAltFieldSpecified;
+            }
+            set
+            {
+                this.cruisingAltFieldSpecified = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("CruisingAltF")]
+        public decimal CruisingAltF
+        {
+            get
+            {
+                return this.cruisingAltFField;
+            }
+            set
+            {
+                this.cruisingAltFField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [JsonProperty("CruisingAltFSpecified")]
+        public bool CruisingAltFSpecified
+        {
+            get
+            {
+                return this.cruisingAltFFieldSpecified;
+            }
+            set
+            {
+                this.cruisingAltFFieldSpecified = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("CreationDate")]
+        public string CreationDate
+        {
+            get
+            {
+                return this.creationDateField;
+            }
+            set
+            {
+                this.creationDateField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("FileVersion")]
+        public string FileVersion
+        {
+            get
+            {
+                return this.fileVersionField;
+            }
+            set
+            {
+                this.fileVersionField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("ProgramName")]
+        public string ProgramName
+        {
+            get
+            {
+                return this.programNameField;
+            }
+            set
+            {
+                this.programNameField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("ProgramVersion")]
+        public string ProgramVersion
+        {
+            get
+            {
+                return this.programVersionField;
+            }
+            set
+            {
+                this.programVersionField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("Documentation")]
+        public string Documentation
+        {
+            get
+            {
+                return this.documentationField;
+            }
+            set
+            {
+                this.documentationField = value;
+            }
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
-    [JsonProperty("LonSpecified")]
-    public bool LonSpecified {
-        get {
-            return this.lonFieldSpecified;
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [JsonObject(MemberSerialization.OptIn)]
+    public partial class LittleNavmapFlightplanAircraftPerformance
+    {
+
+        private string filePathField;
+
+        private string typeField;
+
+        private string nameField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("FilePath")]
+        public string FilePath
+        {
+            get
+            {
+                return this.filePathField;
+            }
+            set
+            {
+                this.filePathField = value;
+            }
         }
-        set {
-            this.lonFieldSpecified = value;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("Type")]
+        public string Type
+        {
+            get
+            {
+                return this.typeField;
+            }
+            set
+            {
+                this.typeField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("Name")]
+        public string Name
+        {
+            get
+            {
+                return this.nameField;
+            }
+            set
+            {
+                this.nameField = value;
+            }
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    [JsonProperty("Lat")]
-    public double Lat {
-        get {
-            return this.latField;
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [JsonObject(MemberSerialization.OptIn)]
+    public partial class LittleNavmapFlightplanWaypoint
+    {
+
+        private string nameField;
+
+        private string identField;
+
+        private string regionField;
+
+        private string typeField;
+
+        private string commentField;
+
+        private LittleNavmapFlightplanWaypointPos posField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("Name")]
+        public string Name
+        {
+            get
+            {
+                return this.nameField;
+            }
+            set
+            {
+                this.nameField = value;
+            }
         }
-        set {
-            this.latField = value;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("Ident")]
+        public string Ident
+        {
+            get
+            {
+                return this.identField;
+            }
+            set
+            {
+                this.identField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("Region")]
+        public string Region
+        {
+            get
+            {
+                return this.regionField;
+            }
+            set
+            {
+                this.regionField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("Type")]
+        public string Type
+        {
+            get
+            {
+                return this.typeField;
+            }
+            set
+            {
+                this.typeField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("Comment")]
+        public string Comment
+        {
+            get
+            {
+                return this.commentField;
+            }
+            set
+            {
+                this.commentField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("Pos")]
+        public LittleNavmapFlightplanWaypointPos Pos
+        {
+            get
+            {
+                return this.posField;
+            }
+            set
+            {
+                this.posField = value;
+            }
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
-    [JsonProperty("LatSpecified")]
-    public bool LatSpecified {
-        get {
-            return this.latFieldSpecified;
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [JsonObject(MemberSerialization.OptIn)]
+    public partial class LittleNavmapFlightplanWaypointPos
+    {
+
+        private double lonField;
+
+        private bool lonFieldSpecified;
+
+        private double latField;
+
+        private bool latFieldSpecified;
+
+        private double altField;
+
+        private bool altFieldSpecified;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [JsonProperty("Lon")]
+        public double Lon
+        {
+            get
+            {
+                return this.lonField;
+            }
+            set
+            {
+                this.lonField = value;
+            }
         }
-        set {
-            this.latFieldSpecified = value;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [JsonProperty("LonSpecified")]
+        public bool LonSpecified
+        {
+            get
+            {
+                return this.lonFieldSpecified;
+            }
+            set
+            {
+                this.lonFieldSpecified = value;
+            }
         }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    [JsonProperty("Alt")]
-    public double Alt {
-        get {
-            return this.altField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [JsonProperty("Lat")]
+        public double Lat
+        {
+            get
+            {
+                return this.latField;
+            }
+            set
+            {
+                this.latField = value;
+            }
         }
-        set {
-            this.altField = value;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [JsonProperty("LatSpecified")]
+        public bool LatSpecified
+        {
+            get
+            {
+                return this.latFieldSpecified;
+            }
+            set
+            {
+                this.latFieldSpecified = value;
+            }
         }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
-    [JsonProperty("AltSpecified")]
-    public bool AltSpecified {
-        get {
-            return this.altFieldSpecified;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [JsonProperty("Alt")]
+        public double Alt
+        {
+            get
+            {
+                return this.altField;
+            }
+            set
+            {
+                this.altField = value;
+            }
         }
-        set {
-            this.altFieldSpecified = value;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [JsonProperty("AltSpecified")]
+        public bool AltSpecified
+        {
+            get
+            {
+                return this.altFieldSpecified;
+            }
+            set
+            {
+                this.altFieldSpecified = value;
+            }
         }
     }
 }

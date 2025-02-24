@@ -10,6 +10,8 @@ using SimAddonControls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Runtime.Intrinsics.Arm;
 using System.Globalization;
+using simbrief;
+using flightplan;
 
 namespace BushTripPlugin
 {
@@ -266,7 +268,7 @@ namespace BushTripPlugin
         {
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Any flight plan file|*.fplan;*.lnmpln|Bushtrip file|*.fplan|little nav map file|*.lnmpln";
+            openFileDialog.Filter = "Any flight plan file|*.fplan;*.lnmpln;*.xml|Bushtrip file|*.fplan|little nav map file|*.lnmpln|simbrief xml file|*.xml";
             if (openFileDialog.ShowDialog(this) == DialogResult.OK)
             {
                 string filePath = openFileDialog.FileName;
@@ -297,6 +299,25 @@ namespace BushTripPlugin
                     flightPlan.CurrentStep = waypointIndex;
                     Logger.WriteLine("Fichier XML chargé avec succès !");
                 }
+
+                if (filePath.EndsWith(".xml"))
+                {
+                    //set the save file name to store fileplan & current position;
+                    filename = filePath.Replace(".xml", ".fplan");
+
+                    // Remplacez 'FlightPlan' par la classe générée à partir du XSD
+                    XmlSerializer serializer = new XmlSerializer(typeof(OFP));
+
+                    // Lecture du fichier et désérialisation
+                    using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+                    {
+                        OFP simbriefPlan = (OFP)serializer.Deserialize(fileStream);
+                        flightPlan = converter.FlightplanFromOFP(simbriefPlan);
+                    }
+                    flightPlan.CurrentStep = waypointIndex;
+                    Logger.WriteLine("Fichier XML chargé avec succès !");
+                }
+
                 useFlightPlan();
 
             }
