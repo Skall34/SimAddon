@@ -271,54 +271,64 @@ namespace BushTripPlugin
             openFileDialog.Filter = "Any flight plan file|*.fplan;*.lnmpln;*.xml|Bushtrip file|*.fplan|little nav map file|*.lnmpln|simbrief xml file|*.xml";
             if (openFileDialog.ShowDialog(this) == DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName;
-                filename = filePath;
-                waypointIndex = 0;
-                lastWaypointIndex = 0;
-                if (filePath.EndsWith(".fplan"))
+                try
                 {
-                    string json = File.ReadAllText(filePath);
-                    flightPlan = JsonConvert.DeserializeObject<LittleNavmap>(json);
-                    waypointIndex = flightPlan.CurrentStep;
-                    Logger.WriteLine("Fichier fplan chargé avec succès !");
-                }
-
-                if (filePath.EndsWith(".lnmpln"))
-                {
-                    //set the save file name to store fileplan & current position;
-                    filename = filePath.Replace(".lnmpln", ".fplan");
-
-                    // Remplacez 'FlightPlan' par la classe générée à partir du XSD
-                    XmlSerializer serializer = new XmlSerializer(typeof(LittleNavmap));
-
-                    // Lecture du fichier et désérialisation
-                    using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+                    string filePath = openFileDialog.FileName;
+                    filename = filePath;
+                    waypointIndex = 0;
+                    lastWaypointIndex = 0;
+                    if (filePath.EndsWith(".fplan"))
                     {
-                        flightPlan = (LittleNavmap)serializer.Deserialize(fileStream);
+                        string json = File.ReadAllText(filePath);
+                        flightPlan = JsonConvert.DeserializeObject<LittleNavmap>(json);
+                        waypointIndex = flightPlan.CurrentStep;
+                        Logger.WriteLine("Fichier fplan chargé avec succès !");
                     }
-                    flightPlan.CurrentStep = waypointIndex;
-                    Logger.WriteLine("Fichier XML chargé avec succès !");
-                }
 
-                if (filePath.EndsWith(".xml"))
-                {
-                    //set the save file name to store fileplan & current position;
-                    filename = filePath.Replace(".xml", ".fplan");
-
-                    // Remplacez 'FlightPlan' par la classe générée à partir du XSD
-                    XmlSerializer serializer = new XmlSerializer(typeof(OFP));
-
-                    // Lecture du fichier et désérialisation
-                    using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+                    if (filePath.EndsWith(".lnmpln"))
                     {
-                        OFP simbriefPlan = (OFP)serializer.Deserialize(fileStream);
-                        flightPlan = converter.FlightplanFromOFP(simbriefPlan);
-                    }
-                    flightPlan.CurrentStep = waypointIndex;
-                    Logger.WriteLine("Fichier XML chargé avec succès !");
-                }
+                        //set the save file name to store fileplan & current position;
+                        filename = filePath.Replace(".lnmpln", ".fplan");
 
-                useFlightPlan();
+                        // Remplacez 'FlightPlan' par la classe générée à partir du XSD
+                        XmlSerializer serializer = new XmlSerializer(typeof(LittleNavmap));
+
+                        // Lecture du fichier et désérialisation
+                        using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+                        {
+                            flightPlan = (LittleNavmap)serializer.Deserialize(fileStream);
+                        }
+                        flightPlan.CurrentStep = waypointIndex;
+                        Logger.WriteLine("Fichier XML chargé avec succès !");
+                    }
+
+                    if (filePath.EndsWith(".xml"))
+                    {
+                        //set the save file name to store fileplan & current position;
+                        filename = filePath.Replace(".xml", ".fplan");
+
+                        // Remplacez 'FlightPlan' par la classe générée à partir du XSD
+                        XmlSerializer serializer = new XmlSerializer(typeof(OFP));
+
+                        // Lecture du fichier et désérialisation
+                        using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+                        {
+                            OFP simbriefPlan = (OFP)serializer.Deserialize(fileStream);
+                            flightPlan = converter.FlightplanFromOFP(simbriefPlan);
+                        }
+                        flightPlan.CurrentStep = waypointIndex;
+                        Logger.WriteLine("Fichier XML chargé avec succès !");
+                    }
+
+                    //everything is OK, use the flightplan
+                    useFlightPlan();
+
+
+                }catch(Exception ex)
+                {
+                    Logger.WriteLine(ex.ToString());
+                    MessageBox.Show(ex.ToString(),"Error during import");
+                }
 
             }
 

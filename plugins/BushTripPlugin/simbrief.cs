@@ -22,6 +22,1034 @@ namespace simbrief {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
+    public partial class notam {
+        
+        private string source_idField;
+        
+        private string account_idField;
+        
+        private string notam_idField;
+        
+        private string location_idField;
+        
+        private string location_icaoField;
+        
+        private string location_nameField;
+        
+        private string location_typeField;
+        
+        private string date_createdField;
+        
+        private string date_effectiveField;
+        
+        private string date_expireField;
+        
+        private string date_expire_is_estimatedField;
+        
+        private string date_modifiedField;
+        
+        private string notam_scheduleField;
+        
+        private string notam_htmlField;
+        
+        private string notam_textField;
+        
+        private string notam_rawField;
+        
+        private string notam_nrcField;
+        
+        private string notam_qcodeField;
+        
+        private string notam_qcode_categoryField;
+        
+        private string notam_qcode_subjectField;
+        
+        private string notam_qcode_statusField;
+        
+        private string notam_is_obstacleField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string source_id {
+            get {
+                return this.source_idField;
+            }
+            set {
+                this.source_idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string account_id {
+            get {
+                return this.account_idField;
+            }
+            set {
+                this.account_idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string notam_id {
+            get {
+                return this.notam_idField;
+            }
+            set {
+                this.notam_idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string location_id {
+            get {
+                return this.location_idField;
+            }
+            set {
+                this.location_idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string location_icao {
+            get {
+                return this.location_icaoField;
+            }
+            set {
+                this.location_icaoField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string location_name {
+            get {
+                return this.location_nameField;
+            }
+            set {
+                this.location_nameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string location_type {
+            get {
+                return this.location_typeField;
+            }
+            set {
+                this.location_typeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string date_created {
+            get {
+                return this.date_createdField;
+            }
+            set {
+                this.date_createdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string date_effective {
+            get {
+                return this.date_effectiveField;
+            }
+            set {
+                this.date_effectiveField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string date_expire {
+            get {
+                return this.date_expireField;
+            }
+            set {
+                this.date_expireField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string date_expire_is_estimated {
+            get {
+                return this.date_expire_is_estimatedField;
+            }
+            set {
+                this.date_expire_is_estimatedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string date_modified {
+            get {
+                return this.date_modifiedField;
+            }
+            set {
+                this.date_modifiedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string notam_schedule {
+            get {
+                return this.notam_scheduleField;
+            }
+            set {
+                this.notam_scheduleField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string notam_html {
+            get {
+                return this.notam_htmlField;
+            }
+            set {
+                this.notam_htmlField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string notam_text {
+            get {
+                return this.notam_textField;
+            }
+            set {
+                this.notam_textField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string notam_raw {
+            get {
+                return this.notam_rawField;
+            }
+            set {
+                this.notam_rawField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string notam_nrc {
+            get {
+                return this.notam_nrcField;
+            }
+            set {
+                this.notam_nrcField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string notam_qcode {
+            get {
+                return this.notam_qcodeField;
+            }
+            set {
+                this.notam_qcodeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string notam_qcode_category {
+            get {
+                return this.notam_qcode_categoryField;
+            }
+            set {
+                this.notam_qcode_categoryField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string notam_qcode_subject {
+            get {
+                return this.notam_qcode_subjectField;
+            }
+            set {
+                this.notam_qcode_subjectField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string notam_qcode_status {
+            get {
+                return this.notam_qcode_statusField;
+            }
+            set {
+                this.notam_qcode_statusField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string notam_is_obstacle {
+            get {
+                return this.notam_is_obstacleField;
+            }
+            set {
+                this.notam_is_obstacleField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
+    public partial class fix {
+        
+        private string identField;
+        
+        private string nameField;
+        
+        private string typeField;
+        
+        private string icao_regionField;
+        
+        private string frequencyField;
+        
+        private double pos_latField;
+        
+        private bool pos_latFieldSpecified;
+        
+        private double pos_longField;
+        
+        private bool pos_longFieldSpecified;
+        
+        private string stageField;
+        
+        private string via_airwayField;
+        
+        private string is_sid_starField;
+        
+        private string distanceField;
+        
+        private string track_trueField;
+        
+        private string track_magField;
+        
+        private string heading_trueField;
+        
+        private string heading_magField;
+        
+        private string altitude_feetField;
+        
+        private string ind_airspeedField;
+        
+        private string true_airspeedField;
+        
+        private string machField;
+        
+        private string mach_thousandthsField;
+        
+        private string wind_componentField;
+        
+        private string groundspeedField;
+        
+        private string time_legField;
+        
+        private string time_totalField;
+        
+        private string fuel_flowField;
+        
+        private string fuel_legField;
+        
+        private string fuel_totalusedField;
+        
+        private string fuel_min_onboardField;
+        
+        private string fuel_plan_onboardField;
+        
+        private string oatField;
+        
+        private string oat_isa_devField;
+        
+        private string wind_dirField;
+        
+        private string wind_spdField;
+        
+        private string shearField;
+        
+        private string tropopause_feetField;
+        
+        private string ground_heightField;
+        
+        private string firField;
+        
+        private string fir_unitsField;
+        
+        private string fir_valid_levelsField;
+        
+        private string moraField;
+        
+        private fixLevel[] wind_dataField;
+        
+        private fixFir[] fir_crossingField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ident {
+            get {
+                return this.identField;
+            }
+            set {
+                this.identField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string icao_region {
+            get {
+                return this.icao_regionField;
+            }
+            set {
+                this.icao_regionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string frequency {
+            get {
+                return this.frequencyField;
+            }
+            set {
+                this.frequencyField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public double pos_lat {
+            get {
+                return this.pos_latField;
+            }
+            set {
+                this.pos_latField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool pos_latSpecified {
+            get {
+                return this.pos_latFieldSpecified;
+            }
+            set {
+                this.pos_latFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public double pos_long {
+            get {
+                return this.pos_longField;
+            }
+            set {
+                this.pos_longField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool pos_longSpecified {
+            get {
+                return this.pos_longFieldSpecified;
+            }
+            set {
+                this.pos_longFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string stage {
+            get {
+                return this.stageField;
+            }
+            set {
+                this.stageField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string via_airway {
+            get {
+                return this.via_airwayField;
+            }
+            set {
+                this.via_airwayField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string is_sid_star {
+            get {
+                return this.is_sid_starField;
+            }
+            set {
+                this.is_sid_starField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string distance {
+            get {
+                return this.distanceField;
+            }
+            set {
+                this.distanceField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string track_true {
+            get {
+                return this.track_trueField;
+            }
+            set {
+                this.track_trueField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string track_mag {
+            get {
+                return this.track_magField;
+            }
+            set {
+                this.track_magField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string heading_true {
+            get {
+                return this.heading_trueField;
+            }
+            set {
+                this.heading_trueField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string heading_mag {
+            get {
+                return this.heading_magField;
+            }
+            set {
+                this.heading_magField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string altitude_feet {
+            get {
+                return this.altitude_feetField;
+            }
+            set {
+                this.altitude_feetField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ind_airspeed {
+            get {
+                return this.ind_airspeedField;
+            }
+            set {
+                this.ind_airspeedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string true_airspeed {
+            get {
+                return this.true_airspeedField;
+            }
+            set {
+                this.true_airspeedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string mach {
+            get {
+                return this.machField;
+            }
+            set {
+                this.machField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string mach_thousandths {
+            get {
+                return this.mach_thousandthsField;
+            }
+            set {
+                this.mach_thousandthsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string wind_component {
+            get {
+                return this.wind_componentField;
+            }
+            set {
+                this.wind_componentField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string groundspeed {
+            get {
+                return this.groundspeedField;
+            }
+            set {
+                this.groundspeedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string time_leg {
+            get {
+                return this.time_legField;
+            }
+            set {
+                this.time_legField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string time_total {
+            get {
+                return this.time_totalField;
+            }
+            set {
+                this.time_totalField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string fuel_flow {
+            get {
+                return this.fuel_flowField;
+            }
+            set {
+                this.fuel_flowField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string fuel_leg {
+            get {
+                return this.fuel_legField;
+            }
+            set {
+                this.fuel_legField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string fuel_totalused {
+            get {
+                return this.fuel_totalusedField;
+            }
+            set {
+                this.fuel_totalusedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string fuel_min_onboard {
+            get {
+                return this.fuel_min_onboardField;
+            }
+            set {
+                this.fuel_min_onboardField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string fuel_plan_onboard {
+            get {
+                return this.fuel_plan_onboardField;
+            }
+            set {
+                this.fuel_plan_onboardField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string oat {
+            get {
+                return this.oatField;
+            }
+            set {
+                this.oatField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string oat_isa_dev {
+            get {
+                return this.oat_isa_devField;
+            }
+            set {
+                this.oat_isa_devField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string wind_dir {
+            get {
+                return this.wind_dirField;
+            }
+            set {
+                this.wind_dirField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string wind_spd {
+            get {
+                return this.wind_spdField;
+            }
+            set {
+                this.wind_spdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string shear {
+            get {
+                return this.shearField;
+            }
+            set {
+                this.shearField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string tropopause_feet {
+            get {
+                return this.tropopause_feetField;
+            }
+            set {
+                this.tropopause_feetField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ground_height {
+            get {
+                return this.ground_heightField;
+            }
+            set {
+                this.ground_heightField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string fir {
+            get {
+                return this.firField;
+            }
+            set {
+                this.firField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string fir_units {
+            get {
+                return this.fir_unitsField;
+            }
+            set {
+                this.fir_unitsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string fir_valid_levels {
+            get {
+                return this.fir_valid_levelsField;
+            }
+            set {
+                this.fir_valid_levelsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string mora {
+            get {
+                return this.moraField;
+            }
+            set {
+                this.moraField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("level", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public fixLevel[] wind_data {
+            get {
+                return this.wind_dataField;
+            }
+            set {
+                this.wind_dataField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("fir", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public fixFir[] fir_crossing {
+            get {
+                return this.fir_crossingField;
+            }
+            set {
+                this.fir_crossingField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    public partial class fixLevel {
+        
+        private string altitudeField;
+        
+        private string wind_dirField;
+        
+        private string wind_spdField;
+        
+        private string oatField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string altitude {
+            get {
+                return this.altitudeField;
+            }
+            set {
+                this.altitudeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string wind_dir {
+            get {
+                return this.wind_dirField;
+            }
+            set {
+                this.wind_dirField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string wind_spd {
+            get {
+                return this.wind_spdField;
+            }
+            set {
+                this.wind_spdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string oat {
+            get {
+                return this.oatField;
+            }
+            set {
+                this.oatField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    public partial class fixFir {
+        
+        private string fir_icaoField;
+        
+        private string fir_nameField;
+        
+        private double pos_lat_entryField;
+        
+        private bool pos_lat_entryFieldSpecified;
+        
+        private double pos_long_entryField;
+        
+        private bool pos_long_entryFieldSpecified;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string fir_icao {
+            get {
+                return this.fir_icaoField;
+            }
+            set {
+                this.fir_icaoField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string fir_name {
+            get {
+                return this.fir_nameField;
+            }
+            set {
+                this.fir_nameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public double pos_lat_entry {
+            get {
+                return this.pos_lat_entryField;
+            }
+            set {
+                this.pos_lat_entryField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool pos_lat_entrySpecified {
+            get {
+                return this.pos_lat_entryFieldSpecified;
+            }
+            set {
+                this.pos_lat_entryFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public double pos_long_entry {
+            get {
+                return this.pos_long_entryField;
+            }
+            set {
+                this.pos_long_entryField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool pos_long_entrySpecified {
+            get {
+                return this.pos_long_entryFieldSpecified;
+            }
+            set {
+                this.pos_long_entryFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
     public partial class pdf {
         
         private string nameField;
@@ -60,10 +1088,6 @@ namespace simbrief {
     [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
     public partial class OFP {
         
-        private string alternateField;
-        
-        private string alternate_navlogField;
-        
         private string takeoff_altnField;
         
         private string enroute_altnField;
@@ -71,8 +1095,6 @@ namespace simbrief {
         private string etopsField;
         
         private string tlrField;
-        
-        private string sigmetsField;
         
         private string tracksField;
         
@@ -94,65 +1116,49 @@ namespace simbrief {
         
         private OFPDestination destinationField;
         
-        private OFPFix[] navlogField;
+        private OFPAlternate alternateField;
         
-        private OFPAtc[] atcField;
+        private fix[] alternate_navlogField;
         
-        private OFPAircraft[] aircraftField;
+        private fix[] navlogField;
+        
+        private OFPAtc atcField;
+        
+        private OFPAircraft aircraftField;
         
         private OFPFuel fuelField;
         
         private OFPBucket[] fuel_extraField;
         
-        private OFPTimes[] timesField;
+        private OFPTimes timesField;
         
-        private OFPWeights[] weightsField;
+        private OFPWeights weightsField;
         
-        private OFPImpacts[] impactsField;
+        private OFPImpacts impactsField;
         
-        private OFPCrew[] crewField;
+        private OFPCrew crewField;
         
-        private OFPNotams[] notamsField;
+        private OFPNotams notamsField;
         
-        private OFPWeather[] weatherField;
+        private OFPWeather weatherField;
         
-        private OFPText[] textField;
+        private OFPSigmet[] sigmetsField;
         
-        private OFPDatabase_updates[] database_updatesField;
+        private OFPText textField;
         
-        private OFPFiles[] filesField;
+        private OFPDatabase_updates database_updatesField;
         
-        private OFPFms_downloads[] fms_downloadsField;
+        private OFPFiles filesField;
         
-        private OFPImages[] imagesField;
+        private OFPFms_downloads fms_downloadsField;
         
-        private OFPLinks[] linksField;
+        private OFPImages imagesField;
         
-        private OFPPrefile[] prefileField;
+        private OFPLinks linksField;
         
-        private OFPApi_params[] api_paramsField;
+        private OFPPrefile prefileField;
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string alternate {
-            get {
-                return this.alternateField;
-            }
-            set {
-                this.alternateField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string alternate_navlog {
-            get {
-                return this.alternate_navlogField;
-            }
-            set {
-                this.alternate_navlogField = value;
-            }
-        }
+        private OFPApi_params api_paramsField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -195,17 +1201,6 @@ namespace simbrief {
             }
             set {
                 this.tlrField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string sigmets {
-            get {
-                return this.sigmetsField;
-            }
-            set {
-                this.sigmetsField = value;
             }
         }
         
@@ -320,9 +1315,32 @@ namespace simbrief {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPAlternate alternate {
+            get {
+                return this.alternateField;
+            }
+            set {
+                this.alternateField = value;
+            }
+        }
+        
+        /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("fix", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public OFPFix[] navlog {
+        [System.Xml.Serialization.XmlArrayItemAttribute("fix", IsNullable=false)]
+        public fix[] alternate_navlog {
+            get {
+                return this.alternate_navlogField;
+            }
+            set {
+                this.alternate_navlogField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("fix", IsNullable=false)]
+        public fix[] navlog {
             get {
                 return this.navlogField;
             }
@@ -332,8 +1350,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("atc", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPAtc[] atc {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPAtc atc {
             get {
                 return this.atcField;
             }
@@ -343,8 +1361,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("aircraft", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPAircraft[] aircraft {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPAircraft aircraft {
             get {
                 return this.aircraftField;
             }
@@ -377,8 +1395,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("times", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPTimes[] times {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPTimes times {
             get {
                 return this.timesField;
             }
@@ -388,8 +1406,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("weights", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPWeights[] weights {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPWeights weights {
             get {
                 return this.weightsField;
             }
@@ -399,8 +1417,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("impacts", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPImpacts[] impacts {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPImpacts impacts {
             get {
                 return this.impactsField;
             }
@@ -410,8 +1428,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("crew", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPCrew[] crew {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPCrew crew {
             get {
                 return this.crewField;
             }
@@ -421,8 +1439,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("notams", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPNotams[] notams {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPNotams notams {
             get {
                 return this.notamsField;
             }
@@ -432,8 +1450,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("weather", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPWeather[] weather {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPWeather weather {
             get {
                 return this.weatherField;
             }
@@ -443,8 +1461,20 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("text", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPText[] text {
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("sigmet", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public OFPSigmet[] sigmets {
+            get {
+                return this.sigmetsField;
+            }
+            set {
+                this.sigmetsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPText text {
             get {
                 return this.textField;
             }
@@ -454,8 +1484,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("database_updates", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPDatabase_updates[] database_updates {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPDatabase_updates database_updates {
             get {
                 return this.database_updatesField;
             }
@@ -465,8 +1495,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("files", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPFiles[] files {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPFiles files {
             get {
                 return this.filesField;
             }
@@ -476,8 +1506,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("fms_downloads", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPFms_downloads[] fms_downloads {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPFms_downloads fms_downloads {
             get {
                 return this.fms_downloadsField;
             }
@@ -487,8 +1517,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("images", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPImages[] images {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPImages images {
             get {
                 return this.imagesField;
             }
@@ -498,8 +1528,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("links", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPLinks[] links {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPLinks links {
             get {
                 return this.linksField;
             }
@@ -509,8 +1539,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("prefile", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPPrefile[] prefile {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPPrefile prefile {
             get {
                 return this.prefileField;
             }
@@ -520,8 +1550,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("api_params", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPApi_params[] api_params {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPApi_params api_params {
             get {
                 return this.api_paramsField;
             }
@@ -1153,9 +2183,13 @@ namespace simbrief {
         
         private string plan_rwyField;
         
-        private string trans_altField;
+        private int trans_altField;
         
-        private string trans_levelField;
+        private bool trans_altFieldSpecified;
+        
+        private int trans_levelField;
+        
+        private bool trans_levelFieldSpecified;
         
         private string metarField;
         
@@ -1171,9 +2205,9 @@ namespace simbrief {
         
         private string taf_timeField;
         
-        private string atisField;
+        private OFPOriginAtis[] atisField;
         
-        private string notamField;
+        private notam[] notamField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -1309,7 +2343,7 @@ namespace simbrief {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string trans_alt {
+        public int trans_alt {
             get {
                 return this.trans_altField;
             }
@@ -1319,13 +2353,35 @@ namespace simbrief {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool trans_altSpecified {
+            get {
+                return this.trans_altFieldSpecified;
+            }
+            set {
+                this.trans_altFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string trans_level {
+        public int trans_level {
             get {
                 return this.trans_levelField;
             }
             set {
                 this.trans_levelField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool trans_levelSpecified {
+            get {
+                return this.trans_levelFieldSpecified;
+            }
+            set {
+                this.trans_levelFieldSpecified = value;
             }
         }
         
@@ -1407,8 +2463,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string atis {
+        [System.Xml.Serialization.XmlElementAttribute("atis", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPOriginAtis[] atis {
             get {
                 return this.atisField;
             }
@@ -1418,13 +2474,100 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string notam {
+        [System.Xml.Serialization.XmlElementAttribute("notam")]
+        public notam[] notam {
             get {
                 return this.notamField;
             }
             set {
                 this.notamField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    public partial class OFPOriginAtis {
+        
+        private string networkField;
+        
+        private string issuedField;
+        
+        private string letterField;
+        
+        private string phoneticField;
+        
+        private string typeField;
+        
+        private string messageField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string network {
+            get {
+                return this.networkField;
+            }
+            set {
+                this.networkField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string issued {
+            get {
+                return this.issuedField;
+            }
+            set {
+                this.issuedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string letter {
+            get {
+                return this.letterField;
+            }
+            set {
+                this.letterField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string phonetic {
+            get {
+                return this.phoneticField;
+            }
+            set {
+                this.phoneticField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string message {
+            get {
+                return this.messageField;
+            }
+            set {
+                this.messageField = value;
             }
         }
     }
@@ -1461,9 +2604,13 @@ namespace simbrief {
         
         private string plan_rwyField;
         
-        private string trans_altField;
+        private int trans_altField;
         
-        private string trans_levelField;
+        private bool trans_altFieldSpecified;
+        
+        private int trans_levelField;
+        
+        private bool trans_levelFieldSpecified;
         
         private string metarField;
         
@@ -1481,7 +2628,7 @@ namespace simbrief {
         
         private string atisField;
         
-        private string notamField;
+        private notam[] notamField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -1617,7 +2764,7 @@ namespace simbrief {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string trans_alt {
+        public int trans_alt {
             get {
                 return this.trans_altField;
             }
@@ -1627,13 +2774,35 @@ namespace simbrief {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool trans_altSpecified {
+            get {
+                return this.trans_altFieldSpecified;
+            }
+            set {
+                this.trans_altFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string trans_level {
+        public int trans_level {
             get {
                 return this.trans_levelField;
             }
             set {
                 this.trans_levelField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool trans_levelSpecified {
+            get {
+                return this.trans_levelFieldSpecified;
+            }
+            set {
+                this.trans_levelFieldSpecified = value;
             }
         }
         
@@ -1726,8 +2895,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string notam {
+        [System.Xml.Serialization.XmlElementAttribute("notam")]
+        public notam[] notam {
             get {
                 return this.notamField;
             }
@@ -1743,17 +2912,17 @@ namespace simbrief {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    public partial class OFPFix {
+    public partial class OFPAlternate {
         
-        private string identField;
+        private string icao_codeField;
         
-        private string nameField;
+        private string iata_codeField;
         
-        private string typeField;
+        private string faa_codeField;
         
         private string icao_regionField;
         
-        private string frequencyField;
+        private string elevationField;
         
         private double pos_latField;
         
@@ -1763,106 +2932,102 @@ namespace simbrief {
         
         private bool pos_longFieldSpecified;
         
-        private string stageField;
+        private string nameField;
         
-        private string via_airwayField;
+        private string timezoneField;
         
-        private string is_sid_starField;
+        private string plan_rwyField;
+        
+        private int trans_altField;
+        
+        private bool trans_altFieldSpecified;
+        
+        private int trans_levelField;
+        
+        private bool trans_levelFieldSpecified;
+        
+        private string cruise_altitudeField;
         
         private string distanceField;
+        
+        private string gc_distanceField;
+        
+        private string air_distanceField;
         
         private string track_trueField;
         
         private string track_magField;
         
-        private string heading_trueField;
+        private string tasField;
         
-        private string heading_magField;
+        private string gsField;
         
-        private string altitude_feetField;
+        private string avg_wind_compField;
         
-        private string ind_airspeedField;
+        private string avg_wind_dirField;
         
-        private string true_airspeedField;
+        private string avg_wind_spdField;
         
-        private string machField;
+        private string avg_tropopauseField;
         
-        private string mach_thousandthsField;
+        private string avg_tdvField;
         
-        private string wind_componentField;
+        private string eteField;
         
-        private string groundspeedField;
+        private string burnField;
         
-        private string time_legField;
+        private string routeField;
         
-        private string time_totalField;
+        private string route_ifpsField;
         
-        private string fuel_flowField;
+        private string metarField;
         
-        private string fuel_legField;
+        private string metar_timeField;
         
-        private string fuel_totalusedField;
+        private string metar_categoryField;
         
-        private string fuel_min_onboardField;
+        private string metar_visibilityField;
         
-        private string fuel_plan_onboardField;
+        private string metar_ceilingField;
         
-        private string oatField;
+        private string tafField;
         
-        private string oat_isa_devField;
+        private string taf_timeField;
         
-        private string wind_dirField;
+        private string atisField;
         
-        private string wind_spdField;
-        
-        private string shearField;
-        
-        private string tropopause_feetField;
-        
-        private string ground_heightField;
-        
-        private string firField;
-        
-        private string fir_unitsField;
-        
-        private string fir_valid_levelsField;
-        
-        private string moraField;
-        
-        private string fir_crossingField;
-        
-        private OFPFixLevel[] wind_dataField;
+        private notam[] notamField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ident {
+        public string icao_code {
             get {
-                return this.identField;
+                return this.icao_codeField;
             }
             set {
-                this.identField = value;
+                this.icao_codeField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string name {
+        public string iata_code {
             get {
-                return this.nameField;
+                return this.iata_codeField;
             }
             set {
-                this.nameField = value;
+                this.iata_codeField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string type {
+        public string faa_code {
             get {
-                return this.typeField;
+                return this.faa_codeField;
             }
             set {
-                this.typeField = value;
+                this.faa_codeField = value;
             }
         }
         
@@ -1879,12 +3044,12 @@ namespace simbrief {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string frequency {
+        public string elevation {
             get {
-                return this.frequencyField;
+                return this.elevationField;
             }
             set {
-                this.frequencyField = value;
+                this.elevationField = value;
             }
         }
         
@@ -1934,34 +3099,89 @@ namespace simbrief {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string stage {
+        public string name {
             get {
-                return this.stageField;
+                return this.nameField;
             }
             set {
-                this.stageField = value;
+                this.nameField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string via_airway {
+        public string timezone {
             get {
-                return this.via_airwayField;
+                return this.timezoneField;
             }
             set {
-                this.via_airwayField = value;
+                this.timezoneField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string is_sid_star {
+        public string plan_rwy {
             get {
-                return this.is_sid_starField;
+                return this.plan_rwyField;
             }
             set {
-                this.is_sid_starField = value;
+                this.plan_rwyField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public int trans_alt {
+            get {
+                return this.trans_altField;
+            }
+            set {
+                this.trans_altField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool trans_altSpecified {
+            get {
+                return this.trans_altFieldSpecified;
+            }
+            set {
+                this.trans_altFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public int trans_level {
+            get {
+                return this.trans_levelField;
+            }
+            set {
+                this.trans_levelField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool trans_levelSpecified {
+            get {
+                return this.trans_levelFieldSpecified;
+            }
+            set {
+                this.trans_levelFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string cruise_altitude {
+            get {
+                return this.cruise_altitudeField;
+            }
+            set {
+                this.cruise_altitudeField = value;
             }
         }
         
@@ -1973,6 +3193,28 @@ namespace simbrief {
             }
             set {
                 this.distanceField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string gc_distance {
+            get {
+                return this.gc_distanceField;
+            }
+            set {
+                this.gc_distanceField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string air_distance {
+            get {
+                return this.air_distanceField;
+            }
+            set {
+                this.air_distanceField = value;
             }
         }
         
@@ -2000,382 +3242,221 @@ namespace simbrief {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string heading_true {
+        public string tas {
             get {
-                return this.heading_trueField;
+                return this.tasField;
             }
             set {
-                this.heading_trueField = value;
+                this.tasField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string heading_mag {
+        public string gs {
             get {
-                return this.heading_magField;
+                return this.gsField;
             }
             set {
-                this.heading_magField = value;
+                this.gsField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string altitude_feet {
+        public string avg_wind_comp {
             get {
-                return this.altitude_feetField;
+                return this.avg_wind_compField;
             }
             set {
-                this.altitude_feetField = value;
+                this.avg_wind_compField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ind_airspeed {
+        public string avg_wind_dir {
             get {
-                return this.ind_airspeedField;
+                return this.avg_wind_dirField;
             }
             set {
-                this.ind_airspeedField = value;
+                this.avg_wind_dirField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string true_airspeed {
+        public string avg_wind_spd {
             get {
-                return this.true_airspeedField;
+                return this.avg_wind_spdField;
             }
             set {
-                this.true_airspeedField = value;
+                this.avg_wind_spdField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string mach {
+        public string avg_tropopause {
             get {
-                return this.machField;
+                return this.avg_tropopauseField;
             }
             set {
-                this.machField = value;
+                this.avg_tropopauseField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string mach_thousandths {
+        public string avg_tdv {
             get {
-                return this.mach_thousandthsField;
+                return this.avg_tdvField;
             }
             set {
-                this.mach_thousandthsField = value;
+                this.avg_tdvField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string wind_component {
+        public string ete {
             get {
-                return this.wind_componentField;
+                return this.eteField;
             }
             set {
-                this.wind_componentField = value;
+                this.eteField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string groundspeed {
+        public string burn {
             get {
-                return this.groundspeedField;
+                return this.burnField;
             }
             set {
-                this.groundspeedField = value;
+                this.burnField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string time_leg {
+        public string route {
             get {
-                return this.time_legField;
+                return this.routeField;
             }
             set {
-                this.time_legField = value;
+                this.routeField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string time_total {
+        public string route_ifps {
             get {
-                return this.time_totalField;
+                return this.route_ifpsField;
             }
             set {
-                this.time_totalField = value;
+                this.route_ifpsField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string fuel_flow {
+        public string metar {
             get {
-                return this.fuel_flowField;
+                return this.metarField;
             }
             set {
-                this.fuel_flowField = value;
+                this.metarField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string fuel_leg {
+        public string metar_time {
             get {
-                return this.fuel_legField;
+                return this.metar_timeField;
             }
             set {
-                this.fuel_legField = value;
+                this.metar_timeField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string fuel_totalused {
+        public string metar_category {
             get {
-                return this.fuel_totalusedField;
+                return this.metar_categoryField;
             }
             set {
-                this.fuel_totalusedField = value;
+                this.metar_categoryField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string fuel_min_onboard {
+        public string metar_visibility {
             get {
-                return this.fuel_min_onboardField;
+                return this.metar_visibilityField;
             }
             set {
-                this.fuel_min_onboardField = value;
+                this.metar_visibilityField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string fuel_plan_onboard {
+        public string metar_ceiling {
             get {
-                return this.fuel_plan_onboardField;
+                return this.metar_ceilingField;
             }
             set {
-                this.fuel_plan_onboardField = value;
+                this.metar_ceilingField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string oat {
+        public string taf {
             get {
-                return this.oatField;
+                return this.tafField;
             }
             set {
-                this.oatField = value;
+                this.tafField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string oat_isa_dev {
+        public string taf_time {
             get {
-                return this.oat_isa_devField;
+                return this.taf_timeField;
             }
             set {
-                this.oat_isa_devField = value;
+                this.taf_timeField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string wind_dir {
+        public string atis {
             get {
-                return this.wind_dirField;
+                return this.atisField;
             }
             set {
-                this.wind_dirField = value;
+                this.atisField = value;
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string wind_spd {
+        [System.Xml.Serialization.XmlElementAttribute("notam")]
+        public notam[] notam {
             get {
-                return this.wind_spdField;
+                return this.notamField;
             }
             set {
-                this.wind_spdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string shear {
-            get {
-                return this.shearField;
-            }
-            set {
-                this.shearField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string tropopause_feet {
-            get {
-                return this.tropopause_feetField;
-            }
-            set {
-                this.tropopause_feetField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ground_height {
-            get {
-                return this.ground_heightField;
-            }
-            set {
-                this.ground_heightField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string fir {
-            get {
-                return this.firField;
-            }
-            set {
-                this.firField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string fir_units {
-            get {
-                return this.fir_unitsField;
-            }
-            set {
-                this.fir_unitsField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string fir_valid_levels {
-            get {
-                return this.fir_valid_levelsField;
-            }
-            set {
-                this.fir_valid_levelsField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string mora {
-            get {
-                return this.moraField;
-            }
-            set {
-                this.moraField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string fir_crossing {
-            get {
-                return this.fir_crossingField;
-            }
-            set {
-                this.fir_crossingField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("level", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public OFPFixLevel[] wind_data {
-            get {
-                return this.wind_dataField;
-            }
-            set {
-                this.wind_dataField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    public partial class OFPFixLevel {
-        
-        private string altitudeField;
-        
-        private string wind_dirField;
-        
-        private string wind_spdField;
-        
-        private string oatField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string altitude {
-            get {
-                return this.altitudeField;
-            }
-            set {
-                this.altitudeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string wind_dir {
-            get {
-                return this.wind_dirField;
-            }
-            set {
-                this.wind_dirField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string wind_spd {
-            get {
-                return this.wind_spdField;
-            }
-            set {
-                this.wind_spdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string oat {
-            get {
-                return this.oatField;
-            }
-            set {
-                this.oatField = value;
+                this.notamField = value;
             }
         }
     }
@@ -2418,7 +3499,7 @@ namespace simbrief {
         
         private string fir_etopsField;
         
-        private string fir_enrouteField;
+        private OFPAtcFir_enroute[] fir_enrouteField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -2586,13 +3667,35 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string fir_enroute {
+        [System.Xml.Serialization.XmlElementAttribute("fir_enroute", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public OFPAtcFir_enroute[] fir_enroute {
             get {
                 return this.fir_enrouteField;
             }
             set {
                 this.fir_enrouteField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    public partial class OFPAtcFir_enroute {
+        
+        private string valueField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlTextAttribute()]
+        public string Value {
+            get {
+                return this.valueField;
+            }
+            set {
+                this.valueField = value;
             }
         }
     }
@@ -4562,9 +5665,9 @@ namespace simbrief {
         
         private string notam_effective_dtgField;
         
-        private string notam_expire_dtg_estimatedField;
-        
         private string notam_expire_dtgField;
+        
+        private string notam_expire_dtg_estimatedField;
         
         private string notam_lastmod_dtgField;
         
@@ -4690,23 +5793,23 @@ namespace simbrief {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string notam_expire_dtg_estimated {
-            get {
-                return this.notam_expire_dtg_estimatedField;
-            }
-            set {
-                this.notam_expire_dtg_estimatedField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string notam_expire_dtg {
             get {
                 return this.notam_expire_dtgField;
             }
             set {
                 this.notam_expire_dtgField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string notam_expire_dtg_estimated {
+            get {
+                return this.notam_expire_dtg_estimatedField;
+            }
+            set {
+                this.notam_expire_dtg_estimatedField = value;
             }
         }
         
@@ -4938,6 +6041,184 @@ namespace simbrief {
             }
             set {
                 this.etops_tafField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    public partial class OFPSigmet {
+        
+        private string typeField;
+        
+        private string locField;
+        
+        private string addressField;
+        
+        private string titleField;
+        
+        private string firField;
+        
+        private string fir_nameField;
+        
+        private string idField;
+        
+        private string hazardField;
+        
+        private string qualifierField;
+        
+        private string issuedField;
+        
+        private string startField;
+        
+        private string endField;
+        
+        private string textField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string loc {
+            get {
+                return this.locField;
+            }
+            set {
+                this.locField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string address {
+            get {
+                return this.addressField;
+            }
+            set {
+                this.addressField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string title {
+            get {
+                return this.titleField;
+            }
+            set {
+                this.titleField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string fir {
+            get {
+                return this.firField;
+            }
+            set {
+                this.firField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string fir_name {
+            get {
+                return this.fir_nameField;
+            }
+            set {
+                this.fir_nameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string id {
+            get {
+                return this.idField;
+            }
+            set {
+                this.idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string hazard {
+            get {
+                return this.hazardField;
+            }
+            set {
+                this.hazardField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string qualifier {
+            get {
+                return this.qualifierField;
+            }
+            set {
+                this.qualifierField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string issued {
+            get {
+                return this.issuedField;
+            }
+            set {
+                this.issuedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string start {
+            get {
+                return this.startField;
+            }
+            set {
+                this.startField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string end {
+            get {
+                return this.endField;
+            }
+            set {
+                this.endField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string text {
+            get {
+                return this.textField;
+            }
+            set {
+                this.textField = value;
             }
         }
     }
@@ -9705,6 +10986,8 @@ namespace simbrief {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("OFP", typeof(OFP))]
+        [System.Xml.Serialization.XmlElementAttribute("fix", typeof(fix))]
+        [System.Xml.Serialization.XmlElementAttribute("notam", typeof(notam))]
         [System.Xml.Serialization.XmlElementAttribute("pdf", typeof(pdf))]
         public object[] Items {
             get {
