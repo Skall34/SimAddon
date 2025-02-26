@@ -15,6 +15,12 @@ namespace SimDataManager
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+
+        public override string ToString()
+        {
+            string result=Latitude.ToString("0.000000") + "/" + Longitude.ToString("0.000000");
+            return result;
+        }
     }
 
     public class PositionSnapshot
@@ -56,6 +62,11 @@ namespace SimDataManager
 
         public PositionSnapshot() { 
             Location = new LatLonPoint();
+        }
+
+        public override string ToString()
+        {
+            return Location.ToString();
         }
 
     }

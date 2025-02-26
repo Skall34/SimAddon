@@ -88,11 +88,11 @@ namespace BushTripPlugin
             dest.Type = "AIRPORT";
             if (simbrief.origin.trans_level != 0)
             {
-                dest.Comment += "Transition altitude: " + simbrief.destination.trans_alt.ToString();
+                dest.Comment += "Transition altitude: " + simbrief.destination.trans_alt.ToString() + Environment.NewLine ;
             }
             if (simbrief.origin.trans_alt != 0)
             {
-                dest.Comment += "Transition level: " + simbrief.destination.trans_level.ToString();
+                dest.Comment += "Transition level: " + simbrief.destination.trans_level.ToString() + Environment.NewLine;
             }
 
             result.Item.Waypoints[nbWaypoints-1] = dest;

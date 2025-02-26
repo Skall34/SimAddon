@@ -203,7 +203,20 @@ namespace BushTripPlugin
                     item.ImageKey = wp.Type;
 
                     lvWaypoints.Items.Add(item);
-                    tbComment.AppendText(flightPlan.Item.Waypoints[i].Comment + Environment.NewLine + "-------------------" + Environment.NewLine);
+                    if (!string.IsNullOrEmpty(flightPlan.Item.Waypoints[i].Comment))
+                    {
+                        tbComment.AppendText(flightPlan.Item.Waypoints[i].Name + Environment.NewLine);
+                        tbComment.AppendText(flightPlan.Item.Waypoints[i].Comment);
+                        if (!flightPlan.Item.Waypoints[i].Comment.EndsWith(Environment.NewLine))
+                        {
+                            tbComment.AppendText(Environment.NewLine);
+                        }
+                        tbComment.AppendText("-------------------" + Environment.NewLine);
+                    }
+                    else
+                    {
+                        tbComment.AppendText("-------------------" + Environment.NewLine);
+                    }
                 }
                 //ensure that text is scrolled down
                 tbComment.SelectionStart = tbComment.TextLength;
