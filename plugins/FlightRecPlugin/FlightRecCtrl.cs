@@ -313,31 +313,36 @@ namespace FlightRecPlugin
                     {
                         if (onGround)
                         {
-                            //only take the first takeoff for takeoff time. To manage rebounds when landing.
-                            Logger.WriteLine("Takeoff detected !");
-                            UpdateStatus("In flight");
-                            //we just took off ! read the plane weight
-                            flightPerfs.takeOffWeight = currentFlightStatus.planeWeight;
-                            //keep memory that we're airborn
-                            onGround = false;
-                            // on veut afficher la date
-                            _airborn = DateTime.Now;
-                            flightPerfs.takeOffTime = _airborn;
-
-                            if (lbTimeAirborn.Text == "--:--")
+                            //filter to only consider the first takeoff
+                            if (_airborn == DateTime.UnixEpoch)
                             {
-                                this.lbTimeAirborn.Text = _airborn.ToString("HH:mm");
+                                //only take the first takeoff for takeoff time. To manage rebounds when landing.
+                                Logger.WriteLine("Takeoff detected !");
+                                UpdateStatus("In flight");
+                                //we just took off ! read the plane weight
+                                flightPerfs.takeOffWeight = currentFlightStatus.planeWeight;
+                                //keep memory that we're airborn
+                                onGround = false;
+                                // on veut afficher la date
+                                _airborn = DateTime.Now;
+                                flightPerfs.takeOffTime = _airborn;
+
+                                if (lbTimeAirborn.Text == "--:--")
+                                {
+                                    this.lbTimeAirborn.Text = _airborn.ToString("HH:mm");
+                                }
+
+                                // On cache le label du Fret après le décollage. On en a plus besoin
+                                this.lbFret.Visible = false;
+                                //on grise le bouton save flight en vol
+                                btnSubmit.Enabled = false;
+                                submitFlightToolStripMenuItem.Enabled = false;
+
+                                //just incase of rebound during takeoff, reset the onground label
+                                lbTimeOnGround.Text = "--:--";
+
+                                SimEvent(SimEventArg.EventType.TAKEOFF);
                             }
-
-                            // On cache le label du Fret après le décollage. On en a plus besoin
-                            this.lbFret.Visible = false;
-                            //on grise le bouton save flight en vol
-                            btnSubmit.Enabled = false;
-                            submitFlightToolStripMenuItem.Enabled = false;
-                            //just incase of rebound during takeoff, reset the onground label
-                            lbTimeOnGround.Text = "--:--";
-
-                            SimEvent(SimEventArg.EventType.TAKEOFF);
                         }
                         //constamment mettre à jour la vrtical acceleration et airspeed pendant le vol.
                         flightPerfs.landingVerticalAcceleration = currentFlightStatus.verticalAcceleration;

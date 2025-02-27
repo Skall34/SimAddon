@@ -102,11 +102,12 @@ namespace SimAddonLogger
             string newLine = callingFunc + " : " + message;
             if (newLine != lastLine)
             {
-                if (nbLastLine>0)
+                if (nbLastLine > 0)
                 {
                     Trace.WriteLine(DateTime.Now.ToLongTimeString() + $" : {lastLine} ({nbLastLine})");
                 }
                 Trace.WriteLine(DateTime.Now.ToLongTimeString() + " : " + newLine);
+                
                 lastLine = newLine;
                 nbLastLine = 0;
             }
