@@ -70,8 +70,11 @@ jobs:
     - name: publish ATIS plugin
       run: dotnet publish plugins/ATISPlugin/ATISPlugin.csproj --configuration Release --output publish_output\plugins\3_ATIS
 
-    - name: publish ChartFox plugin
-      run: dotnet publish plugins/ChartFoxPlugin/WebBrowserPlugin.csproj --configuration Release --output publish_output\plugins\4_ChartFox
+    - name: publish Chartfox plugin
+      run: dotnet publish plugins/ChartFoxPlugin/ChartFoxPlugin.csproj --configuration Release --output publish_output\plugins\4_ChartFox
+
+    - name: publish Vatsim radar plugin
+      run: dotnet publish plugins/VatsimRadarPlugin/VatsimRadarPlugin.csproj --configuration Release --output publish_output\plugins\R_Radar
 
     - name: set version in installer
       shell: pwsh
