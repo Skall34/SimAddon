@@ -118,4 +118,10 @@ jobs:
         name: simaddon_setup_${{ steps.previoustag.outputs.tag }}
         compression-level: 0
         path: nsis/simaddon_setup_${{ steps.previoustag.outputs.tag }}.exe
-    
+
+    - name: attach artifacts to release
+      uses: softprops/action-gh-release@v2.2.1
+      with:
+        files: |
+          publish_output/*
+          nsis/simaddon_setup_${{ steps.previoustag.outputs.tag }}.exe
