@@ -122,6 +122,7 @@ jobs:
     - name: attach artifacts to release
       uses: softprops/action-gh-release@v2.2.1
       with:
+        tag_name: ${{ steps.previoustag.outputs.tag }}
         files: |
           publish_output/*
           nsis/simaddon_setup_${{ steps.previoustag.outputs.tag }}.exe
