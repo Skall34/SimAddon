@@ -22,6 +22,8 @@
   <ItemGroup>
     <DesignData Include="simbrief.xsd">
       <Generator>xmlSchemaGenerator </Generator>
+      <CustomToolNamespace>simbrief</CustomToolNamespace>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </DesignData>
   </ItemGroup>
 

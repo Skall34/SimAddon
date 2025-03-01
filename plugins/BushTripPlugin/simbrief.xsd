@@ -120,13 +120,14 @@
         <xs:element name="takeoff_altn" type="xs:string" minOccurs="0" />
         <xs:element name="enroute_altn" type="xs:string" minOccurs="0" />
         <xs:element name="etops" type="xs:string" minOccurs="0" />
-        <xs:element name="tlr" type="xs:string" minOccurs="0" />
+        <!--<xs:element name="tlr" type="xs:string" minOccurs="0" />-->
         <xs:element name="tracks" type="xs:string" minOccurs="0" />
         <xs:element name="vatsim_prefile" type="xs:string" minOccurs="0" />
         <xs:element name="ivao_prefile" type="xs:string" minOccurs="0" />
         <xs:element name="pilotedge_prefile" type="xs:string" minOccurs="0" />
         <xs:element name="poscon_prefile" type="xs:string" minOccurs="0" />
         <xs:element name="map_data" type="xs:string" minOccurs="0" />
+        <!--
         <xs:element name="params" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
@@ -142,6 +143,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        -->
         <xs:element name="general" minOccurs="0" maxOccurs="1">
           <xs:complexType>
             <xs:sequence>
@@ -287,7 +289,6 @@
               <xs:element name="metar_ceiling" type="xs:string" minOccurs="0" />
               <xs:element name="taf" type="xs:string" minOccurs="0" />
               <xs:element name="taf_time" type="xs:string" minOccurs="0" />
-              <xs:element name="atis" type="xs:string" minOccurs="0" />
               <xs:element ref="notam" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
           </xs:complexType>
@@ -306,6 +307,8 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+
+        <!--
         <xs:element name="atc" minOccurs="0" maxOccurs="1">
           <xs:complexType>
             <xs:sequence>
@@ -449,6 +452,9 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        -->  
+        
+        <!--
         <xs:element name="impacts" minOccurs="0" maxOccurs="1">
           <xs:complexType>
             <xs:sequence>
@@ -1338,6 +1344,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        -->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
