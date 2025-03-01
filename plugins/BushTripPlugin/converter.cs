@@ -68,7 +68,7 @@ namespace BushTripPlugin
                         }; break;
                     case "wpt":
                         {
-                            wp.Type = "WAYPONT";
+                            wp.Type = "WAYPOINT";
                         }; break;
                     default:
                         {
@@ -97,6 +97,60 @@ namespace BushTripPlugin
 
             result.Item.Waypoints[nbWaypoints-1] = dest;
 
+            return result;
+        }
+
+        internal static LittleNavmap? FlightplanFromFMS(fms fmsData)
+        {
+            LittleNavmap result = new LittleNavmap();
+            result.Item = new LittleNavmapFlightplan();
+            result.Item.Waypoints = new LittleNavmapFlightplanWaypoint[fmsData.numenr];
+            for (int i=0;i<fmsData.numenr;i++)
+            {
+                fms.fmsWpt wpt = fmsData.waypoints[i];
+                LittleNavmapFlightplanWaypoint lnmpWp = new LittleNavmapFlightplanWaypoint()
+                {
+                    Name = wpt.special,
+                    Ident = wpt.name,
+                };
+                lnmpWp.Pos = new LittleNavmapFlightplanWaypointPos()
+                {
+                    Alt = wpt.altitude,
+                    AltSpecified = true,
+                    Lat = wpt.latitude,
+                    LatSpecified = true,
+                    Lon = wpt.longitude,
+                    LonSpecified = true
+                };
+                switch (wpt.wpType)
+                {
+                    case fms.fmsWpt.WPTYPE.AIRPORT:
+                        {
+                            lnmpWp.Type = "AIRPORT";
+                        };break;
+                    case fms.fmsWpt.WPTYPE.NDB:
+                        {
+                            lnmpWp.Type = "NDB";
+                        };break;
+                    case fms.fmsWpt.WPTYPE.VOR:
+                        {
+                            lnmpWp.Type = "VOR";
+                        }; break;
+                    case fms.fmsWpt.WPTYPE.NAMED:
+                        {
+                            lnmpWp.Type = "WAYPOINT";
+                        }; break;
+                    case fms.fmsWpt.WPTYPE.UNNAMED:
+                        {
+                            lnmpWp.Type = "USER";
+                        }; break;
+
+
+                }
+
+                result.Item.Waypoints[i] = lnmpWp;
+
+            }
             return result;
         }
     }

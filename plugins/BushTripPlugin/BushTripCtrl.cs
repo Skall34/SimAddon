@@ -281,7 +281,7 @@ namespace BushTripPlugin
         {
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Any flight plan file|*.fplan;*.lnmpln;*.xml|Bushtrip file|*.fplan|little nav map file|*.lnmpln|simbrief xml file|*.xml";
+            openFileDialog.Filter = "Any flight plan file|*.fplan;*.lnmpln;*.xml;*.fms|Bushtrip file|*.fplan|little nav map file|*.lnmpln|simbrief xml file|*.xml|fms file|*.fms";
             if (openFileDialog.ShowDialog(this) == DialogResult.OK)
             {
                 try
@@ -332,6 +332,30 @@ namespace BushTripPlugin
                         flightPlan.CurrentStep = waypointIndex;
                         Logger.WriteLine("Fichier XML chargé avec succès !");
                     }
+
+                    if (filePath.EndsWith(".fms"))
+                    {
+                        //set the save file name to store fileplan & current position;
+                        filename = filePath.Replace(".fms", ".fplan");
+
+                        string fmsRawData = File.ReadAllText(filePath);
+                        try
+                        {
+                            fms fmsData = new fms(fmsRawData);
+
+                            flightPlan = converter.FlightplanFromFMS(fmsData);
+
+
+                            flightPlan.CurrentStep = waypointIndex;
+                            Logger.WriteLine("Fichier XML chargé avec succès !");
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.WriteLine("Erreur dans le fichier FMS "+filePath);
+                            Logger.WriteLine(ex.ToString());
+                        }
+                    }
+
 
                     //everything is OK, use the flightplan
                     useFlightPlan();
