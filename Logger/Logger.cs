@@ -20,6 +20,7 @@ namespace SimAddonLogger
 
         private static string lastLine="";
         private static uint nbLastLine = 0;
+        private static bool lastlineWritten = false;
 
         static string GetCallingMethodName()
         {
@@ -76,7 +77,11 @@ namespace SimAddonLogger
 
         public static void Dispose()
         {
-            Trace.WriteLine(DateTime.Now.ToLongTimeString() + " : " + lastLine);
+            if (!lastlineWritten)
+            {
+                Trace.WriteLine(DateTime.Now.ToLongTimeString() + " : " + lastLine);
+            }
+            Trace.WriteLine(DateTime.Now.ToLongTimeString() + " : Disposing logger");
             logger.Flush();
             logger.Close();
             System.Diagnostics.Trace.Listeners.Remove(logger);
@@ -84,7 +89,11 @@ namespace SimAddonLogger
 
         public static void suspend()
         {
-            Trace.WriteLine(DateTime.Now.ToLongTimeString() + " : " + lastLine);
+            if (!lastlineWritten)
+            {
+                Trace.WriteLine(DateTime.Now.ToLongTimeString() + " : " + lastLine);
+            }
+            Trace.WriteLine(DateTime.Now.ToLongTimeString() + " : Suspended");
             logger.Flush();
             logger.Close();
             System.Diagnostics.Trace.Listeners.Remove(logger);
@@ -110,10 +119,12 @@ namespace SimAddonLogger
                 
                 lastLine = newLine;
                 nbLastLine = 0;
+                lastlineWritten = true;
             }
             else
             {
                 nbLastLine++;
+                lastlineWritten = false;
             }
         }
 
