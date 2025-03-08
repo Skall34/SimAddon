@@ -261,7 +261,7 @@ namespace FlightRecPlugin
             {
                 if (currentFlightStatus.readyToFly)
                 {
-                    //flag to avoid to take bad data until the pilto is in the plane.
+                    //one shot flag to avoid to take bad data until the pilot is in the plane.
                     simReady = true;
                 }
 
@@ -477,7 +477,7 @@ namespace FlightRecPlugin
                     //test pour savoir si on est vraiment pret à voler. On le sim doit etre pret, et le pilote dans le cockpit
                     //(viewmode à moins de 4 sur msfs (pas de pb de viewmode avec xplane apparement)
                     //c'est pour eviter d'etre detecté à DGTK si on demarre directement sur la piste moteurs allumés.
-                    if (currentFlightStatus.readyToFly)
+                    if (simReady)
                     {
 
                         if ((!_previousEngineStatus && currentFlightStatus.isAtLeastOneEngineFiring) && (startDisabled == 0))
@@ -521,7 +521,7 @@ namespace FlightRecPlugin
                     }
 
                     // si on detecte un arret moteur
-                    if (currentFlightStatus.readyToFly)
+                    if (simReady)
                     {
                         if (_previousEngineStatus && !currentFlightStatus.isAtLeastOneEngineFiring)
                         {

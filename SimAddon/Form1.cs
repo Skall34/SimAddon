@@ -383,6 +383,7 @@ namespace SimAddon
             //what to do in application if flight recorder detected an engine start ?
             if (autoHide)
             {
+                LastWindowState = this.WindowState;
                 this.WindowState = FormWindowState.Minimized;
             }
         }
@@ -392,7 +393,7 @@ namespace SimAddon
             //what to do in application if flight recorder detected an engine stop ?
             if (autoHide)
             {
-                this.WindowState = FormWindowState.Maximized;
+                this.WindowState = LastWindowState;
             }
         }
 
@@ -421,41 +422,41 @@ namespace SimAddon
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            if (WindowState != LastWindowState)
-            {
-                LastWindowState = WindowState;
-                if (WindowState == FormWindowState.Maximized)
-                {
-                    foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
-                    {
-                        try
-                        {
-                            plugin.SetWindowMode(ISimAddonPluginCtrl.WindowMode.FULL);
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.WriteLine(ex.Message);
-                        }
-                    }
-                }
+            //if (WindowState != LastWindowState)
+            //{
+            //    LastWindowState = WindowState;
+            //    if (WindowState == FormWindowState.Maximized)
+            //    {
+            //        foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+            //        {
+            //            try
+            //            {
+            //                plugin.SetWindowMode(ISimAddonPluginCtrl.WindowMode.FULL);
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                Logger.WriteLine(ex.Message);
+            //            }
+            //        }
+            //    }
 
-                if (WindowState == FormWindowState.Normal)
-                {
-                    foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
-                    {
-                        try
-                        {
-                            plugin.SetWindowMode(ISimAddonPluginCtrl.WindowMode.COMPACT);
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.WriteLine(ex.Message);
-                        }
-                    }
+            //    if (WindowState == FormWindowState.Normal)
+            //    {
+            //        foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+            //        {
+            //            try
+            //            {
+            //                plugin.SetWindowMode(ISimAddonPluginCtrl.WindowMode.COMPACT);
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                Logger.WriteLine(ex.Message);
+            //            }
+            //        }
 
-                }
+            //    }
 
-            }
+            //}
         }
 
         private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e)
