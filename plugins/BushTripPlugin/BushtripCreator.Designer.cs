@@ -32,6 +32,12 @@
             btnCancel = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox1 = new GroupBox();
+            chkSea = new CheckBox();
+            chkHeli = new CheckBox();
+            chkSmall = new CheckBox();
+            chkMedium = new CheckBox();
+            label2 = new Label();
+            chkLarge = new CheckBox();
             checkMultiHop = new CheckBox();
             btnRandomArrival = new Button();
             comboBox2 = new ComboBox();
@@ -89,14 +95,20 @@
             tableLayoutPanel1.Location = new Point(12, 12);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 110F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 166F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Size = new Size(627, 509);
             tableLayoutPanel1.TabIndex = 2;
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(chkSea);
+            groupBox1.Controls.Add(chkHeli);
+            groupBox1.Controls.Add(chkSmall);
+            groupBox1.Controls.Add(chkMedium);
+            groupBox1.Controls.Add(label2);
+            groupBox1.Controls.Add(chkLarge);
             groupBox1.Controls.Add(checkMultiHop);
             groupBox1.Controls.Add(btnRandomArrival);
             groupBox1.Controls.Add(comboBox2);
@@ -107,10 +119,79 @@
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(621, 104);
+            groupBox1.Size = new Size(621, 160);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Departure";
+            // 
+            // chkSea
+            // 
+            chkSea.AutoSize = true;
+            chkSea.Checked = true;
+            chkSea.CheckState = CheckState.Checked;
+            chkSea.Location = new Point(372, 119);
+            chkSea.Name = "chkSea";
+            chkSea.Size = new Size(73, 19);
+            chkSea.TabIndex = 12;
+            chkSea.Text = "SeaPlane";
+            chkSea.UseVisualStyleBackColor = true;
+            // 
+            // chkHeli
+            // 
+            chkHeli.AutoSize = true;
+            chkHeli.Checked = true;
+            chkHeli.CheckState = CheckState.Checked;
+            chkHeli.Location = new Point(301, 118);
+            chkHeli.Name = "chkHeli";
+            chkHeli.Size = new Size(69, 19);
+            chkHeli.TabIndex = 11;
+            chkHeli.Text = "Heliport";
+            chkHeli.UseVisualStyleBackColor = true;
+            // 
+            // chkSmall
+            // 
+            chkSmall.AutoSize = true;
+            chkSmall.Checked = true;
+            chkSmall.CheckState = CheckState.Checked;
+            chkSmall.Location = new Point(240, 118);
+            chkSmall.Name = "chkSmall";
+            chkSmall.Size = new Size(55, 19);
+            chkSmall.TabIndex = 10;
+            chkSmall.Text = "Small";
+            chkSmall.UseVisualStyleBackColor = true;
+            // 
+            // chkMedium
+            // 
+            chkMedium.AutoSize = true;
+            chkMedium.Checked = true;
+            chkMedium.CheckState = CheckState.Checked;
+            chkMedium.Location = new Point(163, 118);
+            chkMedium.Name = "chkMedium";
+            chkMedium.Size = new Size(71, 19);
+            chkMedium.TabIndex = 9;
+            chkMedium.Text = "Medium";
+            chkMedium.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(11, 119);
+            label2.Name = "label2";
+            label2.Size = new Size(66, 15);
+            label2.TabIndex = 8;
+            label2.Text = "Airport size";
+            // 
+            // chkLarge
+            // 
+            chkLarge.AutoSize = true;
+            chkLarge.Checked = true;
+            chkLarge.CheckState = CheckState.Checked;
+            chkLarge.Location = new Point(102, 118);
+            chkLarge.Name = "chkLarge";
+            chkLarge.Size = new Size(55, 19);
+            chkLarge.TabIndex = 7;
+            chkLarge.Text = "Large";
+            chkLarge.UseVisualStyleBackColor = true;
             // 
             // checkMultiHop
             // 
@@ -188,9 +269,9 @@
             // 
             groupBox2.Controls.Add(lbArrivals);
             groupBox2.Dock = DockStyle.Fill;
-            groupBox2.Location = new Point(3, 203);
+            groupBox2.Location = new Point(3, 265);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(621, 303);
+            groupBox2.Size = new Size(621, 241);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Possible arrivals";
@@ -203,7 +284,7 @@
             lbArrivals.ItemHeight = 15;
             lbArrivals.Location = new Point(3, 19);
             lbArrivals.Name = "lbArrivals";
-            lbArrivals.Size = new Size(615, 281);
+            lbArrivals.Size = new Size(615, 219);
             lbArrivals.TabIndex = 0;
             // 
             // groupBox3
@@ -215,9 +296,9 @@
             groupBox3.Controls.Add(trackBar1);
             groupBox3.Controls.Add(lblSpeed);
             groupBox3.Dock = DockStyle.Fill;
-            groupBox3.Location = new Point(3, 113);
+            groupBox3.Location = new Point(3, 169);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(621, 84);
+            groupBox3.Size = new Size(621, 90);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
             groupBox3.Text = "Flight parameters";
@@ -340,5 +421,11 @@
         private CheckBox checkMultiHop;
         private Button btnSearchFlights;
         private ProgressBar progressBar1;
+        private CheckBox chkSea;
+        private CheckBox chkHeli;
+        private CheckBox chkSmall;
+        private CheckBox chkMedium;
+        private Label label2;
+        private CheckBox chkLarge;
     }
 }
