@@ -211,7 +211,13 @@ namespace BushTripPlugin
             }
             else
             {
+                //construit une liste temporaire des aéroports
+                //TODO : ne garder dans cette liste QUE les aéroports correspondant aux tailles souhaitées.
                 List<Aeroport> temp = new List<Aeroport>(data.aeroports);
+
+
+
+                //constuire le bushtrip en utilisant cette sous-liste.
                 List<Aeroport> trip;
                     trip = await BuildBushtrip3(temp, start, end, miles);
                 if (trip != null)
