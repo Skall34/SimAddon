@@ -213,8 +213,30 @@ namespace BushTripPlugin
             {
                 //construit une liste temporaire des aéroports
                 //TODO : ne garder dans cette liste QUE les aéroports correspondant aux tailles souhaitées.
-                List<Aeroport> temp = new List<Aeroport>(data.aeroports);
-
+                List<Aeroport> temp = new List<Aeroport>();
+                
+                foreach (Aeroport a in data.aeroports) { 
+                    if ((a.type=="small_airport") && (chkSmall.Checked))
+                    {
+                        temp.Add(a);
+                    }
+                    if ((a.type == "medium_airport") && (chkMedium.Checked))
+                    {
+                        temp.Add(a);
+                    }
+                    if ((a.type == "large_airport") && (chkLarge.Checked))
+                    {
+                        temp.Add(a);
+                    }
+                    if ((a.type == "heliport") && (chkHeli.Checked))
+                    {
+                        temp.Add(a);
+                    }
+                    if ((a.type == "seaplane_base") && (chkSea.Checked))
+                    {
+                        temp.Add(a);
+                    }
+                }
 
 
                 //constuire le bushtrip en utilisant cette sous-liste.
