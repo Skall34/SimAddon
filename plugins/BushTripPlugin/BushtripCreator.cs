@@ -215,7 +215,10 @@ namespace BushTripPlugin
                 //TODO : ne garder dans cette liste QUE les aéroports correspondant aux tailles souhaitées.
                 List<Aeroport> temp = new List<Aeroport>();
                 
-                foreach (Aeroport a in data.aeroports) { 
+                foreach (Aeroport a in data.aeroports) {
+                    if (start.ident == a.ident) { 
+                        temp.Add(a);
+                    }
                     if ((a.type=="small_airport") && (chkSmall.Checked))
                     {
                         temp.Add(a);
@@ -233,6 +236,10 @@ namespace BushTripPlugin
                         temp.Add(a);
                     }
                     if ((a.type == "seaplane_base") && (chkSea.Checked))
+                    {
+                        temp.Add(a);
+                    }
+                    if (end.ident == a.ident)
                     {
                         temp.Add(a);
                     }
