@@ -130,11 +130,11 @@ namespace BushTripPlugin
             }
         }
 
-        private  double Heuristic(Aeroport a, Aeroport b)
+        private double Heuristic(Aeroport a, Aeroport b)
         {
             return a.DistanceTo(b); // Distance en ligne droite
         }
-        private  List<Aeroport> ReconstructPath(Dictionary<Aeroport, Aeroport> cameFrom, Aeroport current)
+        private List<Aeroport> ReconstructPath(Dictionary<Aeroport, Aeroport> cameFrom, Aeroport current)
         {
             var path = new List<Aeroport> { current };
             while (cameFrom.ContainsKey(current))
@@ -159,43 +159,43 @@ namespace BushTripPlugin
             fScore[start] = Heuristic(start, goal);
             openSet.Add((fScore[start], start));
 
-                while (openSet.Count > 0)
+            while (openSet.Count > 0)
+            {
+                Aeroport current = openSet.First().Airport;
+                openSet.Remove(openSet.First());
+
+                if (current == goal)
+                    return ReconstructPath(cameFrom, current);
+
+                current.FindAirportsInRange(airports, maxHop);
+                progressBar1.Value = 0;
+                progressBar1.Maximum = current.AirportsInRange.Count;
+
+                if (cancel)
                 {
-                    Aeroport current = openSet.First().Airport;
-                    openSet.Remove(openSet.First());
+                    break;
+                }
 
-                    if (current == goal)
-                        return ReconstructPath(cameFrom, current);
-
-                    current.FindAirportsInRange(airports, maxHop);
-                    progressBar1.Value = 0;
-                    progressBar1.Maximum = current.AirportsInRange.Count;
-
-                    if (cancel)
+                foreach (var neighbor in current.AirportsInRange)
+                {
+                    double tentativeGScore = gScore[current] + current.DistanceTo(neighbor);
+                    progressBar1.Value++;
+                    if (progressBar1.Value >= progressBar1.Maximum)
                     {
-                        break;
+                        progressBar1.Value = progressBar1.Minimum;
                     }
 
-                    foreach (var neighbor in current.AirportsInRange)
+                    if (!gScore.ContainsKey(neighbor) || tentativeGScore < gScore[neighbor])
                     {
-                        double tentativeGScore = gScore[current] + current.DistanceTo(neighbor);
-                        progressBar1.Value++;
-                        if (progressBar1.Value >= progressBar1.Maximum)
-                        {
-                            progressBar1.Value = progressBar1.Minimum;
-                        }
+                        cameFrom[neighbor] = current;
+                        gScore[neighbor] = tentativeGScore;
+                        fScore[neighbor] = tentativeGScore + Heuristic(neighbor, goal);
 
-                        if (!gScore.ContainsKey(neighbor) || tentativeGScore < gScore[neighbor])
-                        {
-                            cameFrom[neighbor] = current;
-                            gScore[neighbor] = tentativeGScore;
-                            fScore[neighbor] = tentativeGScore + Heuristic(neighbor, goal);
-
-                            if (!openSet.Any(n => n.Airport == neighbor))
-                                openSet.Add((fScore[neighbor], neighbor));
-                        }
+                        if (!openSet.Any(n => n.Airport == neighbor))
+                            openSet.Add((fScore[neighbor], neighbor));
                     }
                 }
+            }
 
             return null; // Aucun chemin trouvé
         }
@@ -214,12 +214,14 @@ namespace BushTripPlugin
                 //construit une liste temporaire des aéroports
                 //TODO : ne garder dans cette liste QUE les aéroports correspondant aux tailles souhaitées.
                 List<Aeroport> temp = new List<Aeroport>();
-                
-                foreach (Aeroport a in data.aeroports) {
-                    if (start.ident == a.ident) { 
+
+                foreach (Aeroport a in data.aeroports)
+                {
+                    if (start.ident == a.ident)
+                    {
                         temp.Add(a);
                     }
-                    if ((a.type=="small_airport") && (chkSmall.Checked))
+                    if ((a.type == "small_airport") && (chkSmall.Checked))
                     {
                         temp.Add(a);
                     }
@@ -248,7 +250,7 @@ namespace BushTripPlugin
 
                 //constuire le bushtrip en utilisant cette sous-liste.
                 List<Aeroport> trip;
-                    trip = await BuildBushtrip3(temp, start, end, miles);
+                trip = await BuildBushtrip3(temp, start, end, miles);
                 if (trip != null)
                 {
                     foreach (Aeroport etape in trip)
@@ -337,21 +339,36 @@ namespace BushTripPlugin
             if (e.KeyChar != (char)Keys.Back)
             {
                 ComboBox comboBox = sender as ComboBox;
-                searched = comboBox.Text.ToLower();
+                if (comboBox.SelectionLength>0)
+                {
+                    comboBox.Text = comboBox.Text.Replace(comboBox.SelectedText,e.KeyChar.ToString());
+                    searched = comboBox.Text.ToLower();
+                }
+                else
+                {
+                    searched = comboBox.Text.ToLower() + e.KeyChar;
+                }
+
                 if (data != null)
                 {
                     // search = comboBox1.Text;
                     List<Aeroport> possible = data.aeroports.FindAll(a => (a.fullName.ToLower().Contains(searched)));
-                    comboBox.Items.Clear();
                     if (possible.Count > 0)
                     {
+                        string temptext = comboBox.Text;
+                        comboBox.Items.Clear();
                         comboBox.Items.AddRange(possible.ToArray());
+                        comboBox.Text = temptext;
+                        comboBox.SelectedIndex = -1;
+                        comboBox.SelectionStart = comboBox.Text.Length;
                         comboBox.DroppedDown = true;
                     }
                     else
                     {
                     }
-                    comboBox.SelectionStart = comboBox.Text.Length;
+                    if (comboBox.Items.Count > 0)
+                    {
+                    }
                 }
                 else
                 {
@@ -368,7 +385,7 @@ namespace BushTripPlugin
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            
+
             cancel = false;
             lbArrivals.Items.Clear();
             DateTime flightTime = dateTimePicker1.Value;
