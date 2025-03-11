@@ -203,6 +203,7 @@ namespace BushTripPlugin
                     item.ImageKey = wp.Type;
 
                     lvWaypoints.Items.Add(item);
+                    lvWaypoints.Items[lvWaypoints.Items.Count - 1].EnsureVisible();
                     if (!string.IsNullOrEmpty(flightPlan.Item.Waypoints[i].Comment))
                     {
                         tbComment.AppendText(flightPlan.Item.Waypoints[i].Name + Environment.NewLine);
