@@ -135,13 +135,11 @@ namespace SimAddon
             Controls.Add(statusStrip);
             Font = new Font("Arial", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             ForeColor = Color.White;
-            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 5, 4, 5);
-            MaximumSize = new Size(590, 870);
+            MinimumSize = new Size(590, 870);
             Name = "Form1";
             Text = "SimAddon";
-            WindowState = FormWindowState.Normal;
             FormClosing += FrmMain_FormClosing;
             Load += Form1_Load;
             LocationChanged += Form1_LocationChanged;
