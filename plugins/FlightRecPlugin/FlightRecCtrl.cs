@@ -352,40 +352,47 @@ namespace FlightRecPlugin
                     {
                         if (!onGround)
                         {
-                            Logger.WriteLine("Landing detected !");
-                            UpdateStatus("On ground");
-                            //only update the touchDownVSpeed if we've been airborn once
-                            flightPerfs.landingVSpeed = currentFlightStatus.landingVerticalSpeed;
-                            flightPerfs.landingWeight = currentFlightStatus.planeWeight;
-
-                            _notAirborn = DateTime.Now;
-                            flightPerfs.landingTime = _notAirborn;
-
-                            if (lbTimeOnGround.Text == "--:--")
+                            if (DateTime.Now - _airborn >= TimeSpan.FromSeconds(30))
                             {
-                                this.lbTimeOnGround.Text = _notAirborn.ToString("HH:mm");
-                            }
+                                Logger.WriteLine("Landing detected !");
+                                UpdateStatus("On ground");
+                                //only update the touchDownVSpeed if we've been airborn once
+                                flightPerfs.landingVSpeed = currentFlightStatus.landingVerticalSpeed;
+                                flightPerfs.landingWeight = currentFlightStatus.planeWeight;
 
-                            //check for crashes
-                            if (currentFlightStatus.offRunwayCrashed != 0)
+                                _notAirborn = DateTime.Now;
+                                flightPerfs.landingTime = _notAirborn;
+
+                                if (lbTimeOnGround.Text == "--:--")
+                                {
+                                    this.lbTimeOnGround.Text = _notAirborn.ToString("HH:mm");
+                                }
+
+                                //check for crashes
+                                if (currentFlightStatus.offRunwayCrashed != 0)
+                                {
+                                    Logger.WriteLine("off runway crashed detected");
+                                    flightPerfs.overRunwayCrashed = true;
+                                    getEndOfFlightData();
+                                }
+                                if (currentFlightStatus.crashedFlag != 0)
+                                {
+                                    Logger.WriteLine("crash detected");
+                                    flightPerfs.crashed = true;
+                                    getEndOfFlightData();
+                                }
+
+                                onGround = true;
+
+                                //enable the save button
+                                btnSubmit.Enabled = true;
+                                submitFlightToolStripMenuItem.Enabled = true;
+                                SimEvent(SimEventArg.EventType.LANDING);
+                            }
+                            else
                             {
-                                Logger.WriteLine("off runway crashed detected");
-                                flightPerfs.overRunwayCrashed = true;
-                                getEndOfFlightData();
+                                Logger.WriteLine("take off rebound detected. Just ignore");
                             }
-                            if (currentFlightStatus.crashedFlag != 0)
-                            {
-                                Logger.WriteLine("crash detected");
-                                flightPerfs.crashed = true;
-                                getEndOfFlightData();
-                            }
-
-                            onGround = true;
-
-                            //enable the save button
-                            btnSubmit.Enabled = true;
-                            submitFlightToolStripMenuItem.Enabled = true;
-                            SimEvent(SimEventArg.EventType.LANDING);
 
                         }
 
