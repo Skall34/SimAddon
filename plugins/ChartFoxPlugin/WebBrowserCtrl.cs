@@ -29,8 +29,8 @@ namespace ChartFoxPlugin
         void loadSettings()
         {
             string currentDir = executionFolder;
-            
-            string filePath = Path.Combine(currentDir,"settings.json"); // Path to your JSON file
+
+            string filePath = Path.Combine(currentDir, "settings.json"); // Path to your JSON file
             try
             {
                 // Read the JSON file content
@@ -117,10 +117,21 @@ namespace ChartFoxPlugin
             webView21.Source = new Uri(settings.Url);
         }
 
+        private void btnHome_Click(object sender, EventArgs e)
+        {
+            webView21.Source = new Uri(settings.Url);
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            webView21.GoBack();
+        }
+
         void ISimAddonPluginCtrl.SetExecutionFolder(string path)
         {
             executionFolder = path;
             loadSettings();
         }
+
     }
 }
