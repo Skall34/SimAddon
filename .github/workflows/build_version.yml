@@ -93,13 +93,18 @@ jobs:
     #    compression-level: 0
     #    path: setup/*.*
 
-    - name: setup nsis setup compiler
-      uses: repolevedavaj/install-nsis@v1.0.2
-      with:
-        nsis-version: '3.11'
+
+    #   uses: repolevedavaj/install-nsis@v1.0.2
+    #   with:
+    #     nsis-version: '3.11'
+
+    #- name: compile nsis setup
+    #  run: makensis /V4 nsis/installer.nsi   
 
     - name: compile nsis setup
-      run: makensis nsis/installer.nsi   
+      uses: joncloud/makensis-action@v4
+      with:
+        script-file: nsis/installer.nsi
 
     - name: upload nsis installer
       uses: actions/upload-artifact@v4.4.3
