@@ -99,13 +99,19 @@ jobs:
         name: SimAddon_zip
         path: publish_output/*
 
-    - name: setup nsis setup compiler
-      uses: repolevedavaj/install-nsis@v1.0.2
-      with:
-        nsis-version: '3.11'
+   # - name: setup nsis setup compiler
+   #   uses: repolevedavaj/install-nsis@v1.0.2
+   #   with:
+   #     nsis-version: '3.11'
+
+    #- name: compile nsis setup
+    #  run: makensis /V4 nsis/installer.nsi   
 
     - name: compile nsis setup
-      run: makensis /V4 nsis/installer.nsi   
+      uses: joncloud/makensis-action@v4
+      with:
+        script-file: nsis/installer.nsi
+        
 
     - name: Generate artifact attestation
       uses: actions/attest-build-provenance@v2
