@@ -407,18 +407,18 @@ namespace FlightRecPlugin
                             Logger.WriteLine("Refuel detected ! new fuel " + currentFuel + " > " + _currentFuel + " (old fuel))");
                             //this.WindowState = FormWindowState.Normal;
                             _currentFuel = currentFuel;
-                            //si on refuel pendant qu'un moteur tourne, c'est suspect. Envoie la popup pour proposer le reset !
-                            if (atLeastOneEngineFiring)
-                            {
-                                if (DialogResult.OK == ShowMsgBox("Refuel detected ! do you want to reset the flight !", "Refuel detected", MessageBoxButtons.OKCancel))
-                                {
-                                    resetFlight(true);
-                                }
-                            }
-                            else
-                            {
+                            ////si on refuel pendant qu'un moteur tourne, c'est suspect. Envoie la popup pour proposer le reset !
+                            //if (atLeastOneEngineFiring)
+                            //{
+                            //    if (DialogResult.OK == ShowMsgBox("Refuel detected ! do you want to reset the flight !", "Refuel detected", MessageBoxButtons.OKCancel))
+                            //    {
+                            //        resetFlight(true);
+                            //    }
+                            //}
+                            //else
+                            //{
 
-                            }
+                            //}
                         }
 
                     }
