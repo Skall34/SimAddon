@@ -77,11 +77,21 @@ namespace FlightRecPlugin
                 OnStatusUpdate(this, message);
             }
         }
+        private void SimEvent(SimEventArg eventArg)
+        {
+            if (OnSimEvent != null)
+            {
+                OnSimEvent(this, eventArg);
+            }
+        }
+
         private void SimEvent(SimEventArg.EventType eventType)
         {
             if (OnSimEvent != null)
             {
-                OnSimEvent(this, new SimEventArg() { reason = eventType });
+                SimEventArg eventArg = new SimEventArg();
+                eventArg.reason = eventType;
+                OnSimEvent(this, eventArg);
             }
         }
 
@@ -187,6 +197,13 @@ namespace FlightRecPlugin
             Logger.WriteLine("FlightRecorder is ready");
 
             timerUpdateStaticValues.Start();
+
+            //send the callsign event
+            SimEventArg eventArg = new SimEventArg();
+            eventArg.reason = SimEventArg.EventType.SETCALLSIGN;
+            eventArg.value = tbCallsign.Text;
+            SimEvent(eventArg);
+
         }
 
         public async void FormClosing(object sender, FormClosingEventArgs e)
@@ -607,6 +624,13 @@ namespace FlightRecPlugin
                 {
                     Avion selected = data.avions.Where(a => a.Immat == lastImmat).First();
                     cbImmat.SelectedItem = selected;
+
+                    //send the SETAIRCRAFT event
+                    SimEventArg eventArg = new SimEventArg();
+                    eventArg.reason = SimEventArg.EventType.SETAIRCRAFT;
+                    eventArg.value = selected.Designation;
+                    SimEvent(eventArg);
+
                 }
             }
 
@@ -965,6 +989,11 @@ namespace FlightRecPlugin
         private void BtnSaveSettings_Click(object sender, EventArgs e)
         {
             SaveCallSign();
+
+            SimEventArg eventArg = new SimEventArg();
+            eventArg.reason = SimEventArg.EventType.SETCALLSIGN;
+            eventArg.value = tbCallsign.Text;
+            SimEvent(eventArg);
         }
 
         private void BtnSubmit_Click(object sender, EventArgs e)
@@ -1087,6 +1116,12 @@ namespace FlightRecPlugin
                 UpdatePlaneStatus(_planeReserved ? 1 : 0);
                 //todo ! search for this airport in the database.
                 //if found, udate the tooltip with the airport name.
+
+                //push this event, so that other plugins are notified that the destination was set
+                SimEventArg eventArg = new SimEventArg();
+                eventArg.reason = SimEventArg.EventType.SETDESTINATION;
+                eventArg.value = tbEndICAO.Text;
+                SimEvent(eventArg);
             }
         }
 
@@ -1185,6 +1220,12 @@ namespace FlightRecPlugin
                         Logger.WriteLine("Freeing the airplane on the sheet");
                         UpdatePlaneStatus(0);
                     }
+
+                    //push this event, so that other plugins are notified that the plane was selected
+                    SimEventArg eventArg = new SimEventArg();
+                    eventArg.reason = SimEventArg.EventType.SETAIRCRAFT;
+                    eventArg.value = selectedPlane.Designation;
+                    SimEvent(eventArg);
                 }
             }
         }
@@ -1386,6 +1427,20 @@ namespace FlightRecPlugin
         void ISimAddonPluginCtrl.SetExecutionFolder(string path)
         {
             throw new NotImplementedException();
+        }
+
+        public void ManageSimEvent(object sender, SimEventArg eventArg)
+        {
+            if (eventArg.reason == SimEventArg.EventType.SETCALLSIGN)
+            {
+                tbCallsign.Text = eventArg.value;
+                SaveCallSign();
+            }
+
+            if (eventArg.reason == SimEventArg.EventType.SETDESTINATION)
+            {
+                tbEndICAO.Text = eventArg.value;
+            }
         }
     }
 }

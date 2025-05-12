@@ -481,5 +481,10 @@ namespace ATISPlugin
         {
             throw new NotImplementedException();
         }
+
+        public void ManageSimEvent(object sender, SimEventArg eventArg)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -373,8 +373,30 @@ namespace SimAddon
                 case SimEventArg.EventType.LANDING:
                     SetLanding();
                     break;
+                case SimEventArg.EventType.SETCALLSIGN:
+                    SetCallsign(sender, eventArg.value);
+                    break;
+                case SimEventArg.EventType.SETDESTINATION:
+                    SetDestination(sender, eventArg.value);
+                    break;
                 default:
                     break;
+            }
+
+            //push the event to all the plugins
+            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+            {
+                try
+                {
+                    //don't send the event to the plugin that sent it
+                    if (plugin != sender) { 
+                        plugin.ManageSimEvent(sender, eventArg);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine(ex.Message);
+                }
             }
         }
 
@@ -405,6 +427,15 @@ namespace SimAddon
         public void SetLanding()
         {
             //what to do in application if flight recorder detected a landing ?
+        }
+
+        public void SetCallsign(object sender, string callsign)
+        {
+
+        }
+
+        public void SetDestination(object sender, string destination)
+        {
         }
 
         //write the message the status bar

@@ -11,10 +11,14 @@ namespace SimAddonPlugin
             ENGINESTART,
             ENGINESTOP,
             TAKEOFF,
-            LANDING
+            LANDING,
+            SETCALLSIGN,
+            SETDESTINATION,
+            SETAIRCRAFT
         }
 
         public EventType reason{ get; set; }
+        public string value { get; set; }
     }
 
     public interface ISimAddonPluginCtrl
@@ -54,6 +58,7 @@ namespace SimAddonPlugin
 
         public delegate void OnSimEventHandler(object sender, SimEventArg eventArg);
         public event OnSimEventHandler OnSimEvent;
+        public void ManageSimEvent(object sender, SimEventArg eventArg);
 
         public delegate DialogResult OnShowMsgboxHandler(object sender, string title, string caption,  MessageBoxButtons buttons);
         public event OnShowMsgboxHandler OnShowMsgbox;

@@ -12,6 +12,7 @@ using System.Runtime.Intrinsics.Arm;
 using System.Globalization;
 using simbrief;
 using flightplan;
+using System.Numerics;
 
 namespace BushTripPlugin
 {
@@ -21,6 +22,7 @@ namespace BushTripPlugin
         private uint waypointIndex;
         private int lastWaypointIndex;
         private LittleNavmap? flightPlan;
+        private bool hidden = false; //hide flight plan in case of fplan file only
 
         private string filename;
         private double declinaison;
@@ -178,7 +180,7 @@ namespace BushTripPlugin
                 lvWaypoints.Items.Clear();
                 tbComment.Text = "";
                 // Vous pouvez maintenant accéder aux propriétés de l'objet flightPlan
-                for (int i = 0; i <= waypointIndex; i++)
+                for (int i = 0; i < flightPlan.Item.Waypoints.Count(); i++)
                 {
                     LittleNavmapFlightplanWaypoint? wp = flightPlan.Item.Waypoints[i];
                     LittleNavmapFlightplanWaypoint? nextwp = null;
@@ -202,24 +204,49 @@ namespace BushTripPlugin
                     ListViewItem item = new ListViewItem(new string[] { wp.Ident, wp.Name, route.ToString(), distance.ToString() });
                     item.ImageKey = wp.Type;
 
-                    lvWaypoints.Items.Add(item);
-                    lvWaypoints.Items[lvWaypoints.Items.Count - 1].EnsureVisible();
-                    if (!string.IsNullOrEmpty(flightPlan.Item.Waypoints[i].Comment))
+                    if (i <= waypointIndex)
                     {
-                        tbComment.AppendText(flightPlan.Item.Waypoints[i].Name + Environment.NewLine);
-                        tbComment.AppendText(flightPlan.Item.Waypoints[i].Comment);
-                        if (!flightPlan.Item.Waypoints[i].Comment.EndsWith(Environment.NewLine))
+                        if (i < waypointIndex)
                         {
-                            tbComment.AppendText(Environment.NewLine);
+                            //pour les waypoints passés, on surligne en bleu
+                            item.BackColor = System.Drawing.Color.LightBlue;
                         }
-                        tbComment.AppendText("-------------------" + Environment.NewLine);
+                        else
+                        {
+                            //pour le waypoint courant, on surligne en vert
+                            item.BackColor = System.Drawing.Color.LightGreen;
+                        }
+
+                        //on affiche le commentaire du waypoint
+                        if (!string.IsNullOrEmpty(flightPlan.Item.Waypoints[i].Comment))
+                        {
+                            tbComment.AppendText(flightPlan.Item.Waypoints[i].Name + Environment.NewLine);
+                            tbComment.AppendText(flightPlan.Item.Waypoints[i].Comment);
+                            if (!flightPlan.Item.Waypoints[i].Comment.EndsWith(Environment.NewLine))
+                            {
+                                tbComment.AppendText(Environment.NewLine);
+                            }
+                            tbComment.AppendText("-------------------" + Environment.NewLine);
+                        }
+                        else
+                        {
+                            tbComment.AppendText("-------------------" + Environment.NewLine);
+                        }
                     }
                     else
                     {
-                        tbComment.AppendText("-------------------" + Environment.NewLine);
+                        item.BackColor = System.Drawing.Color.White;
+                    }
+
+                    if ((i<=waypointIndex) || (!hidden))
+                    {
+                        lvWaypoints.Items.Add(item);
+                        lvWaypoints.Items[lvWaypoints.Items.Count - 1].EnsureVisible();
                     }
                 }
-                //ensure that text is scrolled down
+
+
+                //ensure that text is scrolled down in the comments
                 tbComment.SelectionStart = tbComment.TextLength;
                 tbComment.ScrollToCaret();
             }
@@ -291,12 +318,16 @@ namespace BushTripPlugin
                     filename = filePath;
                     waypointIndex = 0;
                     lastWaypointIndex = 0;
+                    bool loaded = false;
+
                     if (filePath.EndsWith(".fplan"))
                     {
                         string json = File.ReadAllText(filePath);
                         flightPlan = JsonConvert.DeserializeObject<LittleNavmap>(json);
                         waypointIndex = flightPlan.CurrentStep;
                         Logger.WriteLine("Fichier fplan chargé avec succès !");
+                        loaded = true;
+                        hidden = true;
                     }
 
                     if (filePath.EndsWith(".lnmpln"))
@@ -314,6 +345,8 @@ namespace BushTripPlugin
                         }
                         flightPlan.CurrentStep = waypointIndex;
                         Logger.WriteLine("Fichier XML chargé avec succès !");
+                        loaded = true;
+                        hidden = false;
                     }
 
                     if (filePath.EndsWith(".xml"))
@@ -332,6 +365,9 @@ namespace BushTripPlugin
                         }
                         flightPlan.CurrentStep = waypointIndex;
                         Logger.WriteLine("Fichier XML chargé avec succès !");
+                        loaded = true;
+                        hidden = false;
+
                     }
 
                     if (filePath.EndsWith(".fms"))
@@ -349,6 +385,9 @@ namespace BushTripPlugin
 
                             flightPlan.CurrentStep = waypointIndex;
                             Logger.WriteLine("Fichier XML chargé avec succès !");
+                            loaded = true;
+                            hidden = false;
+
                         }
                         catch (Exception ex)
                         {
@@ -361,8 +400,22 @@ namespace BushTripPlugin
                     //everything is OK, use the flightplan
                     useFlightPlan();
 
+                    //notify the other plugin that a flightplan was loaded if it's not a fplan file
+                    if (loaded && !filePath.EndsWith(".fplan"))
+                    {
+                        if (OnSimEvent != null)
+                        {
+                            SimEventArg eventArg = new SimEventArg();
+                            eventArg.reason = SimEventArg.EventType.SETDESTINATION;
+                            int nbWaypoints = flightPlan.Item.Waypoints.Count();
+                            eventArg.value = flightPlan.Item.Waypoints[nbWaypoints-1].Ident;
+                            OnSimEvent(this, eventArg);
+                        }
+                    }
 
-                }catch(Exception ex)
+
+                }
+                catch(Exception ex)
                 {
                     Logger.WriteLine(ex.ToString());
                     MessageBox.Show(ex.ToString(),"Error during import");
@@ -379,7 +432,7 @@ namespace BushTripPlugin
 
         private void saveFlightPlan()
         {
-            if (filename.EndsWith(".json"))
+            if (filename.EndsWith(".fplan"))
             {
                 string json = JsonConvert.SerializeObject(flightPlan, Formatting.Indented);
                 File.WriteAllText(filename, json);
@@ -526,6 +579,11 @@ namespace BushTripPlugin
         void ISimAddonPluginCtrl.SetExecutionFolder(string path)
         {
             throw new NotImplementedException();
+        }
+
+        public void ManageSimEvent(object sender, SimEventArg eventArg)
+        {
+
         }
     }
 }

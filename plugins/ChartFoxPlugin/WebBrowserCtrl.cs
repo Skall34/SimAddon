@@ -133,5 +133,8 @@ namespace ChartFoxPlugin
             loadSettings();
         }
 
+        public void ManageSimEvent(object sender, SimEventArg eventArg)
+        {
+        }
     }
 }
