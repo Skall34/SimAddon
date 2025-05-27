@@ -561,6 +561,7 @@ namespace FlightRecPlugin
             cbMission.DropDownStyle = ComboBoxStyle.DropDownList;
             cbMission.FormattingEnabled = true;
             cbMission.Location = new Point(355, 192);
+            cbMission.MaxDropDownItems = 12;
             cbMission.Name = "cbMission";
             cbMission.Size = new Size(179, 26);
             cbMission.TabIndex = 22;
