@@ -228,11 +228,11 @@ namespace FlightRecPlugin
                 MessageBox.Show("Please check departure and arrival ICAOs");
                 result = false;
             }
-            else if (DepartureTime >= ArrivalTime)
-            {
-                MessageBox.Show("Departure time must be before arrival time");
-                result = false;
-            }
+            //else if (DepartureTime >= ArrivalTime)
+            //{
+            //    MessageBox.Show("Departure time must be before arrival time");
+            //    result = false;
+            //}
 
             if (result)
             {

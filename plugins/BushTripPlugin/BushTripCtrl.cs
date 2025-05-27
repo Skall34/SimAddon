@@ -479,7 +479,7 @@ namespace BushTripPlugin
         {
             if (flightPlan != null)
             {
-                if (waypointIndex == lastWaypointIndex)
+                if ((waypointIndex == lastWaypointIndex)||(!hidden))
                 {
                     waypointIndex = (uint)lvWaypoints.SelectedIndices[0];
                 }
