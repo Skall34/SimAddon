@@ -48,6 +48,12 @@ namespace SimAddon
             Point startlocation = new Point();
             startlocation.X = Properties.Settings.Default.xpos;
             startlocation.Y = Properties.Settings.Default.ypos;
+            if (startlocation.X==-32000 || startlocation.Y == -32000)
+            {
+                //if the position is not set, then use the default position
+                startlocation.X = 0;
+                startlocation.Y = 0;
+            }
             this.Location = startlocation;
 
             this.TopMost = Properties.Settings.Default.AlwaysOnTop;
@@ -546,9 +552,13 @@ namespace SimAddon
 
         private void Form1_LocationChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.xpos = this.Location.X;
-            Properties.Settings.Default.ypos = this.Location.Y;
-            Properties.Settings.Default.Save();
+            // Save the position of the window when it is moved, but not when minimized
+            if (this.WindowState != FormWindowState.Minimized)
+            {
+                Properties.Settings.Default.xpos = this.Location.X;
+                Properties.Settings.Default.ypos = this.Location.Y;
+                Properties.Settings.Default.Save();
+            }
         }
     }
 }
