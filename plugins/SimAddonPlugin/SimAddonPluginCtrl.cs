@@ -93,5 +93,12 @@ namespace SimAddonPlugin
 
         public  PositionSnapshot position { get; set; }
 
+        public float COM1Frequency { get; set; }
+        public float COM1StdbyFrequency { get; set; }
+
+        public int squawkCode { get; set; }
+
+        public byte squawkMode { get; set; } // 0 = off, 1 = standby, 2 = on, test=3
+
     }
 }

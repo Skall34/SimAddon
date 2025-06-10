@@ -86,6 +86,13 @@ namespace SimDataManager
 
         private readonly Offset<int> landingVerticalSpeed = new Offset<int>(0x030C);
 
+        private readonly Offset<short> COM1 = new Offset<short>(0x034E);
+        private readonly Offset<short> COM1Stdby = new Offset<short>(0x311A);
+        private Offset<byte> COM1Switch = new Offset<byte>(0x3123);
+
+        private readonly Offset<short> squawk = new Offset<short>(0x0354);
+        private readonly Offset<byte> squawkMode = new Offset<byte>(0x6D8C);
+
         private readonly Offset<short> onGround         = new Offset<short>(0x0366);
         private readonly Offset<byte> stallWarning       = new Offset<byte>(0x036C);
         private readonly Offset<byte> overSpeedWarning   = new Offset<byte>(0x036D);
@@ -368,6 +375,91 @@ namespace SimDataManager
             }
             return result;
         }
+
+        public float GetCOM1()
+        {
+            short bcdValue = COM1.Value;
+            int thousands = (bcdValue >> 12) & 0xF;
+            int hundreds = (bcdValue >> 8) & 0xF;
+            int tens = (bcdValue >> 4) & 0xF;
+            int ones = bcdValue & 0xF;
+
+            int integerValue = thousands * 1000 + hundreds * 100 + tens * 10 + ones;
+
+            // Si on sait que la virgule est après deux chiffres
+            return 100 + integerValue / 100.0f;
+        }
+
+        public void SetCOM1(float newValue)
+        {
+            // Convertir la valeur en BCD
+            int integerValue = (int)((newValue-100) * 100);
+            short bcdValue = (short)((((integerValue / 1000) % 10) << 12) |
+                                     (((integerValue / 100) % 10) << 8) |
+                                     (((integerValue / 10) % 10) << 4) |
+                                     (integerValue % 10));
+            COM1.Value = bcdValue;
+        }
+
+        public float GetCOM1Stdby()
+        {
+            short bcdValue = COM1Stdby.Value;
+            int thousands = (bcdValue >> 12) & 0xF;
+            int hundreds = (bcdValue >> 8) & 0xF;
+            int tens = (bcdValue >> 4) & 0xF;
+            int ones = bcdValue & 0xF;
+
+            int integerValue = thousands * 1000 + hundreds * 100 + tens * 10 + ones;
+
+            // Si on sait que la virgule est après deux chiffres
+            return 100 + integerValue / 100.0f;
+        }
+
+        public void SetCOM1Stdby(float newValue)
+        {
+            // Convertir la valeur en BCD
+            int integerValue = (int)((newValue - 100) * 100);
+            short bcdValue = (short)((((integerValue / 1000) % 10) << 12) |
+                                     (((integerValue / 100) % 10) << 8) |
+                                     (((integerValue / 10) % 10) << 4) |
+                                     (integerValue % 10));
+            COM1Stdby.Value = bcdValue;
+        }
+
+        public void SwitchCOM1() {
+            // Toggle the COM1 switch value
+            //COM1Switch.Value = (byte)8; //2^3 = COM1 swap
+            FSUIPCConnection.SendControlToFS(FsControl.COM_STBY_RADIO_SWAP, 0);
+        }
+
+
+        public int GetSquawk()
+        {
+            short bcdValue = squawk.Value;
+            int thousands = (bcdValue >> 12) & 0xF;
+            int hundreds = (bcdValue >> 8) & 0xF;
+            int tens = (bcdValue >> 4) & 0xF;
+            int ones = bcdValue & 0xF;
+            int integerValue = thousands * 1000 + hundreds * 100 + tens * 10 + ones;
+            return integerValue;
+        }
+
+        public void SetSquawk(int newValue)
+        {
+            // Convertir la valeur en BCD
+            short bcdValue = (short)((((newValue / 1000) % 10) << 12) |
+                                     (((newValue / 100) % 10) << 8) |
+                                     (((newValue / 10) % 10) << 4) |
+                                     (newValue % 10));
+            squawk.Value = bcdValue;
+        }
+
+        //transponder mode off=0,stdby=1,on=2,test=3
+        public byte GetSquawkMode() => squawkMode.Value;
+        public void SetSquawkMode(byte value) {
+            squawkMode.Value = value;
+        }
+
 
         public double GetMagVariation() => ((double)this.magVariation.Value) * 360 / 65536;
 

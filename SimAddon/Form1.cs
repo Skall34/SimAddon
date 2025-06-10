@@ -180,6 +180,11 @@ namespace SimAddon
                 currentStatus.position = _simData.GetPosition();
                 currentStatus.MasterAvionicsOn = (0 != _simData.GetAvionicsMaster());
                 currentStatus.MasterBatteryOn = (0 != _simData.GetBatteryMaster());
+                
+                currentStatus.COM1Frequency = _simData.GetCOM1();
+                currentStatus.COM1StdbyFrequency = _simData.GetCOM1Stdby();
+                currentStatus.squawkCode = _simData.GetSquawk();
+                currentStatus.squawkMode = _simData.GetSquawkMode(); // 0 = off, 1 = standby, 2 = on, test=3
 
                 //byte ViewMode = _simData.GetViewMode();
                 //lblConnectionStatus.Text = "viewMode " + ViewMode;
