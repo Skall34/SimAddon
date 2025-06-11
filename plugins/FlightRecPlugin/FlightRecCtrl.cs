@@ -260,17 +260,31 @@ namespace FlightRecPlugin
         }
 
 
-        public void registerPage(TabControl parent)
+        //public void registerPage(TabControl parent)
+        //{
+        //    parent.SuspendLayout();
+        //    TabPage pluginPage = new TabPage();
+        //    pluginPage.Text = getName();
+        //    pluginPage.Controls.Add(this);
+        //    this.Dock = DockStyle.Fill;
+        //    pluginPage.Visible = true;
+        //    parent.TabPages.Add(pluginPage);
+        //    parent.ResumeLayout();
+        //}
+        public TabPage registerPage()
         {
-            parent.SuspendLayout();
+            //parent.SuspendLayout();
             TabPage pluginPage = new TabPage();
             pluginPage.Text = getName();
             pluginPage.Controls.Add(this);
+            this.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             this.Dock = DockStyle.Fill;
             pluginPage.Visible = true;
-            parent.TabPages.Add(pluginPage);
-            parent.ResumeLayout();
+            return pluginPage;
+            //parent.TabPages.Add(pluginPage);
+            //parent.ResumeLayout();
         }
+
 
         public void updateSituation(situation currentFlightStatus)
         {

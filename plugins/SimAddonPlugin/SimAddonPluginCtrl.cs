@@ -40,7 +40,7 @@ namespace SimAddonPlugin
         string getName();
 
         void init(ref simData _data);
-        void registerPage(TabControl parent);
+        public TabPage registerPage();
 
         void updateSituation(situation data);
 

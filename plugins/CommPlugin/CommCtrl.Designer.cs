@@ -51,21 +51,28 @@ namespace CommPlugin
             label2 = new Label();
             rotaryKnobMode = new SimAddonControls.RotaryKnob();
             groupBox2 = new GroupBox();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            tableLayoutPanel3 = new TableLayoutPanel();
             label1 = new Label();
             btnUnicom = new Button();
+            tableLayoutPanel4 = new TableLayoutPanel();
             groupBox1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
             groupBox2.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
+            tableLayoutPanel4.SuspendLayout();
             SuspendLayout();
             // 
             // btnChangeCOM1Freq
             // 
             btnChangeCOM1Freq.BackColor = Color.Gray;
             btnChangeCOM1Freq.FlatStyle = FlatStyle.Flat;
-            btnChangeCOM1Freq.Location = new Point(122, 53);
+            btnChangeCOM1Freq.Location = new Point(104, 25);
+            btnChangeCOM1Freq.Margin = new Padding(5, 25, 5, 5);
             btnChangeCOM1Freq.Name = "btnChangeCOM1Freq";
-            btnChangeCOM1Freq.Size = new Size(42, 32);
+            btnChangeCOM1Freq.Size = new Size(42, 42);
             btnChangeCOM1Freq.TabIndex = 3;
             btnChangeCOM1Freq.Text = "<->";
             btnChangeCOM1Freq.UseVisualStyleBackColor = false;
@@ -77,8 +84,8 @@ namespace CommPlugin
             lblCom1.BackColor = Color.FromArgb(64, 0, 0);
             lblCom1.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblCom1.ForeColor = Color.Red;
-            lblCom1.Location = new Point(17, 48);
-            lblCom1.Margin = new Padding(3);
+            lblCom1.Location = new Point(5, 25);
+            lblCom1.Margin = new Padding(5, 25, 5, 5);
             lblCom1.Name = "lblCom1";
             lblCom1.Padding = new Padding(5);
             lblCom1.Size = new Size(89, 42);
@@ -91,8 +98,8 @@ namespace CommPlugin
             lblComStdby.BackColor = Color.FromArgb(64, 0, 0);
             lblComStdby.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblComStdby.ForeColor = Color.Red;
-            lblComStdby.Location = new Point(182, 48);
-            lblComStdby.Margin = new Padding(5);
+            lblComStdby.Location = new Point(156, 25);
+            lblComStdby.Margin = new Padding(5, 25, 5, 5);
             lblComStdby.Name = "lblComStdby";
             lblComStdby.Padding = new Padding(5);
             lblComStdby.Size = new Size(89, 42);
@@ -118,7 +125,7 @@ namespace CommPlugin
             lblSquawk2.BackColor = Color.FromArgb(64, 0, 0);
             lblSquawk2.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSquawk2.ForeColor = Color.Red;
-            lblSquawk2.Location = new Point(68, 3);
+            lblSquawk2.Location = new Point(67, 3);
             lblSquawk2.Name = "lblSquawk2";
             lblSquawk2.Padding = new Padding(3);
             lblSquawk2.Size = new Size(43, 52);
@@ -131,7 +138,7 @@ namespace CommPlugin
             lblSquawk3.BackColor = Color.FromArgb(64, 0, 0);
             lblSquawk3.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSquawk3.ForeColor = Color.Red;
-            lblSquawk3.Location = new Point(130, 3);
+            lblSquawk3.Location = new Point(128, 3);
             lblSquawk3.Name = "lblSquawk3";
             lblSquawk3.Padding = new Padding(3);
             lblSquawk3.Size = new Size(43, 52);
@@ -144,7 +151,7 @@ namespace CommPlugin
             lblSquawk4.BackColor = Color.FromArgb(64, 0, 0);
             lblSquawk4.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSquawk4.ForeColor = Color.Red;
-            lblSquawk4.Location = new Point(192, 3);
+            lblSquawk4.Location = new Point(189, 3);
             lblSquawk4.Name = "lblSquawk4";
             lblSquawk4.Padding = new Padding(3);
             lblSquawk4.Size = new Size(43, 52);
@@ -156,11 +163,11 @@ namespace CommPlugin
             // 
             rotaryKnob1.BackColor = Color.Transparent;
             rotaryKnob1.Increment = 1;
-            rotaryKnob1.Location = new Point(279, 45);
+            rotaryKnob1.Location = new Point(3, 18);
             rotaryKnob1.Maximum = 136;
             rotaryKnob1.Minimum = 118;
             rotaryKnob1.Name = "rotaryKnob1";
-            rotaryKnob1.Size = new Size(45, 45);
+            rotaryKnob1.Size = new Size(42, 45);
             rotaryKnob1.TabIndex = 12;
             rotaryKnob1.Value = 118;
             rotaryKnob1.ValueChanged += rotaryKnob1_ValueChanged;
@@ -169,11 +176,11 @@ namespace CommPlugin
             // 
             rotaryKnob2.BackColor = Color.Transparent;
             rotaryKnob2.Increment = 5;
-            rotaryKnob2.Location = new Point(321, 45);
+            rotaryKnob2.Location = new Point(51, 18);
             rotaryKnob2.Maximum = 995;
             rotaryKnob2.Minimum = 0;
             rotaryKnob2.Name = "rotaryKnob2";
-            rotaryKnob2.Size = new Size(45, 45);
+            rotaryKnob2.Size = new Size(43, 45);
             rotaryKnob2.TabIndex = 13;
             rotaryKnob2.Value = 8;
             rotaryKnob2.ValueChanged += rotaryKnob2_ValueChanged;
@@ -195,7 +202,7 @@ namespace CommPlugin
             // 
             rotaryKnobS2.BackColor = Color.Transparent;
             rotaryKnobS2.Increment = 1;
-            rotaryKnobS2.Location = new Point(68, 58);
+            rotaryKnobS2.Location = new Point(67, 58);
             rotaryKnobS2.Maximum = 7;
             rotaryKnobS2.Minimum = 0;
             rotaryKnobS2.Name = "rotaryKnobS2";
@@ -208,7 +215,7 @@ namespace CommPlugin
             // 
             rotaryKnobS3.BackColor = Color.Transparent;
             rotaryKnobS3.Increment = 1;
-            rotaryKnobS3.Location = new Point(130, 58);
+            rotaryKnobS3.Location = new Point(128, 58);
             rotaryKnobS3.Maximum = 7;
             rotaryKnobS3.Minimum = 0;
             rotaryKnobS3.Name = "rotaryKnobS3";
@@ -221,7 +228,7 @@ namespace CommPlugin
             // 
             rotaryKnobS4.BackColor = Color.Transparent;
             rotaryKnobS4.Increment = 1;
-            rotaryKnobS4.Location = new Point(192, 58);
+            rotaryKnobS4.Location = new Point(189, 58);
             rotaryKnobS4.Maximum = 7;
             rotaryKnobS4.Minimum = 0;
             rotaryKnobS4.Name = "rotaryKnobS4";
@@ -234,9 +241,9 @@ namespace CommPlugin
             // 
             groupBox1.Controls.Add(tableLayoutPanel1);
             groupBox1.ForeColor = Color.White;
-            groupBox1.Location = new Point(103, 141);
+            groupBox1.Location = new Point(3, 148);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(372, 133);
+            groupBox1.Size = new Size(366, 133);
             groupBox1.TabIndex = 18;
             groupBox1.TabStop = false;
             groupBox1.Text = "Transponder";
@@ -266,7 +273,7 @@ namespace CommPlugin
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(366, 111);
+            tableLayoutPanel1.Size = new Size(360, 111);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
@@ -276,7 +283,7 @@ namespace CommPlugin
             panel1.Controls.Add(label3);
             panel1.Controls.Add(label2);
             panel1.Controls.Add(rotaryKnobMode);
-            panel1.Location = new Point(254, 6);
+            panel1.Location = new Point(250, 6);
             panel1.Name = "panel1";
             tableLayoutPanel1.SetRowSpan(panel1, 2);
             panel1.Size = new Size(104, 99);
@@ -311,6 +318,7 @@ namespace CommPlugin
             label3.Size = new Size(37, 15);
             label3.TabIndex = 21;
             label3.Text = "Stdby";
+            label3.TextAlign = ContentAlignment.TopRight;
             // 
             // label2
             // 
@@ -338,49 +346,100 @@ namespace CommPlugin
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(label1);
-            groupBox2.Controls.Add(btnUnicom);
-            groupBox2.Controls.Add(rotaryKnob2);
-            groupBox2.Controls.Add(rotaryKnob1);
-            groupBox2.Controls.Add(lblComStdby);
-            groupBox2.Controls.Add(lblCom1);
-            groupBox2.Controls.Add(btnChangeCOM1Freq);
+            groupBox2.Controls.Add(tableLayoutPanel2);
             groupBox2.ForeColor = Color.White;
-            groupBox2.Location = new Point(103, 16);
+            groupBox2.Location = new Point(3, 3);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(372, 119);
+            groupBox2.Size = new Size(366, 136);
             groupBox2.TabIndex = 19;
             groupBox2.TabStop = false;
             groupBox2.Text = "COM1";
             // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 4;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.Controls.Add(lblCom1, 0, 0);
+            tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 3, 0);
+            tableLayoutPanel2.Controls.Add(btnChangeCOM1Freq, 1, 0);
+            tableLayoutPanel2.Controls.Add(lblComStdby, 2, 0);
+            tableLayoutPanel2.Location = new Point(6, 19);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.Size = new Size(351, 111);
+            tableLayoutPanel2.TabIndex = 16;
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.ColumnCount = 2;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.Controls.Add(label1, 0, 0);
+            tableLayoutPanel3.Controls.Add(btnUnicom, 0, 2);
+            tableLayoutPanel3.Controls.Add(rotaryKnob2, 1, 1);
+            tableLayoutPanel3.Controls.Add(rotaryKnob1, 0, 1);
+            tableLayoutPanel3.Location = new Point(253, 3);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 3;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 15F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 51F));
+            tableLayoutPanel3.Size = new Size(97, 100);
+            tableLayoutPanel3.TabIndex = 6;
+            // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(281, 19);
+            tableLayoutPanel3.SetColumnSpan(label1, 2);
+            label1.Dock = DockStyle.Fill;
+            label1.Location = new Point(3, 0);
             label1.Name = "label1";
-            label1.Size = new Size(62, 15);
+            label1.Size = new Size(91, 15);
             label1.TabIndex = 15;
             label1.Text = "Frequency";
+            label1.TextAlign = ContentAlignment.TopCenter;
+            label1.Click += label1_Click;
             // 
             // btnUnicom
             // 
             btnUnicom.BackColor = Color.Gray;
+            tableLayoutPanel3.SetColumnSpan(btnUnicom, 2);
+            btnUnicom.Dock = DockStyle.Top;
             btnUnicom.FlatStyle = FlatStyle.Flat;
-            btnUnicom.Location = new Point(281, 91);
+            btnUnicom.Location = new Point(5, 71);
+            btnUnicom.Margin = new Padding(5);
             btnUnicom.Name = "btnUnicom";
-            btnUnicom.Size = new Size(85, 23);
+            btnUnicom.Size = new Size(87, 25);
             btnUnicom.TabIndex = 14;
             btnUnicom.Text = "Unicom";
             btnUnicom.UseVisualStyleBackColor = false;
             btnUnicom.Click += btnUnicom_Click;
+            // 
+            // tableLayoutPanel4
+            // 
+            tableLayoutPanel4.ColumnCount = 1;
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel4.Controls.Add(groupBox1, 0, 1);
+            tableLayoutPanel4.Controls.Add(groupBox2, 0, 0);
+            tableLayoutPanel4.Dock = DockStyle.Fill;
+            tableLayoutPanel4.Location = new Point(0, 0);
+            tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.RowCount = 2;
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 32.4444427F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 67.55556F));
+            tableLayoutPanel4.Size = new Size(800, 450);
+            tableLayoutPanel4.TabIndex = 21;
             // 
             // CommCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
-            Controls.Add(groupBox2);
-            Controls.Add(groupBox1);
+            Controls.Add(tableLayoutPanel4);
             Name = "CommCtrl";
             Size = new Size(800, 450);
             Load += CommCtrl_Load;
@@ -390,7 +449,11 @@ namespace CommPlugin
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
+            tableLayoutPanel3.ResumeLayout(false);
+            tableLayoutPanel3.PerformLayout();
+            tableLayoutPanel4.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -421,5 +484,8 @@ namespace CommPlugin
         private Label label5;
         private Label label4;
         private Label label3;
+        private TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanel tableLayoutPanel3;
+        private TableLayoutPanel tableLayoutPanel4;
     }
 }

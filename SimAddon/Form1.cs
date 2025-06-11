@@ -2,11 +2,13 @@
 using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
+using System.Collections.ObjectModel;
 using System.Drawing.Imaging;
 using System.Reflection;
 
 namespace SimAddon
 {
+
 
 
     public partial class Form1 : Form
@@ -15,12 +17,14 @@ namespace SimAddon
         private bool autoHide = false;
 
         PluginsMgr plugsMgr;
+        private PluginsSettings pluginsSettings;
 
         private simData _simData;
         private situation currentStatus;
         FormWindowState LastWindowState = FormWindowState.Normal;
 
         Version version;
+        Collection<TabPage> pluginTabs;
 
         public static bool isAutoStart()
         {
@@ -42,7 +46,12 @@ namespace SimAddon
         //private bool modifiedFuel;
         public Form1()
         {
+            pluginTabs = new Collection<TabPage>();
+            pluginsSettings = new PluginsSettings();
+            pluginsSettings.loadFromJsonFile("plugins.json");
+
             InitializeComponent();
+            
 
             this.StartPosition = FormStartPosition.Manual;
             Point startlocation = new Point();
@@ -62,11 +71,8 @@ namespace SimAddon
             autoHide = Properties.Settings.Default.AutoHide;
             autoHideToolStripMenuItem.Checked = autoHide;
 
-
-
             plugsMgr = new PluginsMgr();
             plugsMgr.LoadPluginsFromFolder("plugins", tabControl1);
-
 
             autostart = isAutoStart();
 
@@ -314,6 +320,7 @@ namespace SimAddon
         {
             //initialise l'object qui sert à capter les données qui viennent du simu
             Logger.WriteLine("initialize the connection to the simulator");
+            tabControl1.SuspendLayout();
             foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
             {
                 try
@@ -321,13 +328,46 @@ namespace SimAddon
                     plugin.OnStatusUpdate += Plugin_OnStatusUpdate;
                     plugin.OnSimEvent += Plugin_OnSimEvent;
                     plugin.OnShowMsgbox += Plugin_OnShowMsgbox;
-                    plugin.registerPage(tabControl1);
+                    TabPage pluginpage = plugin.registerPage();
+
+                    pluginTabs.Add(pluginpage);
+                    //find if there is a plugin setting for this plugin
+                    string pluginName = plugin.getName();
+                    PluginSettings pluginSetting;
+                    if(pluginsSettings.Plugins.ContainsKey(pluginName))
+                    {
+                        pluginSetting = pluginsSettings.Plugins[plugin.getName()];
+                        //if the plugin is not visible, then don't add it to the tab control
+                        if (pluginSetting.Visible)
+                        {
+                            //if there is a setting for this plugin, then add it to the tab control                           
+                            tabControl1.TabPages.Add(pluginpage);
+                        }
+                    }
+                    else
+                    {
+                        //if there is no setting for this plugin, then add it with default visibility
+                        pluginSetting = new PluginSettings { Visible = true };
+                        pluginsSettings.Plugins[plugin.getName()] = pluginSetting;
+                        tabControl1.TabPages.Add(pluginpage);
+                    }
+
+                    //add a checkable menu item to the context menu of the tab control
+                    ToolStripMenuItem menuItem = new ToolStripMenuItem(plugin.getName(), null,(o,v) => { showHideTab(plugin.getName()); } );
+                    menuItem.CheckOnClick = true;
+                    menuItem.Checked = pluginSetting.Visible; // by default, the plugin is enabled
+                    menuItem.Enabled = true;
+                    //add the menu item to the context menu of the tab control
+                    contextMenuStrip1.Items.Add(menuItem);
                 }
                 catch (Exception ex)
                 {
                     Logger.WriteLine(ex.Message);
                 }
             }
+            tabControl1.ResumeLayout(true);
+            //save the plugins settings to the file
+            pluginsSettings.saveToJsonFile("plugins.json");
 
             await _simData.loadDataFromSheet();
             //met à jour l'etat de connection au simu dans la barre de statut
@@ -350,6 +390,52 @@ namespace SimAddon
             //demarre le timer de connection (fait un essai de connexion toutes les 1000ms)
             this.timerConnection.Start();
 
+        }
+
+        private void showHideTab(string v)
+        {
+            bool found = false;
+            foreach (TabPage tab in tabControl1.TabPages)
+            {
+                if (tab.Text == v)
+                {
+                    //toggle the visibility of the tab
+                    tabControl1.TabPages.Remove(tab);
+                    //update the plugin settings to hide the tab
+                    if (pluginsSettings.Plugins.ContainsKey(v))
+                    {
+                        pluginsSettings.Plugins[v].Visible = false;
+                    }
+                    else
+                    {
+                        pluginsSettings.Plugins.Add(v, new PluginSettings { Visible = false });
+                    }
+                    found = true;
+                }
+            }
+            //if not found, then add the tab
+            if (!found)
+            {
+                //find the plugin with the name v
+                foreach (TabPage plugin in pluginTabs)
+                {
+                    if (plugin.Text == v)
+                    {
+                        tabControl1.TabPages.Add(plugin);
+                        //update the plugin settings to show the tab
+                        if (pluginsSettings.Plugins.ContainsKey(v))
+                        {
+                            pluginsSettings.Plugins[v].Visible = true;
+                        }
+                        else
+                        {
+                            pluginsSettings.Plugins.Add(v, new PluginSettings { Visible = true });
+                        }
+                    }
+                }
+            }
+            //save the plugins settings to the file
+            pluginsSettings.saveToJsonFile("plugins.json");
         }
 
         private DialogResult Plugin_OnShowMsgbox(object sender, string title, string caption, MessageBoxButtons buttons)
