@@ -219,5 +219,10 @@ namespace CommPlugin
         {
 
         }
+
+        private void rotaryKnobMode_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -125,7 +125,7 @@ namespace CommPlugin
             lblSquawk2.BackColor = Color.FromArgb(64, 0, 0);
             lblSquawk2.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSquawk2.ForeColor = Color.Red;
-            lblSquawk2.Location = new Point(67, 3);
+            lblSquawk2.Location = new Point(84, 3);
             lblSquawk2.Name = "lblSquawk2";
             lblSquawk2.Padding = new Padding(3);
             lblSquawk2.Size = new Size(43, 52);
@@ -138,7 +138,7 @@ namespace CommPlugin
             lblSquawk3.BackColor = Color.FromArgb(64, 0, 0);
             lblSquawk3.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSquawk3.ForeColor = Color.Red;
-            lblSquawk3.Location = new Point(128, 3);
+            lblSquawk3.Location = new Point(162, 3);
             lblSquawk3.Name = "lblSquawk3";
             lblSquawk3.Padding = new Padding(3);
             lblSquawk3.Size = new Size(43, 52);
@@ -151,7 +151,7 @@ namespace CommPlugin
             lblSquawk4.BackColor = Color.FromArgb(64, 0, 0);
             lblSquawk4.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSquawk4.ForeColor = Color.Red;
-            lblSquawk4.Location = new Point(189, 3);
+            lblSquawk4.Location = new Point(240, 3);
             lblSquawk4.Name = "lblSquawk4";
             lblSquawk4.Padding = new Padding(3);
             lblSquawk4.Size = new Size(43, 52);
@@ -202,7 +202,7 @@ namespace CommPlugin
             // 
             rotaryKnobS2.BackColor = Color.Transparent;
             rotaryKnobS2.Increment = 1;
-            rotaryKnobS2.Location = new Point(67, 58);
+            rotaryKnobS2.Location = new Point(84, 58);
             rotaryKnobS2.Maximum = 7;
             rotaryKnobS2.Minimum = 0;
             rotaryKnobS2.Name = "rotaryKnobS2";
@@ -215,7 +215,7 @@ namespace CommPlugin
             // 
             rotaryKnobS3.BackColor = Color.Transparent;
             rotaryKnobS3.Increment = 1;
-            rotaryKnobS3.Location = new Point(128, 58);
+            rotaryKnobS3.Location = new Point(162, 58);
             rotaryKnobS3.Maximum = 7;
             rotaryKnobS3.Minimum = 0;
             rotaryKnobS3.Name = "rotaryKnobS3";
@@ -228,7 +228,7 @@ namespace CommPlugin
             // 
             rotaryKnobS4.BackColor = Color.Transparent;
             rotaryKnobS4.Increment = 1;
-            rotaryKnobS4.Location = new Point(189, 58);
+            rotaryKnobS4.Location = new Point(240, 58);
             rotaryKnobS4.Maximum = 7;
             rotaryKnobS4.Minimum = 0;
             rotaryKnobS4.Name = "rotaryKnobS4";
@@ -243,19 +243,20 @@ namespace CommPlugin
             groupBox1.ForeColor = Color.White;
             groupBox1.Location = new Point(3, 148);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(366, 133);
+            groupBox1.Size = new Size(457, 133);
             groupBox1.TabIndex = 18;
             groupBox1.TabStop = false;
             groupBox1.Text = "Transponder";
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.ColumnCount = 5;
+            tableLayoutPanel1.ColumnCount = 6;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Controls.Add(rotaryKnobS4, 3, 1);
             tableLayoutPanel1.Controls.Add(lblSquawk4, 3, 0);
             tableLayoutPanel1.Controls.Add(lblSquawk1, 0, 0);
@@ -273,7 +274,7 @@ namespace CommPlugin
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(360, 111);
+            tableLayoutPanel1.Size = new Size(451, 111);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
@@ -283,7 +284,7 @@ namespace CommPlugin
             panel1.Controls.Add(label3);
             panel1.Controls.Add(label2);
             panel1.Controls.Add(rotaryKnobMode);
-            panel1.Location = new Point(250, 6);
+            panel1.Location = new Point(318, 6);
             panel1.Name = "panel1";
             tableLayoutPanel1.SetRowSpan(panel1, 2);
             panel1.Size = new Size(104, 99);
@@ -313,7 +314,7 @@ namespace CommPlugin
             // 
             label3.AutoSize = true;
             label3.ForeColor = Color.White;
-            label3.Location = new Point(64, 11);
+            label3.Location = new Point(57, 11);
             label3.Name = "label3";
             label3.Size = new Size(37, 15);
             label3.TabIndex = 21;
@@ -343,6 +344,7 @@ namespace CommPlugin
             rotaryKnobMode.TabIndex = 18;
             rotaryKnobMode.Value = 0;
             rotaryKnobMode.ValueChanged += rotaryKnobMode_ValueChanged;
+            rotaryKnobMode.Load += rotaryKnobMode_Load;
             // 
             // groupBox2
             // 
@@ -350,7 +352,7 @@ namespace CommPlugin
             groupBox2.ForeColor = Color.White;
             groupBox2.Location = new Point(3, 3);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(366, 136);
+            groupBox2.Size = new Size(457, 136);
             groupBox2.TabIndex = 19;
             groupBox2.TabStop = false;
             groupBox2.Text = "COM1";
@@ -366,7 +368,7 @@ namespace CommPlugin
             tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 3, 0);
             tableLayoutPanel2.Controls.Add(btnChangeCOM1Freq, 1, 0);
             tableLayoutPanel2.Controls.Add(lblComStdby, 2, 0);
-            tableLayoutPanel2.Location = new Point(6, 19);
+            tableLayoutPanel2.Location = new Point(53, 19);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
