@@ -69,7 +69,7 @@ namespace CommPlugin
             // 
             btnChangeCOM1Freq.BackColor = Color.Gray;
             btnChangeCOM1Freq.FlatStyle = FlatStyle.Flat;
-            btnChangeCOM1Freq.Location = new Point(104, 25);
+            btnChangeCOM1Freq.Location = new Point(155, 25);
             btnChangeCOM1Freq.Margin = new Padding(5, 25, 5, 5);
             btnChangeCOM1Freq.Name = "btnChangeCOM1Freq";
             btnChangeCOM1Freq.Size = new Size(42, 42);
@@ -80,7 +80,6 @@ namespace CommPlugin
             // 
             // lblCom1
             // 
-            lblCom1.AutoSize = true;
             lblCom1.BackColor = Color.FromArgb(64, 0, 0);
             lblCom1.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblCom1.ForeColor = Color.Red;
@@ -88,23 +87,24 @@ namespace CommPlugin
             lblCom1.Margin = new Padding(5, 25, 5, 5);
             lblCom1.Name = "lblCom1";
             lblCom1.Padding = new Padding(5);
-            lblCom1.Size = new Size(89, 42);
+            lblCom1.Size = new Size(140, 42);
             lblCom1.TabIndex = 4;
             lblCom1.Text = "---.---";
+            lblCom1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblComStdby
             // 
-            lblComStdby.AutoSize = true;
             lblComStdby.BackColor = Color.FromArgb(64, 0, 0);
             lblComStdby.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblComStdby.ForeColor = Color.Red;
-            lblComStdby.Location = new Point(156, 25);
+            lblComStdby.Location = new Point(207, 25);
             lblComStdby.Margin = new Padding(5, 25, 5, 5);
             lblComStdby.Name = "lblComStdby";
             lblComStdby.Padding = new Padding(5);
-            lblComStdby.Size = new Size(89, 42);
+            lblComStdby.Size = new Size(140, 42);
             lblComStdby.TabIndex = 5;
             lblComStdby.Text = "---.---";
+            lblComStdby.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblSquawk1
             // 
@@ -368,11 +368,12 @@ namespace CommPlugin
             tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 3, 0);
             tableLayoutPanel2.Controls.Add(btnChangeCOM1Freq, 1, 0);
             tableLayoutPanel2.Controls.Add(lblComStdby, 2, 0);
-            tableLayoutPanel2.Location = new Point(53, 19);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(3, 19);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(351, 111);
+            tableLayoutPanel2.Size = new Size(451, 114);
             tableLayoutPanel2.TabIndex = 16;
             // 
             // tableLayoutPanel3
@@ -384,7 +385,7 @@ namespace CommPlugin
             tableLayoutPanel3.Controls.Add(btnUnicom, 0, 2);
             tableLayoutPanel3.Controls.Add(rotaryKnob2, 1, 1);
             tableLayoutPanel3.Controls.Add(rotaryKnob1, 0, 1);
-            tableLayoutPanel3.Location = new Point(253, 3);
+            tableLayoutPanel3.Location = new Point(355, 3);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 3;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 15F));
@@ -452,7 +453,6 @@ namespace CommPlugin
             panel1.PerformLayout();
             groupBox2.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
             tableLayoutPanel4.ResumeLayout(false);
