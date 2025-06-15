@@ -74,7 +74,10 @@ jobs:
       run: dotnet publish plugins/ChartFoxPlugin/ChartFoxPlugin.csproj --configuration Release --output publish_output\plugins\4_ChartFox
 
     - name: publish Vatsim radar plugin
-      run: dotnet publish plugins/VatsimRadarPlugin/VatsimRadarPlugin.csproj --configuration Release --output publish_output\plugins\R_Radar
+      run: dotnet publish plugins/VatsimRadarPlugin/VatsimRadarPlugin.csproj --configuration Release --output publish_output\plugins\5_ATC
+
+    - name: publish Comm plugin
+      run: dotnet publish plugins/CommPlugin/CommPlugin.csproj --configuration Release --output publish_output\plugins\6_Comm
 
     - name: set version in installer
       shell: pwsh
