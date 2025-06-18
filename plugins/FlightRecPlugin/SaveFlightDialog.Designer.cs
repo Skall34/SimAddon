@@ -71,7 +71,7 @@
             btnSave.Location = new System.Drawing.Point(197, 499);
             btnSave.Name = "btnSave";
             btnSave.Size = new System.Drawing.Size(75, 23);
-            btnSave.TabIndex = 0;
+            btnSave.TabIndex = 11;
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
@@ -82,7 +82,7 @@
             btnCancel.Location = new System.Drawing.Point(116, 499);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new System.Drawing.Size(75, 23);
-            btnCancel.TabIndex = 1;
+            btnCancel.TabIndex = 12;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
             // 
@@ -107,7 +107,7 @@
             valDepFuel.Maximum = new decimal(new int[] { 99999, 0, 0, 0 });
             valDepFuel.Name = "valDepFuel";
             valDepFuel.Size = new System.Drawing.Size(200, 23);
-            valDepFuel.TabIndex = 5;
+            valDepFuel.TabIndex = 4;
             valDepFuel.ValueChanged += valDepFuel_ValueChanged;
             // 
             // label3
@@ -134,7 +134,7 @@
             label2.AutoSize = true;
             label2.Location = new System.Drawing.Point(8, 49);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(39, 15);
+            label2.Size = new System.Drawing.Size(40, 15);
             label2.TabIndex = 2;
             label2.Text = "Time :";
             // 
@@ -143,7 +143,7 @@
             tbDepICAO.Location = new System.Drawing.Point(51, 16);
             tbDepICAO.Name = "tbDepICAO";
             tbDepICAO.Size = new System.Drawing.Size(200, 23);
-            tbDepICAO.TabIndex = 1;
+            tbDepICAO.TabIndex = 2;
             // 
             // label1
             // 
@@ -175,7 +175,7 @@
             valArrFuel.Maximum = new decimal(new int[] { 99999, 0, 0, 0 });
             valArrFuel.Name = "valArrFuel";
             valArrFuel.Size = new System.Drawing.Size(200, 23);
-            valArrFuel.TabIndex = 11;
+            valArrFuel.TabIndex = 7;
             valArrFuel.ValueChanged += valArrFuel_ValueChanged;
             // 
             // label4
@@ -194,14 +194,14 @@
             dtArrival.Name = "dtArrival";
             dtArrival.ShowUpDown = true;
             dtArrival.Size = new System.Drawing.Size(200, 23);
-            dtArrival.TabIndex = 9;
+            dtArrival.TabIndex = 6;
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Location = new System.Drawing.Point(8, 55);
             label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(39, 15);
+            label5.Size = new System.Drawing.Size(40, 15);
             label5.TabIndex = 8;
             label5.Text = "Time :";
             // 
@@ -210,7 +210,7 @@
             tbArrICAO.Location = new System.Drawing.Point(55, 22);
             tbArrICAO.Name = "tbArrICAO";
             tbArrICAO.Size = new System.Drawing.Size(200, 23);
-            tbArrICAO.TabIndex = 7;
+            tbArrICAO.TabIndex = 5;
             // 
             // label6
             // 
@@ -240,7 +240,7 @@
             valCargo.Maximum = new decimal(new int[] { 99999, 0, 0, 0 });
             valCargo.Name = "valCargo";
             valCargo.Size = new System.Drawing.Size(200, 23);
-            valCargo.TabIndex = 3;
+            valCargo.TabIndex = 1;
             // 
             // label8
             // 
@@ -258,7 +258,7 @@
             cbImmat.Location = new System.Drawing.Point(52, 16);
             cbImmat.Name = "cbImmat";
             cbImmat.Size = new System.Drawing.Size(200, 23);
-            cbImmat.TabIndex = 1;
+            cbImmat.TabIndex = 0;
             // 
             // label7
             // 
@@ -289,7 +289,7 @@
             valNote.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             valNote.Name = "valNote";
             valNote.Size = new System.Drawing.Size(192, 23);
-            valNote.TabIndex = 5;
+            valNote.TabIndex = 9;
             // 
             // label10
             // 
@@ -316,7 +316,7 @@
             cbMission.Location = new System.Drawing.Point(62, 135);
             cbMission.Name = "cbMission";
             cbMission.Size = new System.Drawing.Size(192, 23);
-            cbMission.TabIndex = 1;
+            cbMission.TabIndex = 10;
             // 
             // tbComments
             // 
@@ -324,7 +324,7 @@
             tbComments.Multiline = true;
             tbComments.Name = "tbComments";
             tbComments.Size = new System.Drawing.Size(249, 75);
-            tbComments.TabIndex = 0;
+            tbComments.TabIndex = 8;
             // 
             // SaveFlightDialog
             // 

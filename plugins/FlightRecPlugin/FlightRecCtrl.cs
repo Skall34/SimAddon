@@ -15,6 +15,8 @@ using System.Drawing.Imaging;
 using System.Threading.Tasks;
 using System.Text;
 using FSUIPC;
+using System.Net.Http;
+using System.Globalization;
 
 namespace FlightRecPlugin
 {
@@ -849,9 +851,42 @@ namespace FlightRecPlugin
                         comment = saveFlightDialog.Comment,
                         cargo = saveFlightDialog.Cargo.ToString("0.00")
                     };
+                    //JFK 18062025
 
-                    int result = await (data.saveFlight(flightdata));
+                    //int result = await (data.saveFlight(flightdata));
+                    // Construction du dictionnaire à partir de flightdata
+                    var flightData = new Dictionary<string, string>
+                    {
+                        { "callsign", tbCallsign.Text },
+                        { "immatriculation", cbImmat.Text },
+                        { "departure_icao", lbStartIata.Text },
+                        { "departure_fuel", _startFuel.ToString("0.00", CultureInfo.InvariantCulture) },
+                        { "departure_time", _startTime.ToString("yyyy-MM-ddTHH:mm") },
+                        { "arrival_icao", lbEndIata.Text },
+                        { "arrival_fuel", _endFuel.ToString("0.00", CultureInfo.InvariantCulture) },
+                        { "arrival_time", _endTime.ToString("yyyy-MM-ddTHH:mm") },
+                        { "note_du_vol", _note.ToString() },
+                        { "mission", cbMission.Text },
+                        { "commentaire", tbCommentaires.Text },
+                        { "payload", _endPayload.ToString("0.00", CultureInfo.InvariantCulture) }
+                    };
 
+                    if (string.IsNullOrWhiteSpace(lbStartIata.Text) || lbStartIata.Text == "Not Yet Available")
+                        throw new Exception("Aéroport de départ non détecté !");
+                    if (string.IsNullOrWhiteSpace(lbEndIata.Text) || lbEndIata.Text == "Waiting end flight ...")
+                        throw new Exception("Aéroport d’arrivée non détecté !");
+                    if (string.IsNullOrWhiteSpace(cbMission.Text))
+                        throw new Exception("Mission non sélectionnée !");
+                    if (_startFuel == 0 || _endFuel == 0)
+                        throw new Exception("Carburant non détecté !");
+                    if (_startTime == DateTime.UnixEpoch || _endTime == DateTime.UnixEpoch)
+                        throw new Exception("Heure de départ ou d’arrivée non détectée !");
+                    File.WriteAllText("debug_flightdata.txt", string.Join("\n", flightData.Select(kv => $"{kv.Key} = {kv.Value}")));
+
+                    string phpUrl = "http://192.168.1.29/api/api_import_vol.php";
+                    bool ok = await SendFlightDataToPhpAsync(flightData, phpUrl);
+                    int result = ok ? 1 : 0;
+                    // Fin JFK 18062025
                     //int result = await urlDeserializer.PushFlightAsync(data);
                     if (0 != result)
                     {
@@ -899,6 +934,43 @@ namespace FlightRecPlugin
             this.Cursor = Cursors.Default;
             return saveOK;
 
+        }
+        private async Task<bool> SendFlightDataToPhpAsync(Dictionary<string, string> flightData, string phpUrl)
+        {
+            using (var client = new HttpClient())
+            {
+                var content = new FormUrlEncodedContent(flightData);
+
+                try
+                {
+                    var response = await client.PostAsync(phpUrl, content);
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    // Affiche tout, même si c'est vide
+                    string message = $"Code: {response.StatusCode}\nRéponse brute:\n{responseContent}";
+                    ShowMsgBox("Détail HTTP", message, MessageBoxButtons.OK);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        // Affiche le détail dans le popup
+                        return false;
+                    }
+
+                    // Affiche aussi la réponse si le code est 200 mais que le PHP retourne une erreur
+                    if (!string.IsNullOrWhiteSpace(responseContent) && !responseContent.Trim().ToLower().Contains("ok"))
+                    {
+                        ShowMsgBox("Réponse PHP", responseContent, MessageBoxButtons.OK);
+                        return false;
+                    }
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    ShowMsgBox("Erreur lors de l'envoi HTTP", ex.Message, MessageBoxButtons.OK);
+                    return false;
+                }
+            }
         }
 
         private void resetFlight(bool force) //force ==true => pas de demande de confirmation
