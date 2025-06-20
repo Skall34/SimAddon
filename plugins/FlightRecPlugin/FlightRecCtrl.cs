@@ -618,7 +618,7 @@ namespace FlightRecPlugin
                 {
                     await connection.OpenAsync();
 
-                    string query = "SELECT Immat FROM FLOTTE WHERE Immat IS NOT NULL AND Immat <> '' AND Actif=1";
+                    string query = "SELECT Immat FROM FLOTTE WHERE Immat IS NOT NULL AND Immat <> '' AND Actif=1 AND status=0 and en_vol=0";
                     using (var command = new MySqlCommand(query, connection))
                     using (var reader = await command.ExecuteReaderAsync())
                     {
