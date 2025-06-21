@@ -6,6 +6,8 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Runtime.Serialization;
+using MySql.Data.MySqlClient;
+
 
 //using System.Text.Json;
 using System.Threading.Tasks;
@@ -96,51 +98,123 @@ namespace SimDataManager
             return (avions, missions);
         }
 
-        public async Task<List<Aeroport>> FetchAirportsDataAsync(string filename)
+
+        public async Task<List<Aeroport>> FetchAirportsFromDatabaseAsync(string connectionString)
         {
-            List<Aeroport> aeroports ;
-
-            using (HttpClient client = new HttpClient())
+            var aeroports = new List<Aeroport>();
+            using (var connection = new MySqlConnection(connectionString))
             {
-                try
+                await connection.OpenAsync();
+                string query = "SELECT ident, type_aeroport, name, municipality, latitude_deg, longitude_deg, elevation_ft, Piste, Longueur_de_piste, Type_de_piste, Observations, Wikipedia_Link, fret FROM AEROPORTS";
+                using (var command = new MySqlCommand(query, connection))
+                using (var reader = await command.ExecuteReaderAsync())
                 {
-                    HttpResponseMessage response = await client.GetAsync(_url);
-
-                    if (response.IsSuccessStatusCode)
+                    while (await reader.ReadAsync())
                     {
-                        string jsonString = await response.Content.ReadAsStringAsync();
-                        // Désérialisation du JSON
-                        aeroports = Aeroport.deserializeAeroports(jsonString);
-                        //if we received airports, store them locally
-                        if (aeroports.Count > 0)
-                        {                           
-                            StreamWriter sw= new StreamWriter(filename);
-                            JsonSerializer serializer = new JsonSerializer();
-                            serializer.Formatting = Formatting.Indented;
-                            serializer.Serialize(sw, aeroports);
-                            sw.Close();
-                        }
+                        var aeroport = new Aeroport
+                        {
+                            ident = reader.GetString(0),
+                            type = reader.GetString(1),
+                            name = reader.GetString(2),
+                            municipality = reader.GetString(3),
+                            latitude_deg = reader.GetDouble(4),
+                            longitude_deg = reader.GetDouble(5),
+                            elevation_ft = reader.GetDouble(6),
+                            Piste = reader.IsDBNull(7) ? "" : reader.GetString(7),
+                            Longueur_de_piste = reader.IsDBNull(8) ? "" : reader.GetString(8),
+                            Type_de_piste = reader.IsDBNull(9) ? "" : reader.GetString(9),
+                            Observations = reader.IsDBNull(10) ? "" : reader.GetString(10),
+                            Wikipedia_Link = reader.IsDBNull(11) ? "" : reader.GetString(11),
+                            fret = reader.IsDBNull(12) ? 0 : reader.GetFloat(12)
+                        };
+                        aeroports.Add(aeroport);
                     }
-                    else
-                    {
-                        aeroports = new List<Aeroport>();
-                        // Gérer les erreurs si la requête n'a pas réussi
-                        Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //MessageBox.Show(ex.Message,"Error while loading airports",MessageBoxButtons.OK,MessageBoxIcon.Error);
-
-                    aeroports = new List<Aeroport>();
-                    // Gérer les exceptions
-                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
                 }
             }
-
             return aeroports;
         }
 
+        public async Task<DateTime?> GetAeroportsLastUpdateAsync(string connectionString)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+                // Cette requête fonctionne si tu as un champ "updated_at" ou "last_modified" dans ta table AEROPORTS.
+                // Sinon, tu peux utiliser la date de modification de la table (voir plus bas).
+                string query = "SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = 'SKYWINGS_VA' AND TABLE_NAME = 'AEROPORTS'";
+
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    var result = await command.ExecuteScalarAsync();
+                    if (result != DBNull.Value && result != null)
+                        return Convert.ToDateTime(result);
+                    else
+                        return null;
+                }
+            }
+        }
+
+        public void SaveLastAeroportsUpdateDate(DateTime date, string filePath)
+        {
+            File.WriteAllText(filePath, date.ToString("o")); // format ISO 8601
+        }
+
+        public DateTime? LoadLastAeroportsUpdateDate(string filePath)
+        {
+            if (!File.Exists(filePath)) return null;
+            var content = File.ReadAllText(filePath);
+            if (DateTime.TryParse(content, null, System.Globalization.DateTimeStyles.RoundtripKind, out var dt))
+                return dt;
+            return null;
+        }
+
+
+        public async Task<List<Aeroport>> FetchAirportsDataAsync(string connectionString)
+        {
+            List<Aeroport> aeroports ;
+            /*
+                        using (HttpClient client = new HttpClient())
+                        {
+                            try
+                            {
+                                HttpResponseMessage response = await client.GetAsync(_url);
+
+                                if (response.IsSuccessStatusCode)
+                                {
+                                    string jsonString = await response.Content.ReadAsStringAsync();
+                                    // Désérialisation du JSON
+                                    aeroports = Aeroport.deserializeAeroports(jsonString);
+                                    //if we received airports, store them locally
+                                    if (aeroports.Count > 0)
+                                    {                           
+                                        StreamWriter sw= new StreamWriter(filename);
+                                        JsonSerializer serializer = new JsonSerializer();
+                                        serializer.Formatting = Formatting.Indented;
+                                        serializer.Serialize(sw, aeroports);
+                                        sw.Close();
+                                    }
+                                }
+                                else
+                                {
+                                    aeroports = new List<Aeroport>();
+                                    // Gérer les erreurs si la requête n'a pas réussi
+                                    Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                //MessageBox.Show(ex.Message,"Error while loading airports",MessageBoxButtons.OK,MessageBoxIcon.Error);
+
+                                aeroports = new List<Aeroport>();
+                                // Gérer les exceptions
+                                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                            }
+                        }
+                        */
+            return await FetchAirportsFromDatabaseAsync(connectionString); 
+            //return aeroports;
+        }
+        
 
         
         public async Task<float> FetchFreightDataAsync()

@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using FSUIPC;
 using SimAddonLogger;
+using MySql.Data.MySqlClient;
+
 
 //using Microsoft.VisualBasic.ApplicationServices;
 
@@ -259,7 +261,7 @@ namespace SimDataManager
             //this.Cursor = Cursors.Default;
         }
 
-
+        /*
         public async Task<int> UpdatePlaneStatus(int isFlying, UrlDeserializer.PlaneUpdateQuery planedata)
         {
                 //crée un dictionnaire des valeurs à envoyer
@@ -268,6 +270,56 @@ namespace SimDataManager
 
             return result;
         }
+        */
+        public async Task<int> UpdatePlaneStatus(int isFlying, UrlDeserializer.PlaneUpdateQuery planedata)
+        {
+            string connectionString = "Server=192.168.1.29;Database=SKYWINGS_VA;User Id=AcarsUser;Password=MerciPascal;";
+            int result = 0;
+            int? piloteId = null;
+
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    // 1. Chercher l'id du pilote à partir du callsign
+                    string piloteQuery = "SELECT id FROM PILOTES WHERE callsign = @callsign LIMIT 1";
+                    using (var piloteCmd = new MySqlCommand(piloteQuery, connection))
+                    {
+                        piloteCmd.Parameters.AddWithValue("@callsign", planedata.cs ?? "");
+                        var idObj = await piloteCmd.ExecuteScalarAsync();
+                        if (idObj != null && idObj != DBNull.Value)
+                            piloteId = Convert.ToInt32(idObj);
+                    }
+
+                    // 2. Mettre à jour la table FLOTTE avec l'id du pilote
+                    string flotteQuery = @"
+                UPDATE FLOTTE
+                SET EnVol = @flying, Dernier_utilisateur = @piloteId, Localisation = @endIcao
+                WHERE Immat = @plane";
+                    using (var flotteCmd = new MySqlCommand(flotteQuery, connection))
+                    {
+                        flotteCmd.Parameters.AddWithValue("@flying", isFlying);
+                        flotteCmd.Parameters.AddWithValue("@piloteId", piloteId.HasValue ? piloteId.Value : (object)DBNull.Value);
+                        flotteCmd.Parameters.AddWithValue("@endIcao", planedata.endIcao ?? "");
+                        flotteCmd.Parameters.AddWithValue("@plane", planedata.plane ?? "");
+
+                        int rowsAffected = await flotteCmd.ExecuteNonQueryAsync();
+                        result = rowsAffected > 0 ? 1 : 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("Erreur lors de la mise à jour du statut avion : " + ex.Message);
+                result = 0;
+            }
+
+            return result;
+        }
+
+
 
         public async Task<int> saveFlight(UrlDeserializer.SaveFlightQuery flightdata)
         {
