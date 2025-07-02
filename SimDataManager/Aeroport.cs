@@ -208,62 +208,43 @@ namespace SimDataManager
         public static async Task<List<Aeroport>> fetchAirports(string baseUrl, DateTime lastUpdateFileTime)
         {
             initPath();
-            //string url = baseUrl + "?query=airports&date=" + epoch.ToString();
-            //UrlDeserializer dataReader = new UrlDeserializer(url);
-
-            string connectionString = "Server=192.168.1.29;Database=SKYWINGS_VA;User Id=AcarsUser;Password=MerciPascal;";
-            List<Aeroport> result = new List<Aeroport>();
-            // Instancie UrlDeserializer (le paramètre _url n'est pas utilisé ici, tu peux mettre "")
-            var dataReader = new UrlDeserializer("");
-            // 1. Charger la date de dernière modif connue (depuis le fichier local)
-            DateTime? lastKnown = null;
+            long epoch = 0; // lastUpdateFileTime.ToFileTime();
             if (File.Exists(DBFILEPATH))
             {
                 FileInfo fi = new FileInfo(DBFILEPATH);
-                lastKnown = fi.LastWriteTimeUtc;
+                DateTime creationTime = fi.CreationTime.ToUniversalTime();
+                epoch = (long)(creationTime - new DateTime(1970, 1, 1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
             }
 
-            // 2. Récupérer la date de dernière modif en base
-            DateTime? lastDb = await dataReader.GetAeroportsLastUpdateAsync(connectionString);
-
-            // 3. Comparer
-            bool needUpdate = (lastDb == null || lastKnown == null || lastDb > lastKnown);
-
-            if (needUpdate)
+            string url = baseUrl + "?query=airports&date=" + epoch.ToString();
+            UrlDeserializer dataReader = new UrlDeserializer(url);
+            List<Aeroport> result;
+            Logger.WriteLine("Fechting airport informations from server");
+            result = await dataReader.FetchAirportsDataAsync(DBFILEPATH);
+            //if no new airport database, just load the local one.
+            if (result.Count == 0)
             {
-                // Aller chercher les aéroports en base
-                result = await dataReader.FetchAirportsFromDatabaseAsync(connectionString);
-
-                // Sauvegarder le JSON localement si on a des résultats
-                if (result.Count > 0)
+                //no airports from the server, try to load the local database.
+                if (File.Exists(DBFILEPATH))
                 {
-                    var json = JsonConvert.SerializeObject(result, Formatting.Indented);
-                    File.WriteAllText(DBFILEPATH, json);
-                    Logger.WriteLine("Airport DB mise à jour depuis la base SQL.");
+                    Logger.WriteLine("Loading local airport database");
+                    //read the aeroports.json file.
+                    StreamReader sr = new StreamReader(DBFILEPATH);
+                    string allData = sr.ReadToEnd();
+                    result = deserializeAeroports(allData);
+                    if (null == result)
+                    {
+                        result = new List<Aeroport>();
+                    }
                 }
                 else
                 {
-                    Logger.WriteLine("Aucun aéroport trouvé en base, tentative de chargement du fichier local.");
+                    //no data from server and no local file available... it sucks....
+                    result = new List<Aeroport>();
                 }
             }
-            else
-            {
-                Logger.WriteLine("Pas de changement détecté sur la table AEROPORTS, chargement du fichier local.");
-            }
-
-            // 4. Si pas de résultat (ou pas de mise à jour), charger le fichier local
-            if (result.Count == 0 && File.Exists(DBFILEPATH))
-            {
-                StreamReader sr = new StreamReader(DBFILEPATH);
-                string allData = sr.ReadToEnd();
-                result = deserializeAeroports(allData);
-                if (result == null)
-                    result = new List<Aeroport>();
-            }
-
             return result;
         }
-
 
         public static async Task<float> fetchFreight(string baseUrl, string airportID)
         {
@@ -317,7 +298,6 @@ namespace SimDataManager
                         a.Type_de_piste = GetStringValueOrDefault(item, "Type_de_piste", "unknown" + i);
                         a.Observations = GetStringValueOrDefault(item, "Observations", "unknown" + i);
                         a.Wikipedia_Link = GetStringValueOrDefault(item, "wikipedia_link", "unknown" + i);
-                        a.fret = float.Parse(GetStringValueOrDefault(item, "fret", "0"), CultureInfo.InvariantCulture);
 
                         aeroports.Add(a);
                     }
