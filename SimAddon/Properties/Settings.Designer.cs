@@ -12,7 +12,7 @@ namespace SimAddon.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.12.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.14.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -20,19 +20,6 @@ namespace SimAddon.Properties {
         public static Settings Default {
             get {
                 return defaultInstance;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://script.google.com/macros/s/AKfycbyhK_pky8u_OUPNwtQJtpRSiWwE0gF64zHHkbbDJu" +
-            "Y6I9-3jjegoiIIfJfV0QKcVC2IAg/exec")]
-        public string GSheetAPIUrl {
-            get {
-                return ((string)(this["GSheetAPIUrl"]));
-            }
-            set {
-                this["GSheetAPIUrl"] = value;
             }
         }
         
@@ -81,6 +68,18 @@ namespace SimAddon.Properties {
             }
             set {
                 this["ypos"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://skywings.ovh/")]
+        public string GSheetAPIUrl {
+            get {
+                return ((string)(this["GSheetAPIUrl"]));
+            }
+            set {
+                this["GSheetAPIUrl"] = value;
             }
         }
     }

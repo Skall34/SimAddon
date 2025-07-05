@@ -1,7 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SimDataManager
 {
+    public class AvionsPhpList
+    {
+        public bool success;
+        public List<Dictionary<string, string>> immats;
+    }
+
     public class Avion : IEquatable<Avion>, IComparable<Avion>
     {
         public int Index { get; set; }

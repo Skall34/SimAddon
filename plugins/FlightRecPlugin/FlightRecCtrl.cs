@@ -17,7 +17,6 @@ using System.Text;
 using FSUIPC;
 using System.Net.Http;
 using System.Globalization;
-using MySql.Data.MySqlClient;
 
 namespace FlightRecPlugin
 {
@@ -191,8 +190,8 @@ namespace FlightRecPlugin
         {
             data = _data;
 
-            RemplirComboImmatAsync();
-            RemplirComboMissionsAsync();
+            RemplirComboImmat();
+            RemplirComboMissions();
 
             this.Enabled = true;
 
@@ -215,11 +214,7 @@ namespace FlightRecPlugin
             string message = "Confirm close ACARS ?";
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                //if (this.btnSubmit.Enabled == true)
-                //{
-                //    //Le vol n'a PAS été envoyé
-                //    message += "\r\n !!! Le vol n'a pas été envoyé !!!";
-                //}
+
 
                 if (e.CloseReason == CloseReason.UserClosing)
                 {
@@ -251,13 +246,7 @@ namespace FlightRecPlugin
                 //close forced. (probably autostart of application by the simulator)
                 if (btnSubmit.Enabled)
                 {
-                    ////if button submit is enabled then we probably have a flight to save.
-                    //bool saveOK = await saveFlight();
-                    //if (!saveOK)
-                    //{
-                    //    //if user hit cancel while closing, dismiss the flight
-                    //    resetFlight(true);
-                    //}
+
                 }
             }
         }
@@ -604,81 +593,77 @@ namespace FlightRecPlugin
 
         }
 
-        private async Task RemplirComboImmatAsync()
+        private void RemplirComboImmat()
         {
             lbFret.Text = "Acars initializing ..... please wait";
+            // Effacez les éléments existants dans la combobox
             cbImmat.Items.Clear();
-            immats.Clear();
-
-            string connectionString = "Server=192.168.1.29;Database=SKYWINGS_VA;User Id=AcarsUser;Password=MerciPascal;";
-
-            try
+            if ((data.avions != null)&&(data.avions.Count>0))
             {
-                using (var connection = new MySqlConnection(connectionString))
+                data.avions.Sort();
+                // Parcourez la liste des avions
+                foreach (Avion avion in data.avions)
                 {
-                    await connection.OpenAsync();
-
-                    string query = "SELECT Immat FROM FLOTTE WHERE Immat IS NOT NULL AND Immat <> '' AND Actif=1 AND status=0 and en_vol=0";
-                    using (var command = new MySqlCommand(query, connection))
-                    using (var reader = await command.ExecuteReaderAsync())
+                    //// Vérifiez si le statut de l'avion est égal à 1
+                    //if (avion.Status == 1 || avion.Status == 2 || ((avion.EnVol == 1) && (avion.DernierUtilisateur != tbCallsign.Text)))
+                    //{
+                    //    // Si le statut est égal à 1 ou 2, il est en maintenance,
+                    //    // passez à l'itération suivante
+                    //    // Si l'avion est en vol, on ne le liste pas (execption, si l'utilisateur courant est celui qui a laissé l'avion en vol)
+                    //    // (permet de libérer un avion qui serait bloqué en vol suite à un crash du simulateur)
+                    //    continue;
+                    //}
+                    // Ajoutez l'immatriculation de l'avion à la liste des immatriculations
+                    if (null != avion.Immat)
                     {
-                        while (await reader.ReadAsync())
-                        {
-                            string immat = reader.GetString(0);
-                            cbImmat.Items.Add(immat);
-                            immats.Add(immat);
-                        }
+                        //immatriculations.Add(avion.Immat);
+                        cbImmat.Items.Add(avion);
+                        immats.Add(avion.Immat);
                     }
                 }
+                cbImmat.DisplayMember = "Immat";
 
-                // Pré-sélection de la dernière immat utilisée si elle existe
+
+                //pre-select the last used immat (stored as setting)
                 string lastImmat = Settings.Default.lastImmat;
-                if (!string.IsNullOrEmpty(lastImmat))
+                if (lastImmat != string.Empty)
                 {
-                    int idx = cbImmat.Items.IndexOf(lastImmat);
-                    if (idx >= 0)
-                        cbImmat.SelectedIndex = idx;
+                    try
+                    {
+                        Avion selected = data.avions.Where(a => a.Immat == lastImmat).First();
+                        cbImmat.SelectedItem = selected;
+
+                        //send the SETAIRCRAFT event
+                        SimEventArg eventArg = new SimEventArg();
+                        eventArg.reason = SimEventArg.EventType.SETAIRCRAFT;
+                        eventArg.value = selected.Designation;
+                        SimEvent(eventArg);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteLine("Error selecting last used immat: " + ex.Message);
+                        //if the last immat is not found, just select the first one
+                        if (cbImmat.Items.Count > 0)
+                        {
+                            cbImmat.SelectedIndex = 0;
+                        }
+
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erreur chargement immatriculations : " + ex.Message, "Erreur DB", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             this.Cursor = Cursors.Default;
         }
 
-        private async Task RemplirComboMissionsAsync()
+        private void RemplirComboMissions()
         {
-            cbMission.Items.Clear();
-            missions.Clear();
-
-            string connectionString = "Server=192.168.1.29;Database=SKYWINGS_VA;User Id=AcarsUser;Password=MerciPascal;";
-
-            try
+            if ((data.missions != null)&&(data.missions.Count>0))
             {
-                using (var connection = new MySqlConnection(connectionString))
-                {
-                    await connection.OpenAsync();
-
-                    string query = "SELECT Libelle FROM MISSIONS WHERE Libelle IS NOT NULL AND Libelle <> '' AND Active=1";
-                    using (var command = new MySqlCommand(query, connection))
-                    using (var reader = await command.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            string libelle = reader.GetString(0);
-                            cbMission.Items.Add(libelle);
-                            missions.Add(libelle);
-                        }
-                    }
-                }
+                cbMission.Items.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
+                missions.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erreur chargement missions : " + ex.Message, "Erreur DB", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
+            //await dataReader.FillComboBoxMissionsAsync(cbMission);
+            cbMission.DisplayMember = "Libelle";
             this.Cursor = Cursors.Default;
         }
 
@@ -851,23 +836,23 @@ namespace FlightRecPlugin
                 {
 
                     Dictionary<string, string> values = new Dictionary<string, string>();
-                    UrlDeserializer.SaveFlightQuery flightdata = new UrlDeserializer.SaveFlightQuery
-                    {
-                        query = "save",
-                        qtype = "json",
-                        cs = tbCallsign.Text,
-                        plane = saveFlightDialog.Immat,
-                        sicao = saveFlightDialog.DepartureICAO,
-                        sfuel = saveFlightDialog.DepartureFuel.ToString("0.00"),
-                        stime = saveFlightDialog.DepartureTime.ToShortTimeString(),
-                        eicao = saveFlightDialog.ArrivalICAO,
-                        efuel = saveFlightDialog.ArrivalFuel.ToString("0.00"),
-                        etime = saveFlightDialog.ArrivalTime.ToShortTimeString(),
-                        note = saveFlightDialog.Note.ToString("0.00"),
-                        mission = saveFlightDialog.Mission,
-                        comment = saveFlightDialog.Comment,
-                        cargo = saveFlightDialog.Cargo.ToString("0.00")
-                    };
+                    //UrlDeserializer.SaveFlightQuery flightdata = new UrlDeserializer.SaveFlightQuery
+                    //{
+                    //    query = "save",
+                    //    qtype = "json",
+                    //    cs = tbCallsign.Text,
+                    //    plane = saveFlightDialog.Immat,
+                    //    sicao = saveFlightDialog.DepartureICAO,
+                    //    sfuel = saveFlightDialog.DepartureFuel.ToString("0.00"),
+                    //    stime = saveFlightDialog.DepartureTime.ToShortTimeString(),
+                    //    eicao = saveFlightDialog.ArrivalICAO,
+                    //    efuel = saveFlightDialog.ArrivalFuel.ToString("0.00"),
+                    //    etime = saveFlightDialog.ArrivalTime.ToShortTimeString(),
+                    //    note = saveFlightDialog.Note.ToString("0.00"),
+                    //    mission = saveFlightDialog.Mission,
+                    //    comment = saveFlightDialog.Comment,
+                    //    cargo = saveFlightDialog.Cargo.ToString("0.00")
+                    //};
                     //JFK 18062025
 
                     //int result = await (data.saveFlight(flightdata));
@@ -878,18 +863,32 @@ namespace FlightRecPlugin
                         { "immatriculation", saveFlightDialog.Immat },
                         { "departure_icao", saveFlightDialog.DepartureICAO },
                         { "departure_fuel", saveFlightDialog.DepartureFuel.ToString("0.00", CultureInfo.InvariantCulture) },
-                        { "departure_time", saveFlightDialog.DepartureTime.ToString("yyyy-MM-ddTHH:mm") },
+                        { "departure_time", saveFlightDialog.DepartureTime.ToShortTimeString()},
                         { "arrival_icao", saveFlightDialog.ArrivalICAO },
                         { "arrival_fuel", saveFlightDialog.ArrivalFuel.ToString("0.00", CultureInfo.InvariantCulture) },
-                        { "arrival_time", saveFlightDialog.ArrivalTime.ToString("yyyy-MM-ddTHH:mm") },
-                        { "note_du_vol", saveFlightDialog.Note.ToString() },
+                        { "arrival_time", saveFlightDialog.ArrivalTime.ToShortTimeString() },
+                        { "note_du_vol", saveFlightDialog.Note.ToString("0.00") },
                         { "mission", saveFlightDialog.Mission },
                         { "commentaire", saveFlightDialog.Comment },
                         { "payload", saveFlightDialog.Cargo.ToString("0.00", CultureInfo.InvariantCulture) }
                     };
 
-                    string phpUrl = "http://192.168.1.29/api/api_import_vol.php";
-                    bool ok = await SendFlightDataToPhpAsync(flightData, phpUrl);
+                    //PB temporary disable the checks for the start and end iata, fuel, time and mission
+
+                    //if (string.IsNullOrWhiteSpace(lbStartIata.Text) || lbStartIata.Text == "Not Yet Available")
+                    //    throw new Exception("Aéroport de départ non détecté !");
+                    //if (string.IsNullOrWhiteSpace(lbEndIata.Text) || lbEndIata.Text == "Waiting end flight ...")
+                    //    throw new Exception("Aéroport d’arrivée non détecté !");
+                    //if (string.IsNullOrWhiteSpace(cbMission.Text))
+                    //    throw new Exception("Mission non sélectionnée !");
+                    //if (_startFuel == 0 || _endFuel == 0)
+                    //    throw new Exception("Carburant non détecté !");
+                    //if (_startTime == DateTime.UnixEpoch || _endTime == DateTime.UnixEpoch)
+                    //    throw new Exception("Heure de départ ou d’arrivée non détectée !");
+                    //File.WriteAllText("debug_flightdata.txt", string.Join("\n", flightData.Select(kv => $"{kv.Key} = {kv.Value}")));
+
+
+                    bool ok = await data.SendFlightDataToPhpAsync(flightData);
                     int result = ok ? 1 : 0;
                     // Fin JFK 18062025
                     //int result = await urlDeserializer.PushFlightAsync(data);
@@ -940,26 +939,7 @@ namespace FlightRecPlugin
             return saveOK;
 
         }
-        private async Task<bool> SendFlightDataToPhpAsync(Dictionary<string, string> flightData, string phpUrl)
-        {
-            using (var client = new HttpClient())
-            {
-                var content = new FormUrlEncodedContent(flightData);
 
-                try
-                {
-                    var response = await client.PostAsync(phpUrl, content);
-                    string responseContent = await response.Content.ReadAsStringAsync();
-
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    ShowMsgBox("Erreur lors de l'envoi HTTP", ex.Message, MessageBoxButtons.OK);
-                    return false;
-                }
-            }
-        }
 
         private void resetFlight(bool force) //force ==true => pas de demande de confirmation
         {
@@ -1123,12 +1103,17 @@ namespace FlightRecPlugin
                     flying = isFlying,
                     endIcao = tbEndICAO.Text
                 };
+                values["callsign"] = tbCallsign.Text;
+                values["plane"] = cbImmat.Text;
+                values["departure_icao"] = lbStartIata.Text;
+                values["flying"] = isFlying.ToString();
+                values["arrival_icao"] = tbEndICAO.Text;
 
                 if (data != null)
                 {
 
-                    int result = await (data.UpdatePlaneStatus(isFlying, planedata));
-                    if (0 != result)
+                    bool result = await (data.UpdatePlaneStatus(isFlying, values));
+                    if (result)
                     {
                         //si tout va bien...
                         if (isFlying == 1)
@@ -1201,26 +1186,54 @@ namespace FlightRecPlugin
 
         private void cbImmat_DrawItem(object sender, DrawItemEventArgs e)
         {
+            // Draw the background of the ListBox control for each item.
             e.DrawBackground();
+            // Define the default color of the brush as black.
             Brush myBrush = Brushes.Black;
 
+            // Draw the current item text based on the current Font 
+            // and the custom brush settings.
             if (e.Index >= 0)
             {
-                string immat = cbImmat.Items[e.Index].ToString();
-                // Ici, tu peux personnaliser la couleur selon des critères si besoin
-                // Par défaut, on garde noir
+                if (cbImmat.Items.Count > 1)
+                {
+                    Avion item = (Avion)cbImmat.Items[e.Index];
+                    switch (item.Status)
+                    {
+                        case 0:
+                            myBrush = Brushes.Black; //avion disponible
+                            break;
+                        case 1:
+                            myBrush = Brushes.LightGray; //avion non disponible (en maintenance).
+                            break;
+                        case 2:
+                            myBrush = Brushes.LightGray;//avion non disponible (en maintenance).
+                            break;
+                    }
 
-                e.Graphics.DrawString(immat, e.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
+                    if (item.EnVol == 1)
+                    {
+                        if (item.DernierUtilisateur != tbCallsign.Text)
+                        {
+                            myBrush = Brushes.LightGray; //avion non disponible (utilisé par qqun d'autre).
+                        }
+                        else
+                        {
+                            myBrush = Brushes.Blue; //avion non disponible (deja pris par moi).
+                        }
+                    }
+
+                    e.Graphics.DrawString(item.Immat,
+                        e.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
+                }
             }
+            // If the ListBox has focus, draw a focus rectangle around the selected item.
             e.DrawFocusRectangle();
         }
 
-
         private void CbImmat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //Avion selectedPlane = this.data.avions.Where(a => a.Immat == cbImmat.Text).FirstOrDefault();
-            string selectedImmat = cbImmat.SelectedItem as string;
-            Avion selectedPlane = this.data.avions?.FirstOrDefault(a => a.Immat == selectedImmat);
+            Avion selectedPlane = this.data.avions.Where(a => a.Immat == cbImmat.Text).FirstOrDefault();
             if (selectedPlane != null)
             {
                 if ((selectedPlane.Status == 1) || (selectedPlane.Status == 2) || ((selectedPlane.EnVol == 1) && (selectedPlane.DernierUtilisateur != tbCallsign.Text)))
@@ -1488,6 +1501,5 @@ namespace FlightRecPlugin
                 tbEndICAO.Text = eventArg.value;
             }
         }
-        
     }
 }

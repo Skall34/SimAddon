@@ -23,9 +23,60 @@ namespace SimDataManager
             _url = url;
         }
 
-        public async Task<(List<Avion>, List<Mission>)> FetchDataAsync()
+        public async Task<List<Avion>> FetchAvionsDataAsync()
         {
             List<Avion> avions = new List<Avion>();
+
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(_url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonString = await response.Content.ReadAsStringAsync();
+                        // Désérialisation du JSON
+                        var data = JsonConvert.DeserializeObject<AvionsPhpList>(jsonString);
+
+                        if ((data!=null) && (data.immats!=null))
+                        {
+                            int i = 0;
+                            foreach (Dictionary<string,string>item in data.immats)
+                            {
+                                Avion avion = new Avion
+                                {
+                                    Index = i++,
+                                    Type = item.TryGetValue("type", out string type) ? type : "unknown",
+                                    Immat = item.TryGetValue("immat", out string immat) ? immat : "-----",
+                                    Etat = int.TryParse(item.TryGetValue("etat", out string etat) ? etat : "", out int etatValue) ? etatValue : 0,
+                                    DernierUtilisateur = item.TryGetValue("callsign", out string utilisateur) ? utilisateur : "",
+                                    EnVol = int.TryParse(item.TryGetValue("en_vol", out string envol) ? envol : "", out int envolValue) ? envolValue : 0
+                                };
+
+                                avions.Add(avion);
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        // Gérer les erreurs si la requête n'a pas réussi
+                        Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Gérer les exceptions
+                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                }
+            }
+
+            return (avions);
+        }
+
+        public async Task<List<Mission>> FetchMissionsDataAsync()
+        {
             List<Mission> missions = new List<Mission>();
 
             using (HttpClient client = new HttpClient())
@@ -38,41 +89,16 @@ namespace SimDataManager
                     {
                         string jsonString = await response.Content.ReadAsStringAsync();
                         // Désérialisation du JSON
-                        var data = JsonConvert.DeserializeObject<Dictionary<string, List<Dictionary<string, string>>>>(jsonString);
+                        var data = JsonConvert.DeserializeObject<MissionsPhpList>(jsonString);
 
-                        if ((data!=null) && (data.TryGetValue("flotte", out var flotte)))
+                        if ((null != data) && (data.missions!=null))
                         {
-                            foreach (Dictionary<string,string>item in flotte)
-                            {
-                                Avion avion = new Avion
-                                {
-                                    Index = int.TryParse(item.TryGetValue("index", out string index) ? index : "", out int indexValue) ? indexValue : 0,
-                                    ICAO = item.TryGetValue("ICAO", out string icao) ? icao : "unknown",
-                                    Designation = item.TryGetValue("Clair", out string design) ? design : "unknown",
-                                    Type = item.TryGetValue("Type", out string type) ? type : "unknown",
-                                    Immat = item.TryGetValue("Immat", out string immat) ? immat : "-----",
-                                    Localisation = item.TryGetValue("Localisation", out string localisation) ? localisation : "",
-                                    Hub = item.TryGetValue("Hub", out string hub) ? hub : "",
-                                    CoutHoraire = int.TryParse(item.TryGetValue("Cout Horaire", out string cout) ? cout : "", out int coutValue) ? coutValue : 0,
-                                    Etat = int.TryParse(item.TryGetValue("Etat", out string etat) ? etat : "", out int etatValue) ? etatValue : 0,
-                                    Status = int.TryParse(item.TryGetValue("Status", out string status) ? status : "", out int statusValue) ? statusValue : 0,
-                                    Horametre = item.TryGetValue("Horametre", out string horametre) ? horametre : "",
-                                    DernierUtilisateur = item.TryGetValue("Dernier utilisateur", out string utilisateur) ? utilisateur : "",
-                                    EnVol = int.TryParse(item.TryGetValue("En vol", out string envol) ? envol : "", out int envolValue) ? envolValue : 0
-                                };
-
-                                avions.Add(avion);
-                            }
-                        }
-
-                        if ((null != data) &&(data.TryGetValue("missions", out var missionTemp)))
-                        {
-                            foreach (var item in missionTemp)
+                            foreach (var item in data.missions)
                             {
                                 Mission mission = new Mission
                                 {
-                                    Libelle = item.TryGetValue("Libelle", out string libMission) ? libMission : "",
-                                    Index = int.TryParse(item.TryGetValue("Index", out string indexMission) ? indexMission : "", out int index) ? index : 0,
+
+                                    Libelle = item.TryGetValue("libelle", out string libMission) ? libMission : "",
                                 };
 
                                 missions.Add(mission);
@@ -93,8 +119,9 @@ namespace SimDataManager
                 }
             }
 
-            return (avions, missions);
+            return (missions);
         }
+
 
         public async Task<List<Aeroport>> FetchAirportsDataAsync(string filename)
         {
@@ -354,5 +381,37 @@ namespace SimDataManager
             }
         }
 
+        internal async Task<DateTime> FetchLastUpdateAsync()
+        {
+            DateTime result = DateTime.MinValue;
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(_url);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonString = await response.Content.ReadAsStringAsync();
+                        // Désérialisation du JSON
+                        SimDataManager.lastUpdate temp = JsonConvert.DeserializeObject<SimDataManager.lastUpdate>(jsonString);
+                        //if we received airports, store them locally
+                        result = DateTime.Parse(temp.last_update);
+                    }
+                    else
+                    {
+                        result = DateTime.MinValue;
+                        // Gérer les erreurs si la requête n'a pas réussi
+                        Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    result = DateTime.MinValue;
+                    // Gérer les exceptions
+                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                }
+            }
+            return result;
+        }
     }
 }

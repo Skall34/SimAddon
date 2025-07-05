@@ -15,6 +15,25 @@ using System.Runtime.Serialization;
 
 namespace SimDataManager
 {
+    public class lastUpdate
+    {
+        public bool success { get; set; }
+        public string last_update { get; set; }
+    }
+
+    public class AeroportPhpList
+    {
+        public bool success { get; set; }
+        public List<Dictionary<string, string>> aeroports { get; set; }
+    }
+
+    public class FretPhpInfo
+    {
+        public bool success { get; set; }
+        public string ICAO { get; set; }
+        public float fret { get; set; }
+    }
+
     public class Fret
     {
         public float fret { get; set; }
@@ -208,19 +227,26 @@ namespace SimDataManager
         public static async Task<List<Aeroport>> fetchAirports(string baseUrl, DateTime lastUpdateFileTime)
         {
             initPath();
-            long epoch = 0; // lastUpdateFileTime.ToFileTime();
+            //long epoch = 0; // lastUpdateFileTime.ToFileTime();
+            DateTime creationTime = DateTime.MinValue;
             if (File.Exists(DBFILEPATH))
             {
                 FileInfo fi = new FileInfo(DBFILEPATH);
-                DateTime creationTime = fi.CreationTime.ToUniversalTime();
-                epoch = (long)(creationTime - new DateTime(1970, 1, 1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
+                creationTime = fi.LastWriteTime;
+                //epoch = (long)(creationTime - new DateTime(1970, 1, 1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
             }
-
-            string url = baseUrl + "?query=airports&date=" + epoch.ToString();
+            string url = baseUrl + "api/api_getLastAirportUpdate.php";
             UrlDeserializer dataReader = new UrlDeserializer(url);
-            List<Aeroport> result;
-            Logger.WriteLine("Fechting airport informations from server");
-            result = await dataReader.FetchAirportsDataAsync(DBFILEPATH);
+            DateTime lastUpdate = await dataReader.FetchLastUpdateAsync();
+
+            List<Aeroport> result= new List<Aeroport>();
+            if (lastUpdate > creationTime)
+            {
+                url = baseUrl + "api/api_getAirports.php";
+                dataReader = new UrlDeserializer(url);
+                Logger.WriteLine("Fechting airport informations from server");
+                result = await dataReader.FetchAirportsDataAsync(DBFILEPATH);
+            }
             //if no new airport database, just load the local one.
             if (result.Count == 0)
             {
@@ -230,7 +256,7 @@ namespace SimDataManager
                     Logger.WriteLine("Loading local airport database");
                     //read the aeroports.json file.
                     StreamReader sr = new StreamReader(DBFILEPATH);
-                    string allData = sr.ReadToEnd();
+                    string allData = "{\"success\":true,\"aeroports\":"+sr.ReadToEnd()+"}";
                     result = deserializeAeroports(allData);
                     if (null == result)
                     {
@@ -240,16 +266,17 @@ namespace SimDataManager
                 else
                 {
                     //no data from server and no local file available... it sucks....
-                    result = new List<Aeroport>();
+                    Logger.WriteLine("No airport database available, please check your internet connection or the server status.");
                 }
             }
+
             return result;
         }
 
         public static async Task<float> fetchFreight(string baseUrl, string airportID)
         {
 
-            string url = baseUrl + "?query=freight&airport=" + airportID;
+            string url = baseUrl + "api/api_getFretByIcao.php?ICAO=" + airportID;
             UrlDeserializer dataReader = new UrlDeserializer(url);
             float result;
             result = await dataReader.FetchFreightDataAsync();
@@ -273,7 +300,7 @@ namespace SimDataManager
             //List<Aeroport>? aeroports = JsonConvert.DeserializeObject<List<Aeroport>>(jsonString);
             
             //instead, deserialize one by one, to skip any wrongly informed airport
-            var data = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonString);
+            var data = JsonConvert.DeserializeObject<AeroportPhpList>(jsonString);
             List<Aeroport> aeroports = new List<Aeroport>();
             IFormatProvider provider = CultureInfo.InvariantCulture;
 
@@ -281,13 +308,13 @@ namespace SimDataManager
             int i = 1;
             if (data != null)
             {
-                foreach (Dictionary<string, string> item in data)
+                foreach (Dictionary<string, string> item in data.aeroports)
                 {
                     try
                     {
                         Aeroport a = new Aeroport();
                         a.ident = GetStringValueOrDefault(item,"ident", "unknown" + i);
-                        a.type = GetStringValueOrDefault(item,"type", "unknown" + i);
+                        a.type = GetStringValueOrDefault(item, "type_aeroport", "unknown" + i);
                         a.name = GetStringValueOrDefault(item,"name", "unknown" + i);
                         a.municipality = GetStringValueOrDefault(item,"municipality", "unknown" + i);
                         a.latitude_deg = GetDoubleValueOrDefault(item,"latitude_deg", "0");
@@ -298,7 +325,7 @@ namespace SimDataManager
                         a.Type_de_piste = GetStringValueOrDefault(item, "Type_de_piste", "unknown" + i);
                         a.Observations = GetStringValueOrDefault(item, "Observations", "unknown" + i);
                         a.Wikipedia_Link = GetStringValueOrDefault(item, "wikipedia_link", "unknown" + i);
-
+                        a.fret = (float)GetDoubleValueOrDefault(item, "fret", "-1");
                         aeroports.Add(a);
                     }
                     catch (Exception ex)
@@ -315,7 +342,7 @@ namespace SimDataManager
         
         public static float deserializeFreight(string jsonString)
         {
-            Fret result = JsonConvert.DeserializeObject<Fret>(jsonString);
+            FretPhpInfo result = JsonConvert.DeserializeObject<FretPhpInfo>(jsonString);
             if (null != result)
             {
                 return result.fret;

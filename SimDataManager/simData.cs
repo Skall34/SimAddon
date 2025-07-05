@@ -1,11 +1,12 @@
-﻿using System;
+﻿using FSUIPC;
+using SimAddonLogger;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using FSUIPC;
-using SimAddonLogger;
 
 //using Microsoft.VisualBasic.ApplicationServices;
 
@@ -235,10 +236,14 @@ namespace SimDataManager
         private async Task<int> LoadDataFromSheet()
         {
             int result = 0;
-            string url = BASERURL + "?query=fleet";
+            string url = BASERURL + "/api/api_getMissions.php";
             UrlDeserializer dataReader = new UrlDeserializer(url);
+            List<Mission> missions = await dataReader.FetchMissionsDataAsync();
 
-            (List<Avion> avions, List<Mission> missions) = await dataReader.FetchDataAsync();
+            url = BASERURL + "/api/api_getFlotte.php";
+            dataReader = new UrlDeserializer(url);
+            List<Avion> avions = await dataReader.FetchAvionsDataAsync();
+
             this.avions.Clear();
             this.missions.Clear();
             this.avions.AddRange(avions);
@@ -260,11 +265,44 @@ namespace SimDataManager
         }
 
 
-        public async Task<int> UpdatePlaneStatus(int isFlying, UrlDeserializer.PlaneUpdateQuery planedata)
+        public async Task<bool> UpdatePlaneStatus(int isFlying, Dictionary<string, string> planedata)
         {
-                //crée un dictionnaire des valeurs à envoyer
-                UrlDeserializer urlDeserializer = new UrlDeserializer(BASERURL);
-                int result = await urlDeserializer.PushJSonAsync<UrlDeserializer.PlaneUpdateQuery>(planedata);
+            //crée un dictionnaire des valeurs à envoyer
+            bool result = false;
+            string phpUrl = BASERURL + "/api/api_update_status.php";
+            using (var client = new HttpClient())
+            {
+                var content = new FormUrlEncodedContent(planedata);
+
+                try
+                {
+                    var response = await client.PostAsync(phpUrl, content);
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    // Affiche tout, même si c'est vide
+                    string message = $"Code: {response.StatusCode}\nRéponse brute:\n{responseContent}";
+                    Logger.WriteLine(message);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        // Affiche le détail dans le popup
+                        return false;
+                    }
+
+                    // Affiche aussi la réponse si le code est 200 mais que le PHP retourne une erreur
+                    if (!string.IsNullOrWhiteSpace(responseContent) && !responseContent.Trim().ToLower().Contains("ok"))
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("Erreur lors de l'envoi des données de vol : " + ex.Message);
+                    return false;
+                }
+            }
 
             return result;
         }
@@ -282,11 +320,46 @@ namespace SimDataManager
             return result;
         }
 
+        public async Task<bool> SendFlightDataToPhpAsync(Dictionary<string, string> flightData)
+        {
+            string phpUrl = BASERURL + "/api/api_import_vol.php";
+            using (var client = new HttpClient())
+            {
+                var content = new FormUrlEncodedContent(flightData);
+
+                try
+                {
+                    var response = await client.PostAsync( phpUrl, content);
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    // Affiche tout, même si c'est vide
+                    string message = $"Code: {response.StatusCode}\nRéponse brute:\n{responseContent}";
+                    Logger.WriteLine(message);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        // Affiche le détail dans le popup
+                        return false;
+                    }
+                    Logger.WriteLine("Réponse du serveur : " + responseContent);
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("Erreur lors de l'envoi des données de vol : " + ex.Message);
+                    return false;
+                }
+            }
+        }
+
 
         public async Task<float> GetFretOnAirport(string airportIdent)
         {
-            string url = BASERURL + "?query=freight&airport=" + airportIdent;
-            float fret = await Aeroport.fetchFreight(BASERURL, airportIdent);
+            string url = BASERURL + "/api/api_getFretByIcao.php?ICAO=" + airportIdent;
+            UrlDeserializer dataReader = new UrlDeserializer(url);
+            float fret = await dataReader.FetchFreightDataAsync();
+
             return fret;
         }
 

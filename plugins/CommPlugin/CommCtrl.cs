@@ -117,6 +117,7 @@ namespace CommPlugin
             lblSquawk2.Text = ((squawk / 100) % 10).ToString(); // Hundreds place
             lblSquawk3.Text = ((squawk / 10) % 10).ToString(); // Tens place
             lblSquawk4.Text = (squawk % 10).ToString(); // Units place
+            rotaryKnobMode.Value = data.squawkMode; // Set squawk mode
 
             // Update the rotary knobs with the new values
             if (!gotData)
@@ -127,7 +128,7 @@ namespace CommPlugin
                 rotaryKnobS2.Value = (squawk / 100) % 10; // Hundreds place
                 rotaryKnobS3.Value = (squawk / 10) % 10; // Tens place
                 rotaryKnobS4.Value = squawk % 10; // Units place
-                rotaryKnobMode.Value = data.squawkMode; // Set squawk mode
+                
                 gotData = true;
             }
 

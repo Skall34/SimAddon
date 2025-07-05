@@ -2,9 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SimAddon.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="GSheetAPIUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://script.google.com/macros/s/AKfycbyhK_pky8u_OUPNwtQJtpRSiWwE0gF64zHHkbbDJuY6I9-3jjegoiIIfJfV0QKcVC2IAg/exec</Value>
-    </Setting>
     <Setting Name="AutoHide" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -16,6 +13,9 @@
     </Setting>
     <Setting Name="ypos" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="GSheetAPIUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://skywings.ovh/</Value>
     </Setting>
   </Settings>
 </SettingsFile>
