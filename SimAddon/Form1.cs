@@ -51,13 +51,13 @@ namespace SimAddon
             pluginsSettings.loadFromJsonFile("plugins.json");
 
             InitializeComponent();
-            
+
 
             this.StartPosition = FormStartPosition.Manual;
             Point startlocation = new Point();
             startlocation.X = Properties.Settings.Default.xpos;
             startlocation.Y = Properties.Settings.Default.ypos;
-            if (startlocation.X==-32000 || startlocation.Y == -32000)
+            if (startlocation.X == -32000 || startlocation.Y == -32000)
             {
                 //if the position is not set, then use the default position
                 startlocation.X = 0;
@@ -186,7 +186,7 @@ namespace SimAddon
                 currentStatus.position = _simData.GetPosition();
                 currentStatus.MasterAvionicsOn = (0 != _simData.GetAvionicsMaster());
                 currentStatus.MasterBatteryOn = (0 != _simData.GetBatteryMaster());
-                
+
                 currentStatus.COM1Frequency = _simData.GetCOM1();
                 currentStatus.COM1StdbyFrequency = _simData.GetCOM1Stdby();
                 currentStatus.squawkCode = _simData.GetSquawk();
@@ -257,18 +257,7 @@ namespace SimAddon
         // Form is closing so stop all the timers and close FSUIPC Connection
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //if (!autostart)
-            //{
-            //    res = MessageBox.Show(message, "Flight Recorder", MessageBoxButtons.OKCancel);
-            //}
-            //else
-            //{
-            //    //si il y a eu un vol, ET que les moteurs sont arretés, envoie le vol vers la google sheet
-            //    if ((this.btnSubmit.Enabled == true) && (!atLeastOneEngineFiring))
-            //    {
-            //        saveFlight();
-            //    }
-            //}
+
             FormClosingEventArgs e2;
             if (autostart)
             {
@@ -334,7 +323,7 @@ namespace SimAddon
                     //find if there is a plugin setting for this plugin
                     string pluginName = plugin.getName();
                     PluginSettings pluginSetting;
-                    if(pluginsSettings.Plugins.ContainsKey(pluginName))
+                    if (pluginsSettings.Plugins.ContainsKey(pluginName))
                     {
                         pluginSetting = pluginsSettings.Plugins[plugin.getName()];
                         //if the plugin is not visible, then don't add it to the tab control
@@ -353,7 +342,7 @@ namespace SimAddon
                     }
 
                     //add a checkable menu item to the context menu of the tab control
-                    ToolStripMenuItem menuItem = new ToolStripMenuItem(plugin.getName(), null,(o,v) => { showHideTab(plugin.getName()); } );
+                    ToolStripMenuItem menuItem = new ToolStripMenuItem(plugin.getName(), null, (o, v) => { showHideTab(plugin.getName()); });
                     menuItem.CheckOnClick = true;
                     menuItem.Checked = pluginSetting.Visible; // by default, the plugin is enabled
                     menuItem.Enabled = true;
@@ -369,9 +358,12 @@ namespace SimAddon
             //save the plugins settings to the file
             pluginsSettings.saveToJsonFile("plugins.json");
 
+            Plugin_OnStatusUpdate(this, "Loading data from server...");
+            Logger.WriteLine("Loading data from server...");
             await _simData.loadDataFromSheet();
             //met à jour l'etat de connection au simu dans la barre de statut
-            Logger.WriteLine("update form status");
+            Plugin_OnStatusUpdate(this, "Data loaded.");
+            Logger.WriteLine("Data loaded from server.");
             UpdateLabelConnectionStatus();
 
             foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
@@ -486,7 +478,8 @@ namespace SimAddon
                 try
                 {
                     //don't send the event to the plugin that sent it
-                    if (plugin != sender) { 
+                    if (plugin != sender)
+                    {
                         plugin.ManageSimEvent(sender, eventArg);
                     }
                 }
@@ -550,41 +543,7 @@ namespace SimAddon
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            //if (WindowState != LastWindowState)
-            //{
-            //    LastWindowState = WindowState;
-            //    if (WindowState == FormWindowState.Maximized)
-            //    {
-            //        foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
-            //        {
-            //            try
-            //            {
-            //                plugin.SetWindowMode(ISimAddonPluginCtrl.WindowMode.FULL);
-            //            }
-            //            catch (Exception ex)
-            //            {
-            //                Logger.WriteLine(ex.Message);
-            //            }
-            //        }
-            //    }
 
-            //    if (WindowState == FormWindowState.Normal)
-            //    {
-            //        foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
-            //        {
-            //            try
-            //            {
-            //                plugin.SetWindowMode(ISimAddonPluginCtrl.WindowMode.COMPACT);
-            //            }
-            //            catch (Exception ex)
-            //            {
-            //                Logger.WriteLine(ex.Message);
-            //            }
-            //        }
-
-            //    }
-
-            //}
         }
 
         private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e)
@@ -649,6 +608,32 @@ namespace SimAddon
                 Properties.Settings.Default.xpos = this.Location.X;
                 Properties.Settings.Default.ypos = this.Location.Y;
                 Properties.Settings.Default.Save();
+            }
+        }
+
+        private void openWebSiteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //open the web site starting the default browser
+            try
+            {
+                //start the default web browser to view the url stored in Properties.Settings.Default.GSheetAPIUrl
+                string url = Properties.Settings.Default.GSheetAPIUrl;
+                if (string.IsNullOrEmpty(url))
+                {
+                    Logger.WriteLine("No URL configured in settings. Please set the URL in the settings.");
+                    Plugin_OnShowMsgbox(this, "Error", "No URL configured in settings. Please set the URL in the settings.", MessageBoxButtons.OK);
+                    return;
+                }
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true // This is necessary to open the URL in the default browser
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine($"Error opening web site: {ex.Message}");
+                Plugin_OnShowMsgbox(this, "Error", "Unable to open the web site. Please check the URL.", MessageBoxButtons.OK);
             }
         }
     }

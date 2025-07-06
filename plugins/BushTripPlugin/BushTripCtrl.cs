@@ -42,18 +42,6 @@ namespace BushTripPlugin
         public event ISimAddonPluginCtrl.UpdateStatusHandler OnStatusUpdate;
         public event ISimAddonPluginCtrl.OnShowMsgboxHandler OnShowMsgbox;
 
-        //event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
-        //{
-        //    add
-        //    {
-        //        updateStatusHandler = value;
-        //    }
-
-        //    remove
-        //    {
-        //        updateStatusHandler = null;
-        //    }
-        //}
 
         public void SetWindowMode(ISimAddonPluginCtrl.WindowMode mode)
         {
@@ -90,17 +78,7 @@ namespace BushTripPlugin
             //nothing particular for termination
         }
 
-        //public void registerPage(TabControl parent)
-        //{
-        //    parent.SuspendLayout();
-        //    TabPage pluginPage = new TabPage();
-        //    pluginPage.Text = getName();
-        //    pluginPage.Controls.Add(this);
-        //    this.Dock = DockStyle.Fill;
-        //    pluginPage.Visible = true;
-        //    parent.TabPages.Add(pluginPage);
-        //    parent.ResumeLayout();
-        //}
+
         public TabPage registerPage()
         {
             //parent.SuspendLayout();
@@ -213,7 +191,7 @@ namespace BushTripPlugin
                     }
                     if (wp.Name != string.Empty)
                     {
-                        toShow += " , " + wp.Name + " , " + route + " , " + distance; ;
+                        toShow += " , " + wp.Name + " , " + route + " , " + distance;
                     }
                     ListViewItem item = new ListViewItem(new string[] { wp.Ident, wp.Name, route.ToString(), distance.ToString() });
                     item.ImageKey = wp.Type;

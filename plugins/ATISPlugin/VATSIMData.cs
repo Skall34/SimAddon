@@ -280,7 +280,7 @@ namespace ATISPlugin
             string result = "";
             int rating = c.rating;
             result = data.ratings.FirstOrDefault(r => r.id == rating).long_name;
-            return result; ;
+            return result;
         }
 
         public static string GetFacilityLabel(ControllerData c)

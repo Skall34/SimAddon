@@ -242,6 +242,10 @@ namespace SimDataManager
             List<Aeroport> result= new List<Aeroport>();
             if (lastUpdate > creationTime)
             {
+                //if the last update is more recent than the local file, fetch the airports from the server.
+                Logger.WriteLine("Last update of the airport database is more recent than the local file, fetching from server.");
+                //fetch the airports from the server.               
+                
                 url = baseUrl + "api/api_getAirports.php";
                 dataReader = new UrlDeserializer(url);
                 Logger.WriteLine("Fechting airport informations from server");

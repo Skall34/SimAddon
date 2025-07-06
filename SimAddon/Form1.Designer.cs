@@ -45,8 +45,10 @@ namespace SimAddon
             autoHideToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             screenshotToolStripMenuItem = new ToolStripMenuItem();
-            tabControl1 = new TabControl();
             toolStripSeparator2 = new ToolStripSeparator();
+            tabControl1 = new TabControl();
+            openWebSiteToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator3 = new ToolStripSeparator();
             statusStrip.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
@@ -85,9 +87,9 @@ namespace SimAddon
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1, screenshotToolStripMenuItem, toolStripSeparator2 });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1, screenshotToolStripMenuItem, toolStripSeparator2, openWebSiteToolStripMenuItem, toolStripSeparator3 });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 104);
+            contextMenuStrip1.Size = new Size(181, 132);
             // 
             // alwaysOnTopToolStripMenuItem
             // 
@@ -115,6 +117,11 @@ namespace SimAddon
             screenshotToolStripMenuItem.Text = "Screenshot";
             screenshotToolStripMenuItem.Click += screenshotToolStripMenuItem_Click;
             // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(177, 6);
+            // 
             // tabControl1
             // 
             tabControl1.Dock = DockStyle.Fill;
@@ -125,10 +132,17 @@ namespace SimAddon
             tabControl1.Size = new Size(574, 809);
             tabControl1.TabIndex = 7;
             // 
-            // toolStripSeparator2
+            // openWebSiteToolStripMenuItem
             // 
-            toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(177, 6);
+            openWebSiteToolStripMenuItem.Name = "openWebSiteToolStripMenuItem";
+            openWebSiteToolStripMenuItem.Size = new Size(180, 22);
+            openWebSiteToolStripMenuItem.Text = "Open web site";
+            openWebSiteToolStripMenuItem.Click += openWebSiteToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator3
+            // 
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(177, 6);
             // 
             // Form1
             // 
@@ -171,6 +185,8 @@ namespace SimAddon
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem screenshotToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem openWebSiteToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator3;
     }
 }
 

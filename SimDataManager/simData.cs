@@ -218,8 +218,6 @@ namespace SimDataManager
             return result;
         }
 
-
-
         //get the fleet, and missions from the google sheet
         private async Task<int> LoadAirportsFromSheet()
         {
@@ -236,13 +234,8 @@ namespace SimDataManager
         private async Task<int> LoadDataFromSheet()
         {
             int result = 0;
-            string url = BASERURL + "/api/api_getMissions.php";
-            UrlDeserializer dataReader = new UrlDeserializer(url);
-            List<Mission> missions = await dataReader.FetchMissionsDataAsync();
-
-            url = BASERURL + "/api/api_getFlotte.php";
-            dataReader = new UrlDeserializer(url);
-            List<Avion> avions = await dataReader.FetchAvionsDataAsync();
+            List<Mission> missions = await Mission.FetchMissionsFromSheet(BASERURL);           
+            List<Avion> avions = await Avion.FetchAvionsFromSheet(BASERURL);
 
             this.avions.Clear();
             this.missions.Clear();

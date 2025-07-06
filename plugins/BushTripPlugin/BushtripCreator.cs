@@ -207,7 +207,7 @@ namespace BushTripPlugin
             Cursor = Cursors.WaitCursor;
             if ((start == null) || (end == null))
             {
-                MessageBox.Show("ICAO départ ou arrivée non renseigné !", "SimAddon", MessageBoxButtons.OK, MessageBoxIcon.Warning); ;
+                MessageBox.Show("ICAO départ ou arrivée non renseigné !", "SimAddon", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
@@ -297,7 +297,7 @@ namespace BushTripPlugin
                 }
                 else
                 {
-                    MessageBox.Show("ICAO départ non renseigné !", "SimAddon", MessageBoxButtons.OK, MessageBoxIcon.Warning); ;
+                    MessageBox.Show("ICAO départ non renseigné !", "SimAddon", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }
@@ -437,7 +437,7 @@ namespace BushTripPlugin
                 }
                 else
                 {
-                    MessageBox.Show("ICAO départ non renseigné !", "SimAddon", MessageBoxButtons.OK, MessageBoxIcon.Warning); ;
+                    MessageBox.Show("ICAO départ non renseigné !", "SimAddon", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }

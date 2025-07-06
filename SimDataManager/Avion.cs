@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SimDataManager
 {
@@ -59,6 +60,14 @@ namespace SimDataManager
         {
 
             return name1.CompareTo(name2);
+        }
+
+        public static async Task<List<Avion>> FetchAvionsFromSheet(string BASEURL)
+        {
+            string url = BASEURL + "/api/api_getFlotte.php";
+            UrlDeserializer dataReader = new UrlDeserializer(url);
+            List<Avion> avions = await dataReader.FetchAvionsDataAsync();
+            return avions;
         }
 
     }

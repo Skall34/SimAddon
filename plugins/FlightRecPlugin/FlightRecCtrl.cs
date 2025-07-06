@@ -251,18 +251,6 @@ namespace FlightRecPlugin
             }
         }
 
-
-        //public void registerPage(TabControl parent)
-        //{
-        //    parent.SuspendLayout();
-        //    TabPage pluginPage = new TabPage();
-        //    pluginPage.Text = getName();
-        //    pluginPage.Controls.Add(this);
-        //    this.Dock = DockStyle.Fill;
-        //    pluginPage.Visible = true;
-        //    parent.TabPages.Add(pluginPage);
-        //    parent.ResumeLayout();
-        //}
         public TabPage registerPage()
         {
             //parent.SuspendLayout();
@@ -604,16 +592,6 @@ namespace FlightRecPlugin
                 // Parcourez la liste des avions
                 foreach (Avion avion in data.avions)
                 {
-                    //// Vérifiez si le statut de l'avion est égal à 1
-                    //if (avion.Status == 1 || avion.Status == 2 || ((avion.EnVol == 1) && (avion.DernierUtilisateur != tbCallsign.Text)))
-                    //{
-                    //    // Si le statut est égal à 1 ou 2, il est en maintenance,
-                    //    // passez à l'itération suivante
-                    //    // Si l'avion est en vol, on ne le liste pas (execption, si l'utilisateur courant est celui qui a laissé l'avion en vol)
-                    //    // (permet de libérer un avion qui serait bloqué en vol suite à un crash du simulateur)
-                    //    continue;
-                    //}
-                    // Ajoutez l'immatriculation de l'avion à la liste des immatriculations
                     if (null != avion.Immat)
                     {
                         //immatriculations.Add(avion.Immat);
@@ -687,10 +665,7 @@ namespace FlightRecPlugin
             Logger.WriteLine("Getting start of flight data");
             endDisabled = 1;
             gbEndInfos.Enabled = false;
-            //lbEndFuel.Enabled = false;
-            //lbEndPosition.Enabled = false;
-            //lbEndTime.Enabled = false;
-            //lbEndIata.Enabled = false;
+
 
             _startPosition = data.GetPosition();
 
@@ -717,7 +692,7 @@ namespace FlightRecPlugin
         {
 
             lbEndFuel.Text = "Waiting end...";
-            lbEndPosition.Text = "Waiting end..."; ;
+            lbEndPosition.Text = "Waiting end...";
             lbEndTime.Text = "--:--";
             lbEndIata.Text = "Waiting end...";
 
@@ -729,10 +704,6 @@ namespace FlightRecPlugin
             // disable start detection for 300 x 100 ms =30s  disable the start text boxes.
             startDisabled = 300;
             gbStartInfos.Enabled = false;
-            //lbStartFuel.Enabled = false;
-            //lbStartPosition.Enabled = false;
-            //lbStartTime.Enabled = false;
-            //lbStartIata.Enabled = false;
 
             //on recupere les etats de fin de vol : heure, carbu, position.
             _endPosition = _currentPosition; // data.GetPosition();
@@ -789,14 +760,9 @@ namespace FlightRecPlugin
                 //if end of flight is not detected, get the data
                 if (atLeastOneEngineFiring)
                 {
-                    //garde le commentaire entré manuellement
-                    //string flightComment = tbCommentaires.Text;
+
                     Logger.WriteLine("Forcing end of flight detection before save");
                     getEndOfFlightData();
-                    //get the computed flight comments.
-                    //string autoComment = tbCommentaires.Text;
-                    //concatene les deux commentaires.
-                    //tbCommentaires.Text = flightComment + " " + autoComment;
                 }
 
                 //cet appel declenche une exception si une conditio nde save n'es tpas remplie.
@@ -836,26 +802,7 @@ namespace FlightRecPlugin
                 {
 
                     Dictionary<string, string> values = new Dictionary<string, string>();
-                    //UrlDeserializer.SaveFlightQuery flightdata = new UrlDeserializer.SaveFlightQuery
-                    //{
-                    //    query = "save",
-                    //    qtype = "json",
-                    //    cs = tbCallsign.Text,
-                    //    plane = saveFlightDialog.Immat,
-                    //    sicao = saveFlightDialog.DepartureICAO,
-                    //    sfuel = saveFlightDialog.DepartureFuel.ToString("0.00"),
-                    //    stime = saveFlightDialog.DepartureTime.ToShortTimeString(),
-                    //    eicao = saveFlightDialog.ArrivalICAO,
-                    //    efuel = saveFlightDialog.ArrivalFuel.ToString("0.00"),
-                    //    etime = saveFlightDialog.ArrivalTime.ToShortTimeString(),
-                    //    note = saveFlightDialog.Note.ToString("0.00"),
-                    //    mission = saveFlightDialog.Mission,
-                    //    comment = saveFlightDialog.Comment,
-                    //    cargo = saveFlightDialog.Cargo.ToString("0.00")
-                    //};
-                    //JFK 18062025
 
-                    //int result = await (data.saveFlight(flightdata));
                     // Construction du dictionnaire à partir de flightdata
                     var flightData = new Dictionary<string, string>
                     {
@@ -875,17 +822,17 @@ namespace FlightRecPlugin
 
                     //PB temporary disable the checks for the start and end iata, fuel, time and mission
 
-                    //if (string.IsNullOrWhiteSpace(lbStartIata.Text) || lbStartIata.Text == "Not Yet Available")
-                    //    throw new Exception("Aéroport de départ non détecté !");
-                    //if (string.IsNullOrWhiteSpace(lbEndIata.Text) || lbEndIata.Text == "Waiting end flight ...")
-                    //    throw new Exception("Aéroport d’arrivée non détecté !");
-                    //if (string.IsNullOrWhiteSpace(cbMission.Text))
-                    //    throw new Exception("Mission non sélectionnée !");
-                    //if (_startFuel == 0 || _endFuel == 0)
-                    //    throw new Exception("Carburant non détecté !");
-                    //if (_startTime == DateTime.UnixEpoch || _endTime == DateTime.UnixEpoch)
-                    //    throw new Exception("Heure de départ ou d’arrivée non détectée !");
-                    //File.WriteAllText("debug_flightdata.txt", string.Join("\n", flightData.Select(kv => $"{kv.Key} = {kv.Value}")));
+                    if (string.IsNullOrWhiteSpace(lbStartIata.Text) || lbStartIata.Text == "Not Yet Available")
+                        throw new Exception("Aéroport de départ non détecté !");
+                    if (string.IsNullOrWhiteSpace(lbEndIata.Text) || lbEndIata.Text == "Waiting end flight ...")
+                        throw new Exception("Aéroport d’arrivée non détecté !");
+                    if (string.IsNullOrWhiteSpace(cbMission.Text))
+                        throw new Exception("Mission non sélectionnée !");
+                    if (_startFuel == 0 || _endFuel == 0)
+                        throw new Exception("Carburant non détecté !");
+                    if (_startTime == DateTime.UnixEpoch || _endTime == DateTime.UnixEpoch)
+                        throw new Exception("Heure de départ ou d’arrivée non détectée !");
+                    File.WriteAllText("debug_flightdata.txt", string.Join("\n", flightData.Select(kv => $"{kv.Key} = {kv.Value}")));
 
 
                     bool ok = await data.SendFlightDataToPhpAsync(flightData);
@@ -1388,7 +1335,7 @@ namespace FlightRecPlugin
                     ledCheckPayload.Color = Color.LightGreen;
 
                     //recupere l'emplacement courant :
-                    _currentPosition = data.GetPosition(); ;
+                    _currentPosition = data.GetPosition();
 
                     //Recupere le libellé de l'avion
                     string planeNomComplet = data.GetAircraftType();
