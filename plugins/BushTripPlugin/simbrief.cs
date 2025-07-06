@@ -2225,7 +2225,7 @@ namespace simbrief {
         
         private string taf_timeField;
         
-        private string atisField;
+        private OFPOriginAtis[] atisField;
         
         private notam[] notamField;
         
@@ -2484,11 +2484,14 @@ namespace simbrief {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string atis {
-            get {
+        public OFPOriginAtis[] atis
+        {
+            get
+            {
                 return this.atisField;
             }
-            set {
+            set
+            {
                 this.atisField = value;
             }
         }
@@ -3054,8 +3057,12 @@ namespace simbrief {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
-    public partial class NewDataSet {
-        
+    public partial class NewDataSet
+    {
+        partial class destinationDataTable
+        {
+        }
+
         private object[] itemsField;
         
         /// <remarks/>

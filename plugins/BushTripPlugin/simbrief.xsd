@@ -1,1354 +1,327 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-  <xs:element name="notam">
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="notam" msprop:Generator_RowEvHandlerName="notamRowChangeEventHandler" msprop:Generator_RowDeletedName="notamRowDeleted" msprop:Generator_RowDeletingName="notamRowDeleting" msprop:Generator_RowEvArgName="notamRowChangeEvent" msprop:Generator_TablePropName="notam" msprop:Generator_RowChangedName="notamRowChanged" msprop:Generator_RowChangingName="notamRowChanging" msprop:Generator_TableClassName="notamDataTable" msprop:Generator_RowClassName="notamRow" msprop:Generator_TableVarName="tablenotam" msprop:Generator_UserTableName="notam">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="source_id" type="xs:string" minOccurs="0" />
-        <xs:element name="account_id" type="xs:string" minOccurs="0" />
-        <xs:element name="notam_id" type="xs:string" minOccurs="0" />
-        <xs:element name="location_id" type="xs:string" minOccurs="0" />
-        <xs:element name="location_icao" type="xs:string" minOccurs="0" />
-        <xs:element name="location_name" type="xs:string" minOccurs="0" />
-        <xs:element name="location_type" type="xs:string" minOccurs="0" />
-        <xs:element name="date_created" type="xs:string" minOccurs="0" />
-        <xs:element name="date_effective" type="xs:string" minOccurs="0" />
-        <xs:element name="date_expire" type="xs:string" minOccurs="0" />
-        <xs:element name="date_expire_is_estimated" type="xs:string" minOccurs="0" />
-        <xs:element name="date_modified" type="xs:string" minOccurs="0" />
-        <xs:element name="notam_schedule" type="xs:string" minOccurs="0" />
-        <xs:element name="notam_html" type="xs:string" minOccurs="0" />
-        <xs:element name="notam_text" type="xs:string" minOccurs="0" />
-        <xs:element name="notam_raw" type="xs:string" minOccurs="0" />
-        <xs:element name="notam_nrc" type="xs:string" minOccurs="0" />
-        <xs:element name="notam_qcode" type="xs:string" minOccurs="0" />
-        <xs:element name="notam_qcode_category" type="xs:string" minOccurs="0" />
-        <xs:element name="notam_qcode_subject" type="xs:string" minOccurs="0" />
-        <xs:element name="notam_qcode_status" type="xs:string" minOccurs="0" />
-        <xs:element name="notam_is_obstacle" type="xs:string" minOccurs="0" />
+        <xs:element name="source_id" msprop:Generator_ColumnPropNameInRow="source_id" msprop:Generator_ColumnPropNameInTable="source_idColumn" msprop:Generator_ColumnVarNameInTable="columnsource_id" msprop:Generator_UserColumnName="source_id" type="xs:string" minOccurs="0" />
+        <xs:element name="account_id" msprop:Generator_ColumnPropNameInRow="account_id" msprop:Generator_ColumnPropNameInTable="account_idColumn" msprop:Generator_ColumnVarNameInTable="columnaccount_id" msprop:Generator_UserColumnName="account_id" type="xs:string" minOccurs="0" />
+        <xs:element name="notam_id" msprop:Generator_ColumnPropNameInRow="notam_id" msprop:Generator_ColumnPropNameInTable="notam_idColumn" msprop:Generator_ColumnVarNameInTable="columnnotam_id" msprop:Generator_UserColumnName="notam_id" type="xs:string" minOccurs="0" />
+        <xs:element name="location_id" msprop:Generator_ColumnPropNameInRow="location_id" msprop:Generator_ColumnPropNameInTable="location_idColumn" msprop:Generator_ColumnVarNameInTable="columnlocation_id" msprop:Generator_UserColumnName="location_id" type="xs:string" minOccurs="0" />
+        <xs:element name="location_icao" msprop:Generator_ColumnPropNameInRow="location_icao" msprop:Generator_ColumnPropNameInTable="location_icaoColumn" msprop:Generator_ColumnVarNameInTable="columnlocation_icao" msprop:Generator_UserColumnName="location_icao" type="xs:string" minOccurs="0" />
+        <xs:element name="location_name" msprop:Generator_ColumnPropNameInRow="location_name" msprop:Generator_ColumnPropNameInTable="location_nameColumn" msprop:Generator_ColumnVarNameInTable="columnlocation_name" msprop:Generator_UserColumnName="location_name" type="xs:string" minOccurs="0" />
+        <xs:element name="location_type" msprop:Generator_ColumnPropNameInRow="location_type" msprop:Generator_ColumnPropNameInTable="location_typeColumn" msprop:Generator_ColumnVarNameInTable="columnlocation_type" msprop:Generator_UserColumnName="location_type" type="xs:string" minOccurs="0" />
+        <xs:element name="date_created" msprop:Generator_ColumnPropNameInRow="date_created" msprop:Generator_ColumnPropNameInTable="date_createdColumn" msprop:Generator_ColumnVarNameInTable="columndate_created" msprop:Generator_UserColumnName="date_created" type="xs:string" minOccurs="0" />
+        <xs:element name="date_effective" msprop:Generator_ColumnPropNameInRow="date_effective" msprop:Generator_ColumnPropNameInTable="date_effectiveColumn" msprop:Generator_ColumnVarNameInTable="columndate_effective" msprop:Generator_UserColumnName="date_effective" type="xs:string" minOccurs="0" />
+        <xs:element name="date_expire" msprop:Generator_ColumnPropNameInRow="date_expire" msprop:Generator_ColumnPropNameInTable="date_expireColumn" msprop:Generator_ColumnVarNameInTable="columndate_expire" msprop:Generator_UserColumnName="date_expire" type="xs:string" minOccurs="0" />
+        <xs:element name="date_expire_is_estimated" msprop:Generator_ColumnPropNameInRow="date_expire_is_estimated" msprop:Generator_ColumnPropNameInTable="date_expire_is_estimatedColumn" msprop:Generator_ColumnVarNameInTable="columndate_expire_is_estimated" msprop:Generator_UserColumnName="date_expire_is_estimated" type="xs:string" minOccurs="0" />
+        <xs:element name="date_modified" msprop:Generator_ColumnPropNameInRow="date_modified" msprop:Generator_ColumnPropNameInTable="date_modifiedColumn" msprop:Generator_ColumnVarNameInTable="columndate_modified" msprop:Generator_UserColumnName="date_modified" type="xs:string" minOccurs="0" />
+        <xs:element name="notam_schedule" msprop:Generator_ColumnPropNameInRow="notam_schedule" msprop:Generator_ColumnPropNameInTable="notam_scheduleColumn" msprop:Generator_ColumnVarNameInTable="columnnotam_schedule" msprop:Generator_UserColumnName="notam_schedule" type="xs:string" minOccurs="0" />
+        <xs:element name="notam_html" msprop:Generator_ColumnPropNameInRow="notam_html" msprop:Generator_ColumnPropNameInTable="notam_htmlColumn" msprop:Generator_ColumnVarNameInTable="columnnotam_html" msprop:Generator_UserColumnName="notam_html" type="xs:string" minOccurs="0" />
+        <xs:element name="notam_text" msprop:Generator_ColumnPropNameInRow="notam_text" msprop:Generator_ColumnPropNameInTable="notam_textColumn" msprop:Generator_ColumnVarNameInTable="columnnotam_text" msprop:Generator_UserColumnName="notam_text" type="xs:string" minOccurs="0" />
+        <xs:element name="notam_raw" msprop:Generator_ColumnPropNameInRow="notam_raw" msprop:Generator_ColumnPropNameInTable="notam_rawColumn" msprop:Generator_ColumnVarNameInTable="columnnotam_raw" msprop:Generator_UserColumnName="notam_raw" type="xs:string" minOccurs="0" />
+        <xs:element name="notam_nrc" msprop:Generator_ColumnPropNameInRow="notam_nrc" msprop:Generator_ColumnPropNameInTable="notam_nrcColumn" msprop:Generator_ColumnVarNameInTable="columnnotam_nrc" msprop:Generator_UserColumnName="notam_nrc" type="xs:string" minOccurs="0" />
+        <xs:element name="notam_qcode" msprop:Generator_ColumnPropNameInRow="notam_qcode" msprop:Generator_ColumnPropNameInTable="notam_qcodeColumn" msprop:Generator_ColumnVarNameInTable="columnnotam_qcode" msprop:Generator_UserColumnName="notam_qcode" type="xs:string" minOccurs="0" />
+        <xs:element name="notam_qcode_category" msprop:Generator_ColumnPropNameInRow="notam_qcode_category" msprop:Generator_ColumnPropNameInTable="notam_qcode_categoryColumn" msprop:Generator_ColumnVarNameInTable="columnnotam_qcode_category" msprop:Generator_UserColumnName="notam_qcode_category" type="xs:string" minOccurs="0" />
+        <xs:element name="notam_qcode_subject" msprop:Generator_ColumnPropNameInRow="notam_qcode_subject" msprop:Generator_ColumnPropNameInTable="notam_qcode_subjectColumn" msprop:Generator_ColumnVarNameInTable="columnnotam_qcode_subject" msprop:Generator_UserColumnName="notam_qcode_subject" type="xs:string" minOccurs="0" />
+        <xs:element name="notam_qcode_status" msprop:Generator_ColumnPropNameInRow="notam_qcode_status" msprop:Generator_ColumnPropNameInTable="notam_qcode_statusColumn" msprop:Generator_ColumnVarNameInTable="columnnotam_qcode_status" msprop:Generator_UserColumnName="notam_qcode_status" type="xs:string" minOccurs="0" />
+        <xs:element name="notam_is_obstacle" msprop:Generator_ColumnPropNameInRow="notam_is_obstacle" msprop:Generator_ColumnPropNameInTable="notam_is_obstacleColumn" msprop:Generator_ColumnVarNameInTable="columnnotam_is_obstacle" msprop:Generator_UserColumnName="notam_is_obstacle" type="xs:string" minOccurs="0" />
       </xs:sequence>
+      <xs:attribute name="origin_Id" msprop:Generator_ColumnPropNameInRow="origin_Id" msprop:Generator_ColumnPropNameInTable="origin_IdColumn" msprop:Generator_ColumnVarNameInTable="columnorigin_Id" msprop:Generator_UserColumnName="origin_Id" type="xs:int" use="prohibited" />
+      <xs:attribute name="destination_Id" msprop:Generator_ColumnPropNameInRow="destination_Id" msprop:Generator_ColumnPropNameInTable="destination_IdColumn" msprop:Generator_ColumnVarNameInTable="columndestination_Id" msprop:Generator_UserColumnName="destination_Id" type="xs:int" use="prohibited" />
+      <xs:attribute name="alternate_Id" msprop:Generator_ColumnPropNameInRow="alternate_Id" msprop:Generator_ColumnPropNameInTable="alternate_IdColumn" msprop:Generator_ColumnVarNameInTable="columnalternate_Id" msprop:Generator_UserColumnName="alternate_Id" type="xs:int" use="prohibited" />
     </xs:complexType>
   </xs:element>
-  <xs:element name="fix">
+  <xs:element name="fix" msprop:Generator_RowEvHandlerName="fixRowChangeEventHandler" msprop:Generator_RowDeletedName="fixRowDeleted" msprop:Generator_RowDeletingName="fixRowDeleting" msprop:Generator_RowEvArgName="fixRowChangeEvent" msprop:Generator_TablePropName="fix" msprop:Generator_RowChangedName="fixRowChanged" msprop:Generator_RowChangingName="fixRowChanging" msprop:Generator_TableClassName="fixDataTable" msprop:Generator_RowClassName="fixRow" msprop:Generator_TableVarName="tablefix" msprop:Generator_UserTableName="fix">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="ident" type="xs:string" minOccurs="0" />
-        <xs:element name="name" type="xs:string" minOccurs="0" />
-        <xs:element name="type" type="xs:string" minOccurs="0" />
-        <xs:element name="icao_region" type="xs:string" minOccurs="0" />
-        <xs:element name="frequency" type="xs:string" minOccurs="0" />
-        <xs:element name="pos_lat" type="xs:double" minOccurs="0" />
-        <xs:element name="pos_long" type="xs:double" minOccurs="0" />
-        <xs:element name="stage" type="xs:string" minOccurs="0" />
-        <xs:element name="via_airway" type="xs:string" minOccurs="0" />
-        <xs:element name="is_sid_star" type="xs:string" minOccurs="0" />
-        <xs:element name="distance" type="xs:string" minOccurs="0" />
-        <xs:element name="track_true" type="xs:string" minOccurs="0" />
-        <xs:element name="track_mag" type="xs:string" minOccurs="0" />
-        <xs:element name="heading_true" type="xs:string" minOccurs="0" />
-        <xs:element name="heading_mag" type="xs:string" minOccurs="0" />
-        <xs:element name="altitude_feet" type="xs:string" minOccurs="0" />
-        <xs:element name="ind_airspeed" type="xs:string" minOccurs="0" />
-        <xs:element name="true_airspeed" type="xs:string" minOccurs="0" />
-        <xs:element name="mach" type="xs:string" minOccurs="0" />
-        <xs:element name="mach_thousandths" type="xs:string" minOccurs="0" />
-        <xs:element name="wind_component" type="xs:string" minOccurs="0" />
-        <xs:element name="groundspeed" type="xs:string" minOccurs="0" />
-        <xs:element name="time_leg" type="xs:string" minOccurs="0" />
-        <xs:element name="time_total" type="xs:string" minOccurs="0" />
-        <xs:element name="fuel_flow" type="xs:string" minOccurs="0" />
-        <xs:element name="fuel_leg" type="xs:string" minOccurs="0" />
-        <xs:element name="fuel_totalused" type="xs:string" minOccurs="0" />
-        <xs:element name="fuel_min_onboard" type="xs:string" minOccurs="0" />
-        <xs:element name="fuel_plan_onboard" type="xs:string" minOccurs="0" />
-        <xs:element name="oat" type="xs:string" minOccurs="0" />
-        <xs:element name="oat_isa_dev" type="xs:string" minOccurs="0" />
-        <xs:element name="wind_dir" type="xs:string" minOccurs="0" />
-        <xs:element name="wind_spd" type="xs:string" minOccurs="0" />
-        <xs:element name="shear" type="xs:string" minOccurs="0" />
-        <xs:element name="tropopause_feet" type="xs:string" minOccurs="0" />
-        <xs:element name="ground_height" type="xs:string" minOccurs="0" />
-        <xs:element name="fir" type="xs:string" minOccurs="0" />
-        <xs:element name="fir_units" type="xs:string" minOccurs="0" />
-        <xs:element name="fir_valid_levels" type="xs:string" minOccurs="0" />
-        <xs:element name="mora" type="xs:string" minOccurs="0" />
-        <xs:element name="wind_data" minOccurs="0" maxOccurs="1">
+        <xs:element name="ident" msprop:Generator_ColumnPropNameInRow="ident" msprop:Generator_ColumnPropNameInTable="identColumn" msprop:Generator_ColumnVarNameInTable="columnident" msprop:Generator_UserColumnName="ident" type="xs:string" minOccurs="0" />
+        <xs:element name="name" msprop:Generator_ColumnPropNameInRow="name" msprop:Generator_ColumnPropNameInTable="nameColumn" msprop:Generator_ColumnVarNameInTable="columnname" msprop:Generator_UserColumnName="name" type="xs:string" minOccurs="0" />
+        <xs:element name="type" msprop:Generator_ColumnPropNameInRow="type" msprop:Generator_ColumnPropNameInTable="typeColumn" msprop:Generator_ColumnVarNameInTable="columntype" msprop:Generator_UserColumnName="type" type="xs:string" minOccurs="0" />
+        <xs:element name="icao_region" msprop:Generator_ColumnPropNameInRow="icao_region" msprop:Generator_ColumnPropNameInTable="icao_regionColumn" msprop:Generator_ColumnVarNameInTable="columnicao_region" msprop:Generator_UserColumnName="icao_region" type="xs:string" minOccurs="0" />
+        <xs:element name="frequency" msprop:Generator_ColumnPropNameInRow="frequency" msprop:Generator_ColumnPropNameInTable="frequencyColumn" msprop:Generator_ColumnVarNameInTable="columnfrequency" msprop:Generator_UserColumnName="frequency" type="xs:string" minOccurs="0" />
+        <xs:element name="pos_lat" msprop:Generator_ColumnPropNameInRow="pos_lat" msprop:Generator_ColumnPropNameInTable="pos_latColumn" msprop:Generator_ColumnVarNameInTable="columnpos_lat" msprop:Generator_UserColumnName="pos_lat" type="xs:double" minOccurs="0" />
+        <xs:element name="pos_long" msprop:Generator_ColumnPropNameInRow="pos_long" msprop:Generator_ColumnPropNameInTable="pos_longColumn" msprop:Generator_ColumnVarNameInTable="columnpos_long" msprop:Generator_UserColumnName="pos_long" type="xs:double" minOccurs="0" />
+        <xs:element name="stage" msprop:Generator_ColumnPropNameInRow="stage" msprop:Generator_ColumnPropNameInTable="stageColumn" msprop:Generator_ColumnVarNameInTable="columnstage" msprop:Generator_UserColumnName="stage" type="xs:string" minOccurs="0" />
+        <xs:element name="via_airway" msprop:Generator_ColumnPropNameInRow="via_airway" msprop:Generator_ColumnPropNameInTable="via_airwayColumn" msprop:Generator_ColumnVarNameInTable="columnvia_airway" msprop:Generator_UserColumnName="via_airway" type="xs:string" minOccurs="0" />
+        <xs:element name="is_sid_star" msprop:Generator_ColumnPropNameInRow="is_sid_star" msprop:Generator_ColumnPropNameInTable="is_sid_starColumn" msprop:Generator_ColumnVarNameInTable="columnis_sid_star" msprop:Generator_UserColumnName="is_sid_star" type="xs:string" minOccurs="0" />
+        <xs:element name="distance" msprop:Generator_ColumnPropNameInRow="distance" msprop:Generator_ColumnPropNameInTable="distanceColumn" msprop:Generator_ColumnVarNameInTable="columndistance" msprop:Generator_UserColumnName="distance" type="xs:string" minOccurs="0" />
+        <xs:element name="track_true" msprop:Generator_ColumnPropNameInRow="track_true" msprop:Generator_ColumnPropNameInTable="track_trueColumn" msprop:Generator_ColumnVarNameInTable="columntrack_true" msprop:Generator_UserColumnName="track_true" type="xs:string" minOccurs="0" />
+        <xs:element name="track_mag" msprop:Generator_ColumnPropNameInRow="track_mag" msprop:Generator_ColumnPropNameInTable="track_magColumn" msprop:Generator_ColumnVarNameInTable="columntrack_mag" msprop:Generator_UserColumnName="track_mag" type="xs:string" minOccurs="0" />
+        <xs:element name="heading_true" msprop:Generator_ColumnPropNameInRow="heading_true" msprop:Generator_ColumnPropNameInTable="heading_trueColumn" msprop:Generator_ColumnVarNameInTable="columnheading_true" msprop:Generator_UserColumnName="heading_true" type="xs:string" minOccurs="0" />
+        <xs:element name="heading_mag" msprop:Generator_ColumnPropNameInRow="heading_mag" msprop:Generator_ColumnPropNameInTable="heading_magColumn" msprop:Generator_ColumnVarNameInTable="columnheading_mag" msprop:Generator_UserColumnName="heading_mag" type="xs:string" minOccurs="0" />
+        <xs:element name="altitude_feet" msprop:Generator_ColumnPropNameInRow="altitude_feet" msprop:Generator_ColumnPropNameInTable="altitude_feetColumn" msprop:Generator_ColumnVarNameInTable="columnaltitude_feet" msprop:Generator_UserColumnName="altitude_feet" type="xs:string" minOccurs="0" />
+        <xs:element name="ind_airspeed" msprop:Generator_ColumnPropNameInRow="ind_airspeed" msprop:Generator_ColumnPropNameInTable="ind_airspeedColumn" msprop:Generator_ColumnVarNameInTable="columnind_airspeed" msprop:Generator_UserColumnName="ind_airspeed" type="xs:string" minOccurs="0" />
+        <xs:element name="true_airspeed" msprop:Generator_ColumnPropNameInRow="true_airspeed" msprop:Generator_ColumnPropNameInTable="true_airspeedColumn" msprop:Generator_ColumnVarNameInTable="columntrue_airspeed" msprop:Generator_UserColumnName="true_airspeed" type="xs:string" minOccurs="0" />
+        <xs:element name="mach" msprop:Generator_ColumnPropNameInRow="mach" msprop:Generator_ColumnPropNameInTable="machColumn" msprop:Generator_ColumnVarNameInTable="columnmach" msprop:Generator_UserColumnName="mach" type="xs:string" minOccurs="0" />
+        <xs:element name="mach_thousandths" msprop:Generator_ColumnPropNameInRow="mach_thousandths" msprop:Generator_ColumnPropNameInTable="mach_thousandthsColumn" msprop:Generator_ColumnVarNameInTable="columnmach_thousandths" msprop:Generator_UserColumnName="mach_thousandths" type="xs:string" minOccurs="0" />
+        <xs:element name="wind_component" msprop:Generator_ColumnPropNameInRow="wind_component" msprop:Generator_ColumnPropNameInTable="wind_componentColumn" msprop:Generator_ColumnVarNameInTable="columnwind_component" msprop:Generator_UserColumnName="wind_component" type="xs:string" minOccurs="0" />
+        <xs:element name="groundspeed" msprop:Generator_ColumnPropNameInRow="groundspeed" msprop:Generator_ColumnPropNameInTable="groundspeedColumn" msprop:Generator_ColumnVarNameInTable="columngroundspeed" msprop:Generator_UserColumnName="groundspeed" type="xs:string" minOccurs="0" />
+        <xs:element name="time_leg" msprop:Generator_ColumnPropNameInRow="time_leg" msprop:Generator_ColumnPropNameInTable="time_legColumn" msprop:Generator_ColumnVarNameInTable="columntime_leg" msprop:Generator_UserColumnName="time_leg" type="xs:string" minOccurs="0" />
+        <xs:element name="time_total" msprop:Generator_ColumnPropNameInRow="time_total" msprop:Generator_ColumnPropNameInTable="time_totalColumn" msprop:Generator_ColumnVarNameInTable="columntime_total" msprop:Generator_UserColumnName="time_total" type="xs:string" minOccurs="0" />
+        <xs:element name="fuel_flow" msprop:Generator_ColumnPropNameInRow="fuel_flow" msprop:Generator_ColumnPropNameInTable="fuel_flowColumn" msprop:Generator_ColumnVarNameInTable="columnfuel_flow" msprop:Generator_UserColumnName="fuel_flow" type="xs:string" minOccurs="0" />
+        <xs:element name="fuel_leg" msprop:Generator_ColumnPropNameInRow="fuel_leg" msprop:Generator_ColumnPropNameInTable="fuel_legColumn" msprop:Generator_ColumnVarNameInTable="columnfuel_leg" msprop:Generator_UserColumnName="fuel_leg" type="xs:string" minOccurs="0" />
+        <xs:element name="fuel_totalused" msprop:Generator_ColumnPropNameInRow="fuel_totalused" msprop:Generator_ColumnPropNameInTable="fuel_totalusedColumn" msprop:Generator_ColumnVarNameInTable="columnfuel_totalused" msprop:Generator_UserColumnName="fuel_totalused" type="xs:string" minOccurs="0" />
+        <xs:element name="fuel_min_onboard" msprop:Generator_ColumnPropNameInRow="fuel_min_onboard" msprop:Generator_ColumnPropNameInTable="fuel_min_onboardColumn" msprop:Generator_ColumnVarNameInTable="columnfuel_min_onboard" msprop:Generator_UserColumnName="fuel_min_onboard" type="xs:string" minOccurs="0" />
+        <xs:element name="fuel_plan_onboard" msprop:Generator_ColumnPropNameInRow="fuel_plan_onboard" msprop:Generator_ColumnPropNameInTable="fuel_plan_onboardColumn" msprop:Generator_ColumnVarNameInTable="columnfuel_plan_onboard" msprop:Generator_UserColumnName="fuel_plan_onboard" type="xs:string" minOccurs="0" />
+        <xs:element name="oat" msprop:Generator_ColumnPropNameInRow="oat" msprop:Generator_ColumnPropNameInTable="oatColumn" msprop:Generator_ColumnVarNameInTable="columnoat" msprop:Generator_UserColumnName="oat" type="xs:string" minOccurs="0" />
+        <xs:element name="oat_isa_dev" msprop:Generator_ColumnPropNameInRow="oat_isa_dev" msprop:Generator_ColumnPropNameInTable="oat_isa_devColumn" msprop:Generator_ColumnVarNameInTable="columnoat_isa_dev" msprop:Generator_UserColumnName="oat_isa_dev" type="xs:string" minOccurs="0" />
+        <xs:element name="wind_dir" msprop:Generator_ColumnPropNameInRow="wind_dir" msprop:Generator_ColumnPropNameInTable="wind_dirColumn" msprop:Generator_ColumnVarNameInTable="columnwind_dir" msprop:Generator_UserColumnName="wind_dir" type="xs:string" minOccurs="0" />
+        <xs:element name="wind_spd" msprop:Generator_ColumnPropNameInRow="wind_spd" msprop:Generator_ColumnPropNameInTable="wind_spdColumn" msprop:Generator_ColumnVarNameInTable="columnwind_spd" msprop:Generator_UserColumnName="wind_spd" type="xs:string" minOccurs="0" />
+        <xs:element name="shear" msprop:Generator_ColumnPropNameInRow="shear" msprop:Generator_ColumnPropNameInTable="shearColumn" msprop:Generator_ColumnVarNameInTable="columnshear" msprop:Generator_UserColumnName="shear" type="xs:string" minOccurs="0" />
+        <xs:element name="tropopause_feet" msprop:Generator_ColumnPropNameInRow="tropopause_feet" msprop:Generator_ColumnPropNameInTable="tropopause_feetColumn" msprop:Generator_ColumnVarNameInTable="columntropopause_feet" msprop:Generator_UserColumnName="tropopause_feet" type="xs:string" minOccurs="0" />
+        <xs:element name="ground_height" msprop:Generator_ColumnPropNameInRow="ground_height" msprop:Generator_ColumnPropNameInTable="ground_heightColumn" msprop:Generator_ColumnVarNameInTable="columnground_height" msprop:Generator_UserColumnName="ground_height" type="xs:string" minOccurs="0" />
+        <xs:element name="fir" msprop:Generator_ColumnPropNameInRow="fir" msprop:Generator_ColumnPropNameInTable="firColumn" msprop:Generator_ColumnVarNameInTable="columnfir" msprop:Generator_UserColumnName="fir" type="xs:string" minOccurs="0" />
+        <xs:element name="fir_units" msprop:Generator_ColumnPropNameInRow="fir_units" msprop:Generator_ColumnPropNameInTable="fir_unitsColumn" msprop:Generator_ColumnVarNameInTable="columnfir_units" msprop:Generator_UserColumnName="fir_units" type="xs:string" minOccurs="0" />
+        <xs:element name="fir_valid_levels" msprop:Generator_ColumnPropNameInRow="fir_valid_levels" msprop:Generator_ColumnPropNameInTable="fir_valid_levelsColumn" msprop:Generator_ColumnVarNameInTable="columnfir_valid_levels" msprop:Generator_UserColumnName="fir_valid_levels" type="xs:string" minOccurs="0" />
+        <xs:element name="mora" msprop:Generator_ColumnPropNameInRow="mora" msprop:Generator_ColumnPropNameInTable="moraColumn" msprop:Generator_ColumnVarNameInTable="columnmora" msprop:Generator_UserColumnName="mora" type="xs:string" minOccurs="0" />
+        <xs:element name="wind_data" msprop:Generator_RowEvHandlerName="wind_dataRowChangeEventHandler" msprop:Generator_RowDeletedName="wind_dataRowDeleted" msprop:Generator_RowDeletingName="wind_dataRowDeleting" msprop:Generator_RowEvArgName="wind_dataRowChangeEvent" msprop:Generator_TablePropName="wind_data" msprop:Generator_RowChangedName="wind_dataRowChanged" msprop:Generator_RowChangingName="wind_dataRowChanging" msprop:Generator_TableClassName="wind_dataDataTable" msprop:Generator_RowClassName="wind_dataRow" msprop:Generator_TableVarName="tablewind_data" msprop:Generator_UserTableName="wind_data" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="level" minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="level" msprop:Generator_RowEvHandlerName="levelRowChangeEventHandler" msprop:Generator_RowDeletedName="levelRowDeleted" msprop:Generator_RowDeletingName="levelRowDeleting" msprop:Generator_RowEvArgName="levelRowChangeEvent" msprop:Generator_TablePropName="level" msprop:Generator_RowChangedName="levelRowChanged" msprop:Generator_RowChangingName="levelRowChanging" msprop:Generator_TableClassName="levelDataTable" msprop:Generator_RowClassName="levelRow" msprop:Generator_TableVarName="tablelevel" msprop:Generator_UserTableName="level" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="altitude" type="xs:string" minOccurs="0" />
-                    <xs:element name="wind_dir" type="xs:string" minOccurs="0" />
-                    <xs:element name="wind_spd" type="xs:string" minOccurs="0" />
-                    <xs:element name="oat" type="xs:string" minOccurs="0" />
+                    <xs:element name="altitude" msprop:Generator_ColumnPropNameInRow="altitude" msprop:Generator_ColumnPropNameInTable="altitudeColumn" msprop:Generator_ColumnVarNameInTable="columnaltitude" msprop:Generator_UserColumnName="altitude" type="xs:string" minOccurs="0" />
+                    <xs:element name="wind_dir" msprop:Generator_ColumnPropNameInRow="wind_dir" msprop:Generator_ColumnPropNameInTable="wind_dirColumn" msprop:Generator_ColumnVarNameInTable="columnwind_dir" msprop:Generator_UserColumnName="wind_dir" type="xs:string" minOccurs="0" />
+                    <xs:element name="wind_spd" msprop:Generator_ColumnPropNameInRow="wind_spd" msprop:Generator_ColumnPropNameInTable="wind_spdColumn" msprop:Generator_ColumnVarNameInTable="columnwind_spd" msprop:Generator_UserColumnName="wind_spd" type="xs:string" minOccurs="0" />
+                    <xs:element name="oat" msprop:Generator_ColumnPropNameInRow="oat" msprop:Generator_ColumnPropNameInTable="oatColumn" msprop:Generator_ColumnVarNameInTable="columnoat" msprop:Generator_UserColumnName="oat" type="xs:string" minOccurs="0" />
                   </xs:sequence>
+                  <xs:attribute name="wind_data_Id" msprop:Generator_ColumnPropNameInRow="wind_data_Id" msprop:Generator_ColumnPropNameInTable="wind_data_IdColumn" msprop:Generator_ColumnVarNameInTable="columnwind_data_Id" msprop:Generator_UserColumnName="wind_data_Id" type="xs:int" use="prohibited" />
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
+            <xs:attribute name="wind_data_Id" msdata:AutoIncrement="true" msprop:Generator_ColumnPropNameInRow="wind_data_Id" msprop:Generator_ColumnPropNameInTable="wind_data_IdColumn" msprop:Generator_ColumnVarNameInTable="columnwind_data_Id" msprop:Generator_UserColumnName="wind_data_Id" type="xs:int" msdata:AllowDBNull="false" use="prohibited" />
+            <xs:attribute name="fix_Id" msprop:Generator_ColumnPropNameInRow="fix_Id" msprop:Generator_ColumnPropNameInTable="fix_IdColumn" msprop:Generator_ColumnVarNameInTable="columnfix_Id" msprop:Generator_UserColumnName="fix_Id" type="xs:int" use="prohibited" />
           </xs:complexType>
         </xs:element>
-        <xs:element name="fir_crossing" minOccurs="0" maxOccurs="1">
+        <xs:element name="fir_crossing" msprop:Generator_RowEvHandlerName="fir_crossingRowChangeEventHandler" msprop:Generator_RowDeletedName="fir_crossingRowDeleted" msprop:Generator_RowDeletingName="fir_crossingRowDeleting" msprop:Generator_RowEvArgName="fir_crossingRowChangeEvent" msprop:Generator_TablePropName="fir_crossing" msprop:Generator_RowChangedName="fir_crossingRowChanged" msprop:Generator_RowChangingName="fir_crossingRowChanging" msprop:Generator_TableClassName="fir_crossingDataTable" msprop:Generator_RowClassName="fir_crossingRow" msprop:Generator_TableVarName="tablefir_crossing" msprop:Generator_UserTableName="fir_crossing" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="fir" minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="fir" msprop:Generator_RowEvHandlerName="firRowChangeEventHandler" msprop:Generator_RowDeletedName="firRowDeleted" msprop:Generator_RowDeletingName="firRowDeleting" msprop:Generator_RowEvArgName="firRowChangeEvent" msprop:Generator_TablePropName="fir" msprop:Generator_RowChangedName="firRowChanged" msprop:Generator_RowChangingName="firRowChanging" msprop:Generator_TableClassName="firDataTable" msprop:Generator_RowClassName="firRow" msprop:Generator_TableVarName="tablefir" msprop:Generator_UserTableName="fir" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="fir_icao" type="xs:string" minOccurs="0" />
-                    <xs:element name="fir_name" type="xs:string" minOccurs="0" />
-                    <xs:element name="pos_lat_entry" type="xs:double" minOccurs="0" />
-                    <xs:element name="pos_long_entry" type="xs:double" minOccurs="0" />
+                    <xs:element name="fir_icao" msprop:Generator_ColumnPropNameInRow="fir_icao" msprop:Generator_ColumnPropNameInTable="fir_icaoColumn" msprop:Generator_ColumnVarNameInTable="columnfir_icao" msprop:Generator_UserColumnName="fir_icao" type="xs:string" minOccurs="0" />
+                    <xs:element name="fir_name" msprop:Generator_ColumnPropNameInRow="fir_name" msprop:Generator_ColumnPropNameInTable="fir_nameColumn" msprop:Generator_ColumnVarNameInTable="columnfir_name" msprop:Generator_UserColumnName="fir_name" type="xs:string" minOccurs="0" />
+                    <xs:element name="pos_lat_entry" msprop:Generator_ColumnPropNameInRow="pos_lat_entry" msprop:Generator_ColumnPropNameInTable="pos_lat_entryColumn" msprop:Generator_ColumnVarNameInTable="columnpos_lat_entry" msprop:Generator_UserColumnName="pos_lat_entry" type="xs:double" minOccurs="0" />
+                    <xs:element name="pos_long_entry" msprop:Generator_ColumnPropNameInRow="pos_long_entry" msprop:Generator_ColumnPropNameInTable="pos_long_entryColumn" msprop:Generator_ColumnVarNameInTable="columnpos_long_entry" msprop:Generator_UserColumnName="pos_long_entry" type="xs:double" minOccurs="0" />
                   </xs:sequence>
+                  <xs:attribute name="fir_crossing_Id" msprop:Generator_ColumnPropNameInRow="fir_crossing_Id" msprop:Generator_ColumnPropNameInTable="fir_crossing_IdColumn" msprop:Generator_ColumnVarNameInTable="columnfir_crossing_Id" msprop:Generator_UserColumnName="fir_crossing_Id" type="xs:int" use="prohibited" />
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
+            <xs:attribute name="fir_crossing_Id" msdata:AutoIncrement="true" msprop:Generator_ColumnPropNameInRow="fir_crossing_Id" msprop:Generator_ColumnPropNameInTable="fir_crossing_IdColumn" msprop:Generator_ColumnVarNameInTable="columnfir_crossing_Id" msprop:Generator_UserColumnName="fir_crossing_Id" type="xs:int" msdata:AllowDBNull="false" use="prohibited" />
+            <xs:attribute name="fix_Id" msprop:Generator_ColumnPropNameInRow="fix_Id" msprop:Generator_ColumnPropNameInTable="fix_IdColumn" msprop:Generator_ColumnVarNameInTable="columnfix_Id" msprop:Generator_UserColumnName="fix_Id" type="xs:int" use="prohibited" />
           </xs:complexType>
         </xs:element>
       </xs:sequence>
+      <xs:attribute name="fix_Id" msdata:AutoIncrement="true" msprop:Generator_ColumnPropNameInRow="fix_Id" msprop:Generator_ColumnPropNameInTable="fix_IdColumn" msprop:Generator_ColumnVarNameInTable="columnfix_Id" msprop:Generator_UserColumnName="fix_Id" type="xs:int" msdata:AllowDBNull="false" use="prohibited" />
+      <xs:attribute name="alternate_navlog_Id" msprop:Generator_ColumnPropNameInRow="alternate_navlog_Id" msprop:Generator_ColumnPropNameInTable="alternate_navlog_IdColumn" msprop:Generator_ColumnVarNameInTable="columnalternate_navlog_Id" msprop:Generator_UserColumnName="alternate_navlog_Id" type="xs:int" use="prohibited" />
+      <xs:attribute name="navlog_Id" msprop:Generator_ColumnPropNameInRow="navlog_Id" msprop:Generator_ColumnPropNameInTable="navlog_IdColumn" msprop:Generator_ColumnVarNameInTable="columnnavlog_Id" msprop:Generator_UserColumnName="navlog_Id" type="xs:int" use="prohibited" />
     </xs:complexType>
   </xs:element>
-  <xs:element name="pdf">
+  <xs:element name="pdf" msprop:Generator_RowEvHandlerName="pdfRowChangeEventHandler" msprop:Generator_RowDeletedName="pdfRowDeleted" msprop:Generator_RowDeletingName="pdfRowDeleting" msprop:Generator_RowEvArgName="pdfRowChangeEvent" msprop:Generator_TablePropName="pdf" msprop:Generator_RowChangedName="pdfRowChanged" msprop:Generator_RowChangingName="pdfRowChanging" msprop:Generator_TableClassName="pdfDataTable" msprop:Generator_RowClassName="pdfRow" msprop:Generator_TableVarName="tablepdf" msprop:Generator_UserTableName="pdf">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="name" type="xs:string" minOccurs="0" />
-        <xs:element name="link" type="xs:string" minOccurs="0" />
+        <xs:element name="name" msprop:Generator_ColumnPropNameInRow="name" msprop:Generator_ColumnPropNameInTable="nameColumn" msprop:Generator_ColumnVarNameInTable="columnname" msprop:Generator_UserColumnName="name" type="xs:string" minOccurs="0" />
+        <xs:element name="link" msprop:Generator_ColumnPropNameInRow="link" msprop:Generator_ColumnPropNameInTable="linkColumn" msprop:Generator_ColumnVarNameInTable="columnlink" msprop:Generator_UserColumnName="link" type="xs:string" minOccurs="0" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="OFP">
+  <xs:element name="OFP" msprop:Generator_RowEvHandlerName="OFPRowChangeEventHandler" msprop:Generator_RowDeletedName="OFPRowDeleted" msprop:Generator_RowDeletingName="OFPRowDeleting" msprop:Generator_RowEvArgName="OFPRowChangeEvent" msprop:Generator_TablePropName="OFP" msprop:Generator_RowChangedName="OFPRowChanged" msprop:Generator_RowChangingName="OFPRowChanging" msprop:Generator_TableClassName="OFPDataTable" msprop:Generator_RowClassName="OFPRow" msprop:Generator_TableVarName="tableOFP" msprop:Generator_UserTableName="OFP">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="takeoff_altn" type="xs:string" minOccurs="0" />
-        <xs:element name="enroute_altn" type="xs:string" minOccurs="0" />
-        <xs:element name="etops" type="xs:string" minOccurs="0" />
-        <!--<xs:element name="tlr" type="xs:string" minOccurs="0" />-->
-        <xs:element name="tracks" type="xs:string" minOccurs="0" />
-        <xs:element name="vatsim_prefile" type="xs:string" minOccurs="0" />
-        <xs:element name="ivao_prefile" type="xs:string" minOccurs="0" />
-        <xs:element name="pilotedge_prefile" type="xs:string" minOccurs="0" />
-        <xs:element name="poscon_prefile" type="xs:string" minOccurs="0" />
-        <xs:element name="map_data" type="xs:string" minOccurs="0" />
-        <!--
-        <xs:element name="params" minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="takeoff_altn" msprop:Generator_ColumnPropNameInRow="takeoff_altn" msprop:Generator_ColumnPropNameInTable="takeoff_altnColumn" msprop:Generator_ColumnVarNameInTable="columntakeoff_altn" msprop:Generator_UserColumnName="takeoff_altn" type="xs:string" minOccurs="0" />
+        <xs:element name="enroute_altn" msprop:Generator_ColumnPropNameInRow="enroute_altn" msprop:Generator_ColumnPropNameInTable="enroute_altnColumn" msprop:Generator_ColumnVarNameInTable="columnenroute_altn" msprop:Generator_UserColumnName="enroute_altn" type="xs:string" minOccurs="0" />
+        <xs:element name="etops" msprop:Generator_ColumnPropNameInRow="etops" msprop:Generator_ColumnPropNameInTable="etopsColumn" msprop:Generator_ColumnVarNameInTable="columnetops" msprop:Generator_UserColumnName="etops" type="xs:string" minOccurs="0" />
+        <xs:element name="tracks" msprop:Generator_ColumnPropNameInRow="tracks" msprop:Generator_ColumnPropNameInTable="tracksColumn" msprop:Generator_ColumnVarNameInTable="columntracks" msprop:Generator_UserColumnName="tracks" type="xs:string" minOccurs="0" />
+        <xs:element name="vatsim_prefile" msprop:Generator_ColumnPropNameInRow="vatsim_prefile" msprop:Generator_ColumnPropNameInTable="vatsim_prefileColumn" msprop:Generator_ColumnVarNameInTable="columnvatsim_prefile" msprop:Generator_UserColumnName="vatsim_prefile" type="xs:string" minOccurs="0" />
+        <xs:element name="ivao_prefile" msprop:Generator_ColumnPropNameInRow="ivao_prefile" msprop:Generator_ColumnPropNameInTable="ivao_prefileColumn" msprop:Generator_ColumnVarNameInTable="columnivao_prefile" msprop:Generator_UserColumnName="ivao_prefile" type="xs:string" minOccurs="0" />
+        <xs:element name="pilotedge_prefile" msprop:Generator_ColumnPropNameInRow="pilotedge_prefile" msprop:Generator_ColumnPropNameInTable="pilotedge_prefileColumn" msprop:Generator_ColumnVarNameInTable="columnpilotedge_prefile" msprop:Generator_UserColumnName="pilotedge_prefile" type="xs:string" minOccurs="0" />
+        <xs:element name="poscon_prefile" msprop:Generator_ColumnPropNameInRow="poscon_prefile" msprop:Generator_ColumnPropNameInTable="poscon_prefileColumn" msprop:Generator_ColumnVarNameInTable="columnposcon_prefile" msprop:Generator_UserColumnName="poscon_prefile" type="xs:string" minOccurs="0" />
+        <xs:element name="map_data" msprop:Generator_ColumnPropNameInRow="map_data" msprop:Generator_ColumnPropNameInTable="map_dataColumn" msprop:Generator_ColumnVarNameInTable="columnmap_data" msprop:Generator_UserColumnName="map_data" type="xs:string" minOccurs="0" />
+        <xs:element name="general" msprop:Generator_RowEvHandlerName="generalRowChangeEventHandler" msprop:Generator_RowDeletedName="generalRowDeleted" msprop:Generator_RowDeletingName="generalRowDeleting" msprop:Generator_RowEvArgName="generalRowChangeEvent" msprop:Generator_TablePropName="general" msprop:Generator_RowChangedName="generalRowChanged" msprop:Generator_RowChangingName="generalRowChanging" msprop:Generator_TableClassName="generalDataTable" msprop:Generator_RowClassName="generalRow" msprop:Generator_TableVarName="tablegeneral" msprop:Generator_UserTableName="general" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="request_id" type="xs:string" minOccurs="0" />
-              <xs:element name="sequence_id" type="xs:string" minOccurs="0" />
-              <xs:element name="static_id" type="xs:string" minOccurs="0" />
-              <xs:element name="user_id" type="xs:string" minOccurs="0" />
-              <xs:element name="time_generated" type="xs:string" minOccurs="0" />
-              <xs:element name="xml_file" type="xs:string" minOccurs="0" />
-              <xs:element name="ofp_layout" type="xs:string" minOccurs="0" />
-              <xs:element name="airac" type="xs:string" minOccurs="0" />
-              <xs:element name="units" type="xs:string" minOccurs="0" />
+              <xs:element name="release" msprop:Generator_ColumnPropNameInRow="release" msprop:Generator_ColumnPropNameInTable="releaseColumn" msprop:Generator_ColumnVarNameInTable="columnrelease" msprop:Generator_UserColumnName="release" type="xs:string" minOccurs="0" />
+              <xs:element name="icao_airline" msprop:Generator_ColumnPropNameInRow="icao_airline" msprop:Generator_ColumnPropNameInTable="icao_airlineColumn" msprop:Generator_ColumnVarNameInTable="columnicao_airline" msprop:Generator_UserColumnName="icao_airline" type="xs:string" minOccurs="0" />
+              <xs:element name="flight_number" msprop:Generator_ColumnPropNameInRow="flight_number" msprop:Generator_ColumnPropNameInTable="flight_numberColumn" msprop:Generator_ColumnVarNameInTable="columnflight_number" msprop:Generator_UserColumnName="flight_number" type="xs:string" minOccurs="0" />
+              <xs:element name="is_etops" msprop:Generator_ColumnPropNameInRow="is_etops" msprop:Generator_ColumnPropNameInTable="is_etopsColumn" msprop:Generator_ColumnVarNameInTable="columnis_etops" msprop:Generator_UserColumnName="is_etops" type="xs:string" minOccurs="0" />
+              <xs:element name="dx_rmk" msprop:Generator_ColumnPropNameInRow="dx_rmk" msprop:Generator_ColumnPropNameInTable="dx_rmkColumn" msprop:Generator_ColumnVarNameInTable="columndx_rmk" msprop:Generator_UserColumnName="dx_rmk" type="xs:string" minOccurs="0" />
+              <xs:element name="sys_rmk" msprop:Generator_ColumnPropNameInRow="sys_rmk" msprop:Generator_ColumnPropNameInTable="sys_rmkColumn" msprop:Generator_ColumnVarNameInTable="columnsys_rmk" msprop:Generator_UserColumnName="sys_rmk" type="xs:string" minOccurs="0" />
+              <xs:element name="is_detailed_profile" msprop:Generator_ColumnPropNameInRow="is_detailed_profile" msprop:Generator_ColumnPropNameInTable="is_detailed_profileColumn" msprop:Generator_ColumnVarNameInTable="columnis_detailed_profile" msprop:Generator_UserColumnName="is_detailed_profile" type="xs:string" minOccurs="0" />
+              <xs:element name="cruise_profile" msprop:Generator_ColumnPropNameInRow="cruise_profile" msprop:Generator_ColumnPropNameInTable="cruise_profileColumn" msprop:Generator_ColumnVarNameInTable="columncruise_profile" msprop:Generator_UserColumnName="cruise_profile" type="xs:string" minOccurs="0" />
+              <xs:element name="climb_profile" msprop:Generator_ColumnPropNameInRow="climb_profile" msprop:Generator_ColumnPropNameInTable="climb_profileColumn" msprop:Generator_ColumnVarNameInTable="columnclimb_profile" msprop:Generator_UserColumnName="climb_profile" type="xs:string" minOccurs="0" />
+              <xs:element name="descent_profile" msprop:Generator_ColumnPropNameInRow="descent_profile" msprop:Generator_ColumnPropNameInTable="descent_profileColumn" msprop:Generator_ColumnVarNameInTable="columndescent_profile" msprop:Generator_UserColumnName="descent_profile" type="xs:string" minOccurs="0" />
+              <xs:element name="alternate_profile" msprop:Generator_ColumnPropNameInRow="alternate_profile" msprop:Generator_ColumnPropNameInTable="alternate_profileColumn" msprop:Generator_ColumnVarNameInTable="columnalternate_profile" msprop:Generator_UserColumnName="alternate_profile" type="xs:string" minOccurs="0" />
+              <xs:element name="reserve_profile" msprop:Generator_ColumnPropNameInRow="reserve_profile" msprop:Generator_ColumnPropNameInTable="reserve_profileColumn" msprop:Generator_ColumnVarNameInTable="columnreserve_profile" msprop:Generator_UserColumnName="reserve_profile" type="xs:string" minOccurs="0" />
+              <xs:element name="costindex" msprop:Generator_ColumnPropNameInRow="costindex" msprop:Generator_ColumnPropNameInTable="costindexColumn" msprop:Generator_ColumnVarNameInTable="columncostindex" msprop:Generator_UserColumnName="costindex" type="xs:string" minOccurs="0" />
+              <xs:element name="cont_rule" msprop:Generator_ColumnPropNameInRow="cont_rule" msprop:Generator_ColumnPropNameInTable="cont_ruleColumn" msprop:Generator_ColumnVarNameInTable="columncont_rule" msprop:Generator_UserColumnName="cont_rule" type="xs:string" minOccurs="0" />
+              <xs:element name="initial_altitude" msprop:Generator_ColumnPropNameInRow="initial_altitude" msprop:Generator_ColumnPropNameInTable="initial_altitudeColumn" msprop:Generator_ColumnVarNameInTable="columninitial_altitude" msprop:Generator_UserColumnName="initial_altitude" type="xs:string" minOccurs="0" />
+              <xs:element name="stepclimb_string" msprop:Generator_ColumnPropNameInRow="stepclimb_string" msprop:Generator_ColumnPropNameInTable="stepclimb_stringColumn" msprop:Generator_ColumnVarNameInTable="columnstepclimb_string" msprop:Generator_UserColumnName="stepclimb_string" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_temp_dev" msprop:Generator_ColumnPropNameInRow="avg_temp_dev" msprop:Generator_ColumnPropNameInTable="avg_temp_devColumn" msprop:Generator_ColumnVarNameInTable="columnavg_temp_dev" msprop:Generator_UserColumnName="avg_temp_dev" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_tropopause" msprop:Generator_ColumnPropNameInRow="avg_tropopause" msprop:Generator_ColumnPropNameInTable="avg_tropopauseColumn" msprop:Generator_ColumnVarNameInTable="columnavg_tropopause" msprop:Generator_UserColumnName="avg_tropopause" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_wind_comp" msprop:Generator_ColumnPropNameInRow="avg_wind_comp" msprop:Generator_ColumnPropNameInTable="avg_wind_compColumn" msprop:Generator_ColumnVarNameInTable="columnavg_wind_comp" msprop:Generator_UserColumnName="avg_wind_comp" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_wind_dir" msprop:Generator_ColumnPropNameInRow="avg_wind_dir" msprop:Generator_ColumnPropNameInTable="avg_wind_dirColumn" msprop:Generator_ColumnVarNameInTable="columnavg_wind_dir" msprop:Generator_UserColumnName="avg_wind_dir" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_wind_spd" msprop:Generator_ColumnPropNameInRow="avg_wind_spd" msprop:Generator_ColumnPropNameInTable="avg_wind_spdColumn" msprop:Generator_ColumnVarNameInTable="columnavg_wind_spd" msprop:Generator_UserColumnName="avg_wind_spd" type="xs:string" minOccurs="0" />
+              <xs:element name="gc_distance" msprop:Generator_ColumnPropNameInRow="gc_distance" msprop:Generator_ColumnPropNameInTable="gc_distanceColumn" msprop:Generator_ColumnVarNameInTable="columngc_distance" msprop:Generator_UserColumnName="gc_distance" type="xs:string" minOccurs="0" />
+              <xs:element name="route_distance" msprop:Generator_ColumnPropNameInRow="route_distance" msprop:Generator_ColumnPropNameInTable="route_distanceColumn" msprop:Generator_ColumnVarNameInTable="columnroute_distance" msprop:Generator_UserColumnName="route_distance" type="xs:string" minOccurs="0" />
+              <xs:element name="air_distance" msprop:Generator_ColumnPropNameInRow="air_distance" msprop:Generator_ColumnPropNameInTable="air_distanceColumn" msprop:Generator_ColumnVarNameInTable="columnair_distance" msprop:Generator_UserColumnName="air_distance" type="xs:string" minOccurs="0" />
+              <xs:element name="total_burn" msprop:Generator_ColumnPropNameInRow="total_burn" msprop:Generator_ColumnPropNameInTable="total_burnColumn" msprop:Generator_ColumnVarNameInTable="columntotal_burn" msprop:Generator_UserColumnName="total_burn" type="xs:string" minOccurs="0" />
+              <xs:element name="cruise_tas" msprop:Generator_ColumnPropNameInRow="cruise_tas" msprop:Generator_ColumnPropNameInTable="cruise_tasColumn" msprop:Generator_ColumnVarNameInTable="columncruise_tas" msprop:Generator_UserColumnName="cruise_tas" type="xs:string" minOccurs="0" />
+              <xs:element name="cruise_mach" msprop:Generator_ColumnPropNameInRow="cruise_mach" msprop:Generator_ColumnPropNameInTable="cruise_machColumn" msprop:Generator_ColumnVarNameInTable="columncruise_mach" msprop:Generator_UserColumnName="cruise_mach" type="xs:string" minOccurs="0" />
+              <xs:element name="passengers" msprop:Generator_ColumnPropNameInRow="passengers" msprop:Generator_ColumnPropNameInTable="passengersColumn" msprop:Generator_ColumnVarNameInTable="columnpassengers" msprop:Generator_UserColumnName="passengers" type="xs:string" minOccurs="0" />
+              <xs:element name="route" msprop:Generator_ColumnPropNameInRow="route" msprop:Generator_ColumnPropNameInTable="routeColumn" msprop:Generator_ColumnVarNameInTable="columnroute" msprop:Generator_UserColumnName="route" type="xs:string" minOccurs="0" />
+              <xs:element name="route_ifps" msprop:Generator_ColumnPropNameInRow="route_ifps" msprop:Generator_ColumnPropNameInTable="route_ifpsColumn" msprop:Generator_ColumnVarNameInTable="columnroute_ifps" msprop:Generator_UserColumnName="route_ifps" type="xs:string" minOccurs="0" />
+              <xs:element name="route_navigraph" msprop:Generator_ColumnPropNameInRow="route_navigraph" msprop:Generator_ColumnPropNameInTable="route_navigraphColumn" msprop:Generator_ColumnVarNameInTable="columnroute_navigraph" msprop:Generator_UserColumnName="route_navigraph" type="xs:string" minOccurs="0" />
+              <xs:element name="sid_ident" msprop:Generator_ColumnPropNameInRow="sid_ident" msprop:Generator_ColumnPropNameInTable="sid_identColumn" msprop:Generator_ColumnVarNameInTable="columnsid_ident" msprop:Generator_UserColumnName="sid_ident" type="xs:string" minOccurs="0" />
+              <xs:element name="sid_trans" msprop:Generator_ColumnPropNameInRow="sid_trans" msprop:Generator_ColumnPropNameInTable="sid_transColumn" msprop:Generator_ColumnVarNameInTable="columnsid_trans" msprop:Generator_UserColumnName="sid_trans" type="xs:string" minOccurs="0" />
+              <xs:element name="star_ident" msprop:Generator_ColumnPropNameInRow="star_ident" msprop:Generator_ColumnPropNameInTable="star_identColumn" msprop:Generator_ColumnVarNameInTable="columnstar_ident" msprop:Generator_UserColumnName="star_ident" type="xs:string" minOccurs="0" />
+              <xs:element name="star_trans" msprop:Generator_ColumnPropNameInRow="star_trans" msprop:Generator_ColumnPropNameInTable="star_transColumn" msprop:Generator_ColumnVarNameInTable="columnstar_trans" msprop:Generator_UserColumnName="star_trans" type="xs:string" minOccurs="0" />
             </xs:sequence>
+            <xs:attribute name="OFP_Id" msprop:Generator_ColumnPropNameInRow="OFP_Id" msprop:Generator_ColumnPropNameInTable="OFP_IdColumn" msprop:Generator_ColumnVarNameInTable="columnOFP_Id" msprop:Generator_UserColumnName="OFP_Id" type="xs:int" use="prohibited" />
           </xs:complexType>
         </xs:element>
-        -->
-        <xs:element name="general" minOccurs="0" maxOccurs="1">
+        <xs:element name="origin" msprop:Generator_RowEvHandlerName="originRowChangeEventHandler" msprop:Generator_RowDeletedName="originRowDeleted" msprop:Generator_RowDeletingName="originRowDeleting" msprop:Generator_RowEvArgName="originRowChangeEvent" msprop:Generator_TablePropName="origin" msprop:Generator_RowChangedName="originRowChanged" msprop:Generator_RowChangingName="originRowChanging" msprop:Generator_TableClassName="originDataTable" msprop:Generator_RowClassName="originRow" msprop:Generator_TableVarName="tableorigin" msprop:Generator_UserTableName="origin" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="release" type="xs:string" minOccurs="0" />
-              <xs:element name="icao_airline" type="xs:string" minOccurs="0" />
-              <xs:element name="flight_number" type="xs:string" minOccurs="0" />
-              <xs:element name="is_etops" type="xs:string" minOccurs="0" />
-              <xs:element name="dx_rmk" type="xs:string" minOccurs="0" />
-              <xs:element name="sys_rmk" type="xs:string" minOccurs="0" />
-              <xs:element name="is_detailed_profile" type="xs:string" minOccurs="0" />
-              <xs:element name="cruise_profile" type="xs:string" minOccurs="0" />
-              <xs:element name="climb_profile" type="xs:string" minOccurs="0" />
-              <xs:element name="descent_profile" type="xs:string" minOccurs="0" />
-              <xs:element name="alternate_profile" type="xs:string" minOccurs="0" />
-              <xs:element name="reserve_profile" type="xs:string" minOccurs="0" />
-              <xs:element name="costindex" type="xs:string" minOccurs="0" />
-              <xs:element name="cont_rule" type="xs:string" minOccurs="0" />
-              <xs:element name="initial_altitude" type="xs:string" minOccurs="0" />
-              <xs:element name="stepclimb_string" type="xs:string" minOccurs="0" />
-              <xs:element name="avg_temp_dev" type="xs:string" minOccurs="0" />
-              <xs:element name="avg_tropopause" type="xs:string" minOccurs="0" />
-              <xs:element name="avg_wind_comp" type="xs:string" minOccurs="0" />
-              <xs:element name="avg_wind_dir" type="xs:string" minOccurs="0" />
-              <xs:element name="avg_wind_spd" type="xs:string" minOccurs="0" />
-              <xs:element name="gc_distance" type="xs:string" minOccurs="0" />
-              <xs:element name="route_distance" type="xs:string" minOccurs="0" />
-              <xs:element name="air_distance" type="xs:string" minOccurs="0" />
-              <xs:element name="total_burn" type="xs:string" minOccurs="0" />
-              <xs:element name="cruise_tas" type="xs:string" minOccurs="0" />
-              <xs:element name="cruise_mach" type="xs:string" minOccurs="0" />
-              <xs:element name="passengers" type="xs:string" minOccurs="0" />
-              <xs:element name="route" type="xs:string" minOccurs="0" />
-              <xs:element name="route_ifps" type="xs:string" minOccurs="0" />
-              <xs:element name="route_navigraph" type="xs:string" minOccurs="0" />
-              <xs:element name="sid_ident" type="xs:string" minOccurs="0" />
-              <xs:element name="sid_trans" type="xs:string" minOccurs="0" />
-              <xs:element name="star_ident" type="xs:string" minOccurs="0" />
-              <xs:element name="star_trans" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="origin" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="icao_code" type="xs:string" minOccurs="0" />
-              <xs:element name="iata_code" type="xs:string" minOccurs="0" />
-              <xs:element name="faa_code" type="xs:string" minOccurs="0" />
-              <xs:element name="icao_region" type="xs:string" minOccurs="0" />
-              <xs:element name="elevation" type="xs:string" minOccurs="0" />
-              <xs:element name="pos_lat" type="xs:double" minOccurs="0" />
-              <xs:element name="pos_long" type="xs:double" minOccurs="0" />
-              <xs:element name="name" type="xs:string" minOccurs="0" />
-              <xs:element name="timezone" type="xs:string" minOccurs="0" />
-              <xs:element name="plan_rwy" type="xs:string" minOccurs="0" />
-              <xs:element name="trans_alt" type="xs:int" minOccurs="0" />
-              <xs:element name="trans_level" type="xs:int" minOccurs="0" />
-              <xs:element name="metar" type="xs:string" minOccurs="0" />
-              <xs:element name="metar_time" type="xs:string" minOccurs="0" />
-              <xs:element name="metar_category" type="xs:string" minOccurs="0" />
-              <xs:element name="metar_visibility" type="xs:string" minOccurs="0" />
-              <xs:element name="metar_ceiling" type="xs:string" minOccurs="0" />
-              <xs:element name="taf" type="xs:string" minOccurs="0" />
-              <xs:element name="taf_time" type="xs:string" minOccurs="0" />
-              <xs:element name="atis" minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="icao_code" msprop:Generator_ColumnPropNameInRow="icao_code" msprop:Generator_ColumnPropNameInTable="icao_codeColumn" msprop:Generator_ColumnVarNameInTable="columnicao_code" msprop:Generator_UserColumnName="icao_code" type="xs:string" minOccurs="0" />
+              <xs:element name="iata_code" msprop:Generator_ColumnPropNameInRow="iata_code" msprop:Generator_ColumnPropNameInTable="iata_codeColumn" msprop:Generator_ColumnVarNameInTable="columniata_code" msprop:Generator_UserColumnName="iata_code" type="xs:string" minOccurs="0" />
+              <xs:element name="faa_code" msprop:Generator_ColumnPropNameInRow="faa_code" msprop:Generator_ColumnPropNameInTable="faa_codeColumn" msprop:Generator_ColumnVarNameInTable="columnfaa_code" msprop:Generator_UserColumnName="faa_code" type="xs:string" minOccurs="0" />
+              <xs:element name="icao_region" msprop:Generator_ColumnPropNameInRow="icao_region" msprop:Generator_ColumnPropNameInTable="icao_regionColumn" msprop:Generator_ColumnVarNameInTable="columnicao_region" msprop:Generator_UserColumnName="icao_region" type="xs:string" minOccurs="0" />
+              <xs:element name="elevation" msprop:Generator_ColumnPropNameInRow="elevation" msprop:Generator_ColumnPropNameInTable="elevationColumn" msprop:Generator_ColumnVarNameInTable="columnelevation" msprop:Generator_UserColumnName="elevation" type="xs:string" minOccurs="0" />
+              <xs:element name="pos_lat" msprop:Generator_ColumnPropNameInRow="pos_lat" msprop:Generator_ColumnPropNameInTable="pos_latColumn" msprop:Generator_ColumnVarNameInTable="columnpos_lat" msprop:Generator_UserColumnName="pos_lat" type="xs:double" minOccurs="0" />
+              <xs:element name="pos_long" msprop:Generator_ColumnPropNameInRow="pos_long" msprop:Generator_ColumnPropNameInTable="pos_longColumn" msprop:Generator_ColumnVarNameInTable="columnpos_long" msprop:Generator_UserColumnName="pos_long" type="xs:double" minOccurs="0" />
+              <xs:element name="name" msprop:Generator_ColumnPropNameInRow="name" msprop:Generator_ColumnPropNameInTable="nameColumn" msprop:Generator_ColumnVarNameInTable="columnname" msprop:Generator_UserColumnName="name" type="xs:string" minOccurs="0" />
+              <xs:element name="timezone" msprop:Generator_ColumnPropNameInRow="timezone" msprop:Generator_ColumnPropNameInTable="timezoneColumn" msprop:Generator_ColumnVarNameInTable="columntimezone" msprop:Generator_UserColumnName="timezone" type="xs:string" minOccurs="0" />
+              <xs:element name="plan_rwy" msprop:Generator_ColumnPropNameInRow="plan_rwy" msprop:Generator_ColumnPropNameInTable="plan_rwyColumn" msprop:Generator_ColumnVarNameInTable="columnplan_rwy" msprop:Generator_UserColumnName="plan_rwy" type="xs:string" minOccurs="0" />
+              <xs:element name="trans_alt" msprop:Generator_ColumnPropNameInRow="trans_alt" msprop:Generator_ColumnPropNameInTable="trans_altColumn" msprop:Generator_ColumnVarNameInTable="columntrans_alt" msprop:Generator_UserColumnName="trans_alt" type="xs:int" minOccurs="0" />
+              <xs:element name="trans_level" msprop:Generator_ColumnPropNameInRow="trans_level" msprop:Generator_ColumnPropNameInTable="trans_levelColumn" msprop:Generator_ColumnVarNameInTable="columntrans_level" msprop:Generator_UserColumnName="trans_level" type="xs:int" minOccurs="0" />
+              <xs:element name="metar" msprop:Generator_ColumnPropNameInRow="metar" msprop:Generator_ColumnPropNameInTable="metarColumn" msprop:Generator_ColumnVarNameInTable="columnmetar" msprop:Generator_UserColumnName="metar" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_time" msprop:Generator_ColumnPropNameInRow="metar_time" msprop:Generator_ColumnPropNameInTable="metar_timeColumn" msprop:Generator_ColumnVarNameInTable="columnmetar_time" msprop:Generator_UserColumnName="metar_time" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_category" msprop:Generator_ColumnPropNameInRow="metar_category" msprop:Generator_ColumnPropNameInTable="metar_categoryColumn" msprop:Generator_ColumnVarNameInTable="columnmetar_category" msprop:Generator_UserColumnName="metar_category" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_visibility" msprop:Generator_ColumnPropNameInRow="metar_visibility" msprop:Generator_ColumnPropNameInTable="metar_visibilityColumn" msprop:Generator_ColumnVarNameInTable="columnmetar_visibility" msprop:Generator_UserColumnName="metar_visibility" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_ceiling" msprop:Generator_ColumnPropNameInRow="metar_ceiling" msprop:Generator_ColumnPropNameInTable="metar_ceilingColumn" msprop:Generator_ColumnVarNameInTable="columnmetar_ceiling" msprop:Generator_UserColumnName="metar_ceiling" type="xs:string" minOccurs="0" />
+              <xs:element name="taf" msprop:Generator_ColumnPropNameInRow="taf" msprop:Generator_ColumnPropNameInTable="tafColumn" msprop:Generator_ColumnVarNameInTable="columntaf" msprop:Generator_UserColumnName="taf" type="xs:string" minOccurs="0" />
+              <xs:element name="taf_time" msprop:Generator_ColumnPropNameInRow="taf_time" msprop:Generator_ColumnPropNameInTable="taf_timeColumn" msprop:Generator_ColumnVarNameInTable="columntaf_time" msprop:Generator_UserColumnName="taf_time" type="xs:string" minOccurs="0" />
+              <xs:element name="atis" msprop:Generator_RowEvHandlerName="atisRowChangeEventHandler" msprop:Generator_RowDeletedName="atisRowDeleted" msprop:Generator_RowDeletingName="atisRowDeleting" msprop:Generator_RowEvArgName="atisRowChangeEvent" msprop:Generator_TablePropName="atis" msprop:Generator_RowChangedName="atisRowChanged" msprop:Generator_RowChangingName="atisRowChanging" msprop:Generator_TableClassName="atisDataTable" msprop:Generator_RowClassName="atisRow" msprop:Generator_TableVarName="tableatis" msprop:Generator_UserTableName="atis" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="network" type="xs:string" minOccurs="0" />
-                    <xs:element name="issued" type="xs:string" minOccurs="0" />
-                    <xs:element name="letter" type="xs:string" minOccurs="0" />
-                    <xs:element name="phonetic" type="xs:string" minOccurs="0" />
-                    <xs:element name="type" type="xs:string" minOccurs="0" />
-                    <xs:element name="message" type="xs:string" minOccurs="0" />
+                    <xs:element name="network" msprop:Generator_ColumnPropNameInRow="network" msprop:Generator_ColumnPropNameInTable="networkColumn" msprop:Generator_ColumnVarNameInTable="columnnetwork" msprop:Generator_UserColumnName="network" type="xs:string" minOccurs="0" />
+                    <xs:element name="issued" msprop:Generator_ColumnPropNameInRow="issued" msprop:Generator_ColumnPropNameInTable="issuedColumn" msprop:Generator_ColumnVarNameInTable="columnissued" msprop:Generator_UserColumnName="issued" type="xs:string" minOccurs="0" />
+                    <xs:element name="letter" msprop:Generator_ColumnPropNameInRow="letter" msprop:Generator_ColumnPropNameInTable="letterColumn" msprop:Generator_ColumnVarNameInTable="columnletter" msprop:Generator_UserColumnName="letter" type="xs:string" minOccurs="0" />
+                    <xs:element name="phonetic" msprop:Generator_ColumnPropNameInRow="phonetic" msprop:Generator_ColumnPropNameInTable="phoneticColumn" msprop:Generator_ColumnVarNameInTable="columnphonetic" msprop:Generator_UserColumnName="phonetic" type="xs:string" minOccurs="0" />
+                    <xs:element name="type" msprop:Generator_ColumnPropNameInRow="type" msprop:Generator_ColumnPropNameInTable="typeColumn" msprop:Generator_ColumnVarNameInTable="columntype" msprop:Generator_UserColumnName="type" type="xs:string" minOccurs="0" />
+                    <xs:element name="message" msprop:Generator_ColumnPropNameInRow="message" msprop:Generator_ColumnPropNameInTable="messageColumn" msprop:Generator_ColumnVarNameInTable="columnmessage" msprop:Generator_UserColumnName="message" type="xs:string" minOccurs="0" />
                   </xs:sequence>
+                  <xs:attribute name="origin_Id" msprop:Generator_ColumnPropNameInRow="origin_Id" msprop:Generator_ColumnPropNameInTable="origin_IdColumn" msprop:Generator_ColumnVarNameInTable="columnorigin_Id" msprop:Generator_UserColumnName="origin_Id" type="xs:int" use="prohibited" />
                 </xs:complexType>
               </xs:element>
               <xs:element ref="notam" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
+            <xs:attribute name="origin_Id" msdata:AutoIncrement="true" msprop:Generator_ColumnPropNameInRow="origin_Id" msprop:Generator_ColumnPropNameInTable="origin_IdColumn" msprop:Generator_ColumnVarNameInTable="columnorigin_Id" msprop:Generator_UserColumnName="origin_Id" type="xs:int" msdata:AllowDBNull="false" use="prohibited" />
+            <xs:attribute name="OFP_Id" msprop:Generator_ColumnPropNameInRow="OFP_Id" msprop:Generator_ColumnPropNameInTable="OFP_IdColumn" msprop:Generator_ColumnVarNameInTable="columnOFP_Id" msprop:Generator_UserColumnName="OFP_Id" type="xs:int" use="prohibited" />
           </xs:complexType>
         </xs:element>
-        <xs:element name="destination" minOccurs="0" maxOccurs="1">
+        <xs:element name="destination" msprop:Generator_RowEvHandlerName="destinationRowChangeEventHandler" msprop:Generator_RowDeletedName="destinationRowDeleted" msprop:Generator_RowDeletingName="destinationRowDeleting" msprop:Generator_RowEvArgName="destinationRowChangeEvent" msprop:Generator_TablePropName="destination" msprop:Generator_RowChangedName="destinationRowChanged" msprop:Generator_RowChangingName="destinationRowChanging" msprop:Generator_TableClassName="destinationDataTable" msprop:Generator_RowClassName="destinationRow" msprop:Generator_TableVarName="tabledestination" msprop:Generator_UserTableName="destination" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="icao_code" type="xs:string" minOccurs="0" />
-              <xs:element name="iata_code" type="xs:string" minOccurs="0" />
-              <xs:element name="faa_code" type="xs:string" minOccurs="0" />
-              <xs:element name="icao_region" type="xs:string" minOccurs="0" />
-              <xs:element name="elevation" type="xs:string" minOccurs="0" />
-              <xs:element name="pos_lat" type="xs:double" minOccurs="0" />
-              <xs:element name="pos_long" type="xs:double" minOccurs="0" />
-              <xs:element name="name" type="xs:string" minOccurs="0" />
-              <xs:element name="timezone" type="xs:string" minOccurs="0" />
-              <xs:element name="plan_rwy" type="xs:string" minOccurs="0" />
-              <xs:element name="trans_alt" type="xs:int" minOccurs="0" />
-              <xs:element name="trans_level" type="xs:int" minOccurs="0" />
-              <xs:element name="metar" type="xs:string" minOccurs="0" />
-              <xs:element name="metar_time" type="xs:string" minOccurs="0" />
-              <xs:element name="metar_category" type="xs:string" minOccurs="0" />
-              <xs:element name="metar_visibility" type="xs:string" minOccurs="0" />
-              <xs:element name="metar_ceiling" type="xs:string" minOccurs="0" />
-              <xs:element name="taf" type="xs:string" minOccurs="0" />
-              <xs:element name="taf_time" type="xs:string" minOccurs="0" />
-              <xs:element name="atis" type="xs:string" minOccurs="0" />
+              <xs:element name="icao_code" msprop:Generator_ColumnPropNameInRow="icao_code" msprop:Generator_ColumnPropNameInTable="icao_codeColumn" msprop:Generator_ColumnVarNameInTable="columnicao_code" msprop:Generator_UserColumnName="icao_code" type="xs:string" minOccurs="0" />
+              <xs:element name="iata_code" msprop:Generator_ColumnPropNameInRow="iata_code" msprop:Generator_ColumnPropNameInTable="iata_codeColumn" msprop:Generator_ColumnVarNameInTable="columniata_code" msprop:Generator_UserColumnName="iata_code" type="xs:string" minOccurs="0" />
+              <xs:element name="faa_code" msprop:Generator_ColumnPropNameInRow="faa_code" msprop:Generator_ColumnPropNameInTable="faa_codeColumn" msprop:Generator_ColumnVarNameInTable="columnfaa_code" msprop:Generator_UserColumnName="faa_code" type="xs:string" minOccurs="0" />
+              <xs:element name="icao_region" msprop:Generator_ColumnPropNameInRow="icao_region" msprop:Generator_ColumnPropNameInTable="icao_regionColumn" msprop:Generator_ColumnVarNameInTable="columnicao_region" msprop:Generator_UserColumnName="icao_region" type="xs:string" minOccurs="0" />
+              <xs:element name="elevation" msprop:Generator_ColumnPropNameInRow="elevation" msprop:Generator_ColumnPropNameInTable="elevationColumn" msprop:Generator_ColumnVarNameInTable="columnelevation" msprop:Generator_UserColumnName="elevation" type="xs:string" minOccurs="0" />
+              <xs:element name="pos_lat" msprop:Generator_ColumnPropNameInRow="pos_lat" msprop:Generator_ColumnPropNameInTable="pos_latColumn" msprop:Generator_ColumnVarNameInTable="columnpos_lat" msprop:Generator_UserColumnName="pos_lat" type="xs:double" minOccurs="0" />
+              <xs:element name="pos_long" msprop:Generator_ColumnPropNameInRow="pos_long" msprop:Generator_ColumnPropNameInTable="pos_longColumn" msprop:Generator_ColumnVarNameInTable="columnpos_long" msprop:Generator_UserColumnName="pos_long" type="xs:double" minOccurs="0" />
+              <xs:element name="name" msprop:Generator_ColumnPropNameInRow="name" msprop:Generator_ColumnPropNameInTable="nameColumn" msprop:Generator_ColumnVarNameInTable="columnname" msprop:Generator_UserColumnName="name" type="xs:string" minOccurs="0" />
+              <xs:element name="timezone" msprop:Generator_ColumnPropNameInRow="timezone" msprop:Generator_ColumnPropNameInTable="timezoneColumn" msprop:Generator_ColumnVarNameInTable="columntimezone" msprop:Generator_UserColumnName="timezone" type="xs:string" minOccurs="0" />
+              <xs:element name="plan_rwy" msprop:Generator_ColumnPropNameInRow="plan_rwy" msprop:Generator_ColumnPropNameInTable="plan_rwyColumn" msprop:Generator_ColumnVarNameInTable="columnplan_rwy" msprop:Generator_UserColumnName="plan_rwy" type="xs:string" minOccurs="0" />
+              <xs:element name="trans_alt" msprop:Generator_ColumnPropNameInRow="trans_alt" msprop:Generator_ColumnPropNameInTable="trans_altColumn" msprop:Generator_ColumnVarNameInTable="columntrans_alt" msprop:Generator_UserColumnName="trans_alt" type="xs:int" minOccurs="0" />
+              <xs:element name="trans_level" msprop:Generator_ColumnPropNameInRow="trans_level" msprop:Generator_ColumnPropNameInTable="trans_levelColumn" msprop:Generator_ColumnVarNameInTable="columntrans_level" msprop:Generator_UserColumnName="trans_level" type="xs:int" minOccurs="0" />
+              <xs:element name="metar" msprop:Generator_ColumnPropNameInRow="metar" msprop:Generator_ColumnPropNameInTable="metarColumn" msprop:Generator_ColumnVarNameInTable="columnmetar" msprop:Generator_UserColumnName="metar" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_time" msprop:Generator_ColumnPropNameInRow="metar_time" msprop:Generator_ColumnPropNameInTable="metar_timeColumn" msprop:Generator_ColumnVarNameInTable="columnmetar_time" msprop:Generator_UserColumnName="metar_time" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_category" msprop:Generator_ColumnPropNameInRow="metar_category" msprop:Generator_ColumnPropNameInTable="metar_categoryColumn" msprop:Generator_ColumnVarNameInTable="columnmetar_category" msprop:Generator_UserColumnName="metar_category" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_visibility" msprop:Generator_ColumnPropNameInRow="metar_visibility" msprop:Generator_ColumnPropNameInTable="metar_visibilityColumn" msprop:Generator_ColumnVarNameInTable="columnmetar_visibility" msprop:Generator_UserColumnName="metar_visibility" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_ceiling" msprop:Generator_ColumnPropNameInRow="metar_ceiling" msprop:Generator_ColumnPropNameInTable="metar_ceilingColumn" msprop:Generator_ColumnVarNameInTable="columnmetar_ceiling" msprop:Generator_UserColumnName="metar_ceiling" type="xs:string" minOccurs="0" />
+              <xs:element name="taf" msprop:Generator_ColumnPropNameInRow="taf" msprop:Generator_ColumnPropNameInTable="tafColumn" msprop:Generator_ColumnVarNameInTable="columntaf" msprop:Generator_UserColumnName="taf" type="xs:string" minOccurs="0" />
+              <xs:element name="taf_time" msprop:Generator_ColumnPropNameInRow="taf_time" msprop:Generator_ColumnPropNameInTable="taf_timeColumn" msprop:Generator_ColumnVarNameInTable="columntaf_time" msprop:Generator_UserColumnName="taf_time" type="xs:string" minOccurs="0" />
               <xs:element ref="notam" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
+            <xs:attribute name="OFP_Id" msprop:Generator_ColumnPropNameInRow="OFP_Id" msprop:Generator_ColumnPropNameInTable="OFP_IdColumn" msprop:Generator_ColumnVarNameInTable="columnOFP_Id" msprop:Generator_UserColumnName="OFP_Id" type="xs:int" use="prohibited" />
           </xs:complexType>
         </xs:element>
-        <xs:element name="alternate" minOccurs="0" maxOccurs="1">
+        <xs:element name="alternate" msprop:Generator_RowEvHandlerName="alternateRowChangeEventHandler" msprop:Generator_RowDeletedName="alternateRowDeleted" msprop:Generator_RowDeletingName="alternateRowDeleting" msprop:Generator_RowEvArgName="alternateRowChangeEvent" msprop:Generator_TablePropName="alternate" msprop:Generator_RowChangedName="alternateRowChanged" msprop:Generator_RowChangingName="alternateRowChanging" msprop:Generator_TableClassName="alternateDataTable" msprop:Generator_RowClassName="alternateRow" msprop:Generator_TableVarName="tablealternate" msprop:Generator_UserTableName="alternate" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="icao_code" type="xs:string" minOccurs="0" />
-              <xs:element name="iata_code" type="xs:string" minOccurs="0" />
-              <xs:element name="faa_code" type="xs:string" minOccurs="0" />
-              <xs:element name="icao_region" type="xs:string" minOccurs="0" />
-              <xs:element name="elevation" type="xs:string" minOccurs="0" />
-              <xs:element name="pos_lat" type="xs:double" minOccurs="0" />
-              <xs:element name="pos_long" type="xs:double" minOccurs="0" />
-              <xs:element name="name" type="xs:string" minOccurs="0" />
-              <xs:element name="timezone" type="xs:string" minOccurs="0" />
-              <xs:element name="plan_rwy" type="xs:string" minOccurs="0" />
-              <xs:element name="trans_alt" type="xs:int" minOccurs="0" />
-              <xs:element name="trans_level" type="xs:int" minOccurs="0" />
-              <xs:element name="cruise_altitude" type="xs:string" minOccurs="0" />
-              <xs:element name="distance" type="xs:string" minOccurs="0" />
-              <xs:element name="gc_distance" type="xs:string" minOccurs="0" />
-              <xs:element name="air_distance" type="xs:string" minOccurs="0" />
-              <xs:element name="track_true" type="xs:string" minOccurs="0" />
-              <xs:element name="track_mag" type="xs:string" minOccurs="0" />
-              <xs:element name="tas" type="xs:string" minOccurs="0" />
-              <xs:element name="gs" type="xs:string" minOccurs="0" />
-              <xs:element name="avg_wind_comp" type="xs:string" minOccurs="0" />
-              <xs:element name="avg_wind_dir" type="xs:string" minOccurs="0" />
-              <xs:element name="avg_wind_spd" type="xs:string" minOccurs="0" />
-              <xs:element name="avg_tropopause" type="xs:string" minOccurs="0" />
-              <xs:element name="avg_tdv" type="xs:string" minOccurs="0" />
-              <xs:element name="ete" type="xs:string" minOccurs="0" />
-              <xs:element name="burn" type="xs:string" minOccurs="0" />
-              <xs:element name="route" type="xs:string" minOccurs="0" />
-              <xs:element name="route_ifps" type="xs:string" minOccurs="0" />
-              <xs:element name="metar" type="xs:string" minOccurs="0" />
-              <xs:element name="metar_time" type="xs:string" minOccurs="0" />
-              <xs:element name="metar_category" type="xs:string" minOccurs="0" />
-              <xs:element name="metar_visibility" type="xs:string" minOccurs="0" />
-              <xs:element name="metar_ceiling" type="xs:string" minOccurs="0" />
-              <xs:element name="taf" type="xs:string" minOccurs="0" />
-              <xs:element name="taf_time" type="xs:string" minOccurs="0" />
+              <xs:element name="icao_code" msprop:Generator_ColumnPropNameInRow="icao_code" msprop:Generator_ColumnPropNameInTable="icao_codeColumn" msprop:Generator_ColumnVarNameInTable="columnicao_code" msprop:Generator_UserColumnName="icao_code" type="xs:string" minOccurs="0" />
+              <xs:element name="iata_code" msprop:Generator_ColumnPropNameInRow="iata_code" msprop:Generator_ColumnPropNameInTable="iata_codeColumn" msprop:Generator_ColumnVarNameInTable="columniata_code" msprop:Generator_UserColumnName="iata_code" type="xs:string" minOccurs="0" />
+              <xs:element name="faa_code" msprop:Generator_ColumnPropNameInRow="faa_code" msprop:Generator_ColumnPropNameInTable="faa_codeColumn" msprop:Generator_ColumnVarNameInTable="columnfaa_code" msprop:Generator_UserColumnName="faa_code" type="xs:string" minOccurs="0" />
+              <xs:element name="icao_region" msprop:Generator_ColumnPropNameInRow="icao_region" msprop:Generator_ColumnPropNameInTable="icao_regionColumn" msprop:Generator_ColumnVarNameInTable="columnicao_region" msprop:Generator_UserColumnName="icao_region" type="xs:string" minOccurs="0" />
+              <xs:element name="elevation" msprop:Generator_ColumnPropNameInRow="elevation" msprop:Generator_ColumnPropNameInTable="elevationColumn" msprop:Generator_ColumnVarNameInTable="columnelevation" msprop:Generator_UserColumnName="elevation" type="xs:string" minOccurs="0" />
+              <xs:element name="pos_lat" msprop:Generator_ColumnPropNameInRow="pos_lat" msprop:Generator_ColumnPropNameInTable="pos_latColumn" msprop:Generator_ColumnVarNameInTable="columnpos_lat" msprop:Generator_UserColumnName="pos_lat" type="xs:double" minOccurs="0" />
+              <xs:element name="pos_long" msprop:Generator_ColumnPropNameInRow="pos_long" msprop:Generator_ColumnPropNameInTable="pos_longColumn" msprop:Generator_ColumnVarNameInTable="columnpos_long" msprop:Generator_UserColumnName="pos_long" type="xs:double" minOccurs="0" />
+              <xs:element name="name" msprop:Generator_ColumnPropNameInRow="name" msprop:Generator_ColumnPropNameInTable="nameColumn" msprop:Generator_ColumnVarNameInTable="columnname" msprop:Generator_UserColumnName="name" type="xs:string" minOccurs="0" />
+              <xs:element name="timezone" msprop:Generator_ColumnPropNameInRow="timezone" msprop:Generator_ColumnPropNameInTable="timezoneColumn" msprop:Generator_ColumnVarNameInTable="columntimezone" msprop:Generator_UserColumnName="timezone" type="xs:string" minOccurs="0" />
+              <xs:element name="plan_rwy" msprop:Generator_ColumnPropNameInRow="plan_rwy" msprop:Generator_ColumnPropNameInTable="plan_rwyColumn" msprop:Generator_ColumnVarNameInTable="columnplan_rwy" msprop:Generator_UserColumnName="plan_rwy" type="xs:string" minOccurs="0" />
+              <xs:element name="trans_alt" msprop:Generator_ColumnPropNameInRow="trans_alt" msprop:Generator_ColumnPropNameInTable="trans_altColumn" msprop:Generator_ColumnVarNameInTable="columntrans_alt" msprop:Generator_UserColumnName="trans_alt" type="xs:int" minOccurs="0" />
+              <xs:element name="trans_level" msprop:Generator_ColumnPropNameInRow="trans_level" msprop:Generator_ColumnPropNameInTable="trans_levelColumn" msprop:Generator_ColumnVarNameInTable="columntrans_level" msprop:Generator_UserColumnName="trans_level" type="xs:int" minOccurs="0" />
+              <xs:element name="cruise_altitude" msprop:Generator_ColumnPropNameInRow="cruise_altitude" msprop:Generator_ColumnPropNameInTable="cruise_altitudeColumn" msprop:Generator_ColumnVarNameInTable="columncruise_altitude" msprop:Generator_UserColumnName="cruise_altitude" type="xs:string" minOccurs="0" />
+              <xs:element name="distance" msprop:Generator_ColumnPropNameInRow="distance" msprop:Generator_ColumnPropNameInTable="distanceColumn" msprop:Generator_ColumnVarNameInTable="columndistance" msprop:Generator_UserColumnName="distance" type="xs:string" minOccurs="0" />
+              <xs:element name="gc_distance" msprop:Generator_ColumnPropNameInRow="gc_distance" msprop:Generator_ColumnPropNameInTable="gc_distanceColumn" msprop:Generator_ColumnVarNameInTable="columngc_distance" msprop:Generator_UserColumnName="gc_distance" type="xs:string" minOccurs="0" />
+              <xs:element name="air_distance" msprop:Generator_ColumnPropNameInRow="air_distance" msprop:Generator_ColumnPropNameInTable="air_distanceColumn" msprop:Generator_ColumnVarNameInTable="columnair_distance" msprop:Generator_UserColumnName="air_distance" type="xs:string" minOccurs="0" />
+              <xs:element name="track_true" msprop:Generator_ColumnPropNameInRow="track_true" msprop:Generator_ColumnPropNameInTable="track_trueColumn" msprop:Generator_ColumnVarNameInTable="columntrack_true" msprop:Generator_UserColumnName="track_true" type="xs:string" minOccurs="0" />
+              <xs:element name="track_mag" msprop:Generator_ColumnPropNameInRow="track_mag" msprop:Generator_ColumnPropNameInTable="track_magColumn" msprop:Generator_ColumnVarNameInTable="columntrack_mag" msprop:Generator_UserColumnName="track_mag" type="xs:string" minOccurs="0" />
+              <xs:element name="tas" msprop:Generator_ColumnPropNameInRow="tas" msprop:Generator_ColumnPropNameInTable="tasColumn" msprop:Generator_ColumnVarNameInTable="columntas" msprop:Generator_UserColumnName="tas" type="xs:string" minOccurs="0" />
+              <xs:element name="gs" msprop:Generator_ColumnPropNameInRow="gs" msprop:Generator_ColumnPropNameInTable="gsColumn" msprop:Generator_ColumnVarNameInTable="columngs" msprop:Generator_UserColumnName="gs" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_wind_comp" msprop:Generator_ColumnPropNameInRow="avg_wind_comp" msprop:Generator_ColumnPropNameInTable="avg_wind_compColumn" msprop:Generator_ColumnVarNameInTable="columnavg_wind_comp" msprop:Generator_UserColumnName="avg_wind_comp" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_wind_dir" msprop:Generator_ColumnPropNameInRow="avg_wind_dir" msprop:Generator_ColumnPropNameInTable="avg_wind_dirColumn" msprop:Generator_ColumnVarNameInTable="columnavg_wind_dir" msprop:Generator_UserColumnName="avg_wind_dir" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_wind_spd" msprop:Generator_ColumnPropNameInRow="avg_wind_spd" msprop:Generator_ColumnPropNameInTable="avg_wind_spdColumn" msprop:Generator_ColumnVarNameInTable="columnavg_wind_spd" msprop:Generator_UserColumnName="avg_wind_spd" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_tropopause" msprop:Generator_ColumnPropNameInRow="avg_tropopause" msprop:Generator_ColumnPropNameInTable="avg_tropopauseColumn" msprop:Generator_ColumnVarNameInTable="columnavg_tropopause" msprop:Generator_UserColumnName="avg_tropopause" type="xs:string" minOccurs="0" />
+              <xs:element name="avg_tdv" msprop:Generator_ColumnPropNameInRow="avg_tdv" msprop:Generator_ColumnPropNameInTable="avg_tdvColumn" msprop:Generator_ColumnVarNameInTable="columnavg_tdv" msprop:Generator_UserColumnName="avg_tdv" type="xs:string" minOccurs="0" />
+              <xs:element name="ete" msprop:Generator_ColumnPropNameInRow="ete" msprop:Generator_ColumnPropNameInTable="eteColumn" msprop:Generator_ColumnVarNameInTable="columnete" msprop:Generator_UserColumnName="ete" type="xs:string" minOccurs="0" />
+              <xs:element name="burn" msprop:Generator_ColumnPropNameInRow="burn" msprop:Generator_ColumnPropNameInTable="burnColumn" msprop:Generator_ColumnVarNameInTable="columnburn" msprop:Generator_UserColumnName="burn" type="xs:string" minOccurs="0" />
+              <xs:element name="route" msprop:Generator_ColumnPropNameInRow="route" msprop:Generator_ColumnPropNameInTable="routeColumn" msprop:Generator_ColumnVarNameInTable="columnroute" msprop:Generator_UserColumnName="route" type="xs:string" minOccurs="0" />
+              <xs:element name="route_ifps" msprop:Generator_ColumnPropNameInRow="route_ifps" msprop:Generator_ColumnPropNameInTable="route_ifpsColumn" msprop:Generator_ColumnVarNameInTable="columnroute_ifps" msprop:Generator_UserColumnName="route_ifps" type="xs:string" minOccurs="0" />
+              <xs:element name="metar" msprop:Generator_ColumnPropNameInRow="metar" msprop:Generator_ColumnPropNameInTable="metarColumn" msprop:Generator_ColumnVarNameInTable="columnmetar" msprop:Generator_UserColumnName="metar" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_time" msprop:Generator_ColumnPropNameInRow="metar_time" msprop:Generator_ColumnPropNameInTable="metar_timeColumn" msprop:Generator_ColumnVarNameInTable="columnmetar_time" msprop:Generator_UserColumnName="metar_time" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_category" msprop:Generator_ColumnPropNameInRow="metar_category" msprop:Generator_ColumnPropNameInTable="metar_categoryColumn" msprop:Generator_ColumnVarNameInTable="columnmetar_category" msprop:Generator_UserColumnName="metar_category" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_visibility" msprop:Generator_ColumnPropNameInRow="metar_visibility" msprop:Generator_ColumnPropNameInTable="metar_visibilityColumn" msprop:Generator_ColumnVarNameInTable="columnmetar_visibility" msprop:Generator_UserColumnName="metar_visibility" type="xs:string" minOccurs="0" />
+              <xs:element name="metar_ceiling" msprop:Generator_ColumnPropNameInRow="metar_ceiling" msprop:Generator_ColumnPropNameInTable="metar_ceilingColumn" msprop:Generator_ColumnVarNameInTable="columnmetar_ceiling" msprop:Generator_UserColumnName="metar_ceiling" type="xs:string" minOccurs="0" />
+              <xs:element name="taf" msprop:Generator_ColumnPropNameInRow="taf" msprop:Generator_ColumnPropNameInTable="tafColumn" msprop:Generator_ColumnVarNameInTable="columntaf" msprop:Generator_UserColumnName="taf" type="xs:string" minOccurs="0" />
+              <xs:element name="taf_time" msprop:Generator_ColumnPropNameInRow="taf_time" msprop:Generator_ColumnPropNameInTable="taf_timeColumn" msprop:Generator_ColumnVarNameInTable="columntaf_time" msprop:Generator_UserColumnName="taf_time" type="xs:string" minOccurs="0" />
               <xs:element ref="notam" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
+            <xs:attribute name="OFP_Id" msprop:Generator_ColumnPropNameInRow="OFP_Id" msprop:Generator_ColumnPropNameInTable="OFP_IdColumn" msprop:Generator_ColumnVarNameInTable="columnOFP_Id" msprop:Generator_UserColumnName="OFP_Id" type="xs:int" use="prohibited" />
           </xs:complexType>
         </xs:element>
-        <xs:element name="alternate_navlog" minOccurs="0" maxOccurs="1">
+        <xs:element name="alternate_navlog" msprop:Generator_RowEvHandlerName="alternate_navlogRowChangeEventHandler" msprop:Generator_RowDeletedName="alternate_navlogRowDeleted" msprop:Generator_RowDeletingName="alternate_navlogRowDeleting" msprop:Generator_RowEvArgName="alternate_navlogRowChangeEvent" msprop:Generator_TablePropName="alternate_navlog" msprop:Generator_RowChangedName="alternate_navlogRowChanged" msprop:Generator_RowChangingName="alternate_navlogRowChanging" msprop:Generator_TableClassName="alternate_navlogDataTable" msprop:Generator_RowClassName="alternate_navlogRow" msprop:Generator_TableVarName="tablealternate_navlog" msprop:Generator_UserTableName="alternate_navlog" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
               <xs:element ref="fix" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
+            <xs:attribute name="OFP_Id" msprop:Generator_ColumnPropNameInRow="OFP_Id" msprop:Generator_ColumnPropNameInTable="OFP_IdColumn" msprop:Generator_ColumnVarNameInTable="columnOFP_Id" msprop:Generator_UserColumnName="OFP_Id" type="xs:int" use="prohibited" />
           </xs:complexType>
         </xs:element>
-        <xs:element name="navlog" minOccurs="0" maxOccurs="1">
+        <xs:element name="navlog" msprop:Generator_RowEvHandlerName="navlogRowChangeEventHandler" msprop:Generator_RowDeletedName="navlogRowDeleted" msprop:Generator_RowDeletingName="navlogRowDeleting" msprop:Generator_RowEvArgName="navlogRowChangeEvent" msprop:Generator_TablePropName="navlog" msprop:Generator_RowChangedName="navlogRowChanged" msprop:Generator_RowChangingName="navlogRowChanging" msprop:Generator_TableClassName="navlogDataTable" msprop:Generator_RowClassName="navlogRow" msprop:Generator_TableVarName="tablenavlog" msprop:Generator_UserTableName="navlog" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
               <xs:element ref="fix" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
+            <xs:attribute name="OFP_Id" msprop:Generator_ColumnPropNameInRow="OFP_Id" msprop:Generator_ColumnPropNameInTable="OFP_IdColumn" msprop:Generator_ColumnVarNameInTable="columnOFP_Id" msprop:Generator_UserColumnName="OFP_Id" type="xs:int" use="prohibited" />
           </xs:complexType>
         </xs:element>
-
-        <!--
-        <xs:element name="atc" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="flightplan_text" type="xs:string" minOccurs="0" />
-              <xs:element name="route" type="xs:string" minOccurs="0" />
-              <xs:element name="route_ifps" type="xs:string" minOccurs="0" />
-              <xs:element name="callsign" type="xs:string" minOccurs="0" />
-              <xs:element name="flight_type" type="xs:string" minOccurs="0" />
-              <xs:element name="flight_rules" type="xs:string" minOccurs="0" />
-              <xs:element name="initial_spd" type="xs:string" minOccurs="0" />
-              <xs:element name="initial_spd_unit" type="xs:string" minOccurs="0" />
-              <xs:element name="initial_alt" type="xs:string" minOccurs="0" />
-              <xs:element name="initial_alt_unit" type="xs:string" minOccurs="0" />
-              <xs:element name="section18" type="xs:string" minOccurs="0" />
-              <xs:element name="fir_orig" type="xs:string" minOccurs="0" />
-              <xs:element name="fir_dest" type="xs:string" minOccurs="0" />
-              <xs:element name="fir_altn" type="xs:string" minOccurs="0" />
-              <xs:element name="fir_etops" type="xs:string" minOccurs="0" />
-              <xs:element name="fir_enroute" nillable="true" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:simpleContent msdata:ColumnName="fir_enroute_Text" msdata:Ordinal="0">
-                    <xs:extension base="xs:string">
-                    </xs:extension>
-                  </xs:simpleContent>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="aircraft" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="icaocode" type="xs:string" minOccurs="0" />
-              <xs:element name="iatacode" type="xs:string" minOccurs="0" />
-              <xs:element name="base_type" type="xs:string" minOccurs="0" />
-              <xs:element name="icao_code" type="xs:string" minOccurs="0" />
-              <xs:element name="iata_code" type="xs:string" minOccurs="0" />
-              <xs:element name="name" type="xs:string" minOccurs="0" />
-              <xs:element name="reg" type="xs:string" minOccurs="0" />
-              <xs:element name="fin" type="xs:string" minOccurs="0" />
-              <xs:element name="selcal" type="xs:string" minOccurs="0" />
-              <xs:element name="equip" type="xs:string" minOccurs="0" />
-              <xs:element name="equip_category" type="xs:string" minOccurs="0" />
-              <xs:element name="equip_navigation" type="xs:string" minOccurs="0" />
-              <xs:element name="equip_transponder" type="xs:string" minOccurs="0" />
-              <xs:element name="fuelfact" type="xs:string" minOccurs="0" />
-              <xs:element name="fuelfactor" type="xs:string" minOccurs="0" />
-              <xs:element name="max_passengers" type="xs:string" minOccurs="0" />
-              <xs:element name="supports_tlr" type="xs:string" minOccurs="0" />
-              <xs:element name="internal_id" type="xs:string" minOccurs="0" />
-              <xs:element name="is_custom" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="fuel" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="taxi" type="xs:string" minOccurs="0" />
-              <xs:element name="enroute_burn" type="xs:string" minOccurs="0" />
-              <xs:element name="contingency" type="xs:string" minOccurs="0" />
-              <xs:element name="alternate_burn" type="xs:string" minOccurs="0" />
-              <xs:element name="reserve" type="xs:string" minOccurs="0" />
-              <xs:element name="etops" type="xs:string" minOccurs="0" />
-              <xs:element name="extra" type="xs:string" minOccurs="0" />
-              <xs:element name="extra_required" type="xs:string" minOccurs="0" />
-              <xs:element name="extra_optional" type="xs:string" minOccurs="0" />
-              <xs:element name="min_takeoff" type="xs:string" minOccurs="0" />
-              <xs:element name="plan_takeoff" type="xs:string" minOccurs="0" />
-              <xs:element name="plan_ramp" type="xs:string" minOccurs="0" />
-              <xs:element name="plan_landing" type="xs:string" minOccurs="0" />
-              <xs:element name="avg_fuel_flow" type="xs:string" minOccurs="0" />
-              <xs:element name="max_tanks" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="fuel_extra" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="bucket" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="label" type="xs:string" minOccurs="0" />
-                    <xs:element name="fuel" type="xs:string" minOccurs="0" />
-                    <xs:element name="time" type="xs:string" minOccurs="0" />
-                    <xs:element name="required" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="times" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="est_time_enroute" type="xs:string" minOccurs="0" />
-              <xs:element name="sched_time_enroute" type="xs:string" minOccurs="0" />
-              <xs:element name="sched_out" type="xs:string" minOccurs="0" />
-              <xs:element name="sched_off" type="xs:string" minOccurs="0" />
-              <xs:element name="sched_on" type="xs:string" minOccurs="0" />
-              <xs:element name="sched_in" type="xs:string" minOccurs="0" />
-              <xs:element name="sched_block" type="xs:string" minOccurs="0" />
-              <xs:element name="est_out" type="xs:string" minOccurs="0" />
-              <xs:element name="est_off" type="xs:string" minOccurs="0" />
-              <xs:element name="est_on" type="xs:string" minOccurs="0" />
-              <xs:element name="est_in" type="xs:string" minOccurs="0" />
-              <xs:element name="est_block" type="xs:string" minOccurs="0" />
-              <xs:element name="orig_timezone" type="xs:string" minOccurs="0" />
-              <xs:element name="dest_timezone" type="xs:string" minOccurs="0" />
-              <xs:element name="taxi_out" type="xs:string" minOccurs="0" />
-              <xs:element name="taxi_in" type="xs:string" minOccurs="0" />
-              <xs:element name="reserve_time" type="xs:string" minOccurs="0" />
-              <xs:element name="endurance" type="xs:string" minOccurs="0" />
-              <xs:element name="contfuel_time" type="xs:string" minOccurs="0" />
-              <xs:element name="etopsfuel_time" type="xs:string" minOccurs="0" />
-              <xs:element name="extrafuel_time" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="weights" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="oew" type="xs:string" minOccurs="0" />
-              <xs:element name="pax_count" type="xs:string" minOccurs="0" />
-              <xs:element name="bag_count" type="xs:string" minOccurs="0" />
-              <xs:element name="pax_count_actual" type="xs:string" minOccurs="0" />
-              <xs:element name="bag_count_actual" type="xs:string" minOccurs="0" />
-              <xs:element name="pax_weight" type="xs:string" minOccurs="0" />
-              <xs:element name="bag_weight" type="xs:string" minOccurs="0" />
-              <xs:element name="freight_added" type="xs:string" minOccurs="0" />
-              <xs:element name="cargo" type="xs:string" minOccurs="0" />
-              <xs:element name="payload" type="xs:string" minOccurs="0" />
-              <xs:element name="est_zfw" type="xs:string" minOccurs="0" />
-              <xs:element name="max_zfw" type="xs:string" minOccurs="0" />
-              <xs:element name="est_tow" type="xs:string" minOccurs="0" />
-              <xs:element name="max_tow" type="xs:string" minOccurs="0" />
-              <xs:element name="max_tow_struct" type="xs:string" minOccurs="0" />
-              <xs:element name="tow_limit_code" type="xs:string" minOccurs="0" />
-              <xs:element name="est_ldw" type="xs:string" minOccurs="0" />
-              <xs:element name="max_ldw" type="xs:string" minOccurs="0" />
-              <xs:element name="est_ramp" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        -->  
-        
-        <!--
-        <xs:element name="impacts" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="plus_2000ft" type="xs:string" minOccurs="0" />
-              <xs:element name="plus_4000ft" type="xs:string" minOccurs="0" />
-              <xs:element name="plus_6000ft" type="xs:string" minOccurs="0" />
-              <xs:element name="higher_ci" type="xs:string" minOccurs="0" />
-              <xs:element name="lower_ci" type="xs:string" minOccurs="0" />
-              <xs:element name="minus_6000ft" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="time_enroute" type="xs:string" minOccurs="0" />
-                    <xs:element name="time_difference" type="xs:string" minOccurs="0" />
-                    <xs:element name="enroute_burn" type="xs:string" minOccurs="0" />
-                    <xs:element name="burn_difference" type="xs:string" minOccurs="0" />
-                    <xs:element name="ramp_fuel" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_fl" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_tas" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_mach" type="xs:string" minOccurs="0" />
-                    <xs:element name="cost_index" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="minus_4000ft" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="time_enroute" type="xs:string" minOccurs="0" />
-                    <xs:element name="time_difference" type="xs:string" minOccurs="0" />
-                    <xs:element name="enroute_burn" type="xs:string" minOccurs="0" />
-                    <xs:element name="burn_difference" type="xs:string" minOccurs="0" />
-                    <xs:element name="ramp_fuel" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_fl" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_tas" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_mach" type="xs:string" minOccurs="0" />
-                    <xs:element name="cost_index" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="minus_2000ft" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="time_enroute" type="xs:string" minOccurs="0" />
-                    <xs:element name="time_difference" type="xs:string" minOccurs="0" />
-                    <xs:element name="enroute_burn" type="xs:string" minOccurs="0" />
-                    <xs:element name="burn_difference" type="xs:string" minOccurs="0" />
-                    <xs:element name="ramp_fuel" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_fl" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_tas" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_mach" type="xs:string" minOccurs="0" />
-                    <xs:element name="cost_index" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="zfw_plus_1000" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="time_enroute" type="xs:string" minOccurs="0" />
-                    <xs:element name="time_difference" type="xs:string" minOccurs="0" />
-                    <xs:element name="enroute_burn" type="xs:string" minOccurs="0" />
-                    <xs:element name="burn_difference" type="xs:string" minOccurs="0" />
-                    <xs:element name="ramp_fuel" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_fl" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_tas" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_mach" type="xs:string" minOccurs="0" />
-                    <xs:element name="cost_index" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="zfw_minus_1000" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="time_enroute" type="xs:string" minOccurs="0" />
-                    <xs:element name="time_difference" type="xs:string" minOccurs="0" />
-                    <xs:element name="enroute_burn" type="xs:string" minOccurs="0" />
-                    <xs:element name="burn_difference" type="xs:string" minOccurs="0" />
-                    <xs:element name="ramp_fuel" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_fl" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_tas" type="xs:string" minOccurs="0" />
-                    <xs:element name="initial_mach" type="xs:string" minOccurs="0" />
-                    <xs:element name="cost_index" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="crew" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="pilot_id" type="xs:string" minOccurs="0" />
-              <xs:element name="cpt" type="xs:string" minOccurs="0" />
-              <xs:element name="fo" type="xs:string" minOccurs="0" />
-              <xs:element name="dx" type="xs:string" minOccurs="0" />
-              <xs:element name="pu" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="notams" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="rec-count" type="xs:string" minOccurs="0" />
-              <xs:element name="notamdrec" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="source_id" type="xs:string" minOccurs="0" />
-                    <xs:element name="account_id" type="xs:string" minOccurs="0" />
-                    <xs:element name="notam_id" type="xs:string" minOccurs="0" />
-                    <xs:element name="notam_part" type="xs:string" minOccurs="0" />
-                    <xs:element name="cns_location_id" type="xs:string" minOccurs="0" />
-                    <xs:element name="icao_id" type="xs:string" minOccurs="0" />
-                    <xs:element name="icao_name" type="xs:string" minOccurs="0" />
-                    <xs:element name="total_parts" type="xs:string" minOccurs="0" />
-                    <xs:element name="notam_created_dtg" type="xs:string" minOccurs="0" />
-                    <xs:element name="notam_effective_dtg" type="xs:string" minOccurs="0" />
-                    <xs:element name="notam_expire_dtg" type="xs:string" minOccurs="0" />
-                    <xs:element name="notam_expire_dtg_estimated" type="xs:string" minOccurs="0" />
-                    <xs:element name="notam_lastmod_dtg" type="xs:string" minOccurs="0" />
-                    <xs:element name="notam_inserted_dtg" type="xs:string" minOccurs="0" />
-                    <xs:element name="notam_text" type="xs:string" minOccurs="0" />
-                    <xs:element name="notam_report" type="xs:string" minOccurs="0" />
-                    <xs:element name="notam_nrc" type="xs:string" minOccurs="0" />
-                    <xs:element name="notam_qcode" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="weather" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="orig_metar" type="xs:string" minOccurs="0" />
-              <xs:element name="orig_taf" type="xs:string" minOccurs="0" />
-              <xs:element name="dest_metar" type="xs:string" minOccurs="0" />
-              <xs:element name="dest_taf" type="xs:string" minOccurs="0" />
-              <xs:element name="altn_metar" type="xs:string" minOccurs="0" />
-              <xs:element name="altn_taf" type="xs:string" minOccurs="0" />
-              <xs:element name="toaltn_metar" type="xs:string" minOccurs="0" />
-              <xs:element name="toaltn_taf" type="xs:string" minOccurs="0" />
-              <xs:element name="eualtn_metar" type="xs:string" minOccurs="0" />
-              <xs:element name="eualtn_taf" type="xs:string" minOccurs="0" />
-              <xs:element name="etops_metar" type="xs:string" minOccurs="0" />
-              <xs:element name="etops_taf" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="sigmets" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="sigmet" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="type" type="xs:string" minOccurs="0" />
-                    <xs:element name="loc" type="xs:string" minOccurs="0" />
-                    <xs:element name="address" type="xs:string" minOccurs="0" />
-                    <xs:element name="title" type="xs:string" minOccurs="0" />
-                    <xs:element name="fir" type="xs:string" minOccurs="0" />
-                    <xs:element name="fir_name" type="xs:string" minOccurs="0" />
-                    <xs:element name="id" type="xs:string" minOccurs="0" />
-                    <xs:element name="hazard" type="xs:string" minOccurs="0" />
-                    <xs:element name="qualifier" type="xs:string" minOccurs="0" />
-                    <xs:element name="issued" type="xs:string" minOccurs="0" />
-                    <xs:element name="start" type="xs:string" minOccurs="0" />
-                    <xs:element name="end" type="xs:string" minOccurs="0" />
-                    <xs:element name="text" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="text" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="nat_tracks" type="xs:string" minOccurs="0" />
-              <xs:element name="tlr_section" type="xs:string" minOccurs="0" />
-              <xs:element name="plan_html" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="database_updates" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="metar_taf" type="xs:string" minOccurs="0" />
-              <xs:element name="winds" type="xs:string" minOccurs="0" />
-              <xs:element name="sigwx" type="xs:string" minOccurs="0" />
-              <xs:element name="sigmet" type="xs:string" minOccurs="0" />
-              <xs:element name="notams" type="xs:string" minOccurs="0" />
-              <xs:element name="tracks" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="files" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="directory" type="xs:string" minOccurs="0" />
-              <xs:element ref="pdf" minOccurs="0" maxOccurs="unbounded" />
-              <xs:element name="file" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="fms_downloads" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="directory" type="xs:string" minOccurs="0" />
-              <xs:element ref="pdf" minOccurs="0" maxOccurs="unbounded" />
-              <xs:element name="abx" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="a3e" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="crx" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="cra" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="psx" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="efb" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="ef2" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="bbs" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="csf" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="ftr" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="gtn" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="vm5" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="vmx" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="ffa" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="fsc" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="fs9" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="mfs" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="mfn" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="m24" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="fsl" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="fsx" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="fsn" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="gfs" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="kml" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="ify" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="i74" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="ifa" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="ifw" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="inb" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="ina" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="ivo" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="xvd" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="xvp" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="ixg" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="jar" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="jhe" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="jfb" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="mdr" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="mda" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="lvd" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="mjc" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="mjq" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="atm" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="mvz" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="vms" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="pmo" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="pmr" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="pmw" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="pgt" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="mga" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="psm" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="qty" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="rmd" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="sbr" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="sfp" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="tdg" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="tfd" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="ufc" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="vas" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="vfp" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="wae" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="xfm" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="xpe" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="xpn" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="xp9" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="zbo" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="images" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="directory" type="xs:string" minOccurs="0" />
-              <xs:element name="map" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="links" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="skyvector" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="prefile" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="vatsim" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="site" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                    <xs:element name="form" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="ivao" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="site" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                    <xs:element name="form" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="pilotedge" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="site" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                    <xs:element name="form" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="poscon" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="name" type="xs:string" minOccurs="0" />
-                    <xs:element name="site" type="xs:string" minOccurs="0" />
-                    <xs:element name="link" type="xs:string" minOccurs="0" />
-                    <xs:element name="form" type="xs:string" minOccurs="0" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="api_params" minOccurs="0" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="airline" type="xs:string" minOccurs="0" />
-              <xs:element name="fltnum" type="xs:string" minOccurs="0" />
-              <xs:element name="type" type="xs:string" minOccurs="0" />
-              <xs:element name="orig" type="xs:string" minOccurs="0" />
-              <xs:element name="dest" type="xs:string" minOccurs="0" />
-              <xs:element name="date" type="xs:string" minOccurs="0" />
-              <xs:element name="dephour" type="xs:string" minOccurs="0" />
-              <xs:element name="depmin" type="xs:string" minOccurs="0" />
-              <xs:element name="route" type="xs:string" minOccurs="0" />
-              <xs:element name="stehour" type="xs:string" minOccurs="0" />
-              <xs:element name="stemin" type="xs:string" minOccurs="0" />
-              <xs:element name="reg" type="xs:string" minOccurs="0" />
-              <xs:element name="fin" type="xs:string" minOccurs="0" />
-              <xs:element name="selcal" type="xs:string" minOccurs="0" />
-              <xs:element name="pax" type="xs:string" minOccurs="0" />
-              <xs:element name="altn" type="xs:string" minOccurs="0" />
-              <xs:element name="fl" type="xs:string" minOccurs="0" />
-              <xs:element name="cpt" type="xs:string" minOccurs="0" />
-              <xs:element name="pid" type="xs:string" minOccurs="0" />
-              <xs:element name="fuelfactor" type="xs:string" minOccurs="0" />
-              <xs:element name="manualpayload" type="xs:string" minOccurs="0" />
-              <xs:element name="manualzfw" type="xs:string" minOccurs="0" />
-              <xs:element name="taxifuel" type="xs:string" minOccurs="0" />
-              <xs:element name="minfob" type="xs:string" minOccurs="0" />
-              <xs:element name="minfob_units" type="xs:string" minOccurs="0" />
-              <xs:element name="minfod" type="xs:string" minOccurs="0" />
-              <xs:element name="minfod_units" type="xs:string" minOccurs="0" />
-              <xs:element name="melfuel" type="xs:string" minOccurs="0" />
-              <xs:element name="melfuel_units" type="xs:string" minOccurs="0" />
-              <xs:element name="atcfuel" type="xs:string" minOccurs="0" />
-              <xs:element name="atcfuel_units" type="xs:string" minOccurs="0" />
-              <xs:element name="wxxfuel" type="xs:string" minOccurs="0" />
-              <xs:element name="wxxfuel_units" type="xs:string" minOccurs="0" />
-              <xs:element name="addedfuel" type="xs:string" minOccurs="0" />
-              <xs:element name="addedfuel_units" type="xs:string" minOccurs="0" />
-              <xs:element name="addedfuel_label" type="xs:string" minOccurs="0" />
-              <xs:element name="tankering" type="xs:string" minOccurs="0" />
-              <xs:element name="tankering_units" type="xs:string" minOccurs="0" />
-              <xs:element name="flightrules" type="xs:string" minOccurs="0" />
-              <xs:element name="flighttype" type="xs:string" minOccurs="0" />
-              <xs:element name="contpct" type="xs:string" minOccurs="0" />
-              <xs:element name="resvrule" type="xs:string" minOccurs="0" />
-              <xs:element name="taxiout" type="xs:string" minOccurs="0" />
-              <xs:element name="taxiin" type="xs:string" minOccurs="0" />
-              <xs:element name="cargo" type="xs:string" minOccurs="0" />
-              <xs:element name="origrwy" type="xs:string" minOccurs="0" />
-              <xs:element name="destrwy" type="xs:string" minOccurs="0" />
-              <xs:element name="climb" type="xs:string" minOccurs="0" />
-              <xs:element name="descent" type="xs:string" minOccurs="0" />
-              <xs:element name="cruisemode" type="xs:string" minOccurs="0" />
-              <xs:element name="cruisesub" type="xs:string" minOccurs="0" />
-              <xs:element name="planformat" type="xs:string" minOccurs="0" />
-              <xs:element name="pounds" type="xs:string" minOccurs="0" />
-              <xs:element name="navlog" type="xs:string" minOccurs="0" />
-              <xs:element name="etops" type="xs:string" minOccurs="0" />
-              <xs:element name="stepclimbs" type="xs:string" minOccurs="0" />
-              <xs:element name="tlr" type="xs:string" minOccurs="0" />
-              <xs:element name="notams_opt" type="xs:string" minOccurs="0" />
-              <xs:element name="firnot" type="xs:string" minOccurs="0" />
-              <xs:element name="maps" type="xs:string" minOccurs="0" />
-              <xs:element name="turntoflt" type="xs:string" minOccurs="0" />
-              <xs:element name="turntoapt" type="xs:string" minOccurs="0" />
-              <xs:element name="turntotime" type="xs:string" minOccurs="0" />
-              <xs:element name="turnfrflt" type="xs:string" minOccurs="0" />
-              <xs:element name="turnfrapt" type="xs:string" minOccurs="0" />
-              <xs:element name="turnfrtime" type="xs:string" minOccurs="0" />
-              <xs:element name="fuelstats" type="xs:string" minOccurs="0" />
-              <xs:element name="contlabel" type="xs:string" minOccurs="0" />
-              <xs:element name="static_id" type="xs:string" minOccurs="0" />
-              <xs:element name="acdata" type="xs:string" minOccurs="0" />
-              <xs:element name="acdata_parsed" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        -->
       </xs:sequence>
+      <xs:attribute name="OFP_Id" msdata:AutoIncrement="true" msprop:Generator_ColumnPropNameInRow="OFP_Id" msprop:Generator_ColumnPropNameInTable="OFP_IdColumn" msprop:Generator_ColumnVarNameInTable="columnOFP_Id" msprop:Generator_UserColumnName="OFP_Id" type="xs:int" msdata:AllowDBNull="false" use="prohibited" />
     </xs:complexType>
   </xs:element>
-  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="NewDataSet" msprop:Generator_DataSetName="NewDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="notam" />
@@ -1357,5 +330,94 @@
         <xs:element ref="OFP" />
       </xs:choice>
     </xs:complexType>
+    <xs:unique name="wind_data_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//wind_data" />
+      <xs:field xpath="@wind_data_Id" />
+    </xs:unique>
+    <xs:unique name="fir_crossing_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//fir_crossing" />
+      <xs:field xpath="@fir_crossing_Id" />
+    </xs:unique>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//fix" />
+      <xs:field xpath="@fix_Id" />
+    </xs:unique>
+    <xs:unique name="origin_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//origin" />
+      <xs:field xpath="@origin_Id" />
+    </xs:unique>
+    <xs:unique name="OFP_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//OFP" />
+      <xs:field xpath="@OFP_Id" />
+    </xs:unique>
+    <xs:keyref name="OFP_navlog" refer="OFP_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="OFP" msprop:rel_Generator_UserChildTable="navlog" msprop:rel_Generator_RelationVarName="relationOFP_navlog" msprop:rel_Generator_ChildPropName="GetnavlogRows" msprop:rel_Generator_ParentPropName="OFPRow" msprop:rel_Generator_UserRelationName="OFP_navlog">
+      <xs:selector xpath=".//navlog" />
+      <xs:field xpath="@OFP_Id" />
+    </xs:keyref>
+    <xs:keyref name="OFP_alternate_navlog" refer="OFP_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="OFP" msprop:rel_Generator_UserChildTable="alternate_navlog" msprop:rel_Generator_RelationVarName="relationOFP_alternate_navlog" msprop:rel_Generator_ChildPropName="Getalternate_navlogRows" msprop:rel_Generator_ParentPropName="OFPRow" msprop:rel_Generator_UserRelationName="OFP_alternate_navlog">
+      <xs:selector xpath=".//alternate_navlog" />
+      <xs:field xpath="@OFP_Id" />
+    </xs:keyref>
+    <xs:keyref name="OFP_alternate" refer="OFP_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="OFP" msprop:rel_Generator_UserChildTable="alternate" msprop:rel_Generator_RelationVarName="relationOFP_alternate" msprop:rel_Generator_ChildPropName="GetalternateRows" msprop:rel_Generator_ParentPropName="OFPRow" msprop:rel_Generator_UserRelationName="OFP_alternate">
+      <xs:selector xpath=".//alternate" />
+      <xs:field xpath="@OFP_Id" />
+    </xs:keyref>
+    <xs:keyref name="OFP_destination" refer="OFP_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="OFP" msprop:rel_Generator_UserChildTable="destination" msprop:rel_Generator_RelationVarName="relationOFP_destination" msprop:rel_Generator_ChildPropName="GetdestinationRows" msprop:rel_Generator_ParentPropName="OFPRow" msprop:rel_Generator_UserRelationName="OFP_destination">
+      <xs:selector xpath=".//destination" />
+      <xs:field xpath="@OFP_Id" />
+    </xs:keyref>
+    <xs:keyref name="OFP_origin" refer="OFP_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="OFP" msprop:rel_Generator_UserChildTable="origin" msprop:rel_Generator_RelationVarName="relationOFP_origin" msprop:rel_Generator_ChildPropName="GetoriginRows" msprop:rel_Generator_ParentPropName="OFPRow" msprop:rel_Generator_UserRelationName="OFP_origin">
+      <xs:selector xpath=".//origin" />
+      <xs:field xpath="@OFP_Id" />
+    </xs:keyref>
+    <xs:keyref name="origin_atis" refer="origin_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="origin" msprop:rel_Generator_UserChildTable="atis" msprop:rel_Generator_RelationVarName="relationorigin_atis" msprop:rel_Generator_ChildPropName="GetatisRows" msprop:rel_Generator_ParentPropName="originRow" msprop:rel_Generator_UserRelationName="origin_atis">
+      <xs:selector xpath=".//atis" />
+      <xs:field xpath="@origin_Id" />
+    </xs:keyref>
+    <xs:keyref name="OFP_general" refer="OFP_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="OFP" msprop:rel_Generator_UserChildTable="general" msprop:rel_Generator_RelationVarName="relationOFP_general" msprop:rel_Generator_ChildPropName="GetgeneralRows" msprop:rel_Generator_ParentPropName="OFPRow" msprop:rel_Generator_UserRelationName="OFP_general">
+      <xs:selector xpath=".//general" />
+      <xs:field xpath="@OFP_Id" />
+    </xs:keyref>
+    <xs:keyref name="navlog_fix" refer="navlog_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="navlog" msprop:rel_Generator_UserChildTable="fix" msprop:rel_Generator_RelationVarName="relationnavlog_fix" msprop:rel_Generator_UserRelationName="navlog_fix" msprop:rel_Generator_ChildPropName="GetfixRows" msprop:rel_Generator_ParentPropName="navlogRow">
+      <xs:selector xpath=".//fix" />
+      <xs:field xpath="@navlog_Id" />
+    </xs:keyref>
+    <xs:keyref name="alternate_navlog_fix" refer="alternate_navlog_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="alternate_navlog" msprop:rel_Generator_UserChildTable="fix" msprop:rel_Generator_RelationVarName="relationalternate_navlog_fix" msprop:rel_Generator_UserRelationName="alternate_navlog_fix" msprop:rel_Generator_ChildPropName="GetfixRows" msprop:rel_Generator_ParentPropName="alternate_navlogRow">
+      <xs:selector xpath=".//fix" />
+      <xs:field xpath="@alternate_navlog_Id" />
+    </xs:keyref>
+    <xs:keyref name="fix_fir_crossing" refer="Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="fix" msprop:rel_Generator_UserChildTable="fir_crossing" msprop:rel_Generator_RelationVarName="relationfix_fir_crossing" msprop:rel_Generator_ChildPropName="Getfir_crossingRows" msprop:rel_Generator_ParentPropName="fixRow" msprop:rel_Generator_UserRelationName="fix_fir_crossing">
+      <xs:selector xpath=".//fir_crossing" />
+      <xs:field xpath="@fix_Id" />
+    </xs:keyref>
+    <xs:keyref name="fir_crossing_fir" refer="fir_crossing_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="fir_crossing" msprop:rel_Generator_UserChildTable="fir" msprop:rel_Generator_RelationVarName="relationfir_crossing_fir" msprop:rel_Generator_ChildPropName="GetfirRows" msprop:rel_Generator_ParentPropName="fir_crossingRow" msprop:rel_Generator_UserRelationName="fir_crossing_fir">
+      <xs:selector xpath=".//fir" />
+      <xs:field xpath="@fir_crossing_Id" />
+    </xs:keyref>
+    <xs:keyref name="fix_wind_data" refer="Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="fix" msprop:rel_Generator_UserChildTable="wind_data" msprop:rel_Generator_RelationVarName="relationfix_wind_data" msprop:rel_Generator_ChildPropName="Getwind_dataRows" msprop:rel_Generator_ParentPropName="fixRow" msprop:rel_Generator_UserRelationName="fix_wind_data">
+      <xs:selector xpath=".//wind_data" />
+      <xs:field xpath="@fix_Id" />
+    </xs:keyref>
+    <xs:keyref name="wind_data_level" refer="wind_data_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="wind_data" msprop:rel_Generator_UserChildTable="level" msprop:rel_Generator_RelationVarName="relationwind_data_level" msprop:rel_Generator_ChildPropName="GetlevelRows" msprop:rel_Generator_ParentPropName="wind_dataRow" msprop:rel_Generator_UserRelationName="wind_data_level">
+      <xs:selector xpath=".//level" />
+      <xs:field xpath="@wind_data_Id" />
+    </xs:keyref>
+    <xs:keyref name="alternate_notam" refer="alternate_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="alternate" msprop:rel_Generator_UserChildTable="notam" msprop:rel_Generator_RelationVarName="relationalternate_notam" msprop:rel_Generator_UserRelationName="alternate_notam" msprop:rel_Generator_ChildPropName="GetnotamRows" msprop:rel_Generator_ParentPropName="alternateRow">
+      <xs:selector xpath=".//notam" />
+      <xs:field xpath="@alternate_Id" />
+    </xs:keyref>
+    <xs:keyref name="destination_notam" refer="destination_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="destination" msprop:rel_Generator_UserChildTable="notam" msprop:rel_Generator_RelationVarName="relationdestination_notam" msprop:rel_Generator_UserRelationName="destination_notam" msprop:rel_Generator_ChildPropName="GetnotamRows" msprop:rel_Generator_ParentPropName="destinationRow">
+      <xs:selector xpath=".//notam" />
+      <xs:field xpath="@destination_Id" />
+    </xs:keyref>
+    <xs:keyref name="origin_notam" refer="origin_Constraint1" msdata:IsNested="true" msprop:rel_Generator_UserParentTable="origin" msprop:rel_Generator_UserChildTable="notam" msprop:rel_Generator_RelationVarName="relationorigin_notam" msprop:rel_Generator_UserRelationName="origin_notam" msprop:rel_Generator_ChildPropName="GetnotamRows" msprop:rel_Generator_ParentPropName="originRow">
+      <xs:selector xpath=".//notam" />
+      <xs:field xpath="@origin_Id" />
+    </xs:keyref>
   </xs:element>
+  <xs:annotation>
+    <xs:appinfo>
+      <msdata:Relationship name="destination_atis" msdata:parent="destination" msdata:child="atis" msdata:parentkey="destination_Id" msdata:childkey="origin_Id" msprop:Generator_UserParentTable="destination" msprop:Generator_UserChildTable="atis" msprop:Generator_RelationVarName="relationdestination_atis" msprop:Generator_UserRelationName="destination_atis" msprop:Generator_ChildPropName="GetatisRows" msprop:Generator_ParentPropName="destinationRow" />
+    </xs:appinfo>
+  </xs:annotation>
 </xs:schema>
