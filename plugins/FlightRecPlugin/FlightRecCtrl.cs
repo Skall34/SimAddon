@@ -276,7 +276,7 @@ namespace FlightRecPlugin
                     simReady = true;
                 }
 
-                if (dbg!=null && dbg.Visible)
+                if (dbg != null && dbg.Visible)
                 {
                     dbg.updateInfos(currentFlightStatus);
                 }
@@ -586,7 +586,7 @@ namespace FlightRecPlugin
             lbFret.Text = "Acars initializing ..... please wait";
             // Effacez les éléments existants dans la combobox
             cbImmat.Items.Clear();
-            if ((data.avions != null)&&(data.avions.Count>0))
+            if ((data.avions != null) && (data.avions.Count > 0))
             {
                 data.avions.Sort();
                 // Parcourez la liste des avions
@@ -635,7 +635,7 @@ namespace FlightRecPlugin
 
         private void RemplirComboMissions()
         {
-            if ((data.missions != null)&&(data.missions.Count>0))
+            if ((data.missions != null) && (data.missions.Count > 0))
             {
                 cbMission.Items.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
                 missions.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
@@ -820,25 +820,21 @@ namespace FlightRecPlugin
                         { "payload", saveFlightDialog.Cargo.ToString("0.00", CultureInfo.InvariantCulture) }
                     };
 
-                    //PB temporary disable the checks for the start and end iata, fuel, time and mission
-
-                    if (string.IsNullOrWhiteSpace(lbStartIata.Text) || lbStartIata.Text == "Not Yet Available")
+                    if (string.IsNullOrWhiteSpace(saveFlightDialog.DepartureICAO) || saveFlightDialog.DepartureICAO == "Not Yet Available")
                         throw new Exception("Aéroport de départ non détecté !");
-                    if (string.IsNullOrWhiteSpace(lbEndIata.Text) || lbEndIata.Text == "Waiting end flight ...")
+                    if (string.IsNullOrWhiteSpace(saveFlightDialog.ArrivalICAO) || saveFlightDialog.ArrivalICAO == "Waiting end flight ...")
                         throw new Exception("Aéroport d’arrivée non détecté !");
-                    if (string.IsNullOrWhiteSpace(cbMission.Text))
+                    if (string.IsNullOrWhiteSpace(saveFlightDialog.Text))
                         throw new Exception("Mission non sélectionnée !");
-                    if (_startFuel == 0 || _endFuel == 0)
+                    if (saveFlightDialog.DepartureFuel == 0 || saveFlightDialog.ArrivalFuel == 0)
                         throw new Exception("Carburant non détecté !");
-                    if (_startTime == DateTime.UnixEpoch || _endTime == DateTime.UnixEpoch)
+                    if (saveFlightDialog.DepartureTime == DateTime.UnixEpoch || saveFlightDialog.ArrivalTime == DateTime.UnixEpoch)
                         throw new Exception("Heure de départ ou d’arrivée non détectée !");
                     File.WriteAllText("debug_flightdata.txt", string.Join("\n", flightData.Select(kv => $"{kv.Key} = {kv.Value}")));
-
 
                     bool ok = await data.SendFlightDataToPhpAsync(flightData);
                     int result = ok ? 1 : 0;
                     // Fin JFK 18062025
-                    //int result = await urlDeserializer.PushFlightAsync(data);
                     if (0 != result)
                     {
                         //store last plane used
@@ -858,6 +854,28 @@ namespace FlightRecPlugin
                     {
                         //en, cas d'erreur, affiche une popup avec le message
                         ShowMsgBox("Error", "Error while sending flight data.", MessageBoxButtons.OK);
+
+                        Logger.WriteLine("Error while sending flight data to php script. Result = " + result);
+                        //store the flight in the local flightbook
+                        Flight newFlight = new Flight
+                        {
+                            immatriculation = saveFlightDialog.Immat,
+                            departureICAO = saveFlightDialog.DepartureICAO,
+                            departureFuel = saveFlightDialog.DepartureFuel,
+                            departureTime = saveFlightDialog.DepartureTime,
+                            arrivalICAO = saveFlightDialog.ArrivalICAO,
+                            arrivalFuel = saveFlightDialog.ArrivalFuel,
+                            arrivalTime = saveFlightDialog.ArrivalTime,
+                            noteDuVol = saveFlightDialog.Note,
+                            mission = saveFlightDialog.Mission,
+                            commentaire = saveFlightDialog.Comment,
+                            payload = saveFlightDialog.Cargo
+                        };
+
+                        LocalFlightBook localFlightBook = new LocalFlightBook();
+                        localFlightBook.loadFromJson(Properties.Settings.Default.LocalFlightbookFile);
+                        localFlightBook.AddFlight(newFlight);
+                        localFlightBook.saveToJson(Properties.Settings.Default.LocalFlightbookFile);
                     }
                     // On grise le bouton save flight pour éviter les doubles envois
                     //btnSubmit.Enabled = false;
@@ -1200,19 +1218,23 @@ namespace FlightRecPlugin
                         case ("Monomoteur"):
                             {
                                 panelAircraftTypeIcon.BackgroundImage = Properties.Resources.monomoteur;
-                            }; break;
+                            }
+                            ; break;
                         case ("Bimoteur"):
                             {
                                 panelAircraftTypeIcon.BackgroundImage = Properties.Resources.bimoteur;
-                            }; break;
+                            }
+                            ; break;
                         case ("Liner"):
                             {
                                 panelAircraftTypeIcon.BackgroundImage = Properties.Resources.liner;
-                            }; break;
+                            }
+                            ; break;
                         case ("Helico"):
                             {
                                 panelAircraftTypeIcon.BackgroundImage = Properties.Resources.helico;
-                            }; break;
+                            }
+                            ; break;
                     }
 
 
@@ -1268,6 +1290,27 @@ namespace FlightRecPlugin
             engineStopTimer.Stop();
 
             SimEvent(SimEventArg.EventType.ENGINESTOP);
+
+            //save the flight to the local flightbook
+            LocalFlightBook localFlightBook = new LocalFlightBook();
+            localFlightBook.loadFromJson(Properties.Settings.Default.LocalFlightbookFile);
+            Flight newFlight = new Flight
+            {
+                immatriculation = cbImmat.Text,
+                departureICAO = lbStartIata.Text,
+                departureFuel = _startFuel,
+                departureTime = _startTime,
+                arrivalICAO = lbEndIata.Text,
+                arrivalFuel = _endFuel,
+                arrivalTime = _endTime,
+                noteDuVol = _note,
+                mission = cbMission.Text,
+                commentaire = tbCommentaires.Text,
+                payload = _endPayload
+            };
+            localFlightBook.AddFlight(newFlight);
+            localFlightBook.saveToJson(Properties.Settings.Default.LocalFlightbookFile);
+
         }
 
         private void checkParameters()
@@ -1447,6 +1490,13 @@ namespace FlightRecPlugin
             {
                 tbEndICAO.Text = eventArg.value;
             }
+        }
+
+        private void btnFlightbook_Click(object sender, EventArgs e)
+        {
+            LocalFlightbookForm localFlightbookForm = new LocalFlightbookForm();
+            localFlightbookForm.loadFlightbook(Properties.Settings.Default.LocalFlightbookFile);
+            localFlightbookForm.ShowDialog(this);
         }
     }
 }

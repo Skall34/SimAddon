@@ -58,5 +58,17 @@ namespace FlightRecPlugin.Properties {
                 this["lastSimPlane"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("localFlightbook.json")]
+        public string LocalFlightbookFile {
+            get {
+                return ((string)(this["LocalFlightbookFile"]));
+            }
+            set {
+                this["LocalFlightbookFile"] = value;
+            }
+        }
     }
 }

@@ -106,6 +106,7 @@ namespace FlightRecPlugin
             engineStopTimer = new Timer(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox5 = new GroupBox();
+            btnFlightbook = new Button();
             timerUpdateStaticValues = new Timer(components);
             splitContainer1 = new SplitContainer();
             gbDynamicData.SuspendLayout();
@@ -888,6 +889,7 @@ namespace FlightRecPlugin
             // groupBox5
             // 
             groupBox5.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox5.Controls.Add(btnFlightbook);
             groupBox5.Controls.Add(btnReset);
             groupBox5.Controls.Add(btnSubmit);
             groupBox5.Location = new Point(5, 232);
@@ -895,6 +897,17 @@ namespace FlightRecPlugin
             groupBox5.Size = new Size(540, 48);
             groupBox5.TabIndex = 42;
             groupBox5.TabStop = false;
+            // 
+            // btnFlightbook
+            // 
+            btnFlightbook.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnFlightbook.Location = new Point(112, 15);
+            btnFlightbook.Name = "btnFlightbook";
+            btnFlightbook.Size = new Size(95, 27);
+            btnFlightbook.TabIndex = 26;
+            btnFlightbook.Text = "Flightbook";
+            btnFlightbook.UseVisualStyleBackColor = true;
+            btnFlightbook.Click += btnFlightbook_Click;
             // 
             // timerUpdateStaticValues
             // 
@@ -1026,5 +1039,6 @@ namespace FlightRecPlugin
         private SimAddonControls.LedBulb ledCheckAircraft;
         private SimAddonControls.LedBulb ledCheckPayload;
         private ToolStripMenuItem debugToolStripMenuItem;
+        private Button btnFlightbook;
     }
 }

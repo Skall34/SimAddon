@@ -11,5 +11,8 @@
     <Setting Name="lastSimPlane" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="LocalFlightbookFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">localFlightbook.json</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
