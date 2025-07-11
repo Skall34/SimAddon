@@ -1,12 +1,16 @@
-﻿using SimAddonLogger;
+﻿using FlightRecPlugin.Properties;
+using SimAddonLogger;
 using SimDataManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Quic;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,6 +21,8 @@ namespace FlightRecPlugin
     public partial class SaveFlightDialog : Form
     {
         simData data;
+
+        public string Callsign { get; set; }
         public string Immat
         {
             get
@@ -167,9 +173,27 @@ namespace FlightRecPlugin
             dtDeparture.Value = DateTime.Now;
             dtArrival.Value = DateTime.Now;
             valNote.Value = 8;
+            List<string> missions = new List<string>();
+
+            missions.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
+            Missions = missions;
+
+            data.avions.Sort();
+            // Parcourez la liste des avions
+            List<string> immatriculations = new List<string>();
+            foreach (Avion avion in data.avions)
+            {
+                if (null != avion.Immat)
+                {
+                    //immatriculations.Add(avion.Immat);
+                    cbImmat.Items.Add(avion);
+                    immatriculations.Add(avion.Immat);
+                }
+            }
+            Planes = immatriculations;
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
             bool result = true;
 
@@ -236,8 +260,51 @@ namespace FlightRecPlugin
 
             if (result)
             {
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                Dictionary<string, string> values = new Dictionary<string, string>();
+
+                // Construction du dictionnaire à partir de flightdata
+                var flightData = new Dictionary<string, string>
+                    {
+                        { "callsign", Callsign},
+                        { "immatriculation", Immat },
+                        { "departure_icao", DepartureICAO },
+                        { "departure_fuel", DepartureFuel.ToString("0.00", CultureInfo.InvariantCulture) },
+                        { "departure_time", DepartureTime.ToShortTimeString()},
+                        { "arrival_icao", ArrivalICAO },
+                        { "arrival_fuel", ArrivalFuel.ToString("0.00", CultureInfo.InvariantCulture) },
+                        { "arrival_time", ArrivalTime.ToShortTimeString() },
+                        { "note_du_vol", Note.ToString("0.00") },
+                        { "mission", Mission },
+                        { "commentaire", Comment },
+                        { "payload", Cargo.ToString("0.00", CultureInfo.InvariantCulture) }
+                    };
+
+                if (string.IsNullOrWhiteSpace(DepartureICAO) || DepartureICAO == "Not Yet Available")
+                    throw new Exception("Aéroport de départ non détecté !");
+                if (string.IsNullOrWhiteSpace(ArrivalICAO) || ArrivalICAO == "Waiting end flight ...")
+                    throw new Exception("Aéroport d’arrivée non détecté !");
+                if (string.IsNullOrWhiteSpace(Mission))
+                    throw new Exception("Mission non sélectionnée !");
+                if (DepartureFuel == 0 || ArrivalFuel == 0)
+                    throw new Exception("Carburant non détecté !");
+                if (DepartureTime == DateTime.UnixEpoch || ArrivalTime == DateTime.UnixEpoch)
+                    throw new Exception("Heure de départ ou d’arrivée non détectée !");
+                File.WriteAllText("debug_flightdata.txt", string.Join("\n", flightData.Select(kv => $"{kv.Key} = {kv.Value}")));
+
+                result = await data.SendFlightDataToPhpAsync(flightData);
+                // Fin JFK 18062025
+
+
+                if (result)
+                {
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Error sending flight to server");
+                this.DialogResult = DialogResult.None;
             }
         }
 

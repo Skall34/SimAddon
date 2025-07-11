@@ -72,5 +72,18 @@ namespace FlightRecPlugin
                 Logger.WriteLine($"Error saving flights to {filename}: {ex.Message}");
             }
         }
+
+        internal void RemoveFlightAt(int selectedIndex)
+        {
+            if (selectedIndex >= 0 && selectedIndex < Flights.Count)
+            {
+                Flights.RemoveAt(selectedIndex);
+                Logger.WriteLine($"Flight at index {selectedIndex} removed successfully.");
+            }
+            else
+            {
+                Logger.WriteLine($"Error: Invalid index {selectedIndex} for removing flight.");
+            }
+        }
     }
 }

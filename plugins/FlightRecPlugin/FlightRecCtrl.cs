@@ -770,12 +770,10 @@ namespace FlightRecPlugin
 
                 string fullComment = tbCommentaires.Text;
                 //crée un dictionnaire des valeurs à envoyer
-                SaveFlightDialog saveFlightDialog = new SaveFlightDialog(data)
-                {
-                    Missions = missions,
-                    Planes = immats
-                };
+                SaveFlightDialog saveFlightDialog = new SaveFlightDialog(data);
 
+
+                saveFlightDialog.Callsign = tbCallsign.Text;
                 saveFlightDialog.Immat = cbImmat.Text;
                 saveFlightDialog.Comment = fullComment;
                 saveFlightDialog.Cargo = _endPayload;
@@ -800,83 +798,18 @@ namespace FlightRecPlugin
 
                 if (saveFlightDialog.ShowDialog() == DialogResult.OK)
                 {
+                    //store last plane used
+                    string SimPlane = lbLibelleAvion.Text;
+                    Properties.Settings.Default.lastSimPlane = SimPlane;
+                    // #34 sauvegarder la derniere immat utilisée
+                    Settings.Default.lastImmat = saveFlightDialog.Immat;
+                    Settings.Default.Save();
 
-                    Dictionary<string, string> values = new Dictionary<string, string>();
+                    //si tout va bien...
+                    ShowMsgBox("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder", MessageBoxButtons.OK);
 
-                    // Construction du dictionnaire à partir de flightdata
-                    var flightData = new Dictionary<string, string>
-                    {
-                        { "callsign", tbCallsign.Text },
-                        { "immatriculation", saveFlightDialog.Immat },
-                        { "departure_icao", saveFlightDialog.DepartureICAO },
-                        { "departure_fuel", saveFlightDialog.DepartureFuel.ToString("0.00", CultureInfo.InvariantCulture) },
-                        { "departure_time", saveFlightDialog.DepartureTime.ToShortTimeString()},
-                        { "arrival_icao", saveFlightDialog.ArrivalICAO },
-                        { "arrival_fuel", saveFlightDialog.ArrivalFuel.ToString("0.00", CultureInfo.InvariantCulture) },
-                        { "arrival_time", saveFlightDialog.ArrivalTime.ToShortTimeString() },
-                        { "note_du_vol", saveFlightDialog.Note.ToString("0.00") },
-                        { "mission", saveFlightDialog.Mission },
-                        { "commentaire", saveFlightDialog.Comment },
-                        { "payload", saveFlightDialog.Cargo.ToString("0.00", CultureInfo.InvariantCulture) }
-                    };
-
-                    if (string.IsNullOrWhiteSpace(saveFlightDialog.DepartureICAO) || saveFlightDialog.DepartureICAO == "Not Yet Available")
-                        throw new Exception("Aéroport de départ non détecté !");
-                    if (string.IsNullOrWhiteSpace(saveFlightDialog.ArrivalICAO) || saveFlightDialog.ArrivalICAO == "Waiting end flight ...")
-                        throw new Exception("Aéroport d’arrivée non détecté !");
-                    if (string.IsNullOrWhiteSpace(saveFlightDialog.Text))
-                        throw new Exception("Mission non sélectionnée !");
-                    if (saveFlightDialog.DepartureFuel == 0 || saveFlightDialog.ArrivalFuel == 0)
-                        throw new Exception("Carburant non détecté !");
-                    if (saveFlightDialog.DepartureTime == DateTime.UnixEpoch || saveFlightDialog.ArrivalTime == DateTime.UnixEpoch)
-                        throw new Exception("Heure de départ ou d’arrivée non détectée !");
-                    File.WriteAllText("debug_flightdata.txt", string.Join("\n", flightData.Select(kv => $"{kv.Key} = {kv.Value}")));
-
-                    bool ok = await data.SendFlightDataToPhpAsync(flightData);
-                    int result = ok ? 1 : 0;
-                    // Fin JFK 18062025
-                    if (0 != result)
-                    {
-                        //store last plane used
-                        string SimPlane = lbLibelleAvion.Text;
-                        Properties.Settings.Default.lastSimPlane = SimPlane;
-                        // #34 sauvegarder la derniere immat utilisée
-                        Settings.Default.lastImmat = saveFlightDialog.Immat;
-                        Settings.Default.Save();
-
-                        //si tout va bien...
-                        ShowMsgBox("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder", MessageBoxButtons.OK);
-
-                        //reset le vol sans demande de confirmation
-                        resetFlight(true);
-                    }
-                    else
-                    {
-                        //en, cas d'erreur, affiche une popup avec le message
-                        ShowMsgBox("Error", "Error while sending flight data.", MessageBoxButtons.OK);
-
-                        Logger.WriteLine("Error while sending flight data to php script. Result = " + result);
-                        //store the flight in the local flightbook
-                        Flight newFlight = new Flight
-                        {
-                            immatriculation = saveFlightDialog.Immat,
-                            departureICAO = saveFlightDialog.DepartureICAO,
-                            departureFuel = saveFlightDialog.DepartureFuel,
-                            departureTime = saveFlightDialog.DepartureTime,
-                            arrivalICAO = saveFlightDialog.ArrivalICAO,
-                            arrivalFuel = saveFlightDialog.ArrivalFuel,
-                            arrivalTime = saveFlightDialog.ArrivalTime,
-                            noteDuVol = saveFlightDialog.Note,
-                            mission = saveFlightDialog.Mission,
-                            commentaire = saveFlightDialog.Comment,
-                            payload = saveFlightDialog.Cargo
-                        };
-
-                        LocalFlightBook localFlightBook = new LocalFlightBook();
-                        localFlightBook.loadFromJson(Properties.Settings.Default.LocalFlightbookFile);
-                        localFlightBook.AddFlight(newFlight);
-                        localFlightBook.saveToJson(Properties.Settings.Default.LocalFlightbookFile);
-                    }
+                    //reset le vol sans demande de confirmation
+                    resetFlight(true);
                     // On grise le bouton save flight pour éviter les doubles envois
                     //btnSubmit.Enabled = false;
                     submitFlightToolStripMenuItem.Enabled = false;
@@ -1494,7 +1427,7 @@ namespace FlightRecPlugin
 
         private void btnFlightbook_Click(object sender, EventArgs e)
         {
-            LocalFlightbookForm localFlightbookForm = new LocalFlightbookForm();
+            LocalFlightbookForm localFlightbookForm = new LocalFlightbookForm(data);
             localFlightbookForm.loadFlightbook(Properties.Settings.Default.LocalFlightbookFile);
             localFlightbookForm.ShowDialog(this);
         }

@@ -35,11 +35,16 @@
             Arrival = new System.Windows.Forms.ColumnHeader();
             Immat = new System.Windows.Forms.ColumnHeader();
             comments = new System.Windows.Forms.ColumnHeader();
+            contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(components);
+            pushToServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             btnOK = new System.Windows.Forms.Button();
             btnClear = new System.Windows.Forms.Button();
             toolTip1 = new System.Windows.Forms.ToolTip(components);
             tbFlightDetails = new System.Windows.Forms.TextBox();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
+            contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -49,6 +54,7 @@
             // listView1
             // 
             listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { Date, Departure, Arrival, Immat, comments });
+            listView1.ContextMenuStrip = contextMenuStrip1;
             listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             listView1.FullRowSelect = true;
             listView1.GridLines = true;
@@ -86,6 +92,31 @@
             // 
             comments.Text = "Comments";
             comments.Width = 150;
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { pushToServerToolStripMenuItem, toolStripSeparator1, deleteToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new System.Drawing.Size(149, 54);
+            // 
+            // pushToServerToolStripMenuItem
+            // 
+            pushToServerToolStripMenuItem.Name = "pushToServerToolStripMenuItem";
+            pushToServerToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            pushToServerToolStripMenuItem.Text = "Push to server";
+            pushToServerToolStripMenuItem.Click += pushToServerToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new System.Drawing.Size(145, 6);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            deleteToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            deleteToolStripMenuItem.Text = "Delete";
+            deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
             // btnOK
             // 
@@ -147,6 +178,7 @@
             Name = "LocalFlightbookForm";
             Text = "Local flightbook";
             Load += LocalFlightbookForm_Load;
+            contextMenuStrip1.ResumeLayout(false);
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             splitContainer1.Panel2.PerformLayout();
@@ -168,5 +200,9 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.TextBox tbFlightDetails;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem pushToServerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
     }
 }

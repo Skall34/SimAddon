@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimDataManager;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,7 @@ namespace FlightRecPlugin
 {
     public partial class LocalFlightbookForm : Form
     {
+        private simData data;
         private string FlightbookFilePath { get; set; } = string.Empty;
         public LocalFlightBook LocalFlightBook { get; set; } = new LocalFlightBook();
 
@@ -32,9 +34,10 @@ namespace FlightRecPlugin
             }
         }
 
-        public LocalFlightbookForm()
+        public LocalFlightbookForm(simData _data)
         {
             InitializeComponent();
+            data = _data;
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -77,11 +80,82 @@ namespace FlightRecPlugin
         {
             LocalFlightBook.ClearFlights();
             LocalFlightBook.saveToJson(FlightbookFilePath);
+            tbFlightDetails.Text = string.Empty;
+            listView1.Items.Clear();
         }
 
         private void tbFlightDetails_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void pushToServerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //send the selected flight to the server
+            if (listView1.SelectedItems.Count > 0)
+            {
+                //get the index of the selected flight
+                int selectedIndex = listView1.SelectedItems[0].Index;
+                //get the flight from the local flightbook
+                var flight = LocalFlightBook.Flights[selectedIndex];
+                //show that flight in a SaveFlightDialog
+                SaveFlightDialog saveFlightDialog = new SaveFlightDialog(data);
+                saveFlightDialog.Callsign = Properties.Settings.Default.callsign;
+                saveFlightDialog.DepartureICAO = flight.departureICAO;
+                saveFlightDialog.ArrivalICAO = flight.arrivalICAO;
+                saveFlightDialog.Immat = flight.immatriculation;
+                saveFlightDialog.DepartureTime = flight.departureTime;
+                saveFlightDialog.ArrivalTime = flight.arrivalTime;
+                saveFlightDialog.DepartureFuel = flight.departureFuel;
+                saveFlightDialog.ArrivalFuel = flight.arrivalFuel;
+                saveFlightDialog.Comment = flight.commentaire;
+                saveFlightDialog.Cargo = flight.payload;
+                saveFlightDialog.Mission = flight.mission;
+                saveFlightDialog.Note = flight.noteDuVol;
+
+                saveFlightDialog.ShowDialog();
+                if (saveFlightDialog.DialogResult == DialogResult.OK)
+                {
+                    // Logic to push the flight to the server
+                    // This could involve calling an API or some other method to send the flight data
+                    // For now, we will just show a message box
+                    MessageBox.Show("Flight pushed to server successfully!");
+                    // Optionally, you can remove the flight from the local flightbook after pushing it to the server
+                    LocalFlightBook.RemoveFlightAt(selectedIndex);
+                    LocalFlightBook.saveToJson(FlightbookFilePath);
+                    // Remove the item from the listview
+                    listView1.Items.RemoveAt(selectedIndex);
+
+                }
+                else
+                {
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("Please select a flight to push to the server.");
+            }
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //delete the selected flight from the local flightbook
+            if (listView1.SelectedItems.Count > 0)
+            {
+                //get the index of the selected flight
+                int selectedIndex = listView1.SelectedItems[0].Index;
+                //remove the flight from the local flightbook
+                LocalFlightBook.RemoveFlightAt(selectedIndex);
+                //save the flightbook to the file
+                LocalFlightBook.saveToJson(FlightbookFilePath);
+                //remove the item from the listview
+                listView1.Items.RemoveAt(selectedIndex);
+            }
+            else
+            {
+                MessageBox.Show("Please select a flight to delete.");
+            }
         }
     }
 }
