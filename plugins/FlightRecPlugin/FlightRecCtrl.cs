@@ -59,6 +59,7 @@ namespace FlightRecPlugin
         private double _currentFuel;
         private bool _refuelDetected;
 
+        private GPSRecorder GPSRecorder;
 
         private readonly FlightPerfs flightPerfs;
 
@@ -166,6 +167,7 @@ namespace FlightRecPlugin
             immats = new List<string>();
 
             flightPerfs = new FlightPerfs();
+            GPSRecorder = new GPSRecorder();
         }
 
 
@@ -205,7 +207,6 @@ namespace FlightRecPlugin
             eventArg.reason = SimEventArg.EventType.SETCALLSIGN;
             eventArg.value = tbCallsign.Text;
             SimEvent(eventArg);
-
         }
 
         public async void FormClosing(object sender, FormClosingEventArgs e)
@@ -319,11 +320,20 @@ namespace FlightRecPlugin
                     double airspeedKnots = currentFlightStatus.airSpeed;
                     double currentFuel = currentFlightStatus.currentFuel;
 
+                    GPSRecorder.AddPoint(
+                        _currentPosition.Location.Latitude,
+                        _currentPosition.Location.Longitude,
+                        _currentPosition.Altitude,
+                        DateTime.Now);
+
                     //check if we are in the air
                     if (currentFlightStatus.onGround == 0)
                     {
+                        //yes, we are airborn.
+                        //check if we were already airborn
                         if (onGround)
                         {
+                            //we were on ground, and now we are airborn.
                             //filter to only consider the first takeoff
                             if (_airborn == DateTime.UnixEpoch)
                             {
@@ -361,8 +371,10 @@ namespace FlightRecPlugin
                     }
                     else //we're on ground !
                     {
+                        //we are on ground, check if we were airborn before
                         if (!onGround)
                         {
+                            //we were airborn, and now we are on ground.
                             if (DateTime.Now - _airborn >= TimeSpan.FromSeconds(30))
                             {
                                 Logger.WriteLine("Landing detected !");
@@ -888,6 +900,8 @@ namespace FlightRecPlugin
 
                 //reset flight infos.
                 flightPerfs.reset();
+                //reset the GPS recorder
+                GPSRecorder.reset();
 
                 atLeastOneEngineFiring = false;
 
@@ -991,16 +1005,16 @@ namespace FlightRecPlugin
             {
                 //crée un dictionnaire des valeurs à envoyer
                 Dictionary<string, string> values = new Dictionary<string, string>();
-                UrlDeserializer.PlaneUpdateQuery planedata = new UrlDeserializer.PlaneUpdateQuery
-                {
-                    query = "updatePlaneStatus",
-                    qtype = "json",
-                    cs = tbCallsign.Text,
-                    plane = cbImmat.Text,
-                    sicao = lbStartIata.Text,
-                    flying = isFlying,
-                    endIcao = tbEndICAO.Text
-                };
+                //UrlDeserializer.PlaneUpdateQuery planedata = new UrlDeserializer.PlaneUpdateQuery
+                //{
+                //    query = "updatePlaneStatus",
+                //    qtype = "json",
+                //    cs = tbCallsign.Text,
+                //    plane = cbImmat.Text,
+                //    sicao = lbStartIata.Text,
+                //    flying = isFlying,
+                //    endIcao = tbEndICAO.Text
+                //};
                 values["callsign"] = tbCallsign.Text;
                 values["plane"] = cbImmat.Text;
                 values["departure_icao"] = lbStartIata.Text;
@@ -1241,9 +1255,13 @@ namespace FlightRecPlugin
                 commentaire = tbCommentaires.Text,
                 payload = _endPayload
             };
+
             localFlightBook.AddFlight(newFlight);
             localFlightBook.saveToJson(Properties.Settings.Default.LocalFlightbookFile);
 
+            //save the GPS trace
+            GPSRecorder.OptimizeTrace();
+            GPSRecorder.SaveToKML(lbStartIata.Text + "_" + lbEndIata.Text + "_trace.kml");
         }
 
         private void checkParameters()
