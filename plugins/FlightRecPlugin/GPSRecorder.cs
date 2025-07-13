@@ -17,8 +17,35 @@ namespace FlightRecPlugin
 
     public class GPSRecorder
     {
+        // create a palette of 16 colors for altitude visualization
+        //from blue to red, with some variations    
+        // The colors are chosen to represent a gradient from low to high altitude
+        // The colors are represented in hexadecimal format
+        public static readonly string[] AltitudeColors = new string[]
+        {
+            "#0000FF", // Blue
+            "#0033FF", // Light Blue
+            "#0066FF", // Sky Blue
+            "#0099FF", // Cyan
+            "#00CCFF", // Light Cyan
+            "#00FFFF", // Aqua
+            "#33FFCC", // Light Greenish Cyan
+            "#66FF99", // Light Green
+            "#99FF66", // Yellowish Green
+            "#CCFF33", // Yellow
+            "#FFFF00", // Yellow
+            "#FFCC00", // Orange Yellow
+            "#FF9900", // Orange
+            "#FF6600", // Dark Orange
+            "#FF3300", // Red Orange
+            "#FF0000"  // Red
+        };
+
         //add a point to the GPS trace, with latitude, longitude, altitude, and timestamp
         public List<GPSPoint> GPSPoints { get; private set; } = new List<GPSPoint>();
+
+        private double minAltitude = double.MaxValue;
+        private double maxAltitude = double.MinValue;
         public void AddPoint(double latitude, double longitude, double altitude, DateTime timestamp)
         {
             GPSPoints.Add(new GPSPoint
@@ -28,6 +55,15 @@ namespace FlightRecPlugin
                 Altitude = altitude,
                 Timestamp = timestamp
             });
+            // Update min and max altitude
+            if (altitude < minAltitude)
+            {
+                minAltitude = altitude;
+            }
+            if (altitude > maxAltitude)
+            {
+                maxAltitude = altitude;
+            }
         }
 
         public void ClearTrace()
@@ -64,19 +100,47 @@ namespace FlightRecPlugin
             }
         }
 
+        // Normalize altitude to a range of 0 to 16
+        int NormalizeAltitude(double altitude)
+        {
+            double deltaAltitude = maxAltitude - minAltitude;
+            if (deltaAltitude < 0.0001)
+            {
+                deltaAltitude = 0.0001; // Avoid division by zero
+            }
+            return (int)(16 * (altitude - minAltitude) / deltaAltitude);
+        }
+
         public void SaveToKML(string filePath)
         {
+
             using (var writer = new System.IO.StreamWriter(filePath))
             {
                 writer.WriteLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
                 writer.WriteLine("<kml xmlns=\"http://www.opengis.net/kml/2.2\">");
                 writer.WriteLine("<Document>");
+                //create the styles
+                for (int i = 0; i < AltitudeColors.Length; i++)
+                {
+                    writer.WriteLine($"<Style id=\"altitude{i}\">");
+                    writer.WriteLine("<LineStyle>");
+                    writer.WriteLine($"<color>{AltitudeColors[i].Substring(1)}</color>"); // Remove the '#' character
+                    writer.WriteLine("<width>6</width>");
+                    writer.WriteLine("</LineStyle>");
+                    writer.WriteLine("</Style>");
+                }
+
                 //draw segments between points
                 for (int i = 0; i < GPSPoints.Count - 1; i++)
                 {
                     var start = GPSPoints[i];
                     var end = GPSPoints[i + 1];
                     writer.WriteLine("<Placemark>");
+                    // Use the normalized altitude to select the color
+                    int normalizedAltitude = NormalizeAltitude(start.Altitude);
+                    writer.WriteLine($"<styleUrl>#altitude{normalizedAltitude}</styleUrl>");
+
+                    // Use the timestamp for the name
                     writer.WriteLine($"<name>{start.Timestamp.ToString("yyyy-MM-dd HH:mm:ss:fff")} to {end.Timestamp.ToString("yyyy-MM-dd HH:mm:ss:fff")}</name>");
                     writer.WriteLine("<LineString>");
                     writer.WriteLine("<coordinates>");
