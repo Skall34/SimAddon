@@ -315,7 +315,7 @@ namespace SimDataManager
 
         public async Task<bool> SendFlightDataToPhpAsync(Dictionary<string, string> flightData)
         {
-            string phpUrl = BASERURL + "/api/api_import_vol.php";
+            string phpUrl = BASERURL + "/api/api_import_vol_direct.php";
             using (var client = new HttpClient())
             {
                 var content = new FormUrlEncodedContent(flightData);
