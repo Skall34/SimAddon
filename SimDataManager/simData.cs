@@ -282,12 +282,6 @@ namespace SimDataManager
                         return false;
                     }
 
-                    // Affiche aussi la réponse si le code est 200 mais que le PHP retourne une erreur
-                    if (!string.IsNullOrWhiteSpace(responseContent) && !responseContent.Trim().ToLower().Contains("ok"))
-                    {
-                        return false;
-                    }
-
                     return true;
                 }
                 catch (Exception ex)
