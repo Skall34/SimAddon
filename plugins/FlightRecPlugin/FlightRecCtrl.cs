@@ -73,6 +73,8 @@ namespace FlightRecPlugin
 
         public event ISimAddonPluginCtrl.OnShowMsgboxHandler OnShowMsgbox;
 
+        private string executionFolder;
+
         private void UpdateStatus(string message)
         {
             if (OnStatusUpdate != null)
@@ -1238,9 +1240,10 @@ namespace FlightRecPlugin
 
             SimEvent(SimEventArg.EventType.ENGINESTOP);
 
+            string localFlightBookFile = Path.Combine(executionFolder, Properties.Settings.Default.LocalFlightbookFile);
             //save the flight to the local flightbook
             LocalFlightBook localFlightBook = new LocalFlightBook();
-            localFlightBook.loadFromJson(Properties.Settings.Default.LocalFlightbookFile);
+            localFlightBook.loadFromJson(localFlightBookFile);
             Flight newFlight = new Flight
             {
                 immatriculation = cbImmat.Text,
@@ -1257,11 +1260,11 @@ namespace FlightRecPlugin
             };
 
             localFlightBook.AddFlight(newFlight);
-            localFlightBook.saveToJson(Properties.Settings.Default.LocalFlightbookFile);
+            localFlightBook.saveToJson(localFlightBookFile);
 
             //save the GPS trace
             GPSRecorder.OptimizeTrace();
-            GPSRecorder.SaveToKML(lbStartIata.Text + "_" + lbEndIata.Text + "_trace.kml");
+            GPSRecorder.SaveToKML(Path.Combine(executionFolder, lbStartIata.Text + "_" + lbEndIata.Text + "_trace.kml"));
         }
 
         private void checkParameters()
@@ -1426,7 +1429,8 @@ namespace FlightRecPlugin
 
         void ISimAddonPluginCtrl.SetExecutionFolder(string path)
         {
-            throw new NotImplementedException();
+            Logger.WriteLine("Setting execution folder to: " + path);
+            executionFolder = path;
         }
 
         public void ManageSimEvent(object sender, SimEventArg eventArg)
