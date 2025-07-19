@@ -907,6 +907,18 @@ namespace FlightRecPlugin
 
                 atLeastOneEngineFiring = false;
 
+                //libère l'avion dans la base de données
+                if (cbImmat.SelectedItem != null)
+                {
+                    Avion selectedPlane = (Avion)cbImmat.SelectedItem;
+                    if (selectedPlane != null)
+                    {
+                        //si l'avion est marqué comme en vol, on le libère.
+                        Logger.WriteLine("Freeing the airplane on the sheet");
+                        UpdatePlaneStatus(0);
+                    }
+                }
+
                 //reenable start detection at next timer tick
                 startDisabled = 1;
                 endDisabled = 1;
