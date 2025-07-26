@@ -9,10 +9,10 @@ namespace FlightRecPlugin
 {
     public class GPSPoint
     {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public double Altitude { get; set; }
-        public DateTime Timestamp { get; set; }
+        public double Lat { get; set; }
+        public double Long { get; set; }
+        public double Alt { get; set; }
+        public DateTime Time { get; set; }
     }
 
     public class GPSRecorder
@@ -50,10 +50,10 @@ namespace FlightRecPlugin
         {
             GPSPoints.Add(new GPSPoint
             {
-                Latitude = latitude,
-                Longitude = longitude,
-                Altitude = altitude,
-                Timestamp = timestamp
+                Lat = latitude,
+                Long = longitude,
+                Alt = altitude,
+                Time = timestamp
             });
             // Update min and max altitude
             if (altitude < minAltitude)
@@ -81,8 +81,8 @@ namespace FlightRecPlugin
             //remove points that are too close to each other
             GPSPoints = GPSPoints
                 .Where((point, index) => index == 0 || 
-                        (Math.Abs(point.Latitude - GPSPoints[index - 1].Latitude) > 0.00000001 ||
-                         Math.Abs(point.Longitude - GPSPoints[index - 1].Longitude) > 0.00000001))
+                        (Math.Abs(point.Lat - GPSPoints[index - 1].Lat) > 0.00000001 ||
+                         Math.Abs(point.Long - GPSPoints[index - 1].Long) > 0.00000001))
                 .ToList();
 
             //remove intermediate points that are aligned with the previous and next points
@@ -91,8 +91,8 @@ namespace FlightRecPlugin
                 var prev = GPSPoints[i - 1];
                 var current = GPSPoints[i];
                 var next = GPSPoints[i + 1];
-                if (Math.Abs((current.Latitude - prev.Latitude) * (next.Longitude - current.Longitude) -
-                             (current.Longitude - prev.Longitude) * (next.Latitude - current.Latitude)) < 0.0000001)
+                if (Math.Abs((current.Lat - prev.Lat) * (next.Long - current.Long) -
+                             (current.Long - prev.Long) * (next.Lat - current.Lat)) < 0.0000001)
                 {
                     GPSPoints.RemoveAt(i);
                     i--; // Adjust index after removal
@@ -137,15 +137,15 @@ namespace FlightRecPlugin
                     var end = GPSPoints[i + 1];
                     writer.WriteLine("<Placemark>");
                     // Use the normalized altitude to select the color
-                    int normalizedAltitude = NormalizeAltitude(start.Altitude);
+                    int normalizedAltitude = NormalizeAltitude(start.Alt);
                     writer.WriteLine($"<styleUrl>#altitude{normalizedAltitude}</styleUrl>");
 
                     // Use the timestamp for the name
-                    writer.WriteLine($"<name>{start.Timestamp.ToString("yyyy-MM-dd HH:mm:ss:fff")} to {end.Timestamp.ToString("yyyy-MM-dd HH:mm:ss:fff")}</name>");
+                    writer.WriteLine($"<name>{start.Time.ToString("yyyy-MM-dd HH:mm:ss:fff")} to {end.Time.ToString("yyyy-MM-dd HH:mm:ss:fff")}</name>");
                     writer.WriteLine("<LineString>");
                     writer.WriteLine("<coordinates>");
-                    writer.WriteLine($"{start.Longitude.ToString(CultureInfo.InvariantCulture)},{start.Latitude.ToString(CultureInfo.InvariantCulture)},{start.Altitude.ToString(CultureInfo.InvariantCulture)} ");
-                    writer.WriteLine($"{end.Longitude.ToString(CultureInfo.InvariantCulture)},{end.Latitude.ToString(CultureInfo.InvariantCulture)},{end.Altitude.ToString(CultureInfo.InvariantCulture)}");
+                    writer.WriteLine($"{start.Long.ToString(CultureInfo.InvariantCulture)},{start.Lat.ToString(CultureInfo.InvariantCulture)},{start.Alt.ToString(CultureInfo.InvariantCulture)} ");
+                    writer.WriteLine($"{end.Long.ToString(CultureInfo.InvariantCulture)},{end.Lat.ToString(CultureInfo.InvariantCulture)},{end.Alt.ToString(CultureInfo.InvariantCulture)}");
                     writer.WriteLine("</coordinates>");
                     writer.WriteLine("</LineString>");
                     writer.WriteLine("</Placemark>");
@@ -163,9 +163,9 @@ namespace FlightRecPlugin
                 writer.WriteLine("<gpx version=\"1.1\" creator=\"FlightRecPlugin\">");
                 foreach (var point in GPSPoints)
                 {
-                    writer.WriteLine("<wpt lat=\"" + point.Latitude + "\" lon=\"" + point.Longitude + "\">");
-                    writer.WriteLine($"<ele>{point.Altitude}</ele>");
-                    writer.WriteLine($"<time>{point.Timestamp.ToString("yyyy-MM-ddTHH:mm:ssZ")}</time>");
+                    writer.WriteLine("<wpt lat=\"" + point.Lat + "\" lon=\"" + point.Long + "\">");
+                    writer.WriteLine($"<ele>{point.Alt}</ele>");
+                    writer.WriteLine($"<time>{point.Time.ToString("yyyy-MM-ddTHH:mm:ssZ")}</time>");
                     writer.WriteLine("</wpt>");
                 }
                 writer.WriteLine("</gpx>");
@@ -179,7 +179,7 @@ namespace FlightRecPlugin
                 writer.WriteLine("Latitude,Longitude,Altitude,Timestamp");
                 foreach (var point in GPSPoints)
                 {
-                    writer.WriteLine($"{point.Latitude},{point.Longitude},{point.Altitude},{point.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")}");
+                    writer.WriteLine($"{point.Lat},{point.Long},{point.Alt},{point.Time.ToString("yyyy-MM-dd HH:mm:ss")}");
                 }
             }
         }
