@@ -21,6 +21,7 @@ namespace FlightRecPlugin
         public string mission { get; set; }
         public string commentaire { get; set; }
         public double payload { get; set; }
+        public string GPSData { get; set; } = string.Empty;
     }
 
     public class LocalFlightBook

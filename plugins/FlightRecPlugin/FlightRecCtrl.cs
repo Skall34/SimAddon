@@ -794,7 +794,6 @@ namespace FlightRecPlugin
                 //crée un dictionnaire des valeurs à envoyer
                 SaveFlightDialog saveFlightDialog = new SaveFlightDialog(data);
 
-
                 saveFlightDialog.Callsign = tbCallsign.Text;
                 saveFlightDialog.Immat = cbImmat.Text;
                 saveFlightDialog.Comment = fullComment;
@@ -807,6 +806,7 @@ namespace FlightRecPlugin
                 saveFlightDialog.ArrivalFuel = _endFuel;
                 saveFlightDialog.Note = _note;
                 saveFlightDialog.Mission = cbMission.Text;
+                saveFlightDialog.GPSTrace = GPSRecorder.GetTraceJSON();
 
                 bool isTopMost = false;
                 Form parentForm = (Form)this.TopLevelControl;
@@ -1279,6 +1279,10 @@ namespace FlightRecPlugin
 
             SimEvent(SimEventArg.EventType.ENGINESTOP);
 
+            //save the GPS trace
+            GPSRecorder.OptimizeTrace();
+            string gpsTrace = GPSRecorder.GetTraceJSON();
+
             string localFlightBookFile = Path.Combine(executionFolder, Properties.Settings.Default.LocalFlightbookFile);
             //save the flight to the local flightbook
             LocalFlightBook localFlightBook = new LocalFlightBook();
@@ -1295,14 +1299,13 @@ namespace FlightRecPlugin
                 noteDuVol = _note,
                 mission = cbMission.Text,
                 commentaire = tbCommentaires.Text,
-                payload = _endPayload
+                payload = _endPayload,
+                GPSData = gpsTrace
             };
 
             localFlightBook.AddFlight(newFlight);
             localFlightBook.saveToJson(localFlightBookFile);
 
-            //save the GPS trace
-            GPSRecorder.OptimizeTrace();
             GPSRecorder.SaveToKML(Path.Combine(executionFolder, lbStartIata.Text + "_" + lbEndIata.Text + "_trace.kml"));
         }
 

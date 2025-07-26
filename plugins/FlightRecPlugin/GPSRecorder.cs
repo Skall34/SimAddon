@@ -184,6 +184,11 @@ namespace FlightRecPlugin
             }
         }
 
+        public string GetTraceJSON()
+        {
+            return System.Text.Json.JsonSerializer.Serialize(GPSPoints);
+        }
+
         internal void reset()
         {
             ClearTrace();

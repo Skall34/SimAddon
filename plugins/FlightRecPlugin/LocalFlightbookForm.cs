@@ -112,6 +112,7 @@ namespace FlightRecPlugin
                 saveFlightDialog.Cargo = flight.payload;
                 saveFlightDialog.Mission = flight.mission;
                 saveFlightDialog.Note = flight.noteDuVol;
+                saveFlightDialog.GPSTrace = flight.GPSData;
 
                 saveFlightDialog.ShowDialog();
                 if (saveFlightDialog.DialogResult == DialogResult.OK)

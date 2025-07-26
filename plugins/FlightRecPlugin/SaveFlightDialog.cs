@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Quic;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -164,6 +165,7 @@ namespace FlightRecPlugin
             }
         }
 
+        public  string GPSTrace { get; set; }
 
         public SaveFlightDialog(simData _data)
         {
@@ -276,7 +278,9 @@ namespace FlightRecPlugin
                         { "note_du_vol", Note.ToString("0.00") },
                         { "mission", Mission },
                         { "commentaire", Comment },
-                        { "payload", Cargo.ToString("0.00", CultureInfo.InvariantCulture) }
+                        { "payload", Cargo.ToString("0.00", CultureInfo.InvariantCulture) },
+                        // Add GPS data if available
+                        { "tracegps", string.IsNullOrWhiteSpace(GPSTrace) ? string.Empty : GPSTrace }
                     };
 
                 if (string.IsNullOrWhiteSpace(DepartureICAO) || DepartureICAO == "Not Yet Available")
