@@ -229,6 +229,10 @@ namespace FlightRecPlugin
                             this.Cursor = Cursors.WaitCursor;
                             // Libère l'avion sur le fichier en cas de fermeture de l'acars avant la fin du vol
                             // on ne le fait que si un moteur tourne encore ==> vol interrompu avant la fin
+
+                            //stop the timer
+                            updatePlaneStatusTimer.Stop();
+
                             UpdatePlaneStatus(0);
                             cbImmat.Enabled = true;
                             //tbEndICAO.Enabled = true;
@@ -533,6 +537,10 @@ namespace FlightRecPlugin
 
                                     //Update the google sheet database indicating that this plane is being used
                                     UpdatePlaneStatus(1);
+
+                                    //start the time which will update the plane status
+                                    updatePlaneStatusTimer.Start();
+
                                     cbImmat.Enabled = false;
                                     //tbEndICAO.Enabled = false;
 
@@ -680,7 +688,6 @@ namespace FlightRecPlugin
             endDisabled = 1;
             gbEndInfos.Enabled = false;
 
-
             _startPosition = data.GetPosition();
 
             double lat = _startPosition.Location.Latitude;
@@ -700,6 +707,7 @@ namespace FlightRecPlugin
             //0.00 => only keep 2 decimals for the fuel
 
             this.lbStartFuel.Text = _startFuel.ToString("0.00");
+           
         }
 
         private void resetEndOfFlightData()
@@ -914,6 +922,9 @@ namespace FlightRecPlugin
                     if (selectedPlane != null)
                     {
                         //si l'avion est marqué comme en vol, on le libère.
+                        //stop the timer
+                        updatePlaneStatusTimer.Stop();
+
                         Logger.WriteLine("Freeing the airplane on the sheet");
                         UpdatePlaneStatus(0);
                     }
@@ -1029,11 +1040,24 @@ namespace FlightRecPlugin
                 //    flying = isFlying,
                 //    endIcao = tbEndICAO.Text
                 //};
+
                 values["callsign"] = tbCallsign.Text;
                 values["plane"] = cbImmat.Text;
                 values["departure_icao"] = lbStartIata.Text;
                 values["flying"] = isFlying.ToString();
                 values["arrival_icao"] = tbEndICAO.Text;
+                if (_currentPosition != null)
+                {
+                    //if the current position is not null, use it to update the position
+                    values["latitude"] = _currentPosition.Location.Latitude.ToString("0.00000", CultureInfo.InvariantCulture);
+                    values["longitude"] = _currentPosition.Location.Longitude.ToString("0.00000", CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    //if the current position is null, use 0 as altitude
+                    values["latitude"] = "";
+                    values["longitude"] ="";
+                }
 
                 if (data != null)
                 {
@@ -1240,6 +1264,9 @@ namespace FlightRecPlugin
 
         private void engineStopTimer_Tick(object sender, EventArgs e)
         {
+            //stop the timer
+            updatePlaneStatusTimer.Stop();
+
             //if this happen, then the engine are definitively stopped.
             getEndOfFlightData();
 
@@ -1464,6 +1491,11 @@ namespace FlightRecPlugin
             LocalFlightbookForm localFlightbookForm = new LocalFlightbookForm(data);
             localFlightbookForm.loadFlightbook(Properties.Settings.Default.LocalFlightbookFile);
             localFlightbookForm.ShowDialog(this);
+        }
+
+        private void updatePlaneStatusTimer_Tick(object sender, EventArgs e)
+        {
+            UpdatePlaneStatus(_planeReserved ? 1 : 0);
         }
     }
 }

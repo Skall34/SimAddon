@@ -109,6 +109,7 @@ namespace FlightRecPlugin
             btnFlightbook = new Button();
             timerUpdateStaticValues = new Timer(components);
             splitContainer1 = new SplitContainer();
+            updatePlaneStatusTimer = new Timer(components);
             gbDynamicData.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             gbEndInfos.SuspendLayout();
@@ -934,6 +935,11 @@ namespace FlightRecPlugin
             splitContainer1.SplitterDistance = 497;
             splitContainer1.TabIndex = 43;
             // 
+            // updatePlaneStatusTimer
+            // 
+            updatePlaneStatusTimer.Interval = 30000;
+            updatePlaneStatusTimer.Tick += updatePlaneStatusTimer_Tick;
+            // 
             // FlightRecCtrl
             // 
             AutoScaleDimensions = new SizeF(9F, 18F);
@@ -1040,5 +1046,6 @@ namespace FlightRecPlugin
         private SimAddonControls.LedBulb ledCheckPayload;
         private ToolStripMenuItem debugToolStripMenuItem;
         private Button btnFlightbook;
+        private Timer updatePlaneStatusTimer;
     }
 }
