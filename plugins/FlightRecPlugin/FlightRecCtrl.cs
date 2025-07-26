@@ -1489,7 +1489,7 @@ namespace FlightRecPlugin
         private void btnFlightbook_Click(object sender, EventArgs e)
         {
             LocalFlightbookForm localFlightbookForm = new LocalFlightbookForm(data);
-            localFlightbookForm.loadFlightbook(Properties.Settings.Default.LocalFlightbookFile);
+            localFlightbookForm.loadFlightbook(Path.Combine(executionFolder,Properties.Settings.Default.LocalFlightbookFile));
             localFlightbookForm.ShowDialog(this);
         }
 
