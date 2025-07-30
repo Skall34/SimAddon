@@ -1280,7 +1280,11 @@ namespace FlightRecPlugin
             SimEvent(SimEventArg.EventType.ENGINESTOP);
 
             //save the GPS trace
-            GPSRecorder.OptimizeTrace();
+            GPSRecorder.SaveToJSON(Path.Combine(executionFolder, lbStartIata.Text + "_" + lbEndIata.Text + "_raw_trace.json"));
+
+            //GPSRecorder.OptimizeTrace();
+            GPSRecorder.OptimizeTraceRamerDouglasPeucker(0.0001);
+
             string gpsTrace = GPSRecorder.GetTraceJSON();
 
             string localFlightBookFile = Path.Combine(executionFolder, Properties.Settings.Default.LocalFlightbookFile);
@@ -1305,6 +1309,8 @@ namespace FlightRecPlugin
 
             localFlightBook.AddFlight(newFlight);
             localFlightBook.saveToJson(localFlightBookFile);
+
+            GPSRecorder.SaveToJSON(Path.Combine(executionFolder, lbStartIata.Text + "_" + lbEndIata.Text + "_trace.json"));
 
             GPSRecorder.SaveToKML(Path.Combine(executionFolder, lbStartIata.Text + "_" + lbEndIata.Text + "_trace.kml"));
         }

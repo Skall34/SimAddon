@@ -79,11 +79,11 @@ namespace FlightRecPlugin
             // to reduce the number of points while preserving the shape of the trace.
 
             //remove points that are too close to each other
-            GPSPoints = GPSPoints
-                .Where((point, index) => index == 0 || 
-                        (Math.Abs(point.Lat - GPSPoints[index - 1].Lat) > 0.00000001 ||
-                         Math.Abs(point.Long - GPSPoints[index - 1].Long) > 0.00000001))
-                .ToList();
+            //GPSPoints = GPSPoints
+            //    .Where((point, index) => index == 0 || 
+            //            (Math.Abs(point.Lat - GPSPoints[index - 1].Lat) > 0.000000001 ||
+            //             Math.Abs(point.Long - GPSPoints[index - 1].Long) > 0.000000001))
+            //    .ToList();
 
             //remove intermediate points that are aligned with the previous and next points
             for (int i = 1; i < GPSPoints.Count - 1; i++)
@@ -99,6 +99,61 @@ namespace FlightRecPlugin
                 }
             }
         }
+
+        //optimize the trace to reduce the number of points using Ramer-Douglas-Peucker algorithm
+        //implement ramer douglas -peucker algorithm
+        public void OptimizeTraceRamerDouglasPeucker(double epsilon)
+        {
+            if (GPSPoints.Count < 3)
+                return; // No optimization needed for less than 3 points
+            GPSPoints = RamerDouglasPeucker(GPSPoints, epsilon);
+        }
+
+        private List<GPSPoint> RamerDouglasPeucker(List<GPSPoint> gPSPoints, double epsilon)
+        {
+            if (gPSPoints.Count < 3)
+                return gPSPoints; // No optimization needed for less than 3 points
+            int firstIndex = 0;
+            int lastIndex = gPSPoints.Count - 1;
+            // Find the point with the maximum distance from the line segment
+            double maxDistance = 0.0;
+            int index = -1;
+            for (int i = firstIndex + 1; i < lastIndex; i++)
+            {
+                double distance = PerpendicularDistance(gPSPoints[firstIndex], gPSPoints[lastIndex], gPSPoints[i]);
+                if (distance > maxDistance)
+                {
+                    maxDistance = distance;
+                    index = i;
+                }
+            }
+            // If the maximum distance is greater than epsilon, recursively simplify
+            if (maxDistance > epsilon)
+            {
+                List<GPSPoint> left = RamerDouglasPeucker(gPSPoints.GetRange(firstIndex, index - firstIndex + 1), epsilon);
+                List<GPSPoint> right = RamerDouglasPeucker(gPSPoints.GetRange(index, lastIndex - index + 1), epsilon);
+                // Combine the results
+                List<GPSPoint> result = new List<GPSPoint>();
+                result.AddRange(left);
+                result.AddRange(right.Skip(1)); // Skip the first point of right to avoid duplication
+                return result;
+            }
+            else
+            {
+                // If the maximum distance is less than epsilon, return the endpoints
+                return new List<GPSPoint> { gPSPoints[firstIndex], gPSPoints[lastIndex] };
+            }
+        }
+
+        private double PerpendicularDistance(GPSPoint gPSPoint1, GPSPoint gPSPoint2, GPSPoint gPSPoint3)
+        {
+            double A = gPSPoint2.Lat - gPSPoint1.Lat;
+            double B = gPSPoint1.Long - gPSPoint2.Long;
+            double C = A * gPSPoint1.Long + B * gPSPoint1.Lat;
+            // Calculate the distance from point 3 to the line defined by points 1 and 2
+            return Math.Abs(A * gPSPoint3.Long + B * gPSPoint3.Lat - C) / Math.Sqrt(A * A + B * B);
+        }
+
 
         // Normalize altitude to a range of 0 to 16
         int NormalizeAltitude(double altitude)
@@ -182,6 +237,12 @@ namespace FlightRecPlugin
                     writer.WriteLine($"{point.Lat},{point.Long},{point.Alt},{point.Time.ToString("yyyy-MM-dd HH:mm:ss")}");
                 }
             }
+        }
+
+        public void SaveToJSON(string filePath)
+        {
+            var json = System.Text.Json.JsonSerializer.Serialize(GPSPoints);
+            System.IO.File.WriteAllText(filePath, json);
         }
 
         public string GetTraceJSON()
