@@ -326,11 +326,6 @@ namespace FlightRecPlugin
                     double airspeedKnots = currentFlightStatus.airSpeed;
                     double currentFuel = currentFlightStatus.currentFuel;
 
-                    GPSRecorder.AddPoint(
-                        _currentPosition.Location.Latitude,
-                        _currentPosition.Location.Longitude,
-                        _currentPosition.Altitude,
-                        DateTime.Now);
 
                     //check if we are in the air
                     if (currentFlightStatus.onGround == 0)
@@ -513,8 +508,7 @@ namespace FlightRecPlugin
                     //test pour savoir si on est vraiment pret à voler. On le sim doit etre pret, et le pilote dans le cockpit
                     //(viewmode à moins de 4 sur msfs (pas de pb de viewmode avec xplane apparement)
                     //c'est pour eviter d'etre detecté à DGTK si on demarre directement sur la piste moteurs allumés.
-                    if (simReady)
-                    {
+
 
                         if ((!_previousEngineStatus && currentFlightStatus.isAtLeastOneEngineFiring) && (startDisabled == 0))
                         {
@@ -553,16 +547,10 @@ namespace FlightRecPlugin
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-                        //not ready to fly
-                        //clear the flight recorder infos ?
-                    }
+
 
                     // si on detecte un arret moteur
-                    if (simReady)
-                    {
+
                         if (_previousEngineStatus && !currentFlightStatus.isAtLeastOneEngineFiring)
                         {
                             //garde le nouvel etat.
@@ -584,11 +572,15 @@ namespace FlightRecPlugin
                         {
                             //no change on engine status.
                         }
-                    }
-                    else
-                    {
-                        //not ready to fly
 
+
+                    if (atLeastOneEngineFiring)
+                    {
+                        GPSRecorder.AddPoint(
+                            _currentPosition.Location.Latitude,
+                            _currentPosition.Location.Longitude,
+                            _currentPosition.Altitude,
+                            DateTime.Now);
                     }
                 }
                 else
@@ -1056,7 +1048,7 @@ namespace FlightRecPlugin
                 {
                     //if the current position is null, use 0 as altitude
                     values["latitude"] = "";
-                    values["longitude"] ="";
+                    values["longitude"] = "";
                 }
 
                 if (data != null)
