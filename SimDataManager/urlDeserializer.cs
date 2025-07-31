@@ -47,7 +47,7 @@ namespace SimDataManager
                                 Avion avion = new Avion
                                 {
                                     Index = i++,
-                                    Type = item.TryGetValue("type", out string type) ? type : "unknown",
+                                    Type = item.TryGetValue("categorie", out string type) ? type : "unknown",
                                     Immat = item.TryGetValue("immat", out string immat) ? immat : "-----",
                                     Etat = int.TryParse(item.TryGetValue("etat", out string etat) ? etat : "", out int etatValue) ? etatValue : 0,
                                     DernierUtilisateur = item.TryGetValue("callsign", out string utilisateur) ? utilisateur : "",
