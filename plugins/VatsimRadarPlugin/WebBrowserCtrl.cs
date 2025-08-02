@@ -15,6 +15,7 @@ namespace ChartFoxPlugin
         {
             public string Name { get; set; }
             public string Url { get; set; }
+            public string DestUrl { get; set; }
         }
 
         private string executionFolder;
@@ -45,6 +46,7 @@ namespace ChartFoxPlugin
                 settings = new JsonData();
                 settings.Name = "google";
                 settings.Url = "https://www.google.com";
+                settings.DestUrl = "https://www.google.com/maps";
                 string jsonContent = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
                 try
                 {
@@ -140,6 +142,27 @@ namespace ChartFoxPlugin
 
         public void ManageSimEvent(object sender, SimEventArg eventArg)
         {
+            if (eventArg.reason == SimEventArg.EventType.SETDESTINATION)
+            {
+                if (eventArg.value is string destination)
+                {
+                    try
+                    {
+                        // Assuming the destination is a URL
+                        string destinationUrl = settings.DestUrl.Replace("<destICAO>", destination);
+                        Uri uri = new Uri(destinationUrl);
+                        webView21.Source = uri;
+                    }
+                    catch (UriFormatException ex)
+                    {
+                        Logger.WriteLine($"Invalid URL format: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    Logger.WriteLine("Destination data is not a string.");
+                }
+            }
         }
     }
 }

@@ -434,7 +434,31 @@ namespace MeteoPlugin
 
         public void ManageSimEvent(object sender, SimEventArg eventArg)
         {
-            throw new NotImplementedException();
+            if ( eventArg.reason == SimEventArg.EventType.SETDESTINATION)
+            {
+                string icao = eventArg.value;
+                if (Regex.IsMatch(icao, @"^[A-Z]{4}$"))
+                {
+                    //check if the airport is in the list
+                    Aeroport a = simdata.aeroports.FirstOrDefault(x => x.ident == icao);
+                    if (a != null)
+                    {
+                        cbICAO.Text = a.ident;
+                        requestForMetar();
+                    }
+                    else
+                    {
+                        UpdateStatus($"Airport {icao} not found in database");
+                        Logger.WriteLine($"Airport {icao} not found in database");
+                    }
+                }
+                else
+                {
+                    UpdateStatus($"Invalid ICAO code {icao}");
+                    Logger.WriteLine($"Invalid ICAO code {icao}");
+                }
+
+            }
         }
     }
 }

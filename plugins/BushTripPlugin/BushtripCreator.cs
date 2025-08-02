@@ -338,6 +338,10 @@ namespace BushTripPlugin
         {
             if (e.KeyChar != (char)Keys.Back)
             {
+                if (!checkMultiHop.Checked)
+                {
+                    checkMultiHop.Checked = true;
+                }
                 ComboBox comboBox = sender as ComboBox;
                 if (comboBox.SelectionLength>0)
                 {

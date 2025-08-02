@@ -553,6 +553,16 @@ namespace BushTripPlugin
                     filename = "bushtrip_" + trip[0].ident + "-" + trip[trip.Count - 1].ident + ".fplan";
                     //saveFlightPlan();
                     useFlightPlan();
+
+                    //notify the other plugin that a flightplan was loaded if it's not a fplan file
+                    if (OnSimEvent != null)
+                    {
+                        SimEventArg eventArg = new SimEventArg();
+                        eventArg.reason = SimEventArg.EventType.SETDESTINATION;
+                        int nbWaypoints = flightPlan.Item.Waypoints.Count();
+                        eventArg.value = flightPlan.Item.Waypoints[nbWaypoints - 1].Ident;
+                        OnSimEvent(this, eventArg);
+                    }
                 }
                 else
                 {

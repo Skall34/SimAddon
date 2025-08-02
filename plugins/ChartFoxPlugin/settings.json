@@ -1,4 +1,5 @@
 {
   "Name": "ChartFox",
-  "Url": "https://chartfox.org/"
+  "Url": "https://chartfox.org/",
+  "DestUrl": "https://chartfox.org/<destICAO>"
 }
