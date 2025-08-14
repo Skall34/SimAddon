@@ -81,6 +81,8 @@ namespace SimDataManager
         //https://www.projectmagenta.com/all-fsuipc-offsets/
 
         private readonly Offset<string> startSituation = new Offset<string>(0x0024, 256);
+        private readonly Offset<short> pauseIndicator = new Offset<short>(0x0264);
+
         private readonly Offset<short> magVariation    =  new Offset<short>(0x02A0);
         private readonly Offset<uint> airspeed         =   new Offset<uint>(0x02BC);
         private readonly Offset<int> verticalSpeed     =    new Offset<int>(0x02C8);
@@ -376,6 +378,16 @@ namespace SimDataManager
                 _isConnected=false;
                 throw;
             }
+        }
+
+        public string GetStartSituation()
+        {
+            return startSituation.Value;
+        }
+
+        public bool IsPaused()
+        {
+            return (pauseIndicator.Value == 4);
         }
 
         public bool GetReadyToFly()

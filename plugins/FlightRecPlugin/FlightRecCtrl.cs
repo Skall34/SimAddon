@@ -27,6 +27,11 @@ namespace FlightRecPlugin
 
         DebugForm dbg;
         bool simReady;
+        bool isPaused;
+        private TimeSpan pauseTime;
+        private DateTime pauseStartTime;
+        private DateTime pauseEndTime;
+        private bool isRecording;
 
         List<string> missions;
         List<string> immats;
@@ -142,6 +147,9 @@ namespace FlightRecPlugin
             _currentFuel = 0;
             _refuelDetected = false;
             _endPayload = 0;
+            pauseTime= TimeSpan.Zero;
+            isPaused= false;
+            isRecording = false;
 
             lbStartFuel.Text = "Not Yet Available";
             lbEndFuel.Text = "Waiting end flight ...";
@@ -218,7 +226,6 @@ namespace FlightRecPlugin
             if (e.CloseReason == CloseReason.UserClosing)
             {
 
-
                 if (e.CloseReason == CloseReason.UserClosing)
                 {
                     DialogResult res = ShowMsgBox(message, "Closing", MessageBoxButtons.OKCancel);
@@ -277,6 +284,27 @@ namespace FlightRecPlugin
         {
             try
             {
+                if (isRecording)
+                {
+                    //check if the sim is paused
+                    if (data.IsPaused() && !isPaused)
+                    {
+                        isPaused = true;
+                        pauseStartTime = DateTime.Now;
+                        Logger.WriteLine("Pause detected. Pause started at " + pauseStartTime.ToString("HH:mm:ss"));
+                        UpdateStatus("Sim is paused. Pause started at " + pauseStartTime.ToString("HH:mm:ss"));
+
+                    }
+                    if (!data.IsPaused() && isPaused)
+                    {
+                        isPaused = false;
+                        pauseEndTime = DateTime.Now;
+                        pauseTime += (pauseEndTime - pauseStartTime);
+                        Logger.WriteLine("Pause detected. Pause time is now " + pauseTime.TotalSeconds + " seconds");
+                        UpdateStatus("Sim is resumed. Pause time is now " + pauseTime.TotalSeconds + " seconds");
+                    }
+                }
+
                 if (currentFlightStatus.readyToFly)
                 {
                     //one shot flag to avoid to take bad data until the pilot is in the plane.
@@ -510,68 +538,68 @@ namespace FlightRecPlugin
                     //c'est pour eviter d'etre detecté à DGTK si on demarre directement sur la piste moteurs allumés.
 
 
-                        if ((!_previousEngineStatus && currentFlightStatus.isAtLeastOneEngineFiring) && (startDisabled == 0))
-                        {
-                            //garde le nouvel etat.
-                            atLeastOneEngineFiring = currentFlightStatus.isAtLeastOneEngineFiring;
+                    if ((!_previousEngineStatus && currentFlightStatus.isAtLeastOneEngineFiring) && (startDisabled == 0))
+                    {
+                        //garde le nouvel etat.
+                        atLeastOneEngineFiring = currentFlightStatus.isAtLeastOneEngineFiring;
 
-                            if (engineStopTimer.Enabled)
+                        if (engineStopTimer.Enabled)
+                        {
+                            Logger.WriteLine("Engine stop canceled. Validation timer stopped");
+                            engineStopTimer.Stop();
+                        }
+                        else
+                        {
+                            if (onGround)
                             {
-                                Logger.WriteLine("Engine stop canceled. Validation timer stopped");
-                                engineStopTimer.Stop();
+                                Logger.WriteLine("First engine start detected for plane" + cbImmat.Text);
+                                //this.WindowState = FormWindowState.Minimized;
+                                getStartOfFlightData();
+                                resetEndOfFlightData();
+
+                                //Update the google sheet database indicating that this plane is being used
+                                UpdatePlaneStatus(1);
+
+                                //start the time which will update the plane status
+                                updatePlaneStatusTimer.Start();
+
+                                cbImmat.Enabled = false;
+                                //tbEndICAO.Enabled = false;
+
+                                SimEvent(SimEventArg.EventType.ENGINESTART);
                             }
                             else
                             {
-                                if (onGround)
-                                {
-                                    Logger.WriteLine("First engine start detected for plane" + cbImmat.Text);
-                                    //this.WindowState = FormWindowState.Minimized;
-                                    getStartOfFlightData();
-                                    resetEndOfFlightData();
-
-                                    //Update the google sheet database indicating that this plane is being used
-                                    UpdatePlaneStatus(1);
-
-                                    //start the time which will update the plane status
-                                    updatePlaneStatusTimer.Start();
-
-                                    cbImmat.Enabled = false;
-                                    //tbEndICAO.Enabled = false;
-
-                                    SimEvent(SimEventArg.EventType.ENGINESTART);
-                                }
-                                else
-                                {
-                                    //demarrage des moteur en vol (redémarrage)... ne rien faire.
-                                    Logger.WriteLine("Engine start during flight. Do nothing");
-                                }
+                                //demarrage des moteur en vol (redémarrage)... ne rien faire.
+                                Logger.WriteLine("Engine start during flight. Do nothing");
                             }
                         }
+                    }
 
 
                     // si on detecte un arret moteur
 
-                        if (_previousEngineStatus && !currentFlightStatus.isAtLeastOneEngineFiring)
-                        {
-                            //garde le nouvel etat.
-                            atLeastOneEngineFiring = currentFlightStatus.isAtLeastOneEngineFiring;
+                    if (_previousEngineStatus && !currentFlightStatus.isAtLeastOneEngineFiring)
+                    {
+                        //garde le nouvel etat.
+                        atLeastOneEngineFiring = currentFlightStatus.isAtLeastOneEngineFiring;
 
-                            // si on est au sol, et qu'on autorise la detection de l'arret moteur
-                            if (onGround && (endDisabled == 0))
-                            {
-                                Logger.WriteLine("Potential engine stop detected. Start validation timer");
-                                engineStopTimer.Start();
-                            }
-                            else
-                            {
-                                //si on est en vol, OU si la detection est desactivée, ne rien faire.
-                                Logger.WriteLine("Potential engine stop detected during flight. Do nothing");
-                            }
+                        // si on est au sol, et qu'on autorise la detection de l'arret moteur
+                        if (onGround && (endDisabled == 0))
+                        {
+                            Logger.WriteLine("Potential engine stop detected. Start validation timer");
+                            engineStopTimer.Start();
                         }
                         else
                         {
-                            //no change on engine status.
+                            //si on est en vol, OU si la detection est desactivée, ne rien faire.
+                            Logger.WriteLine("Potential engine stop detected during flight. Do nothing");
                         }
+                    }
+                    else
+                    {
+                        //no change on engine status.
+                    }
 
 
                     if (atLeastOneEngineFiring)
@@ -699,7 +727,7 @@ namespace FlightRecPlugin
             //0.00 => only keep 2 decimals for the fuel
 
             this.lbStartFuel.Text = _startFuel.ToString("0.00");
-           
+            isRecording = true;
         }
 
         private void resetEndOfFlightData()
@@ -735,13 +763,16 @@ namespace FlightRecPlugin
             //store the end of flight fuel value
             _endFuel = _currentFuel;
 
-            _endTime = DateTime.Now;
+            _endTime = DateTime.Now - pauseTime;
+
             this.lbEndTime.Text = _endTime.ToShortTimeString();
             //0.00 => only keep 2 decimals for the fuel
             this.lbEndFuel.Text = _endFuel.ToString("0.00");
             _endPayload = data.GetPayload();
             //compute the note of the flight
             _note = AnalyseFlight();
+            isRecording = false;
+
             Logger.WriteLine("End of flight data updated");
         }
 
