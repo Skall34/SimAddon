@@ -96,7 +96,7 @@ namespace SimAddon
                             }
                             else
                             {
-                                //Logger.WriteLine("pas de type exporté dans la dll " + item);
+                                //Logger.WriteLine("pas de type_aeroport exporté dans la dll " + item);
 
                             }
                         }

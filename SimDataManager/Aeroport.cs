@@ -81,7 +81,7 @@ namespace SimDataManager
     public class Aeroport
     {
         public string ident { get; set; }
-        public string type { get; set; }
+        public string type_aeroport { get; set; }
         public string name { get; set; }
         public string municipality { get; set; }
         public double latitude_deg { get; set; }
@@ -146,7 +146,7 @@ namespace SimDataManager
 
         public Aeroport(uint id, string _ident, string _type, string _name, double latitude, double longitude)
         {
-            type = _type;
+            type_aeroport = _type;
             name = _name;
             ident = _ident;
             latitude_deg = latitude;
@@ -318,7 +318,7 @@ namespace SimDataManager
                     {
                         Aeroport a = new Aeroport();
                         a.ident = GetStringValueOrDefault(item,"ident", "unknown" + i);
-                        a.type = GetStringValueOrDefault(item, "type_aeroport", "unknown" + i);
+                        a.type_aeroport = GetStringValueOrDefault(item, "type_aeroport", "unknown" + i);
                         a.name = GetStringValueOrDefault(item,"name", "unknown" + i);
                         a.municipality = GetStringValueOrDefault(item,"municipality", "unknown" + i);
                         a.latitude_deg = GetDoubleValueOrDefault(item,"latitude_deg", "0");

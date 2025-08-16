@@ -221,23 +221,23 @@ namespace BushTripPlugin
                     {
                         temp.Add(a);
                     }
-                    if ((a.type == "small_airport") && (chkSmall.Checked))
+                    if ((a.type_aeroport == "small_airport") && (chkSmall.Checked))
                     {
                         temp.Add(a);
                     }
-                    if ((a.type == "medium_airport") && (chkMedium.Checked))
+                    if ((a.type_aeroport == "medium_airport") && (chkMedium.Checked))
                     {
                         temp.Add(a);
                     }
-                    if ((a.type == "large_airport") && (chkLarge.Checked))
+                    if ((a.type_aeroport == "large_airport") && (chkLarge.Checked))
                     {
                         temp.Add(a);
                     }
-                    if ((a.type == "heliport") && (chkHeli.Checked))
+                    if ((a.type_aeroport == "heliport") && (chkHeli.Checked))
                     {
                         temp.Add(a);
                     }
-                    if ((a.type == "seaplane_base") && (chkSea.Checked))
+                    if ((a.type_aeroport == "seaplane_base") && (chkSea.Checked))
                     {
                         temp.Add(a);
                     }
@@ -412,27 +412,27 @@ namespace BushTripPlugin
                         double distance = a.DistanceTo(start.latitude_deg, start.longitude_deg);
                         if ((distance < miles * 1.1) && (distance > miles * 0.9))
                         {
-                            if ((a.type == "large_airport") && (chkLarge.Checked))
+                            if ((a.type_aeroport == "large_airport") && (chkLarge.Checked))
                             {
                                 lbArrivals.Items.Add(a);
                             }
 
-                            if ((a.type == "medium_airport") && (chkMedium.Checked))
+                            if ((a.type_aeroport == "medium_airport") && (chkMedium.Checked))
                             {
                                 lbArrivals.Items.Add(a);
                             }
 
-                            if ((a.type == "small_airport") && (chkSmall.Checked))
+                            if ((a.type_aeroport == "small_airport") && (chkSmall.Checked))
                             {
                                 lbArrivals.Items.Add(a);
                             }
 
-                            if ((a.type == "heliport") && (chkHeli.Checked))
+                            if ((a.type_aeroport == "heliport") && (chkHeli.Checked))
                             {
                                 lbArrivals.Items.Add(a);
                             }
 
-                            if ((a.type == "seaplane_base") && (chkSea.Checked))
+                            if ((a.type_aeroport == "seaplane_base") && (chkSea.Checked))
                             {
                                 lbArrivals.Items.Add(a);
                             }

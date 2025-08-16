@@ -61,7 +61,7 @@ namespace FlightRecPlugin.Properties {
         }
         
         /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        ///   Recherche une ressource localisée de type_aeroport System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap bimoteur {
             get {
@@ -71,7 +71,7 @@ namespace FlightRecPlugin.Properties {
         }
         
         /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        ///   Recherche une ressource localisée de type_aeroport System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap helico {
             get {
@@ -81,7 +81,7 @@ namespace FlightRecPlugin.Properties {
         }
         
         /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        ///   Recherche une ressource localisée de type_aeroport System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap liner {
             get {
@@ -91,7 +91,7 @@ namespace FlightRecPlugin.Properties {
         }
         
         /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        ///   Recherche une ressource localisée de type_aeroport System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap monomoteur {
             get {

@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimAddonLogger", "Logger\Si
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Installer.vdproj", "{E70A2523-0740-4522-B9F7-F1B1F67FB58E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BushTripPlugin", "plugins\BushTripPlugin\BushTripPlugin.csproj", "{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightplanPlugin", "plugins\BushTripPlugin\FlightplanPlugin.csproj", "{EB766AB2-4E2B-4CF2-941F-91CF1FD1A32C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeteoPlugin", "plugins\MeteoPlugin\MeteoPlugin.csproj", "{93F7C2E1-2970-4368-947F-395BF48CDD3A}"
 EndProject

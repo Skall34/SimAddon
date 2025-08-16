@@ -1219,7 +1219,7 @@ namespace FlightRecPlugin
                     string planeDesign = selectedPlane.Designation;
                     lbDesignationAvion.Text = planeDesign;
 
-                    //mettre a jour l'icone suivant le type d'avion.
+                    //mettre a jour l'icone suivant le type_aeroport d'avion.
 
                     switch (selectedPlane.Type)
                     {

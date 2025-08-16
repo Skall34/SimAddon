@@ -185,7 +185,7 @@ namespace MeteoPlugin
         private async void requestForMetar()
         {
             //create a request to https://aviationweather.gov/cgi-bin/data/metar.php?ids=LFMT
-            //https://vfrmap.com/?type=osm&lat=62.321&lon=-150.093&zoom=12&api_key=763xxE1MJHyhr48DlAP2qQ
+            //https://vfrmap.com/?type_aeroport=osm&lat=62.321&lon=-150.093&zoom=12&api_key=763xxE1MJHyhr48DlAP2qQ
 
             UpdateStatus("Requesting METAR informations");
             Logger.WriteLine("Requesting METAR informations");

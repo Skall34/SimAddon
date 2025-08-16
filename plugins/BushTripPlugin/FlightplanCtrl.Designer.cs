@@ -1,6 +1,6 @@
 ﻿namespace BushTripPlugin
 {
-    partial class BushTripCtrl
+    partial class FlightplanCtrl
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BushTripCtrl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlightplanCtrl));
             btnImportFlightPLan = new Button();
             statusStrip1 = new StatusStrip();
             tsGlobalStatus = new ToolStripStatusLabel();

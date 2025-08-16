@@ -16,7 +16,7 @@ using System.Numerics;
 
 namespace BushTripPlugin
 {
-    public partial class BushTripCtrl : UserControl, ISimAddonPluginCtrl
+    public partial class FlightplanCtrl : UserControl, ISimAddonPluginCtrl
     {
         private simData? data;
         private uint waypointIndex;
@@ -27,7 +27,7 @@ namespace BushTripPlugin
         private string filename;
         private double declinaison;
 
-        public BushTripCtrl()
+        public FlightplanCtrl()
         {
             InitializeComponent();
             waypointIndex = 0;
@@ -65,7 +65,7 @@ namespace BushTripPlugin
 
         public string getName()
         {
-            return ("Bushtrip");
+            return ("Flight plan");
         }
 
         public void init(ref simData _data)

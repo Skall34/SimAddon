@@ -61,7 +61,7 @@ namespace ATISPlugin.Properties {
         }
         
         /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        ///   Recherche une ressource localisée de type_aeroport System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Virtual_Air_Traffic_Simulation_Network__logo_ {
             get {
