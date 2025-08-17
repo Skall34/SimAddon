@@ -61,9 +61,9 @@ jobs:
     - name: publish FlightRec plugin
       run: dotnet publish plugins/FlightRecPlugin/FlightRecPlugin.csproj --configuration Release --output publish_output\plugins\0_FlightRecorder
 
-    - name: publish bushtrip plugin
-      run: dotnet publish plugins/BushTripPlugin/BushTripPlugin.csproj --configuration Release --output publish_output\plugins\1_BushTrip
-
+    - name: publish flightplan plugin
+      run: dotnet publish plugins/FlightplanPlugin/FlightplanPlugin.csproj --configuration Release --output publish_output\plugins\1_Flightplan
+      
     - name: publish meteo plugin
       run: dotnet publish plugins/MeteoPlugin/MeteoPlugin.csproj --configuration Release --output publish_output\plugins\2_Meteo
 
