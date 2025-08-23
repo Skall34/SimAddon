@@ -15,6 +15,7 @@ namespace SimAddon
     {
         private bool autostart = false;
         private bool autoHide = false;
+        private System.Windows.Forms.Timer timerZulu;
 
         PluginsMgr plugsMgr;
         private PluginsSettings pluginsSettings;
@@ -25,6 +26,7 @@ namespace SimAddon
 
         Version version;
         Collection<TabPage> pluginTabs;
+
 
         public static bool isAutoStart()
         {
@@ -52,6 +54,10 @@ namespace SimAddon
 
             InitializeComponent();
 
+            // Dans Form1.Designer.cs ou dans le constructeur de Form1
+            this.timerZulu = new System.Windows.Forms.Timer();
+            this.timerZulu.Interval = 1000; // 1 seconde
+            this.timerZulu.Tick += new System.EventHandler(this.timerZulu_Tick);
 
             this.StartPosition = FormStartPosition.Manual;
             Point startlocation = new Point();
@@ -304,9 +310,14 @@ namespace SimAddon
         {
 
         }
-
+        private void timerZulu_Tick(object sender, EventArgs e)
+        {
+            // Format HH:mm:ss 'Z' pour l'heure Zulu
+            toolStripHeureZulu.Text = DateTime.UtcNow.ToString("HH:mm:ss 'Z'");
+        }
         private async void Form1_Load(object sender, EventArgs e)
         {
+            this.timerZulu.Start();
             //initialise l'object qui sert à capter les données qui viennent du simu
             Logger.WriteLine("initialize the connection to the simulator");
             tabControl1.SuspendLayout();

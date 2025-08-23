@@ -38,6 +38,7 @@ namespace SimAddon
             statusStrip = new StatusStrip();
             lblConnectionStatus = new ToolStripStatusLabel();
             lblPluginStatus = new ToolStripStatusLabel();
+            toolStripHeureZulu = new ToolStripStatusLabel();
             timerMain = new System.Windows.Forms.Timer(components);
             timerConnection = new System.Windows.Forms.Timer(components);
             contextMenuStrip1 = new ContextMenuStrip(components);
@@ -46,16 +47,16 @@ namespace SimAddon
             toolStripSeparator1 = new ToolStripSeparator();
             screenshotToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
-            tabControl1 = new TabControl();
             openWebSiteToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
+            tabControl1 = new TabControl();
             statusStrip.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip
             // 
-            statusStrip.Items.AddRange(new ToolStripItem[] { lblConnectionStatus, lblPluginStatus });
+            statusStrip.Items.AddRange(new ToolStripItem[] { lblConnectionStatus, lblPluginStatus, toolStripHeureZulu });
             statusStrip.Location = new Point(0, 809);
             statusStrip.Name = "statusStrip";
             statusStrip.Padding = new Padding(1, 0, 22, 0);
@@ -76,6 +77,13 @@ namespace SimAddon
             lblPluginStatus.Size = new Size(76, 17);
             lblPluginStatus.Text = "Plugin Status";
             // 
+            // toolStripHeureZulu
+            // 
+            toolStripHeureZulu.Name = "toolStripHeureZulu";
+            toolStripHeureZulu.Size = new Size(66, 17);
+            toolStripHeureZulu.Text = "Heure Zulu";
+            toolStripHeureZulu.TextAlign = ContentAlignment.BottomRight;
+            // 
             // timerMain
             // 
             timerMain.Tick += TimerMain_Tick;
@@ -89,38 +97,50 @@ namespace SimAddon
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1, screenshotToolStripMenuItem, toolStripSeparator2, openWebSiteToolStripMenuItem, toolStripSeparator3 });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 132);
+            contextMenuStrip1.Size = new Size(154, 110);
             // 
             // alwaysOnTopToolStripMenuItem
             // 
             alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            alwaysOnTopToolStripMenuItem.Size = new Size(180, 22);
+            alwaysOnTopToolStripMenuItem.Size = new Size(153, 22);
             alwaysOnTopToolStripMenuItem.Text = "Always On Top";
             alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
             // 
             // autoHideToolStripMenuItem
             // 
             autoHideToolStripMenuItem.Name = "autoHideToolStripMenuItem";
-            autoHideToolStripMenuItem.Size = new Size(180, 22);
+            autoHideToolStripMenuItem.Size = new Size(153, 22);
             autoHideToolStripMenuItem.Text = "Auto hide";
             autoHideToolStripMenuItem.Click += autoHideToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(177, 6);
+            toolStripSeparator1.Size = new Size(150, 6);
             // 
             // screenshotToolStripMenuItem
             // 
             screenshotToolStripMenuItem.Name = "screenshotToolStripMenuItem";
-            screenshotToolStripMenuItem.Size = new Size(180, 22);
+            screenshotToolStripMenuItem.Size = new Size(153, 22);
             screenshotToolStripMenuItem.Text = "Screenshot";
             screenshotToolStripMenuItem.Click += screenshotToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(177, 6);
+            toolStripSeparator2.Size = new Size(150, 6);
+            // 
+            // openWebSiteToolStripMenuItem
+            // 
+            openWebSiteToolStripMenuItem.Name = "openWebSiteToolStripMenuItem";
+            openWebSiteToolStripMenuItem.Size = new Size(153, 22);
+            openWebSiteToolStripMenuItem.Text = "Open web site";
+            openWebSiteToolStripMenuItem.Click += openWebSiteToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator3
+            // 
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(150, 6);
             // 
             // tabControl1
             // 
@@ -131,18 +151,6 @@ namespace SimAddon
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(574, 809);
             tabControl1.TabIndex = 7;
-            // 
-            // openWebSiteToolStripMenuItem
-            // 
-            openWebSiteToolStripMenuItem.Name = "openWebSiteToolStripMenuItem";
-            openWebSiteToolStripMenuItem.Size = new Size(180, 22);
-            openWebSiteToolStripMenuItem.Text = "Open web site";
-            openWebSiteToolStripMenuItem.Click += openWebSiteToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator3
-            // 
-            toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(177, 6);
             // 
             // Form1
             // 
@@ -187,6 +195,7 @@ namespace SimAddon
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem openWebSiteToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator3;
+        private ToolStripStatusLabel toolStripHeureZulu;
     }
 }
 
