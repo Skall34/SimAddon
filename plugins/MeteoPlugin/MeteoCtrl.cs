@@ -54,7 +54,6 @@ namespace MeteoPlugin
 
         public MeteoCtrl()
         {
-            LoadCustomFont();
             InitializeComponent();
 
             if (fontCollection != null)
@@ -79,32 +78,6 @@ namespace MeteoPlugin
                 splitContainer1.Panel1Collapsed = false;
             }
         }
-
-
-        private void LoadCustomFont()
-        {
-            fontCollection = new PrivateFontCollection();
-
-            // Load font from embedded resource
-            var fontStream = Assembly.GetExecutingAssembly()
-                .GetManifestResourceStream("MeteoPlugin.Font.LCD2B___.TTF");
-
-            if (fontStream != null)
-            {
-                byte[] fontData = new byte[fontStream.Length];
-                fontStream.Read(fontData, 0, (int)fontStream.Length);
-
-                unsafe
-                {
-                    fixed (byte* pFontData = fontData)
-                    {
-                        fontCollection.AddMemoryFont((IntPtr)pFontData, fontData.Length);
-                    }
-                }
-                // Create the font object with desired size
-            }
-        }
-
 
         public string getName()
         {

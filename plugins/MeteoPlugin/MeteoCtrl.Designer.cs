@@ -49,6 +49,7 @@ namespace MeteoPlugin
             VariableWindTimer = new System.Windows.Forms.Timer(components);
             VariableWindAnimation = new System.Windows.Forms.Timer(components);
             splitContainer1 = new SplitContainer();
+            compas2 = new SimAddonControls.Compas();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -178,7 +179,7 @@ namespace MeteoPlugin
             panel1.BorderStyle = BorderStyle.Fixed3D;
             panel1.Controls.Add(lblDecodedMETAR);
             panel1.Dock = DockStyle.Fill;
-            panel1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            panel1.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             panel1.Location = new Point(12, 156);
             panel1.Margin = new Padding(10, 3, 10, 3);
             panel1.Name = "panel1";
@@ -192,11 +193,13 @@ namespace MeteoPlugin
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel3.Controls.Add(compas1, 0, 0);
             tableLayoutPanel3.Controls.Add(tableLayoutPanel4, 1, 0);
+            tableLayoutPanel3.Controls.Add(compas2, 0, 1);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(0, 0);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 1;
+            tableLayoutPanel3.RowCount = 2;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel3.Size = new Size(725, 281);
             tableLayoutPanel3.TabIndex = 13;
             tableLayoutPanel3.Paint += tableLayoutPanel3_Paint;
@@ -220,7 +223,7 @@ namespace MeteoPlugin
     };
             compas1.NumericValue = 0D;
             compas1.RectangleSize = new Size(60, 20);
-            compas1.Size = new Size(356, 275);
+            compas1.Size = new Size(356, 255);
             compas1.TabIndex = 0;
             compas1.Unit = "NM";
             // 
@@ -236,7 +239,7 @@ namespace MeteoPlugin
             tableLayoutPanel4.RowCount = 2;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel4.Size = new Size(357, 275);
+            tableLayoutPanel4.Size = new Size(357, 255);
             tableLayoutPanel4.TabIndex = 1;
             // 
             // lbAirportInfo
@@ -244,14 +247,14 @@ namespace MeteoPlugin
             lbAirportInfo.BackColor = Color.FromArgb(224, 224, 224);
             lbAirportInfo.Dock = DockStyle.Fill;
             lbAirportInfo.DrawMode = DrawMode.OwnerDrawFixed;
-            lbAirportInfo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lbAirportInfo.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lbAirportInfo.FormattingEnabled = true;
             lbAirportInfo.HorizontalScrollbar = true;
             lbAirportInfo.ItemHeight = 34;
             lbAirportInfo.Items.AddRange(new object[] { "Loading airport database" });
             lbAirportInfo.Location = new Point(3, 3);
             lbAirportInfo.Name = "lbAirportInfo";
-            lbAirportInfo.Size = new Size(351, 239);
+            lbAirportInfo.Size = new Size(351, 219);
             lbAirportInfo.TabIndex = 1;
             lbAirportInfo.DrawItem += lbAirportInfo_DrawItem;
             // 
@@ -259,7 +262,7 @@ namespace MeteoPlugin
             // 
             panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel2.BackColor = Color.Teal;
-            panel2.Location = new Point(0, 245);
+            panel2.Location = new Point(0, 225);
             panel2.Margin = new Padding(0);
             panel2.Name = "panel2";
             panel2.Size = new Size(357, 30);
@@ -291,6 +294,20 @@ namespace MeteoPlugin
             splitContainer1.Size = new Size(725, 691);
             splitContainer1.SplitterDistance = 406;
             splitContainer1.TabIndex = 14;
+            // 
+            // compas2
+            // 
+            compas2.Headings = null;
+            compas2.LabelText = "Compas";
+            compas2.Location = new Point(3, 264);
+            compas2.Name = "compas2";
+            compas2.NbNeedles = 0;
+            compas2.NeedleImages = null;
+            compas2.NumericValue = 0D;
+            compas2.RectangleSize = new Size(60, 20);
+            compas2.Size = new Size(356, 14);
+            compas2.TabIndex = 2;
+            compas2.Unit = "NM";
             // 
             // MeteoCtrl
             // 
@@ -338,5 +355,6 @@ namespace MeteoPlugin
         private SplitContainer splitContainer1;
         private TableLayoutPanel tableLayoutPanel4;
         private Panel panel2;
+        private SimAddonControls.Compas compas2;
     }
 }

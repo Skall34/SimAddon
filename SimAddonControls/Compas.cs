@@ -136,17 +136,17 @@
 
 
             // Draw fixed-size rectangle and right-aligned distance text
-            Rectangle textRect = new Rectangle(
-                centerX - RectangleSize.Width / 2,
-                (int)(centerY + radius * 0.5f - RectangleSize.Height / 2),
-                RectangleSize.Width,
-                RectangleSize.Height);
-
-            g.DrawRectangle(Pens.White, textRect);
-
             string distanceText = $"{NumericValue:F1} {Unit}";
             Font font = new Font("Arial", 10);
             SizeF textSize = g.MeasureString(distanceText, font);
+            Rectangle textRect = new Rectangle(
+                (int)(centerX - textSize.Width / 2 - 2),
+                (int)(centerY + radius * 0.5f - textSize.Height / 2 - 2),
+                (int)textSize.Width + 4,
+                (int)textSize.Height + 4);
+
+            g.DrawRectangle(Pens.White, textRect);
+
 
             // Calculate position for right-aligned text within the rectangle
             float textX = textRect.Right - textSize.Width - 2;
@@ -157,16 +157,17 @@
             // Draw the label text below the dial
             if (!string.IsNullOrEmpty(LabelText))
             {
+                Font labelFont = new Font("Arial", 10);
+                SizeF labelSize = g.MeasureString(LabelText, labelFont);
+
                 Rectangle LabelRect = new Rectangle(
-                    centerX - RectangleSize.Width / 2,
-                    (int)(centerY - radius * 0.5f - RectangleSize.Height / 2),
-                    RectangleSize.Width,
-                    RectangleSize.Height);
+                    (int)(centerX - labelSize.Width / 2-2),
+                    (int)(centerY - radius * 0.5f - labelSize.Height / 2 - 2),
+                    (int)labelSize.Width + 4,
+                    (int)labelSize.Height + 4);
 
                 g.DrawRectangle(Pens.White, LabelRect);
 
-                Font labelFont = new Font("Arial", 10);
-                SizeF labelSize = g.MeasureString(LabelText, labelFont);
                 float labelX = centerX - labelSize.Width / 2;
                 float labelY = LabelRect.Top + (LabelRect.Height - labelSize.Height) / 2;
                 g.DrawString(LabelText, labelFont, Brushes.White, labelX, labelY);

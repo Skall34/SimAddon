@@ -13,16 +13,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Font\CFLCD-Regular.ttf" />
-    <None Remove="Font\LCD-N___.TTF" />
-    <None Remove="Font\LCD2B___.TTF" />
-    <None Remove="Font\LCD2N___.TTF" />
     <None Remove="Resources\piste.png" />
     <None Remove="Resources\vent.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Font\LCD2B___.TTF" />
     <EmbeddedResource Include="Resources\piste.png" />
     <EmbeddedResource Include="Resources\vent.png" />
   </ItemGroup>
@@ -47,12 +42,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Font\LCDWinTT\LCD-N___.TTF">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
