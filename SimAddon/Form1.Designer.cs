@@ -49,6 +49,7 @@ namespace SimAddon
             toolStripSeparator2 = new ToolStripSeparator();
             openWebSiteToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
+            traceFolderToolStripMenuItem = new ToolStripMenuItem();
             tabControl1 = new TabControl();
             statusStrip.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
@@ -95,52 +96,60 @@ namespace SimAddon
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1, screenshotToolStripMenuItem, toolStripSeparator2, openWebSiteToolStripMenuItem, toolStripSeparator3 });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1, screenshotToolStripMenuItem, toolStripSeparator2, openWebSiteToolStripMenuItem, traceFolderToolStripMenuItem, toolStripSeparator3 });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(154, 110);
+            contextMenuStrip1.Size = new Size(181, 154);
+            contextMenuStrip1.Opening += contextMenuStrip1_Opening;
             // 
             // alwaysOnTopToolStripMenuItem
             // 
             alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            alwaysOnTopToolStripMenuItem.Size = new Size(153, 22);
+            alwaysOnTopToolStripMenuItem.Size = new Size(180, 22);
             alwaysOnTopToolStripMenuItem.Text = "Always On Top";
             alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
             // 
             // autoHideToolStripMenuItem
             // 
             autoHideToolStripMenuItem.Name = "autoHideToolStripMenuItem";
-            autoHideToolStripMenuItem.Size = new Size(153, 22);
+            autoHideToolStripMenuItem.Size = new Size(180, 22);
             autoHideToolStripMenuItem.Text = "Auto hide";
             autoHideToolStripMenuItem.Click += autoHideToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(150, 6);
+            toolStripSeparator1.Size = new Size(177, 6);
             // 
             // screenshotToolStripMenuItem
             // 
             screenshotToolStripMenuItem.Name = "screenshotToolStripMenuItem";
-            screenshotToolStripMenuItem.Size = new Size(153, 22);
+            screenshotToolStripMenuItem.Size = new Size(180, 22);
             screenshotToolStripMenuItem.Text = "Screenshot";
             screenshotToolStripMenuItem.Click += screenshotToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(150, 6);
+            toolStripSeparator2.Size = new Size(177, 6);
             // 
             // openWebSiteToolStripMenuItem
             // 
             openWebSiteToolStripMenuItem.Name = "openWebSiteToolStripMenuItem";
-            openWebSiteToolStripMenuItem.Size = new Size(153, 22);
+            openWebSiteToolStripMenuItem.Size = new Size(180, 22);
             openWebSiteToolStripMenuItem.Text = "Open web site";
             openWebSiteToolStripMenuItem.Click += openWebSiteToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(150, 6);
+            toolStripSeparator3.Size = new Size(177, 6);
+            // 
+            // traceFolderToolStripMenuItem
+            // 
+            traceFolderToolStripMenuItem.Name = "traceFolderToolStripMenuItem";
+            traceFolderToolStripMenuItem.Size = new Size(180, 22);
+            traceFolderToolStripMenuItem.Text = "Open trace folder";
+            traceFolderToolStripMenuItem.Click += traceFolderToolStripMenuItem_Click;
             // 
             // tabControl1
             // 
@@ -196,6 +205,7 @@ namespace SimAddon
         private ToolStripMenuItem openWebSiteToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripStatusLabel toolStripHeureZulu;
+        private ToolStripMenuItem traceFolderToolStripMenuItem;
     }
 }
 

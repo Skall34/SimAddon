@@ -189,7 +189,6 @@
                     g.DrawLine(new Pen(Color.Red, 2), centerX, centerY, needleX, needleY);
                 }
             }
-
         }
 
         protected override void OnResize(EventArgs e)

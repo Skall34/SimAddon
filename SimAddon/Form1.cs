@@ -647,5 +647,30 @@ namespace SimAddon
                 Plugin_OnShowMsgbox(this, "Error", "Unable to open the web site. Please check the URL.", MessageBoxButtons.OK);
             }
         }
+
+        private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+
+        private void traceFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Get the application name
+            string appName = Assembly.GetEntryAssembly().GetName().Name;
+
+            // Get the path to the user's AppData folder
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            // Combine the AppData path with the folder name
+            string fullPath = Path.Combine(appDataPath, appName);
+
+            //open fullPath in the file explorer
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = fullPath,
+                UseShellExecute = true, // This is necessary to open the URL in the default browser
+                Verb = "open" // This is necessary to open the folder in the file explorer
+            });
+        }
     }
 }
