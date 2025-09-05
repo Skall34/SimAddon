@@ -1302,15 +1302,15 @@ namespace FlightRecPlugin
 
             SimEvent(SimEventArg.EventType.ENGINESTOP);
 
-            //save the GPS trace
-            GPSRecorder.SaveToJSON(Path.Combine(executionFolder, lbStartIata.Text + "_" + lbEndIata.Text + "_raw_trace.json"));
-
             //GPSRecorder.OptimizeTrace();
             GPSRecorder.OptimizeTraceRamerDouglasPeucker(0.0001);
 
             string gpsTrace = GPSRecorder.GetTraceJSON();
-
-            string localFlightBookFile = Path.Combine(executionFolder, Properties.Settings.Default.LocalFlightbookFile);
+            string localFlightBookFile = Properties.Settings.Default.LocalFlightbookFile;
+            if (localFlightBookFile == string.Empty)
+            {
+                localFlightBookFile = "local_flightbook.json";
+            }
             //save the flight to the local flightbook
             LocalFlightBook localFlightBook = new LocalFlightBook();
             localFlightBook.loadFromJson(localFlightBookFile);
@@ -1333,9 +1333,10 @@ namespace FlightRecPlugin
             localFlightBook.AddFlight(newFlight);
             localFlightBook.saveToJson(localFlightBookFile);
 
-            GPSRecorder.SaveToJSON(Path.Combine(executionFolder, lbStartIata.Text + "_" + lbEndIata.Text + "_trace.json"));
-
-            GPSRecorder.SaveToKML(Path.Combine(executionFolder, lbStartIata.Text + "_" + lbEndIata.Text + "_trace.kml"));
+            //no need it is just for debug
+            //save the GPS trace to a file
+            //GPSRecorder.SaveToJSON(Path.Combine(executionFolder, lbStartIata.Text + "_" + lbEndIata.Text + "_trace.json"));
+            //GPSRecorder.SaveToKML(Path.Combine(executionFolder, lbStartIata.Text + "_" + lbEndIata.Text + "_trace.kml"));
         }
 
         private void checkParameters()
@@ -1521,7 +1522,7 @@ namespace FlightRecPlugin
         private void btnFlightbook_Click(object sender, EventArgs e)
         {
             LocalFlightbookForm localFlightbookForm = new LocalFlightbookForm(data);
-            localFlightbookForm.loadFlightbook(Path.Combine(executionFolder,Properties.Settings.Default.LocalFlightbookFile));
+            localFlightbookForm.loadFlightbook(Properties.Settings.Default.LocalFlightbookFile);
             localFlightbookForm.ShowDialog(this);
         }
 

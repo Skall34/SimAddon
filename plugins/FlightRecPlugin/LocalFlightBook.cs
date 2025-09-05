@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,16 +46,38 @@ namespace FlightRecPlugin
             Flights.Clear();
         }
 
+        private string storageFolder;
+
+        public LocalFlightBook()
+        {
+            Flights = new List<Flight>();
+            // Get the application name
+            string appName = Assembly.GetEntryAssembly().GetName().Name;
+
+            // Get the path to the user's AppData folder
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            // Combine the AppData path with the folder name
+            storageFolder = Path.Combine(appDataPath, appName);
+
+            // Ensure the directory exists, if not, create it
+            Directory.CreateDirectory(storageFolder);
+        }
+
         public void loadFromJson(string jsonfilename)
         {
             try
             {
+                if (Path.IsPathFullyQualified(jsonfilename) == false)
+                {
+                    jsonfilename = Path.Combine(storageFolder, jsonfilename);
+                }
                 string json = System.IO.File.ReadAllText(jsonfilename, Encoding.UTF8);
                 Flights = System.Text.Json.JsonSerializer.Deserialize<List<Flight>>(json);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading flights from JSON: {ex.Message}");
+                Logger.WriteLine($"An error occurred while loading flights from JSON: {ex.Message}");
             }
         }
 
@@ -61,6 +85,11 @@ namespace FlightRecPlugin
         {
             try
             {
+                if (Path.IsPathFullyQualified(filename) == false)
+                {
+                    filename = Path.Combine(storageFolder, filename);
+                }
+
                 string allflights = System.Text.Json.JsonSerializer.Serialize(Flights);
                 using (var file = new System.IO.StreamWriter(filename, false, Encoding.UTF8))
                 {
