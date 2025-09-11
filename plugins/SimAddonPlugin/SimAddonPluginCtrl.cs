@@ -14,7 +14,8 @@ namespace SimAddonPlugin
             LANDING,
             SETCALLSIGN,
             SETDESTINATION,
-            SETAIRCRAFT
+            SETAIRCRAFT,
+            CRASHING
         }
 
         public EventType reason{ get; set; }
