@@ -414,6 +414,7 @@ namespace FlightRecPlugin
         private void measureLandingPerfs(situation currentFlightStatus)
         {
             //only update the touchDownVSpeed if we've been airborn once
+            flightPerfs.landingSpeed = currentFlightStatus.airSpeed;
             flightPerfs.landingVSpeed = currentFlightStatus.landingVerticalSpeed;
             flightPerfs.landingWeight = currentFlightStatus.planeWeight;
 
@@ -676,10 +677,6 @@ namespace FlightRecPlugin
                             }
                             break;
                     }
-
-                    //constamment mettre à jour la vrtical acceleration et airspeed pendant le vol.
-                    flightPerfs.landingVerticalAcceleration = currentFlightStatus.verticalAcceleration;
-                    flightPerfs.landingSpeed = currentFlightStatus.airSpeed;
 
                     //keep new value of current fuel quantity
                     _currentFuel = currentFuel;
