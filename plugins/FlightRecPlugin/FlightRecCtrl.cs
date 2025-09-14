@@ -1441,7 +1441,7 @@ namespace FlightRecPlugin
                         //stop the timer
                         updatePlaneStatusTimer.Stop();
 
-                        Logger.WriteLine("Freeing the airplane on the sheet");
+                        Logger.WriteLine("Freeing the airplane on the database");
                         UpdatePlaneStatus(0);
                     }
                 }
@@ -1577,8 +1577,8 @@ namespace FlightRecPlugin
                 else
                 {
                     //if the current position is null, use 0 as altitude
-                    values["latitude"] = "";
-                    values["longitude"] = "";
+                    values["latitude"] = "0";
+                    values["longitude"] = "0";
                 }
 
                 if (data != null)
@@ -1708,6 +1708,8 @@ namespace FlightRecPlugin
             Avion selectedPlane = this.data.avions.Where(a => a.Immat == cbImmat.Text).FirstOrDefault();
             if (selectedPlane != null)
             {
+                Logger.WriteLine("Plane selected: " + selectedPlane.Immat + " Status=" + selectedPlane.Status.ToString() + " EnVol=" + selectedPlane.EnVol.ToString() + " DernierUtilisateur=" + selectedPlane.DernierUtilisateur);
+                //si l'avion est en maintenance, ou en vol par un autre utilisateur, on ne le selectionne pas.
                 if ((selectedPlane.Status == 1) || (selectedPlane.Status == 2) || ((selectedPlane.EnVol == 1) && (selectedPlane.DernierUtilisateur != tbCallsign.Text)))
                 {
                     cbImmat.SelectedItem = null;
@@ -1744,15 +1746,13 @@ namespace FlightRecPlugin
                             ; break;
                     }
 
-
-
                     checkParameters();
 
                     //si cet avion est marqué comme deja en vol, c'est par l'utilisateur courant. 
                     //marque cet avion comme n'etant plus en vol.
                     if ((selectedPlane.EnVol == 1) && selectedPlane.DernierUtilisateur == tbCallsign.Text)
                     {
-                        Logger.WriteLine("Freeing the airplane on the sheet");
+                        Logger.WriteLine("Freeing the airplane on the database");
                         UpdatePlaneStatus(0);
                     }
 
@@ -1796,7 +1796,7 @@ namespace FlightRecPlugin
             tbEndICAO.Enabled = true;
             //stop this timer
             engineStopTimer.Stop();
-            Logger.WriteLine("Engine stop validated");
+            Logger.WriteLine("Engine stop confirmed");
             stopEngineConfirmed = true;
         }
 

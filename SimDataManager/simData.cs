@@ -274,9 +274,17 @@ namespace SimDataManager
                     var response = await client.PostAsync(phpUrl, content);
                     string responseContent = await response.Content.ReadAsStringAsync();
 
-                    // Affiche tout, même si c'est vide
-                    string message = $"Code: {response.StatusCode}\nRéponse brute:\n{responseContent}";
-                    Logger.WriteLine(message);
+                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        Logger.WriteLine("Erreur lors de l'envoi des données de vol : " + response.StatusCode);
+                        // Affiche tout, même si c'est vide
+                        string message = $"api_update_status return code: {response.StatusCode}\nRéponse brute:\n{responseContent}";
+                        Logger.WriteLine(message);
+                    }
+                    else
+                    {
+                        Logger.WriteLine("UpdatePlaneStatus reponse: " + responseContent);
+                    }
 
                     if (!response.IsSuccessStatusCode)
                     {

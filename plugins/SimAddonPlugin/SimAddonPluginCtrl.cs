@@ -57,7 +57,7 @@ namespace SimAddonPlugin
         public delegate void OnTalkHandler(object sender, string texttospeech);
         public event OnTalkHandler OnTalk;
 
-        public delegate void OnSimEventHandler(object sender, SimEventArg eventArg);
+        public delegate void OnSimEventHandler(SimAddonPlugin.ISimAddonPluginCtrl sender, SimEventArg eventArg);
         public event OnSimEventHandler OnSimEvent;
         public void ManageSimEvent(object sender, SimEventArg eventArg);
 

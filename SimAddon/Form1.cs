@@ -227,7 +227,7 @@ namespace SimAddon
                 }
                 catch (Exception ex)
                 {
-                    Logger.WriteLine(ex.Message);
+                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
                 }
 
             }
@@ -288,7 +288,7 @@ namespace SimAddon
                 }
                 catch (Exception ex)
                 {
-                    Logger.WriteLine(ex.Message);
+                    Logger.WriteLine(plugin.getName() +" : " + ex.Message);
                 }
             }
             e.Cancel = isCanceled;
@@ -362,7 +362,7 @@ namespace SimAddon
                 }
                 catch (Exception ex)
                 {
-                    Logger.WriteLine(ex.Message);
+                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
                 }
             }
             tabControl1.ResumeLayout(true);
@@ -385,7 +385,7 @@ namespace SimAddon
                 }
                 catch (Exception ex)
                 {
-                    Logger.WriteLine(ex.Message);
+                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
                 }
             }
             Cursor = Cursors.Default;
@@ -457,8 +457,9 @@ namespace SimAddon
             return result;
         }
 
-        private void Plugin_OnSimEvent(object sender, SimEventArg eventArg)
+        private void Plugin_OnSimEvent(SimAddonPlugin.ISimAddonPluginCtrl sender, SimEventArg eventArg)
         {
+            Logger.WriteLine("Event received from plugin : " + sender.getName() + " " + eventArg.reason.ToString() + " value=" + eventArg.value);
             switch (eventArg.reason)
             {
                 case SimEventArg.EventType.ENGINESTART:
@@ -496,7 +497,7 @@ namespace SimAddon
                 }
                 catch (Exception ex)
                 {
-                    Logger.WriteLine(ex.Message);
+                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
                 }
             }
         }
