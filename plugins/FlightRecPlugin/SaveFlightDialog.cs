@@ -293,11 +293,9 @@ namespace FlightRecPlugin
                     throw new Exception("Carburant non détecté !");
                 if (DepartureTime == DateTime.UnixEpoch || ArrivalTime == DateTime.UnixEpoch)
                     throw new Exception("Heure de départ ou d’arrivée non détectée !");
-                File.WriteAllText("debug_flightdata.txt", string.Join("\n", flightData.Select(kv => $"{kv.Key} = {kv.Value}")));
 
                 result = await data.SendFlightDataToPhpAsync(flightData);
                 // Fin JFK 18062025
-
 
                 if (result)
                 {
