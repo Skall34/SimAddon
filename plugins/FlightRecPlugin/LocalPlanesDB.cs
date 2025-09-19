@@ -69,10 +69,13 @@ namespace FlightRecPlugin
             {
                 planesDB[simplane] = new List<string>();
             }
-            planesDB[simplane].Add(name);
-            var json = System.Text.Json.JsonSerializer.Serialize(planesDB, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            var filename = Path.Combine(storageFolder, LocalPlanesDB.dbFile);
-            File.WriteAllText(filename, json);
+            if (!planesDB[simplane].Contains(name))
+            {
+                planesDB[simplane].Add(name);
+                var json = System.Text.Json.JsonSerializer.Serialize(planesDB, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+                var filename = Path.Combine(storageFolder, LocalPlanesDB.dbFile);
+                File.WriteAllText(filename, json);
+            }
         }
 
         public static void RemovePlane(string simplane,string name)
