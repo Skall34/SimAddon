@@ -113,6 +113,7 @@ namespace FlightRecPlugin
                 saveFlightDialog.Mission = flight.mission;
                 saveFlightDialog.Note = flight.noteDuVol;
                 saveFlightDialog.GPSTrace = flight.GPSData;
+                saveFlightDialog.SimPlane = flight.SimPlane;
 
                 saveFlightDialog.ShowDialog();
                 if (saveFlightDialog.DialogResult == DialogResult.OK)

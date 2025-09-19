@@ -22,6 +22,8 @@ namespace FlightRecPlugin
     public partial class SaveFlightDialog : Form
     {
         simData data;
+        
+        private string _simPlane = string.Empty;
 
         public string Callsign { get; set; }
         public string Immat
@@ -35,6 +37,19 @@ namespace FlightRecPlugin
                 cbImmat.Text = value;
             }
         }
+
+        public string SimPlane
+        {
+            get
+            {
+                return _simPlane;
+            }
+            set
+            {
+                _simPlane = value;
+            }
+        }
+
         public double Cargo
         {
             get
@@ -198,6 +213,31 @@ namespace FlightRecPlugin
         private async void btnSave_Click(object sender, EventArgs e)
         {
             bool result = true;
+
+            //check the simplane versus the immat using the LocalPlanesDB
+            if (SimPlane != string.Empty)
+            {
+                List<string> planes = LocalPlanesDB.GetPlaneName(SimPlane);
+                if (planes != null)
+                {
+                    if (!planes.Contains(Immat))
+                    {
+                        MessageBox.Show("Selected plane doesn't match the plane in the sim (" + SimPlane + ")");
+                        result = false;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Can't find the plane in local DB, can't check the plane");
+                    Logger.WriteLine("can't check plane, no local DB entry for " + SimPlane);
+                    result = false;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Can't check the plane, no plane detected from sim");
+                Logger.WriteLine("can't check plane, no plane detected from sim");
+            }
 
             //check the departure ICAO
             if (data.aeroports != null)

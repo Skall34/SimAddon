@@ -799,6 +799,9 @@ namespace FlightRecPlugin
             ledCheckImmat.On = true;
             ledCheckImmat.Size = new Size(14, 26);
             ledCheckImmat.TabIndex = 53;
+            ledCheckImmat.DoubleClick += ledCheckAircraft_DoubleClick;
+            ledCheckImmat.MouseEnter += ledCheckAircraft_MouseEnter;
+            ledCheckImmat.MouseLeave += ledCheckAircraft_MouseLeave;
             // 
             // ledCheckFreight
             // 
@@ -817,6 +820,10 @@ namespace FlightRecPlugin
             ledCheckAircraft.On = true;
             ledCheckAircraft.Size = new Size(14, 26);
             ledCheckAircraft.TabIndex = 55;
+            ledCheckAircraft.DoubleClick += ledCheckAircraft_DoubleClick;
+            ledCheckAircraft.MouseEnter += ledCheckAircraft_MouseEnter;
+            ledCheckAircraft.MouseLeave += ledCheckAircraft_MouseLeave;
+            ledCheckAircraft.MouseHover += ledCheckAircraft_MouseHover;
             // 
             // ledCheckPayload
             // 

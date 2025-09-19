@@ -171,8 +171,8 @@ namespace FlightRecPlugin
             _currentFuel = 0;
             _refuelDetected = false;
             _endPayload = 0;
-            pauseTime= TimeSpan.Zero;
-            isPaused= false;
+            pauseTime = TimeSpan.Zero;
+            isPaused = false;
             isRecording = false;
 
             lbStartFuel.Text = "Not Yet Available";
@@ -474,14 +474,14 @@ namespace FlightRecPlugin
         {
             bool result = false;
             //check for crashes
-            if ((currentFlightStatus.offRunwayCrashed != 0)&&(!flightPerfs.overRunwayCrashed))
+            if ((currentFlightStatus.offRunwayCrashed != 0) && (!flightPerfs.overRunwayCrashed))
             {
                 Logger.WriteLine("off runway crashed detected");
                 flightPerfs.overRunwayCrashed = true;
                 result = true;
                 //getEndOfFlightData();
             }
-            if ((currentFlightStatus.crashedFlag != 0)&&(!flightPerfs.crashed))
+            if ((currentFlightStatus.crashedFlag != 0) && (!flightPerfs.crashed))
             {
                 Logger.WriteLine("crash detected");
                 flightPerfs.crashed = true;
@@ -582,7 +582,7 @@ namespace FlightRecPlugin
                         eventDetected = EVENT.CRASHING;
                     }
 
-                    if (eventDetected!=EVENT.NONE)
+                    if (eventDetected != EVENT.NONE)
                     {
                         Logger.WriteLine(getName() + " : Event detected : " + eventDetected.ToString());
                     }
@@ -1253,7 +1253,8 @@ namespace FlightRecPlugin
                 mission = cbMission.Text,
                 commentaire = tbCommentaires.Text,
                 payload = _endPayload,
-                GPSData = gpsTrace
+                GPSData = gpsTrace,
+                SimPlane = lbLibelleAvion.Text
             };
 
             localFlightBook.AddFlight(newFlight);
@@ -1319,6 +1320,7 @@ namespace FlightRecPlugin
                 saveFlightDialog.Note = _note;
                 saveFlightDialog.Mission = cbMission.Text;
                 saveFlightDialog.GPSTrace = GPSRecorder.GetTraceJSON();
+                saveFlightDialog.SimPlane = lbLibelleAvion.Text;
 
                 bool isTopMost = false;
                 Form parentForm = (Form)this.TopLevelControl;
@@ -1334,6 +1336,8 @@ namespace FlightRecPlugin
                 {
                     //store last plane used
                     string SimPlane = lbLibelleAvion.Text;
+                    LocalPlanesDB.SetPlane(SimPlane, saveFlightDialog.Immat);
+
                     Properties.Settings.Default.lastSimPlane = SimPlane;
                     // #34 sauvegarder la derniere immat utilisée
                     Settings.Default.lastImmat = saveFlightDialog.Immat;
@@ -1458,8 +1462,8 @@ namespace FlightRecPlugin
                 submitFlightToolStripMenuItem.Enabled = false;
 
                 pauseTime = TimeSpan.Zero;
-                isPaused = false;               
-               
+                isPaused = false;
+
                 currentState = STATE.WAITING;
                 UpdateStatus("Waiting for engine start");
                 Logger.WriteLine("Flight reset");
@@ -1801,8 +1805,6 @@ namespace FlightRecPlugin
         {
             string planeNomComplet = data.GetAircraftType();
 
-
-
             if (tbCallsign.Text == string.Empty)
             {
                 ledCheckCallsign.Color = Color.Red;
@@ -1812,42 +1814,58 @@ namespace FlightRecPlugin
                 ledCheckCallsign.Color = Color.LightGreen;
             }
 
+            List<string> knownImmat = LocalPlanesDB.GetPlaneName(planeNomComplet);
+            string immat = cbImmat.Text;
 
+            bool foundError = false;
 
-            if (Properties.Settings.Default.lastSimPlane != string.Empty)
+            if ((knownImmat != null) && (knownImmat.Count != 0))
             {
-                bool foundError = false;
-
-                if (planeNomComplet == Properties.Settings.Default.lastSimPlane)
+                if (!knownImmat.Contains(immat))
                 {
-                    if (Settings.Default.lastImmat != cbImmat.Text)
-                    {
-                        foundError = true;
-                    }
-                }
-                else
-                {
-                    if (Settings.Default.lastImmat == cbImmat.Text)
-                    {
-                        foundError = true;
-                    }
-                }
-
-                if (foundError)
-                {
-                    lbLibelleAvion.ForeColor = Color.Red;
-                    lbDesignationAvion.ForeColor = Color.Red;
-                    ledCheckAircraft.Color = Color.Red;
-                    ledCheckImmat.Color = Color.Red;
-                }
-                else
-                {
-                    lbLibelleAvion.ForeColor = Color.White;
-                    lbDesignationAvion.ForeColor = Color.White;
-                    ledCheckAircraft.Color = Color.LightGreen;
-                    ledCheckImmat.Color = Color.LightGreen;
+                    foundError = true;
                 }
             }
+            else
+            {
+                //si l'avion n'est pas dans la base locale, on ne peut pas verifier l'immatriculation.  
+                foundError = true;
+            }
+
+            //if (Properties.Settings.Default.lastSimPlane != string.Empty)
+            //{
+
+            //    if (planeNomComplet == Properties.Settings.Default.lastSimPlane)
+            //    {
+            //        if (Settings.Default.lastImmat != cbImmat.Text)
+            //        {
+            //            foundError = true;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (Settings.Default.lastImmat == cbImmat.Text)
+            //        {
+            //            foundError = true;
+            //        }
+            //    }
+            //}
+
+            if (foundError)
+            {
+                lbLibelleAvion.ForeColor = Color.Red;
+                lbDesignationAvion.ForeColor = Color.Red;
+                ledCheckAircraft.Color = Color.Red;
+                ledCheckImmat.Color = Color.Red;
+            }
+            else
+            {
+                lbLibelleAvion.ForeColor = Color.White;
+                lbDesignationAvion.ForeColor = Color.White;
+                ledCheckAircraft.Color = Color.LightGreen;
+                ledCheckImmat.Color = Color.LightGreen;
+            }
+
         }
 
         public async void ReadStaticValues()
@@ -1987,6 +2005,47 @@ namespace FlightRecPlugin
         private void updatePlaneStatusTimer_Tick(object sender, EventArgs e)
         {
             UpdatePlaneStatus(_planeReserved ? 1 : 0);
+        }
+
+        private void ledCheckAircraft_DoubleClick(object sender, EventArgs e)
+        {
+            string simPlane = lbLibelleAvion.Text;
+            List<string> knownImmat = LocalPlanesDB.GetPlaneName(simPlane);
+            string immat = cbImmat.Text;
+            if ((knownImmat != null) && (knownImmat.Count != 0))
+            {
+                if (knownImmat.Contains(immat))
+                {
+                    LocalPlanesDB.RemovePlane(simPlane, immat);
+                }
+                else
+                {
+                    LocalPlanesDB.SetPlane(simPlane, immat);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No known registration for this plane", "Known registrations", MessageBoxButtons.OK);
+                LocalPlanesDB.SetPlane(simPlane, immat);
+            }
+            checkParameters();
+        }
+
+        private void ledCheckAircraft_MouseHover(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ledCheckAircraft_MouseEnter(object sender, EventArgs e)
+        {
+            //change the cursor to a hand
+            this.Cursor = Cursors.Hand;
+        }
+
+        private void ledCheckAircraft_MouseLeave(object sender, EventArgs e)
+        {
+            //change the cursor to default
+            this.Cursor = Cursors.Default;
         }
     }
 }
