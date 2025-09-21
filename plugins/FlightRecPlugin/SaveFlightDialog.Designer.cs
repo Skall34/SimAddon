@@ -55,6 +55,7 @@
             label9 = new System.Windows.Forms.Label();
             cbMission = new System.Windows.Forms.ComboBox();
             tbComments = new System.Windows.Forms.TextBox();
+            tbSimPlane = new System.Windows.Forms.TextBox();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)valDepFuel).BeginInit();
             groupBox2.SuspendLayout();
@@ -68,7 +69,7 @@
             // btnSave
             // 
             btnSave.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-            btnSave.Location = new System.Drawing.Point(197, 499);
+            btnSave.Location = new System.Drawing.Point(464, 364);
             btnSave.Name = "btnSave";
             btnSave.Size = new System.Drawing.Size(75, 23);
             btnSave.TabIndex = 11;
@@ -79,7 +80,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-            btnCancel.Location = new System.Drawing.Point(116, 499);
+            btnCancel.Location = new System.Drawing.Point(383, 364);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new System.Drawing.Size(75, 23);
             btnCancel.TabIndex = 12;
@@ -96,14 +97,14 @@
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new System.Drawing.Point(12, 97);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(263, 105);
+            groupBox1.Size = new System.Drawing.Size(263, 114);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Departure";
             // 
             // valDepFuel
             // 
-            valDepFuel.Location = new System.Drawing.Point(51, 71);
+            valDepFuel.Location = new System.Drawing.Point(51, 77);
             valDepFuel.Maximum = new decimal(new int[] { 99999, 0, 0, 0 });
             valDepFuel.Name = "valDepFuel";
             valDepFuel.Size = new System.Drawing.Size(200, 23);
@@ -113,7 +114,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(8, 79);
+            label3.Location = new System.Drawing.Point(11, 79);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(35, 15);
             label3.TabIndex = 4;
@@ -123,7 +124,7 @@
             // 
             dtDeparture.CustomFormat = "";
             dtDeparture.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            dtDeparture.Location = new System.Drawing.Point(51, 43);
+            dtDeparture.Location = new System.Drawing.Point(51, 49);
             dtDeparture.Name = "dtDeparture";
             dtDeparture.ShowUpDown = true;
             dtDeparture.Size = new System.Drawing.Size(200, 23);
@@ -132,23 +133,24 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(8, 49);
+            label2.Location = new System.Drawing.Point(11, 52);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(40, 15);
+            label2.Size = new System.Drawing.Size(39, 15);
             label2.TabIndex = 2;
             label2.Text = "Time :";
             // 
             // tbDepICAO
             // 
-            tbDepICAO.Location = new System.Drawing.Point(51, 16);
+            tbDepICAO.Location = new System.Drawing.Point(51, 22);
             tbDepICAO.Name = "tbDepICAO";
             tbDepICAO.Size = new System.Drawing.Size(200, 23);
             tbDepICAO.TabIndex = 2;
+            tbDepICAO.TextChanged += tbDepICAO_TextChanged;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(8, 19);
+            label1.Location = new System.Drawing.Point(11, 25);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(35, 15);
             label1.TabIndex = 0;
@@ -162,7 +164,7 @@
             groupBox2.Controls.Add(label5);
             groupBox2.Controls.Add(tbArrICAO);
             groupBox2.Controls.Add(label6);
-            groupBox2.Location = new System.Drawing.Point(11, 208);
+            groupBox2.Location = new System.Drawing.Point(281, 97);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new System.Drawing.Size(264, 114);
             groupBox2.TabIndex = 3;
@@ -181,7 +183,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(8, 85);
+            label4.Location = new System.Drawing.Point(8, 79);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(35, 15);
             label4.TabIndex = 10;
@@ -199,9 +201,9 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new System.Drawing.Point(8, 55);
+            label5.Location = new System.Drawing.Point(8, 52);
             label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(40, 15);
+            label5.Size = new System.Drawing.Size(39, 15);
             label5.TabIndex = 8;
             label5.Text = "Time :";
             // 
@@ -223,13 +225,14 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(tbSimPlane);
             groupBox3.Controls.Add(valCargo);
             groupBox3.Controls.Add(label8);
             groupBox3.Controls.Add(cbImmat);
             groupBox3.Controls.Add(label7);
             groupBox3.Location = new System.Drawing.Point(11, 12);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new System.Drawing.Size(264, 79);
+            groupBox3.Size = new System.Drawing.Size(534, 79);
             groupBox3.TabIndex = 4;
             groupBox3.TabStop = false;
             groupBox3.Text = "Plane";
@@ -276,16 +279,16 @@
             groupBox4.Controls.Add(label9);
             groupBox4.Controls.Add(cbMission);
             groupBox4.Controls.Add(tbComments);
-            groupBox4.Location = new System.Drawing.Point(12, 328);
+            groupBox4.Location = new System.Drawing.Point(11, 217);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new System.Drawing.Size(263, 165);
+            groupBox4.Size = new System.Drawing.Size(533, 141);
             groupBox4.TabIndex = 5;
             groupBox4.TabStop = false;
             groupBox4.Text = "Comments";
             // 
             // valNote
             // 
-            valNote.Location = new System.Drawing.Point(62, 107);
+            valNote.Location = new System.Drawing.Point(60, 81);
             valNote.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             valNote.Name = "valNote";
             valNote.Size = new System.Drawing.Size(192, 23);
@@ -294,7 +297,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new System.Drawing.Point(8, 109);
+            label10.Location = new System.Drawing.Point(6, 83);
             label10.Name = "label10";
             label10.Size = new System.Drawing.Size(33, 15);
             label10.TabIndex = 4;
@@ -303,7 +306,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new System.Drawing.Point(8, 138);
+            label9.Location = new System.Drawing.Point(6, 112);
             label9.Name = "label9";
             label9.Size = new System.Drawing.Size(48, 15);
             label9.TabIndex = 2;
@@ -313,7 +316,7 @@
             // 
             cbMission.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             cbMission.FormattingEnabled = true;
-            cbMission.Location = new System.Drawing.Point(62, 135);
+            cbMission.Location = new System.Drawing.Point(60, 109);
             cbMission.Name = "cbMission";
             cbMission.Size = new System.Drawing.Size(192, 23);
             cbMission.TabIndex = 10;
@@ -323,15 +326,24 @@
             tbComments.Location = new System.Drawing.Point(5, 22);
             tbComments.Multiline = true;
             tbComments.Name = "tbComments";
-            tbComments.Size = new System.Drawing.Size(249, 75);
+            tbComments.Size = new System.Drawing.Size(520, 53);
             tbComments.TabIndex = 8;
+            // 
+            // tbSimPlane
+            // 
+            tbSimPlane.Location = new System.Drawing.Point(270, 16);
+            tbSimPlane.Multiline = true;
+            tbSimPlane.Name = "tbSimPlane";
+            tbSimPlane.ReadOnly = true;
+            tbSimPlane.Size = new System.Drawing.Size(258, 55);
+            tbSimPlane.TabIndex = 3;
             // 
             // SaveFlightDialog
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             CancelButton = btnCancel;
-            ClientSize = new System.Drawing.Size(284, 534);
+            ClientSize = new System.Drawing.Size(551, 399);
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
@@ -341,6 +353,7 @@
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             Name = "SaveFlightDialog";
             Text = "Save flight";
+            Load += SaveFlightDialog_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)valDepFuel).EndInit();
@@ -385,5 +398,6 @@
         private System.Windows.Forms.TextBox tbComments;
         private System.Windows.Forms.NumericUpDown valNote;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox tbSimPlane;
     }
 }

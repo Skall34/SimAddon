@@ -2033,7 +2033,10 @@ namespace FlightRecPlugin
 
         private void ledCheckAircraft_MouseHover(object sender, EventArgs e)
         {
-
+            toolTip1.ToolTipTitle = "Aircraft registration";
+            string tipText = "Double click to add/remove this registration from the local database";
+            toolTip1.SetToolTip((Control)sender, tipText);
+            toolTip1.Show(tipText, this, 5000);
         }
 
         private void ledCheckAircraft_MouseEnter(object sender, EventArgs e)

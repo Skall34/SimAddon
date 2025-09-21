@@ -22,7 +22,7 @@ namespace FlightRecPlugin
     public partial class SaveFlightDialog : Form
     {
         simData data;
-        
+
         private string _simPlane = string.Empty;
 
         public string Callsign { get; set; }
@@ -46,6 +46,7 @@ namespace FlightRecPlugin
             }
             set
             {
+                tbSimPlane.Text = value;
                 _simPlane = value;
             }
         }
@@ -180,7 +181,7 @@ namespace FlightRecPlugin
             }
         }
 
-        public  string GPSTrace { get; set; }
+        public string GPSTrace { get; set; }
 
         public SaveFlightDialog(simData _data)
         {
@@ -222,15 +223,30 @@ namespace FlightRecPlugin
                 {
                     if (!planes.Contains(Immat))
                     {
-                        MessageBox.Show("Selected plane doesn't match the plane in the sim (" + SimPlane + ")");
+                        string message = "Selected plane (" + Immat + ") doesn't match the plane in the sim (" + SimPlane + ")\n";
+                        message += "possible registered immats for this sim plane are:\n";
+                        foreach (string p in planes)
+                        {
+                            message += " - " + p + "\n";
+                        }
+                        MessageBox.Show(message);
                         result = false;
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Can't find the plane in local DB, can't check the plane");
-                    Logger.WriteLine("can't check plane, no local DB entry for " + SimPlane);
-                    result = false;
+                    Logger.WriteLine("can't check sim plane, no local DB entry for " + SimPlane);
+                    DialogResult action = MessageBox.Show("Can't find the sim plane in local DB, can't check the plane." + Environment.NewLine + " Hit retry to confirm plane association and continue", "Retry", MessageBoxButtons.RetryCancel);
+                    if (action == DialogResult.Retry)
+                    {
+                        Logger.WriteLine("user choose to associate plane " + Immat + " to sim plane " + SimPlane);
+                        LocalPlanesDB.SetPlane(SimPlane, Immat);
+                    }
+                    else
+                    {
+                        Logger.WriteLine("user choose to cancel flight save");
+                        result = false;
+                    }
                 }
             }
             else
@@ -351,7 +367,7 @@ namespace FlightRecPlugin
         }
 
         private void valArrFuel_ValueChanged(object sender, EventArgs e)
-        {          
+        {
             if (valArrFuel.Value > valDepFuel.Value)
             {
                 valDepFuel.Value = valArrFuel.Value;
@@ -360,11 +376,21 @@ namespace FlightRecPlugin
 
         private void valDepFuel_ValueChanged(object sender, EventArgs e)
         {
-           
+
             if (valArrFuel.Value > valDepFuel.Value)
             {
-                valArrFuel.Value =valDepFuel.Value ;
+                valArrFuel.Value = valDepFuel.Value;
             }
+        }
+
+        private void tbDepICAO_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SaveFlightDialog_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

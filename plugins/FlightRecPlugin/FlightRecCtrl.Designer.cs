@@ -802,6 +802,7 @@ namespace FlightRecPlugin
             ledCheckImmat.DoubleClick += ledCheckAircraft_DoubleClick;
             ledCheckImmat.MouseEnter += ledCheckAircraft_MouseEnter;
             ledCheckImmat.MouseLeave += ledCheckAircraft_MouseLeave;
+            ledCheckImmat.MouseHover += ledCheckAircraft_MouseHover;
             // 
             // ledCheckFreight
             // 
