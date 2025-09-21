@@ -244,11 +244,11 @@ namespace SimAddon
                 this.lblConnectionStatus.ForeColor = Color.Green;
                 if (_simData.GetReadyToFly())
                 {
-                    statusText += " / Ready";
+                    statusText += " / Ready to fly";
                 }
                 else
                 {
-                    statusText += " Waiting for flight load...";
+                    statusText += " / Not ready to fly...";
                 }
             }
             else

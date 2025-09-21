@@ -395,7 +395,7 @@ namespace SimDataManager
 
         public bool IsPaused()
         {
-            return (pauseIndicator.Value == 4);
+            return (pauseIndicator.Value != 0);
         }
 
         public bool GetReadyToFly()

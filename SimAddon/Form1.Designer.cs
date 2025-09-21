@@ -48,8 +48,8 @@ namespace SimAddon
             screenshotToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             openWebSiteToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator3 = new ToolStripSeparator();
             traceFolderToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator3 = new ToolStripSeparator();
             tabControl1 = new TabControl();
             statusStrip.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
@@ -58,30 +58,31 @@ namespace SimAddon
             // statusStrip
             // 
             statusStrip.Items.AddRange(new ToolStripItem[] { lblConnectionStatus, lblPluginStatus, toolStripHeureZulu });
-            statusStrip.Location = new Point(0, 809);
+            statusStrip.Location = new Point(0, 807);
             statusStrip.Name = "statusStrip";
             statusStrip.Padding = new Padding(1, 0, 22, 0);
-            statusStrip.Size = new Size(574, 22);
-            statusStrip.SizingGrip = false;
+            statusStrip.Size = new Size(574, 24);
             statusStrip.TabIndex = 6;
             statusStrip.Text = "statusStrip1";
             // 
             // lblConnectionStatus
             // 
             lblConnectionStatus.Name = "lblConnectionStatus";
-            lblConnectionStatus.Size = new Size(104, 17);
+            lblConnectionStatus.Size = new Size(104, 19);
             lblConnectionStatus.Text = "Connection Status";
             // 
             // lblPluginStatus
             // 
+            lblPluginStatus.BorderSides = ToolStripStatusLabelBorderSides.Left;
             lblPluginStatus.Name = "lblPluginStatus";
-            lblPluginStatus.Size = new Size(76, 17);
+            lblPluginStatus.Size = new Size(80, 19);
             lblPluginStatus.Text = "Plugin Status";
             // 
             // toolStripHeureZulu
             // 
+            toolStripHeureZulu.BorderSides = ToolStripStatusLabelBorderSides.Left;
             toolStripHeureZulu.Name = "toolStripHeureZulu";
-            toolStripHeureZulu.Size = new Size(66, 17);
+            toolStripHeureZulu.Size = new Size(70, 19);
             toolStripHeureZulu.Text = "Heure Zulu";
             toolStripHeureZulu.TextAlign = ContentAlignment.BottomRight;
             // 
@@ -98,58 +99,58 @@ namespace SimAddon
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1, screenshotToolStripMenuItem, toolStripSeparator2, openWebSiteToolStripMenuItem, traceFolderToolStripMenuItem, toolStripSeparator3 });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 154);
+            contextMenuStrip1.Size = new Size(167, 132);
             contextMenuStrip1.Opening += contextMenuStrip1_Opening;
             // 
             // alwaysOnTopToolStripMenuItem
             // 
             alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            alwaysOnTopToolStripMenuItem.Size = new Size(180, 22);
+            alwaysOnTopToolStripMenuItem.Size = new Size(166, 22);
             alwaysOnTopToolStripMenuItem.Text = "Always On Top";
             alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
             // 
             // autoHideToolStripMenuItem
             // 
             autoHideToolStripMenuItem.Name = "autoHideToolStripMenuItem";
-            autoHideToolStripMenuItem.Size = new Size(180, 22);
+            autoHideToolStripMenuItem.Size = new Size(166, 22);
             autoHideToolStripMenuItem.Text = "Auto hide";
             autoHideToolStripMenuItem.Click += autoHideToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(177, 6);
+            toolStripSeparator1.Size = new Size(163, 6);
             // 
             // screenshotToolStripMenuItem
             // 
             screenshotToolStripMenuItem.Name = "screenshotToolStripMenuItem";
-            screenshotToolStripMenuItem.Size = new Size(180, 22);
+            screenshotToolStripMenuItem.Size = new Size(166, 22);
             screenshotToolStripMenuItem.Text = "Screenshot";
             screenshotToolStripMenuItem.Click += screenshotToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(177, 6);
+            toolStripSeparator2.Size = new Size(163, 6);
             // 
             // openWebSiteToolStripMenuItem
             // 
             openWebSiteToolStripMenuItem.Name = "openWebSiteToolStripMenuItem";
-            openWebSiteToolStripMenuItem.Size = new Size(180, 22);
+            openWebSiteToolStripMenuItem.Size = new Size(166, 22);
             openWebSiteToolStripMenuItem.Text = "Open web site";
             openWebSiteToolStripMenuItem.Click += openWebSiteToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator3
-            // 
-            toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(177, 6);
             // 
             // traceFolderToolStripMenuItem
             // 
             traceFolderToolStripMenuItem.Name = "traceFolderToolStripMenuItem";
-            traceFolderToolStripMenuItem.Size = new Size(180, 22);
+            traceFolderToolStripMenuItem.Size = new Size(166, 22);
             traceFolderToolStripMenuItem.Text = "Open trace folder";
             traceFolderToolStripMenuItem.Click += traceFolderToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator3
+            // 
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(163, 6);
             // 
             // tabControl1
             // 
@@ -158,7 +159,7 @@ namespace SimAddon
             tabControl1.Margin = new Padding(0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(574, 809);
+            tabControl1.Size = new Size(574, 807);
             tabControl1.TabIndex = 7;
             // 
             // Form1
