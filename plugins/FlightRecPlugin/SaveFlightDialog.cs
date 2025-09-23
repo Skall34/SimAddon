@@ -22,6 +22,7 @@ namespace FlightRecPlugin
     public partial class SaveFlightDialog : Form
     {
         simData data;
+        private FlightRecCtrl pluginCtrl;
 
         private string _simPlane = string.Empty;
 
@@ -183,11 +184,13 @@ namespace FlightRecPlugin
 
         public string GPSTrace { get; set; }
 
-        public SaveFlightDialog(simData _data)
+        public SaveFlightDialog(FlightRecCtrl parent, simData _data)
         {
             InitializeComponent();
             //set default values for properties
             data = _data;
+            pluginCtrl = parent;
+
             dtDeparture.Value = DateTime.Now;
             dtArrival.Value = DateTime.Now;
             valNote.Value = 8;
@@ -214,7 +217,8 @@ namespace FlightRecPlugin
         private async void btnSave_Click(object sender, EventArgs e)
         {
             bool result = true;
-
+            btnSave.Enabled = false;
+            btnCancel.Enabled = false;
             //check the simplane versus the immat using the LocalPlanesDB
             if (SimPlane != string.Empty)
             {
@@ -229,14 +233,16 @@ namespace FlightRecPlugin
                         {
                             message += " - " + p + "\n";
                         }
-                        MessageBox.Show(message);
+                        message += "Please correct the immat or associate the plane in the local DB";
+                        pluginCtrl.ShowMsgBox(message, "Plane mismatch", MessageBoxButtons.OK);
                         result = false;
                     }
                 }
                 else
                 {
                     Logger.WriteLine("can't check sim plane, no local DB entry for " + SimPlane);
-                    DialogResult action = MessageBox.Show("Can't find the sim plane in local DB, can't check the plane." + Environment.NewLine + " Hit retry to confirm plane association and continue", "Retry", MessageBoxButtons.RetryCancel);
+                    DialogResult action = pluginCtrl.ShowMsgBox("Can't find the sim plane in local DB, can't check the plane.\n Hit retry to confirm plane association and continue", "No local DB entry", MessageBoxButtons.RetryCancel);
+
                     if (action == DialogResult.Retry)
                     {
                         Logger.WriteLine("user choose to associate plane " + Immat + " to sim plane " + SimPlane);
@@ -251,7 +257,7 @@ namespace FlightRecPlugin
             }
             else
             {
-                MessageBox.Show("Can't check the plane, no plane detected from sim");
+                pluginCtrl.ShowMsgBox("Can't check the plane, no plane detected from sim", "No plane detected", MessageBoxButtons.OK);
                 Logger.WriteLine("can't check plane, no plane detected from sim");
             }
 
@@ -261,13 +267,13 @@ namespace FlightRecPlugin
                 Aeroport? start = data.aeroports.Find(a => a.ident.ToLower() == DepartureICAO.ToLower());
                 if (start == null)
                 {
-                    MessageBox.Show("Can't find start ICAO in database");
+                    pluginCtrl.ShowMsgBox("Can't find departure ICAO in database", "Unknown departure", MessageBoxButtons.OK);
                     result = false;
                 }
             }
             else
             {
-                MessageBox.Show("Can't find start ICAO in database");
+                pluginCtrl.ShowMsgBox("Can't find start ICAO in database, aeroport DB is empty", "No aeroport DB", MessageBoxButtons.OK);
                 Logger.WriteLine("can't check departure, aeroport DB is empty");
                 result = false;
             }
@@ -278,43 +284,38 @@ namespace FlightRecPlugin
                 Aeroport? end = data.aeroports.Find(a => a.ident.ToLower() == ArrivalICAO.ToLower());
                 if (end == null)
                 {
-                    MessageBox.Show("Can't find end ICAO in database");
+                    pluginCtrl.ShowMsgBox("Can't find arrival ICAO in database", "Unknown arrival", MessageBoxButtons.OK);
                     result = false;
                 }
             }
             else
             {
-                MessageBox.Show("Can't find start ICAO in database");
+                pluginCtrl.ShowMsgBox("Can't find start ICAO in database, aeroport DB is empty", "No aeroport DB", MessageBoxButtons.OK);
                 Logger.WriteLine("can't check departure, aeroport DB is empty");
                 result = false;
             }
 
-
             if (Mission == string.Empty)
             {
-                MessageBox.Show("Please select a mission");
+                pluginCtrl.ShowMsgBox("Please select a mission", "No mission selected", MessageBoxButtons.OK);
                 result = false;
             }
             else if (Immat == string.Empty)
             {
-                MessageBox.Show("Please select a plane");
+                pluginCtrl.ShowMsgBox("Please select a plane", "No plane selected", MessageBoxButtons.OK);
                 result = false;
             }
             else if (ArrivalFuel >= DepartureFuel)
             {
-                MessageBox.Show("Departure fuel can't be lower than arrival fuel");
+                pluginCtrl.ShowMsgBox("Departure fuel can't be lower than arrival fuel", "Fuel error", MessageBoxButtons.OK);
                 result = false;
             }
             else if ((DepartureICAO == string.Empty) || (ArrivalICAO == string.Empty))
             {
-                MessageBox.Show("Please check departure and arrival ICAOs");
+                pluginCtrl.ShowMsgBox("Please check departure and arrival ICAOs", "No ICAO", MessageBoxButtons.OK);
                 result = false;
             }
-            //else if (DepartureTime >= ArrivalTime)
-            //{
-            //    MessageBox.Show("Departure time must be before arrival time");
-            //    result = false;
-            //}
+
 
             if (result)
             {
@@ -356,14 +357,18 @@ namespace FlightRecPlugin
                 if (result)
                 {
                     this.DialogResult = DialogResult.OK;
+                    btnCancel.Enabled = true;
+                    btnSave.Enabled = true;
                     this.Close();
                 }
             }
             else
             {
-                MessageBox.Show("Error sending flight to server");
+                pluginCtrl.ShowMsgBox("Error sending flight to server", "Error", MessageBoxButtons.OK);
                 this.DialogResult = DialogResult.None;
             }
+            btnCancel.Enabled = true;
+            btnSave.Enabled = true;
         }
 
         private void valArrFuel_ValueChanged(object sender, EventArgs e)

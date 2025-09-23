@@ -20,6 +20,7 @@ namespace BushTripPlugin
     public partial class BushtripCreator : Form
     {
         simData data;
+        private FlightplanCtrl pluginCtrl;
         string searched;
 
         bool cancel = false;
@@ -29,10 +30,12 @@ namespace BushTripPlugin
 
         public List<Aeroport> Trip { get; set; }
 
-        public BushtripCreator(simData _data)
+        public BushtripCreator(FlightplanCtrl parent, simData _data)
         {
             InitializeComponent();
             data = _data;
+            pluginCtrl = parent;
+
             searched = string.Empty;
             comboBox1.Select();
             lblGndSpeed.Text = trackBar1.Value.ToString();
@@ -59,7 +62,8 @@ namespace BushTripPlugin
                 }
                 else
                 {
-                    MessageBox.Show("Please select a departure");
+                    pluginCtrl.ShowMsgBox("Please select a departure", "No departure", MessageBoxButtons.OK);
+
                     OK = false;
                 }
                 if (lbArrivals.SelectedItem != null)
@@ -68,7 +72,7 @@ namespace BushTripPlugin
                 }
                 else
                 {
-                    MessageBox.Show("Please select a destination");
+                    pluginCtrl.ShowMsgBox( "Please select a destination", "No destination", MessageBoxButtons.OK);
                     OK = false;
                 }
 
@@ -120,13 +124,13 @@ namespace BushTripPlugin
                 else
                 {
                     Logger.WriteLine("No Airport database loaded");
-                    MessageBox.Show("No airport database loaded");
+                    pluginCtrl.ShowMsgBox("No airport database loaded", "No airport database loaded", MessageBoxButtons.OK);
                 }
             }
             else
             {
                 Logger.WriteLine("No Airport database loaded");
-                MessageBox.Show("No airport database loaded");
+                pluginCtrl.ShowMsgBox("No airport database loaded", "No airport database loaded", MessageBoxButtons.OK);
             }
         }
 
@@ -207,7 +211,7 @@ namespace BushTripPlugin
             Cursor = Cursors.WaitCursor;
             if ((start == null) || (end == null))
             {
-                MessageBox.Show("ICAO départ ou arrivée non renseigné !", "SimAddon", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                pluginCtrl.ShowMsgBox("Please select a departure and an arrival", "No departure or arrival", MessageBoxButtons.OK);
             }
             else
             {
@@ -297,7 +301,7 @@ namespace BushTripPlugin
                 }
                 else
                 {
-                    MessageBox.Show("ICAO départ non renseigné !", "SimAddon", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    pluginCtrl.ShowMsgBox("Please select a departure", "No departure", MessageBoxButtons.OK);
                 }
             }
         }
@@ -323,13 +327,13 @@ namespace BushTripPlugin
                 else
                 {
                     Logger.WriteLine("No airport database loaded");
-                    MessageBox.Show("No airport database loaded");
+                    pluginCtrl.ShowMsgBox("No airport database loaded", "No airport database loaded", MessageBoxButtons.OK);
                 }
             }
             else
             {
                 Logger.WriteLine("No airport database loaded");
-                MessageBox.Show("No airport database loaded");
+                pluginCtrl.ShowMsgBox("No airport database loaded", "No airport database loaded", MessageBoxButtons.OK);
             }
 
         }
@@ -376,7 +380,7 @@ namespace BushTripPlugin
                 }
                 else
                 {
-                    MessageBox.Show("No airport database loaded");
+                    pluginCtrl.ShowMsgBox("No airport database loaded", "No airport database loaded", MessageBoxButtons.OK);
                 }
             }
         }
@@ -441,7 +445,7 @@ namespace BushTripPlugin
                 }
                 else
                 {
-                    MessageBox.Show("ICAO départ non renseigné !", "SimAddon", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    pluginCtrl.ShowMsgBox("Please select a departure", "No departure", MessageBoxButtons.OK);
                 }
             }
         }

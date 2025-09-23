@@ -93,6 +93,18 @@ namespace BushTripPlugin
             //parent.ResumeLayout();
         }
 
+        public DialogResult ShowMsgBox(string text, string caption, MessageBoxButtons buttons)
+        {
+            if (OnShowMsgbox != null)
+            {
+                return OnShowMsgbox(this, text, caption, buttons);
+            }
+            else
+            {
+                //if the caller did not managed this, consider a cancel. (could have been ignore also ?)
+                return DialogResult.Cancel;
+            }
+        }
 
         public async void updateSituation(situation data)
         {
@@ -410,7 +422,7 @@ namespace BushTripPlugin
                 catch(Exception ex)
                 {
                     Logger.WriteLine(ex.ToString());
-                    MessageBox.Show(ex.ToString(),"Error during import");
+                    ShowMsgBox(ex.Message, "Error during import", MessageBoxButtons.OK);
                 }
 
             }
@@ -542,7 +554,7 @@ namespace BushTripPlugin
             }
 
 
-            BushtripCreator creator = new BushtripCreator(data);
+            BushtripCreator creator = new BushtripCreator(this, data);
             DialogResult result =  creator.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -566,7 +578,7 @@ namespace BushTripPlugin
                 }
                 else
                 {
-                    MessageBox.Show("Nothing to export");
+                    ShowMsgBox("No airport in the trip, aborting", "Error", MessageBoxButtons.OK);
                 }
 
             }

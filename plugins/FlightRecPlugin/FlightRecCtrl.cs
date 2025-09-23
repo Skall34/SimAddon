@@ -128,11 +128,11 @@ namespace FlightRecPlugin
             }
         }
 
-        private DialogResult ShowMsgBox(string title, string caption, MessageBoxButtons buttons)
+        public DialogResult ShowMsgBox(string text, string caption, MessageBoxButtons buttons)
         {
             if (OnShowMsgbox != null)
             {
-                return OnShowMsgbox(this, title, caption, buttons);
+                return OnShowMsgbox(this, text, caption, buttons);
             }
             else
             {
@@ -978,7 +978,7 @@ namespace FlightRecPlugin
 
                 string fullComment = tbCommentaires.Text;
                 //crée un dictionnaire des valeurs à envoyer
-                SaveFlightDialog saveFlightDialog = new SaveFlightDialog(data);
+                SaveFlightDialog saveFlightDialog = new SaveFlightDialog(this,data);
 
                 saveFlightDialog.Callsign = tbCallsign.Text;
                 saveFlightDialog.Immat = cbImmat.Text;
@@ -1670,7 +1670,7 @@ namespace FlightRecPlugin
 
         private void btnFlightbook_Click(object sender, EventArgs e)
         {
-            LocalFlightbookForm localFlightbookForm = new LocalFlightbookForm(data);
+            LocalFlightbookForm localFlightbookForm = new LocalFlightbookForm(this,data);
             localFlightbookForm.loadFlightbook(Properties.Settings.Default.LocalFlightbookFile);
             localFlightbookForm.ShowDialog(this);
         }

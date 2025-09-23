@@ -441,7 +441,7 @@ namespace SimAddon
             pluginsSettings.saveToJsonFile("plugins.json");
         }
 
-        private DialogResult Plugin_OnShowMsgbox(object sender, string title, string caption, MessageBoxButtons buttons)
+        private DialogResult Plugin_OnShowMsgbox(object sender, string text, string caption, MessageBoxButtons buttons)
         {
             //if the window is top most, disable the topmost before showing the message box.
             bool wasWindowTopMost = this.TopMost;
@@ -450,7 +450,7 @@ namespace SimAddon
             {
                 this.TopMost = false;
             }
-            DialogResult result = MessageBox.Show(title, caption, buttons);
+            DialogResult result = MessageBox.Show(text, caption, buttons);
 
             //restore the topmost as it was before the popup.
             this.TopMost = wasWindowTopMost;

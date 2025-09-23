@@ -1,4 +1,5 @@
-﻿using SimDataManager;
+﻿using SimAddonPlugin;
+using SimDataManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,11 +12,14 @@ using System.Windows.Forms;
 
 namespace FlightRecPlugin
 {
+   
     public partial class LocalFlightbookForm : Form
     {
         private simData data;
         private string FlightbookFilePath { get; set; } = string.Empty;
         public LocalFlightBook LocalFlightBook { get; set; } = new LocalFlightBook();
+
+        private FlightRecCtrl pluginCtrl;
 
         public void loadFlightbook(string flightbookFilePath)
         {
@@ -34,10 +38,11 @@ namespace FlightRecPlugin
             }
         }
 
-        public LocalFlightbookForm(simData _data)
+        public LocalFlightbookForm(FlightRecCtrl parent, simData _data)
         {
             InitializeComponent();
             data = _data;
+            pluginCtrl = parent;
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -99,7 +104,7 @@ namespace FlightRecPlugin
                 //get the flight from the local flightbook
                 var flight = LocalFlightBook.Flights[selectedIndex];
                 //show that flight in a SaveFlightDialog
-                SaveFlightDialog saveFlightDialog = new SaveFlightDialog(data);
+                SaveFlightDialog saveFlightDialog = new SaveFlightDialog(pluginCtrl, data);
                 saveFlightDialog.Callsign = Properties.Settings.Default.callsign;
                 saveFlightDialog.DepartureICAO = flight.departureICAO;
                 saveFlightDialog.ArrivalICAO = flight.arrivalICAO;
@@ -121,7 +126,8 @@ namespace FlightRecPlugin
                     // Logic to push the flight to the server
                     // This could involve calling an API or some other method to send the flight data
                     // For now, we will just show a message box
-                    MessageBox.Show("Flight pushed to server successfully!");
+                    pluginCtrl.ShowMsgBox("Flight pushed to server successfully!", "Success", MessageBoxButtons.OK);
+
                     // Optionally, you can remove the flight from the local flightbook after pushing it to the server
                     LocalFlightBook.RemoveFlightAt(selectedIndex);
                     LocalFlightBook.saveToJson(FlightbookFilePath);
@@ -136,7 +142,7 @@ namespace FlightRecPlugin
             }
             else
             {
-                MessageBox.Show("Please select a flight to push to the server.");
+                pluginCtrl.ShowMsgBox("Please select a flight to push to the server.", "Error", MessageBoxButtons.OK);
             }
         }
 
@@ -156,7 +162,7 @@ namespace FlightRecPlugin
             }
             else
             {
-                MessageBox.Show("Please select a flight to delete.");
+                pluginCtrl.ShowMsgBox("Please select a flight to delete.", "Error", MessageBoxButtons.OK);
             }
         }
     }
