@@ -83,10 +83,20 @@ namespace FlightRecPlugin
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            LocalFlightBook.ClearFlights();
-            LocalFlightBook.saveToJson(FlightbookFilePath);
-            tbFlightDetails.Text = string.Empty;
-            listView1.Items.Clear();
+            //ask confirmation
+            var result = MessageBox.Show("Are you sure you want to clear the local flightbook? This action cannot be undone.", "Confirm Clear", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.No)
+            {
+                return;
+            }
+            else
+            {
+                //clear the local flightbook
+                LocalFlightBook.ClearFlights();
+                LocalFlightBook.saveToJson(FlightbookFilePath);
+                tbFlightDetails.Text = string.Empty;
+                listView1.Items.Clear();
+            }
         }
 
         private void tbFlightDetails_TextChanged(object sender, EventArgs e)
