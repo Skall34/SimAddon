@@ -632,8 +632,27 @@ namespace FlightRecPlugin
                             break;
                         case STATE.ENDED:
                             //we are ended, so we need to wait for a reset (engine start)
-                            updatePlaneStatusTimer.Stop();
-                            //wait for reset
+                            if (updatePlaneStatusTimer.Enabled)
+                            {
+                                updatePlaneStatusTimer.Stop();
+                            }
+
+                            //the flight is ended, if there's an engine start, begin a new flight
+                            if (eventDetected == EVENT.ENGINESTART)
+                            {
+                                resetFlight(true);
+                                Logger.WriteLine("State change ENDED -> TAXIING");
+                                getStartOfFlightData();
+                                currentState = STATE.TAXIING;
+                                //Update the google sheet database indicating that this plane is being used
+                                UpdatePlaneStatus(1);
+                                //start the timer which will update the plane status
+                                updatePlaneStatusTimer.Start();
+                                cbImmat.Enabled = false;
+                                SimEvent(SimEventArg.EventType.ENGINESTART);
+                            }
+
+                            //wait for manual flight reset
                             break;
                         case STATE.TAXIING:
                             if (eventDetected == EVENT.TAKEOFF)
@@ -749,6 +768,27 @@ namespace FlightRecPlugin
                 Logger.WriteLine(ex.Message);
             }
 
+        }
+
+        private void clearEndOfFlightData()
+        {
+            tbCommentaires.Text = string.Empty;
+            cbMission.Text = string.Empty;
+            tbEndICAO.Text = string.Empty;
+
+            lbEndFuel.Text = "Waiting end ...";
+            lbEndIata.Text = "Waiting end ...";
+            lbEndPosition.Text = "Waiting end ...";
+            lbEndTime.Text = "--:--";
+
+            _startTime = DateTime.UnixEpoch;
+            _airborn = DateTime.UnixEpoch;
+            _notAirborn = DateTime.UnixEpoch;
+            _endTime = DateTime.UnixEpoch;
+
+            lbTimeAirborn.Text = "--:--";
+            lbTimeOnGround.Text = "--:--";
+            cbNote.SelectedItem = 8;
         }
 
         private void RemplirComboImmat()
@@ -872,7 +912,7 @@ namespace FlightRecPlugin
         private void getEndOfFlightData()
         {
             // disable start detection for 300 x 100 ms =30s  disable the start text boxes.
-            startDisabled = 300;
+            startDisabled = 100;
             gbStartInfos.Enabled = false;
 
             //on recupere les etats de fin de vol : heure, carbu, position.
@@ -1021,6 +1061,9 @@ namespace FlightRecPlugin
 
                     //reset le vol sans demande de confirmation
                     resetFlight(true);
+                    currentState = STATE.WAITING;
+                    UpdateStatus("Waiting for engine start");
+
                     // On grise le bouton save flight pour éviter les doubles envois
                     //btnSubmit.Enabled = false;
                     submitFlightToolStripMenuItem.Enabled = false;
@@ -1052,7 +1095,7 @@ namespace FlightRecPlugin
 
         private void resetFlight(bool force) //force ==true => pas de demande de confirmation
         {
-            Logger.WriteLine("Reseting flight");
+            Logger.WriteLine("Resetting flight");
             DialogResult res = DialogResult.OK;
             if (!force)
             {
@@ -1062,40 +1105,15 @@ namespace FlightRecPlugin
             if (res == DialogResult.OK)
             {
                 localAirport = null;
-                lbStartIata.Text = string.Empty;
-                lbStartFuel.Text = string.Empty;
-                lbStartPosition.Text = string.Empty;
-                lbStartTime.Text = string.Empty;
 
-                lbEndTime.Text = string.Empty;
-                lbEndFuel.Text = string.Empty;
-                lbEndIata.Text = string.Empty;
-                lbEndPosition.Text = string.Empty;
+                clearStartOfFLightData();
 
-                tbCommentaires.Text = string.Empty;
-                cbMission.Text = string.Empty;
 
-                tbEndICAO.Text = string.Empty;
 
-                lbStartFuel.Text = "Waiting start";
-                lbEndFuel.Text = "Waiting end ...";
-                lbStartIata.Text = "Waiting start";
-                lbEndIata.Text = "Waiting end ...";
-                lbStartPosition.Text = "Waiting start";
-                lbEndPosition.Text = "Waiting end ...";
+                clearEndOfFlightData();
 
-                lbStartTime.Text = "--:--";
 
-                _airborn = DateTime.UnixEpoch;
-                _notAirborn = DateTime.UnixEpoch;
-                _startTime = DateTime.UnixEpoch;
-                _endTime = DateTime.UnixEpoch;
-
-                lbEndTime.Text = "--:--";
-                lbTimeAirborn.Text = "--:--";
-                lbTimeOnGround.Text = "--:--";
                 lbFret.Visible = true;
-                cbNote.SelectedItem = 8;
 
                 //reset flight infos.
                 flightPerfs.reset();
@@ -1137,8 +1155,8 @@ namespace FlightRecPlugin
                 pauseTime = TimeSpan.Zero;
                 isPaused = false;
 
-                currentState = STATE.WAITING;
-                UpdateStatus("Waiting for engine start");
+                //currentState = STATE.WAITING;
+                //UpdateStatus("Waiting for engine start");
                 Logger.WriteLine("Flight reset");
             }
             else
@@ -1147,7 +1165,13 @@ namespace FlightRecPlugin
             }
         }
 
-
+        private void clearStartOfFLightData()
+        {
+            lbStartFuel.Text = "Waiting start";
+            lbStartIata.Text = "Waiting start";
+            lbStartPosition.Text = "Waiting start";
+            lbStartTime.Text = "--:--";
+        }
 
         private void BlackBoxCtrl_Load(object sender, EventArgs e)
         {
@@ -1445,12 +1469,16 @@ namespace FlightRecPlugin
         {
             //reset flight avec demande de confirmation
             resetFlight(false);
+            currentState = STATE.WAITING;
+            UpdateStatus("Waiting for engine start");
         }
 
         private void resetFlightToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //reset flight avec demande de confirmation
             resetFlight(false);
+            currentState = STATE.WAITING;
+            UpdateStatus("Waiting for engine start");
         }
 
         private void submitFlightToolStripMenuItem_Click(object sender, EventArgs e)

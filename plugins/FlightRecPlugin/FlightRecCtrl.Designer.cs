@@ -877,7 +877,7 @@ namespace FlightRecPlugin
             // 
             // engineStopTimer
             // 
-            engineStopTimer.Interval = 1500;
+            engineStopTimer.Interval = 5000;
             engineStopTimer.Tick += engineStopTimer_Tick;
             // 
             // tableLayoutPanel1
