@@ -13,6 +13,8 @@ using System.Globalization;
 using simbrief;
 using flightplan;
 using System.Numerics;
+using FlightplanPlugin.Properties;
+using FlightplanPlugin;
 
 namespace BushTripPlugin
 {
@@ -242,7 +244,7 @@ namespace BushTripPlugin
                         item.BackColor = System.Drawing.Color.White;
                     }
 
-                    if ((i<=waypointIndex) || (!hidden))
+                    if ((i <= waypointIndex) || (!hidden))
                     {
                         lvWaypoints.Items.Add(item);
                         lvWaypoints.Items[lvWaypoints.Items.Count - 1].EnsureVisible();
@@ -309,7 +311,7 @@ namespace BushTripPlugin
             }
         }
 
-        private async void btnImportFlightPLan_Click(object sender, EventArgs e)
+        private void ImportFromFile()
         {
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -320,6 +322,8 @@ namespace BushTripPlugin
                 {
                     string filePath = openFileDialog.FileName;
                     filename = filePath;
+                    string shortFileName = Path.GetFileName(filePath);
+                    Logger.WriteLine("Importing flight plan from file " + shortFileName);
                     waypointIndex = 0;
                     lastWaypointIndex = 0;
                     bool loaded = false;
@@ -329,6 +333,10 @@ namespace BushTripPlugin
                         string json = File.ReadAllText(filePath);
                         flightPlan = JsonConvert.DeserializeObject<LittleNavmap>(json);
                         waypointIndex = flightPlan.CurrentStep;
+                        if (flightPlan.Item.Header.FileName != null)
+                        {
+                            shortFileName = flightPlan.Item.Header.FileName;
+                        }
                         Logger.WriteLine("Fichier fplan chargé avec succès !");
                         loaded = true;
                         hidden = true;
@@ -347,16 +355,21 @@ namespace BushTripPlugin
                         {
                             flightPlan = (LittleNavmap)serializer.Deserialize(fileStream);
                         }
+
                         flightPlan.CurrentStep = waypointIndex;
-                        Logger.WriteLine("Fichier XML chargé avec succès !");
+                        Logger.WriteLine("Fichier LNMPLN chargé avec succès !");
                         loaded = true;
                         hidden = false;
                     }
 
                     if (filePath.EndsWith(".xml"))
                     {
+                        //https://www.simbrief.com/ofp/flightplans/GMTTGMME_PDF_1760896886.pdf
+
                         //set the save file name to store fileplan & current position;
                         filename = filePath.Replace(".xml", ".fplan");
+
+                        string pdfName = shortFileName.Replace("XML", "PDF").Replace("xml", "pdf");
 
                         // Remplacez 'FlightPlan' par la classe générée à partir du XSD
                         XmlSerializer serializer = new XmlSerializer(typeof(OFP));
@@ -368,6 +381,7 @@ namespace BushTripPlugin
                             flightPlan = converter.FlightplanFromOFP(simbriefPlan);
                         }
                         flightPlan.CurrentStep = waypointIndex;
+
                         Logger.WriteLine("Fichier XML chargé avec succès !");
                         loaded = true;
                         hidden = false;
@@ -388,18 +402,20 @@ namespace BushTripPlugin
 
 
                             flightPlan.CurrentStep = waypointIndex;
-                            Logger.WriteLine("Fichier XML chargé avec succès !");
+                            Logger.WriteLine("Fichier FMS chargé avec succès !");
                             loaded = true;
                             hidden = false;
 
                         }
                         catch (Exception ex)
                         {
-                            Logger.WriteLine("Erreur dans le fichier FMS "+filePath);
+                            Logger.WriteLine("Erreur dans le fichier FMS " + filePath);
                             Logger.WriteLine(ex.ToString());
                         }
                     }
 
+                    //set the flightplan file name in the header for next reload
+                    flightPlan.Item.Header.FileName = shortFileName;
 
                     //everything is OK, use the flightplan
                     useFlightPlan();
@@ -412,14 +428,14 @@ namespace BushTripPlugin
                             SimEventArg eventArg = new SimEventArg();
                             eventArg.reason = SimEventArg.EventType.SETDESTINATION;
                             int nbWaypoints = flightPlan.Item.Waypoints.Count();
-                            eventArg.value = flightPlan.Item.Waypoints[nbWaypoints-1].Ident;
+                            eventArg.value = flightPlan.Item.Waypoints[nbWaypoints - 1].Ident;
                             OnSimEvent(this, eventArg);
                         }
                     }
 
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logger.WriteLine(ex.ToString());
                     ShowMsgBox(ex.Message, "Error during import", MessageBoxButtons.OK);
@@ -427,6 +443,11 @@ namespace BushTripPlugin
 
             }
 
+        }
+
+        private async void btnImportFlightPLan_Click(object sender, EventArgs e)
+        {
+            ImportFromFile();
         }
 
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)
@@ -459,7 +480,7 @@ namespace BushTripPlugin
             }
         }
 
-        private void btnSaveFlightPlan_Click(object sender, EventArgs e)
+        private void ExportFlightplan()
         {
             if (flightPlan != null)
             {
@@ -472,6 +493,13 @@ namespace BushTripPlugin
                     saveFlightPlan();
                 }
             }
+
+        }
+
+        private void btnSaveFlightPlan_Click(object sender, EventArgs e)
+        {
+            ExportFlightplan();
+
         }
 
         private void BushTripCtrl_Load(object sender, EventArgs e)
@@ -483,7 +511,7 @@ namespace BushTripPlugin
         {
             if (flightPlan != null)
             {
-                if ((waypointIndex == lastWaypointIndex)||(!hidden))
+                if ((waypointIndex == lastWaypointIndex) || (!hidden))
                 {
                     waypointIndex = (uint)lvWaypoints.SelectedIndices[0];
                 }
@@ -500,7 +528,7 @@ namespace BushTripPlugin
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void RestartFlightPlan()
         {
             if (flightPlan != null)
             {
@@ -511,15 +539,25 @@ namespace BushTripPlugin
                 saveFlightPlan();
                 refreshFlightBook();
             }
+
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            RestartFlightPlan();
         }
 
         private LittleNavmap createFlightPlan(List<Aeroport> trip)
         {
-            
+
             LittleNavmap fp = new LittleNavmap();
             LittleNavmapFlightplan lfp = new LittleNavmapFlightplan();
             lfp.SimData = "simaddon";
             lfp.NavData = "simaddon";
+            lfp.Header = new LittleNavmapFlightplanHeader();
+            lfp.Header.CreationDate = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
+            lfp.Header.FileVersion = "1.0";
+            lfp.Header.ProgramName = "simaddon";
+
             lfp.Waypoints = new LittleNavmapFlightplanWaypoint[trip.Count];
             for (int i = 0; i < trip.Count; i++)
             {
@@ -541,7 +579,7 @@ namespace BushTripPlugin
             return fp;
         }
 
-        private void btnCreateTrip_Click(object sender, EventArgs e)
+        private void CreateTrip()
         {
             bool isTopMost = false;
             Form parentForm = (Form)this.TopLevelControl;
@@ -555,7 +593,7 @@ namespace BushTripPlugin
 
 
             BushtripCreator creator = new BushtripCreator(this, data);
-            DialogResult result =  creator.ShowDialog();
+            DialogResult result = creator.ShowDialog();
             if (result == DialogResult.OK)
             {
                 List<Aeroport> trip = creator.Trip;
@@ -582,12 +620,18 @@ namespace BushTripPlugin
                 }
 
             }
-            
+
             if (isTopMost)
             {
                 //reactive le always on top
                 parentForm.TopMost = true;
             }
+
+        }
+
+        private void btnCreateTrip_Click(object sender, EventArgs e)
+        {
+            CreateTrip();
         }
 
         void ISimAddonPluginCtrl.SetExecutionFolder(string path)
@@ -596,6 +640,129 @@ namespace BushTripPlugin
         }
 
         public void ManageSimEvent(object sender, SimEventArg eventArg)
+        {
+
+        }
+
+        private void fromFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImportFromFile();
+
+        }
+
+        private void createToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateTrip();
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExportFlightplan();
+        }
+
+        private void restartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RestartFlightPlan();
+        }
+
+        private void fromSimbriefToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImportFromSimbrief();
+        }
+
+        private bool ImportFromSimbrief()
+        {
+            bool finalResult = false;
+            if (Settings.Default.SimbriefUsername == string.Empty)
+            {
+                //show a messagebox to ask for simbrief username
+                SettingsForm settingsForm = new SettingsForm();
+                DialogResult result = settingsForm.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    Settings.Default.SimbriefUsername = settingsForm.SimbriefUserName;
+                    Settings.Default.Save();
+                }
+                else
+                {
+                    return finalResult;
+                }
+            }
+            //here we have a simbrief username, we can proceed
+            //https://www.simbrief.com/api/xml.fetcher.php?username={username}
+
+            //download the xml file from simbrief
+            //make a web request to https://www.simbrief.com/api/xml.fetcher.php?username={username}
+            string url = "https://www.simbrief.com/api/xml.fetcher.php?username=" + Settings.Default.SimbriefUsername;
+            using (var client = new System.Net.WebClient())
+            {
+                try
+                {
+                    string xmlContent = client.DownloadString(url);
+                    //save the xml content to a temporary file
+                    string tempFile = Path.GetTempFileName() + ".xml";
+                    File.WriteAllText(tempFile, xmlContent);
+                    //import the flightplan from the temporary file
+                    filename = tempFile.Replace(".xml", ".fplan");
+                    waypointIndex = 0;
+                    lastWaypointIndex = 0;
+                    XmlSerializer serializer = new XmlSerializer(typeof(OFP));
+                    // Lecture du fichier et désérialisation
+                    using (FileStream fileStream = new FileStream(tempFile, FileMode.Open))
+                    {
+                        OFP simbriefPlan = (OFP)serializer.Deserialize(fileStream);
+                        flightPlan = converter.FlightplanFromOFP(simbriefPlan);
+                    }
+                    flightPlan.CurrentStep = waypointIndex;
+                    Logger.WriteLine("Fichier XML Simbrief chargé avec succès !");
+                    useFlightPlan();
+                    //notify the other plugin that a flightplan was loaded
+                    if (OnSimEvent != null)
+                    {
+                        SimEventArg eventArg = new SimEventArg();
+                        eventArg.reason = SimEventArg.EventType.SETDESTINATION;
+                        int nbWaypoints = flightPlan.Item.Waypoints.Count();
+                        eventArg.value = flightPlan.Item.Waypoints[nbWaypoints - 1].Ident;
+                        OnSimEvent(this, eventArg);
+                    }
+                    finalResult = true;
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("Error when downloading flightplan from Simbrief : " + ex.Message);
+                    ShowMsgBox("Error when downloading flightplan from Simbrief : " + ex.Message, "Error", MessageBoxButtons.OK);
+                }
+            }
+            return finalResult;
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //show a messagebox to ask for simbrief username
+            SettingsForm settingsForm = new SettingsForm();
+            DialogResult result = settingsForm.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                Settings.Default.SimbriefUsername = settingsForm.SimbriefUserName;
+                Settings.Default.Save();
+            }
+        }
+
+        private void getLastFlightplanToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bool importOK = ImportFromSimbrief();
+            if (importOK)
+            {
+                getFlightBriefingToolStripMenuItem.Enabled = true;
+            }
+        }
+
+        private void importToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImportFromFile();
+        }
+
+        private void getFlightBriefingToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }

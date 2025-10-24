@@ -171,6 +171,8 @@ namespace flightplan
 
         private string fileVersionField;
 
+        private string fileNameField;
+
         private string programNameField;
 
         private string programVersionField;
@@ -279,6 +281,21 @@ namespace flightplan
             set
             {
                 this.fileVersionField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [JsonProperty("FileName")]
+        public string FileName
+        {
+            get
+            {
+                return this.fileNameField;
+            }
+            set
+            {
+                this.fileNameField = value;
             }
         }
 

@@ -104,6 +104,8 @@ namespace BushTripPlugin
         {
             LittleNavmap result = new LittleNavmap();
             result.Item = new LittleNavmapFlightplan();
+            result.Item.Header = new LittleNavmapFlightplanHeader();
+            result.Item.Header.ProgramName = "FMS";
             result.Item.Waypoints = new LittleNavmapFlightplanWaypoint[fmsData.numenr];
             for (int i=0;i<fmsData.numenr;i++)
             {

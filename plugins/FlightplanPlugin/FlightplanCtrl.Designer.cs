@@ -34,6 +34,19 @@
             statusStrip1 = new StatusStrip();
             tsGlobalStatus = new ToolStripStatusLabel();
             splitContainer1 = new SplitContainer();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            createToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            importToolStripMenuItem = new ToolStripMenuItem();
+            exportToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator4 = new ToolStripSeparator();
+            simbriefToolStripMenuItem = new ToolStripMenuItem();
+            getLastFlightplanToolStripMenuItem = new ToolStripMenuItem();
+            getFlightBriefingToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
+            restartToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator3 = new ToolStripSeparator();
+            settingsToolStripMenuItem = new ToolStripMenuItem();
             btnCreateTrip = new Button();
             btnSaveFlightPlan = new Button();
             btnReset = new Button();
@@ -53,6 +66,7 @@
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            contextMenuStrip1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -79,6 +93,7 @@
             // 
             // tsGlobalStatus
             // 
+            tsGlobalStatus.BackColor = Color.FromArgb(64, 64, 64);
             tsGlobalStatus.Name = "tsGlobalStatus";
             tsGlobalStatus.Size = new Size(99, 17);
             tsGlobalStatus.Text = "Load a flight plan";
@@ -86,6 +101,7 @@
             // 
             // splitContainer1
             // 
+            splitContainer1.BackColor = Color.FromArgb(64, 64, 64);
             splitContainer1.Dock = DockStyle.Fill;
             splitContainer1.Location = new Point(0, 0);
             splitContainer1.Name = "splitContainer1";
@@ -93,6 +109,8 @@
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.BackColor = Color.FromArgb(64, 64, 64);
+            splitContainer1.Panel1.ContextMenuStrip = contextMenuStrip1;
             splitContainer1.Panel1.Controls.Add(btnCreateTrip);
             splitContainer1.Panel1.Controls.Add(btnSaveFlightPlan);
             splitContainer1.Panel1.Controls.Add(btnReset);
@@ -106,6 +124,89 @@
             splitContainer1.Size = new Size(521, 658);
             splitContainer1.SplitterDistance = 329;
             splitContainer1.TabIndex = 3;
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { createToolStripMenuItem, toolStripSeparator1, importToolStripMenuItem, exportToolStripMenuItem, toolStripSeparator4, simbriefToolStripMenuItem, toolStripSeparator2, restartToolStripMenuItem, toolStripSeparator3, settingsToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(119, 160);
+            // 
+            // createToolStripMenuItem
+            // 
+            createToolStripMenuItem.Name = "createToolStripMenuItem";
+            createToolStripMenuItem.Size = new Size(118, 22);
+            createToolStripMenuItem.Text = "Create";
+            createToolStripMenuItem.Click += createToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(115, 6);
+            // 
+            // importToolStripMenuItem
+            // 
+            importToolStripMenuItem.Name = "importToolStripMenuItem";
+            importToolStripMenuItem.Size = new Size(118, 22);
+            importToolStripMenuItem.Text = "Import";
+            importToolStripMenuItem.Click += importToolStripMenuItem_Click;
+            // 
+            // exportToolStripMenuItem
+            // 
+            exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            exportToolStripMenuItem.Size = new Size(118, 22);
+            exportToolStripMenuItem.Text = "Export";
+            exportToolStripMenuItem.Click += exportToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator4
+            // 
+            toolStripSeparator4.Name = "toolStripSeparator4";
+            toolStripSeparator4.Size = new Size(115, 6);
+            // 
+            // simbriefToolStripMenuItem
+            // 
+            simbriefToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { getLastFlightplanToolStripMenuItem, getFlightBriefingToolStripMenuItem });
+            simbriefToolStripMenuItem.Name = "simbriefToolStripMenuItem";
+            simbriefToolStripMenuItem.Size = new Size(118, 22);
+            simbriefToolStripMenuItem.Text = "Simbrief";
+            // 
+            // getLastFlightplanToolStripMenuItem
+            // 
+            getLastFlightplanToolStripMenuItem.Name = "getLastFlightplanToolStripMenuItem";
+            getLastFlightplanToolStripMenuItem.Size = new Size(180, 22);
+            getLastFlightplanToolStripMenuItem.Text = "Get last flightplan";
+            getLastFlightplanToolStripMenuItem.Click += getLastFlightplanToolStripMenuItem_Click;
+            // 
+            // getFlightBriefingToolStripMenuItem
+            // 
+            getFlightBriefingToolStripMenuItem.Enabled = false;
+            getFlightBriefingToolStripMenuItem.Name = "getFlightBriefingToolStripMenuItem";
+            getFlightBriefingToolStripMenuItem.Size = new Size(180, 22);
+            getFlightBriefingToolStripMenuItem.Text = "Get flight briefing";
+            getFlightBriefingToolStripMenuItem.Click += getFlightBriefingToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(115, 6);
+            // 
+            // restartToolStripMenuItem
+            // 
+            restartToolStripMenuItem.Name = "restartToolStripMenuItem";
+            restartToolStripMenuItem.Size = new Size(118, 22);
+            restartToolStripMenuItem.Text = "Restart";
+            restartToolStripMenuItem.Click += restartToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator3
+            // 
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(115, 6);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            settingsToolStripMenuItem.Size = new Size(118, 22);
+            settingsToolStripMenuItem.Text = "Settings";
+            settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
             // 
             // btnCreateTrip
             // 
@@ -229,6 +330,7 @@
             // 
             // panel1
             // 
+            panel1.BackColor = Color.FromArgb(64, 64, 64);
             panel1.Controls.Add(compas1);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(367, 3);
@@ -239,6 +341,7 @@
             // compas1
             // 
             compas1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            compas1.BackColor = Color.FromArgb(64, 64, 64);
             compas1.Headings = new int[]
     {
     0
@@ -257,7 +360,7 @@
             compas1.TabIndex = 1;
             compas1.Unit = "NM";
             // 
-            // BushTripCtrl
+            // FlightplanCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -265,7 +368,7 @@
             Controls.Add(splitContainer1);
             Controls.Add(statusStrip1);
             ForeColor = Color.White;
-            Name = "BushTripCtrl";
+            Name = "FlightplanCtrl";
             Size = new Size(521, 680);
             Load += BushTripCtrl_Load;
             statusStrip1.ResumeLayout(false);
@@ -275,6 +378,7 @@
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            contextMenuStrip1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             panel1.ResumeLayout(false);
@@ -302,5 +406,18 @@
         private SimAddonControls.Compas compas1;
         private Panel panel1;
         private Button btnCreateTrip;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem createToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem importToolStripMenuItem;
+        private ToolStripMenuItem exportToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem restartToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem settingsToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripMenuItem simbriefToolStripMenuItem;
+        private ToolStripMenuItem getLastFlightplanToolStripMenuItem;
+        private ToolStripMenuItem getFlightBriefingToolStripMenuItem;
     }
 }
