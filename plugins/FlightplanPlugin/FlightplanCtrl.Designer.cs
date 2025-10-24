@@ -30,7 +30,6 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlightplanCtrl));
-            btnImportFlightPLan = new Button();
             statusStrip1 = new StatusStrip();
             tsGlobalStatus = new ToolStripStatusLabel();
             splitContainer1 = new SplitContainer();
@@ -48,8 +47,6 @@
             toolStripSeparator3 = new ToolStripSeparator();
             settingsToolStripMenuItem = new ToolStripMenuItem();
             btnCreateTrip = new Button();
-            btnSaveFlightPlan = new Button();
-            btnReset = new Button();
             lblDistanceTotale = new Label();
             lvWaypoints = new ListView();
             ColWaypoint = new ColumnHeader();
@@ -60,6 +57,7 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             tbComment = new TextBox();
             panel1 = new Panel();
+            splitContainer2 = new SplitContainer();
             compas1 = new SimAddonControls.Compas();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -69,17 +67,10 @@
             contextMenuStrip1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.SuspendLayout();
             SuspendLayout();
-            // 
-            // btnImportFlightPLan
-            // 
-            btnImportFlightPLan.Location = new Point(84, 3);
-            btnImportFlightPLan.Name = "btnImportFlightPLan";
-            btnImportFlightPLan.Size = new Size(72, 38);
-            btnImportFlightPLan.TabIndex = 0;
-            btnImportFlightPLan.Text = "Import";
-            btnImportFlightPLan.UseVisualStyleBackColor = true;
-            btnImportFlightPLan.Click += btnImportFlightPLan_Click;
             // 
             // statusStrip1
             // 
@@ -112,11 +103,8 @@
             splitContainer1.Panel1.BackColor = Color.FromArgb(64, 64, 64);
             splitContainer1.Panel1.ContextMenuStrip = contextMenuStrip1;
             splitContainer1.Panel1.Controls.Add(btnCreateTrip);
-            splitContainer1.Panel1.Controls.Add(btnSaveFlightPlan);
-            splitContainer1.Panel1.Controls.Add(btnReset);
             splitContainer1.Panel1.Controls.Add(lblDistanceTotale);
             splitContainer1.Panel1.Controls.Add(lvWaypoints);
-            splitContainer1.Panel1.Controls.Add(btnImportFlightPLan);
             // 
             // splitContainer1.Panel2
             // 
@@ -152,6 +140,7 @@
             // 
             // exportToolStripMenuItem
             // 
+            exportToolStripMenuItem.Enabled = false;
             exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             exportToolStripMenuItem.Size = new Size(118, 22);
             exportToolStripMenuItem.Text = "Export";
@@ -172,7 +161,7 @@
             // getLastFlightplanToolStripMenuItem
             // 
             getLastFlightplanToolStripMenuItem.Name = "getLastFlightplanToolStripMenuItem";
-            getLastFlightplanToolStripMenuItem.Size = new Size(180, 22);
+            getLastFlightplanToolStripMenuItem.Size = new Size(167, 22);
             getLastFlightplanToolStripMenuItem.Text = "Get last flightplan";
             getLastFlightplanToolStripMenuItem.Click += getLastFlightplanToolStripMenuItem_Click;
             // 
@@ -180,7 +169,7 @@
             // 
             getFlightBriefingToolStripMenuItem.Enabled = false;
             getFlightBriefingToolStripMenuItem.Name = "getFlightBriefingToolStripMenuItem";
-            getFlightBriefingToolStripMenuItem.Size = new Size(180, 22);
+            getFlightBriefingToolStripMenuItem.Size = new Size(167, 22);
             getFlightBriefingToolStripMenuItem.Text = "Get flight briefing";
             getFlightBriefingToolStripMenuItem.Click += getFlightBriefingToolStripMenuItem_Click;
             // 
@@ -191,6 +180,7 @@
             // 
             // restartToolStripMenuItem
             // 
+            restartToolStripMenuItem.Enabled = false;
             restartToolStripMenuItem.Name = "restartToolStripMenuItem";
             restartToolStripMenuItem.Size = new Size(118, 22);
             restartToolStripMenuItem.Text = "Restart";
@@ -214,30 +204,9 @@
             btnCreateTrip.Name = "btnCreateTrip";
             btnCreateTrip.Size = new Size(72, 38);
             btnCreateTrip.TabIndex = 8;
-            btnCreateTrip.Text = "Create";
+            btnCreateTrip.Text = "...";
             btnCreateTrip.UseVisualStyleBackColor = true;
             btnCreateTrip.Click += btnCreateTrip_Click;
-            // 
-            // btnSaveFlightPlan
-            // 
-            btnSaveFlightPlan.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnSaveFlightPlan.Location = new Point(443, 3);
-            btnSaveFlightPlan.Name = "btnSaveFlightPlan";
-            btnSaveFlightPlan.Size = new Size(72, 38);
-            btnSaveFlightPlan.TabIndex = 6;
-            btnSaveFlightPlan.Text = "Export";
-            btnSaveFlightPlan.UseVisualStyleBackColor = true;
-            btnSaveFlightPlan.Click += btnSaveFlightPlan_Click;
-            // 
-            // btnReset
-            // 
-            btnReset.Location = new Point(165, 3);
-            btnReset.Name = "btnReset";
-            btnReset.Size = new Size(72, 38);
-            btnReset.TabIndex = 7;
-            btnReset.Text = "Restart";
-            btnReset.UseVisualStyleBackColor = true;
-            btnReset.Click += button1_Click;
             // 
             // lblDistanceTotale
             // 
@@ -331,23 +300,42 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(64, 64, 64);
-            panel1.Controls.Add(compas1);
+            panel1.Controls.Add(splitContainer2);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(367, 3);
             panel1.Name = "panel1";
             panel1.Size = new Size(151, 319);
             panel1.TabIndex = 2;
             // 
+            // splitContainer2
+            // 
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Name = "splitContainer2";
+            splitContainer2.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            splitContainer2.Panel1.Controls.Add(compas1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.BackgroundImage = (Image)resources.GetObject("splitContainer2.Panel2.BackgroundImage");
+            splitContainer2.Panel2.BackgroundImageLayout = ImageLayout.Zoom;
+            splitContainer2.Size = new Size(151, 319);
+            splitContainer2.SplitterDistance = 158;
+            splitContainer2.TabIndex = 2;
+            // 
             // compas1
             // 
-            compas1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            compas1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             compas1.BackColor = Color.FromArgb(64, 64, 64);
             compas1.Headings = new int[]
     {
     0
     };
             compas1.LabelText = "Compas";
-            compas1.Location = new Point(0, 0);
+            compas1.Location = new Point(3, 3);
             compas1.Name = "compas1";
             compas1.NbNeedles = 1;
             compas1.NeedleImages = new Image[]
@@ -356,7 +344,7 @@
     };
             compas1.NumericValue = 0D;
             compas1.RectangleSize = new Size(80, 20);
-            compas1.Size = new Size(141, 142);
+            compas1.Size = new Size(142, 141);
             compas1.TabIndex = 1;
             compas1.Unit = "NM";
             // 
@@ -382,13 +370,14 @@
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             panel1.ResumeLayout(false);
+            splitContainer2.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private Button btnImportFlightPLan;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel tsGlobalStatus;
         private SplitContainer splitContainer1;
@@ -399,9 +388,7 @@
         private ColumnHeader ColRoute;
         private ColumnHeader ColDistance;
         private ColumnHeader ColName;
-        private Button btnSaveFlightPlan;
         private ImageList imageList1;
-        private Button btnReset;
         private TableLayoutPanel tableLayoutPanel1;
         private SimAddonControls.Compas compas1;
         private Panel panel1;
@@ -419,5 +406,6 @@
         private ToolStripMenuItem simbriefToolStripMenuItem;
         private ToolStripMenuItem getLastFlightplanToolStripMenuItem;
         private ToolStripMenuItem getFlightBriefingToolStripMenuItem;
+        private SplitContainer splitContainer2;
     }
 }

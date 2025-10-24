@@ -1208,7 +1208,7 @@ namespace simbrief {
         
         private OFPDatabase_updates[] database_updatesField;
         
-        private OFPFiles[] filesField;
+        private OFPFiles filesField;
         
         private OFPFms_downloads[] fms_downloadsField;
         
@@ -1555,8 +1555,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("files", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPFiles[] files {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPFiles files {
             get {
                 return this.filesField;
             }
@@ -7258,7 +7258,7 @@ namespace simbrief {
         
         private string directoryField;
         
-        private pdf[] pdfField;
+        private pdf pdfField;
         
         private OFPFilesFile[] fileField;
         
@@ -7274,8 +7274,7 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("pdf")]
-        public pdf[] pdf {
+        public pdf pdf {
             get {
                 return this.pdfField;
             }

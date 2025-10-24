@@ -15,6 +15,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="examples\**" />
+    <EmbeddedResource Remove="examples\**" />
+    <None Remove="examples\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\aiguille.png" />
     <None Remove="simbrief.xsd" />
   </ItemGroup>

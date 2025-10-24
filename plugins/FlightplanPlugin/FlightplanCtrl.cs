@@ -29,13 +29,20 @@ namespace BushTripPlugin
         private string filename;
         private double declinaison;
 
+        private string SimBriefDirectory;
+        private string SimBriefPdfFile;
+        private string tmpPDFfile;
+
         public FlightplanCtrl()
         {
             InitializeComponent();
             waypointIndex = 0;
             lastWaypointIndex = 0;
-            btnReset.Enabled = false;
-            btnSaveFlightPlan.Enabled = false;
+            restartToolStripMenuItem.Enabled = false;
+            exportToolStripMenuItem.Enabled = false;
+            getFlightBriefingToolStripMenuItem.Enabled = false;
+            tmpPDFfile = string.Empty;
+
         }
 
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
@@ -302,8 +309,8 @@ namespace BushTripPlugin
                 double distance = computeFlightLength();
                 lblDistanceTotale.Text = "Total distance :" + distance.ToString() + " miles";
                 tsGlobalStatus.Text = "Flight plan loaded";
-                btnReset.Enabled = true;
-                btnSaveFlightPlan.Enabled = true;
+                restartToolStripMenuItem.Enabled = true;
+                exportToolStripMenuItem.Enabled = true;
             }
             else
             {
@@ -631,7 +638,8 @@ namespace BushTripPlugin
 
         private void btnCreateTrip_Click(object sender, EventArgs e)
         {
-            CreateTrip();
+            //CreateTrip();
+            contextMenuStrip1.Show(btnCreateTrip, 0, btnCreateTrip.Height);
         }
 
         void ISimAddonPluginCtrl.SetExecutionFolder(string path)
@@ -711,6 +719,10 @@ namespace BushTripPlugin
                     using (FileStream fileStream = new FileStream(tempFile, FileMode.Open))
                     {
                         OFP simbriefPlan = (OFP)serializer.Deserialize(fileStream);
+                        //save the simbrief files info
+                        SimBriefDirectory = simbriefPlan.files.directory;
+                        SimBriefPdfFile = simbriefPlan.files.pdf.link;
+
                         flightPlan = converter.FlightplanFromOFP(simbriefPlan);
                     }
                     flightPlan.CurrentStep = waypointIndex;
@@ -725,6 +737,7 @@ namespace BushTripPlugin
                         eventArg.value = flightPlan.Item.Waypoints[nbWaypoints - 1].Ident;
                         OnSimEvent(this, eventArg);
                     }
+                    getFlightBriefingToolStripMenuItem.Enabled = true;
                     finalResult = true;
                 }
                 catch (Exception ex)
@@ -764,7 +777,45 @@ namespace BushTripPlugin
 
         private void getFlightBriefingToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //download the pdf file from simbrief if necessary
+            if (tmpPDFfile != string.Empty)
+            {
+                //open the pdf file
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
+                {
+                    FileName = tmpPDFfile,
+                    UseShellExecute = true
+                });
+            }
+            else
+            {
+                if (SimBriefPdfFile != string.Empty)
+                {
+                    using (var client = new System.Net.WebClient())
+                    {
+                        try
+                        {
+                            string pdfFileName = Path.Combine(SimBriefDirectory, Path.GetFileName(SimBriefPdfFile));
+                            //download the pdf file to a temporary location
+                            //save it in the temp folder
+                            tmpPDFfile = Path.GetTempFileName() + ".pdf";
 
+                            client.DownloadFile(pdfFileName, tmpPDFfile);
+                            //open the pdf file
+                            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
+                            {
+                                FileName = tmpPDFfile,
+                                UseShellExecute = true
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.WriteLine("Error when downloading flight briefing from Simbrief : " + ex.Message);
+                            ShowMsgBox("Error when downloading flight briefing from Simbrief : " + ex.Message, "Error", MessageBoxButtons.OK);
+                        }
+                    }
+                }
+            }
         }
     }
 }
