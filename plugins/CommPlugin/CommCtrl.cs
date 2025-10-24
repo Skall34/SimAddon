@@ -35,6 +35,7 @@ namespace CommPlugin
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
         public event ISimAddonPluginCtrl.OnSimEventHandler OnSimEvent;
         public event ISimAddonPluginCtrl.OnShowMsgboxHandler OnShowMsgbox;
+        public event ISimAddonPluginCtrl.OnShowDialogHandler OnShowDialog;
 
         private void LoadCustomFont()
         {

@@ -66,6 +66,7 @@ namespace ChartFoxPlugin
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
         public event ISimAddonPluginCtrl.OnSimEventHandler OnSimEvent;
         public event ISimAddonPluginCtrl.OnShowMsgboxHandler OnShowMsgbox;
+        public event ISimAddonPluginCtrl.OnShowDialogHandler OnShowDialog;
 
         public void FormClosing(object sender, FormClosingEventArgs e)
         {

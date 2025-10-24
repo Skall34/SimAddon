@@ -50,7 +50,7 @@ namespace BushTripPlugin
 
         public event ISimAddonPluginCtrl.UpdateStatusHandler OnStatusUpdate;
         public event ISimAddonPluginCtrl.OnShowMsgboxHandler OnShowMsgbox;
-
+        public event ISimAddonPluginCtrl.OnShowDialogHandler OnShowDialog;
 
         public void SetWindowMode(ISimAddonPluginCtrl.WindowMode mode)
         {
@@ -652,12 +652,6 @@ namespace BushTripPlugin
 
         }
 
-        private void fromFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ImportFromFile();
-
-        }
-
         private void createToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CreateTrip();
@@ -673,26 +667,30 @@ namespace BushTripPlugin
             RestartFlightPlan();
         }
 
-        private void fromSimbriefToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ImportFromSimbrief();
-        }
-
         private bool ImportFromSimbrief()
         {
             bool finalResult = false;
             if (Settings.Default.SimbriefUsername == string.Empty)
             {
-                //show a messagebox to ask for simbrief username
-                SettingsForm settingsForm = new SettingsForm();
-                DialogResult result = settingsForm.ShowDialog();
-                if (result == DialogResult.OK)
+                if (OnShowDialog != null)
                 {
-                    Settings.Default.SimbriefUsername = settingsForm.SimbriefUserName;
-                    Settings.Default.Save();
+                    //show a messagebox to ask for simbrief username
+                    SettingsForm settingsForm = new SettingsForm();
+                    settingsForm.SimbriefUserName = Settings.Default.SimbriefUsername;
+                    DialogResult result = OnShowDialog(this, settingsForm);
+                    if (result == DialogResult.OK)
+                    {
+                        Settings.Default.SimbriefUsername = settingsForm.SimbriefUserName;
+                        Settings.Default.Save();
+                    }
+                    else
+                    {
+                        return finalResult;
+                    }
                 }
                 else
                 {
+                    //no way to ask for simbrief username, abort
                     return finalResult;
                 }
             }
@@ -753,11 +751,17 @@ namespace BushTripPlugin
         {
             //show a messagebox to ask for simbrief username
             SettingsForm settingsForm = new SettingsForm();
-            DialogResult result = settingsForm.ShowDialog();
-            if (result == DialogResult.OK)
+            settingsForm.SimbriefUserName = Settings.Default.SimbriefUsername;
+
+            if (OnShowDialog != null)
             {
-                Settings.Default.SimbriefUsername = settingsForm.SimbriefUserName;
-                Settings.Default.Save();
+                DialogResult result = OnShowDialog(this, settingsForm);
+                if (result == DialogResult.OK)
+                {
+                    Settings.Default.SimbriefUsername = settingsForm.SimbriefUserName;
+                    Settings.Default.Save();
+                }
+                return;
             }
         }
 
@@ -767,6 +771,11 @@ namespace BushTripPlugin
             if (importOK)
             {
                 getFlightBriefingToolStripMenuItem.Enabled = true;
+            }
+            else
+            {
+                //disable the get briefing menu
+                getFlightBriefingToolStripMenuItem.Enabled = false;
             }
         }
 

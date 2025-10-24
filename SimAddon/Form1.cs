@@ -328,6 +328,8 @@ namespace SimAddon
                     plugin.OnStatusUpdate += Plugin_OnStatusUpdate;
                     plugin.OnSimEvent += Plugin_OnSimEvent;
                     plugin.OnShowMsgbox += Plugin_OnShowMsgbox;
+                    plugin.OnShowDialog += Plugin_OnShowDialog;
+
                     TabPage pluginpage = plugin.registerPage();
 
                     pluginTabs.Add(pluginpage);
@@ -452,6 +454,20 @@ namespace SimAddon
             }
             DialogResult result = MessageBox.Show(text, caption, buttons);
 
+            //restore the topmost as it was before the popup.
+            this.TopMost = wasWindowTopMost;
+            return result;
+        }
+
+        private DialogResult Plugin_OnShowDialog(object sender, Form dialog)
+        {
+            //if the window is top most, disable the topmost before showing the dialog.
+            bool wasWindowTopMost = this.TopMost;
+            if (this.TopMost)
+            {
+                this.TopMost = false;
+            }
+            DialogResult result = dialog.ShowDialog();
             //restore the topmost as it was before the popup.
             this.TopMost = wasWindowTopMost;
             return result;

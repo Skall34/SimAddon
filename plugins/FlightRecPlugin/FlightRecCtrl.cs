@@ -72,12 +72,10 @@ namespace FlightRecPlugin
         private simData data;
 
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
-
         public event ISimAddonPluginCtrl.UpdateStatusHandler OnStatusUpdate;
-
         public event ISimAddonPluginCtrl.OnSimEventHandler OnSimEvent;
-
         public event ISimAddonPluginCtrl.OnShowMsgboxHandler OnShowMsgbox;
+        public event ISimAddonPluginCtrl.OnShowDialogHandler OnShowDialog;
 
         private string executionFolder;
 
@@ -1700,7 +1698,11 @@ namespace FlightRecPlugin
         {
             LocalFlightbookForm localFlightbookForm = new LocalFlightbookForm(this,data);
             localFlightbookForm.loadFlightbook(Properties.Settings.Default.LocalFlightbookFile);
-            localFlightbookForm.ShowDialog(this);
+            //localFlightbookForm.ShowDialog(this);
+            if (OnShowDialog != null)
+            {
+                OnShowDialog(this, localFlightbookForm);
+            }
         }
 
         private void updatePlaneStatusTimer_Tick(object sender, EventArgs e)

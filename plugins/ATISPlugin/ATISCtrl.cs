@@ -89,6 +89,7 @@ namespace ATISPlugin
 
         public event ISimAddonPluginCtrl.UpdateStatusHandler OnStatusUpdate;
         public event ISimAddonPluginCtrl.OnShowMsgboxHandler OnShowMsgbox;
+        public event ISimAddonPluginCtrl.OnShowDialogHandler OnShowDialog;
 
         //event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
         //{
