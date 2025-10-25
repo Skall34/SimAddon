@@ -70,6 +70,7 @@ namespace FlightRecPlugin
         private readonly FlightPerfs flightPerfs;
 
         private simData data;
+        private bool _suppressSelectionValidation = false;
 
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
         public event ISimAddonPluginCtrl.UpdateStatusHandler OnStatusUpdate;
@@ -655,7 +656,6 @@ namespace FlightRecPlugin
                         case STATE.TAXIING:
                             if (eventDetected == EVENT.TAKEOFF)
                             {
-                                measureTakeoffPerfs(currentFlightStatus);
                                 currentState = STATE.INFLIGHT;
                                 SimEvent(SimEventArg.EventType.TAKEOFF);
                             }
@@ -791,7 +791,7 @@ namespace FlightRecPlugin
 
         private void RemplirComboImmat()
         {
-            lbFret.Text = "Acars initializing ..... please wait";
+            //lbFret.Text = "Acars initializing ..... please wait";
             // Effacez les éléments existants dans la combobox
             cbImmat.Items.Clear();
             if ((data.avions != null) && (data.avions.Count > 0))
@@ -1056,6 +1056,9 @@ namespace FlightRecPlugin
 
                     //si tout va bien...
                     ShowMsgBox("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder", MessageBoxButtons.OK);
+
+                    // Appel à l'API api_complete_reservation.php (fire and forget)
+                    _ = ConsumeCompleteReservationApiAsync(tbCallsign.Text, cbImmat.Text, lbStartIata.Text, lbEndIata.Text);
 
                     //reset le vol sans demande de confirmation
                     resetFlight(true);
@@ -1354,113 +1357,90 @@ namespace FlightRecPlugin
 
         private void cbImmat_DrawItem(object sender, DrawItemEventArgs e)
         {
-            // Draw the background of the ListBox control for each item.
             e.DrawBackground();
-            // Define the default color of the brush as black.
             Brush myBrush = Brushes.Black;
-
-            // Draw the current item text based on the current Font 
-            // and the custom brush settings.
             if (e.Index >= 0)
             {
-                if (cbImmat.Items.Count > 1)
+                Avion item = (Avion)cbImmat.Items[e.Index];
+                switch (item.Status)
                 {
-                    Avion item = (Avion)cbImmat.Items[e.Index];
-                    switch (item.Status)
-                    {
-                        case 0:
-                            myBrush = Brushes.Black; //avion disponible
-                            break;
-                        case 1:
-                            myBrush = Brushes.LightGray; //avion non disponible (en maintenance).
-                            break;
-                        case 2:
-                            myBrush = Brushes.LightGray;//avion non disponible (en maintenance).
-                            break;
-                    }
-
-                    if (item.EnVol == 1)
-                    {
-                        if (item.DernierUtilisateur != tbCallsign.Text)
-                        {
-                            myBrush = Brushes.LightGray; //avion non disponible (utilisé par qqun d'autre).
-                        }
+                    case Avion.StatusDisponible:
+                        myBrush = Brushes.Black;
+                        break;
+                    case Avion.StatusMaintenance:
+                    case Avion.StatusMaintenance2:
+                        myBrush = Brushes.LightGray;
+                        break;
+                    case Avion.StatusReserve:
+                        if (item.DernierUtilisateur == tbCallsign.Text)
+                            myBrush = Brushes.Blue; // réservataire
                         else
-                        {
-                            myBrush = Brushes.Blue; //avion non disponible (deja pris par moi).
-                        }
-                    }
-
-                    e.Graphics.DrawString(item.Immat,
-                        e.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
+                            myBrush = Brushes.LightGray; // réservé, non sélectionnable
+                        break;
                 }
+                e.Graphics.DrawString(item.Immat, e.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
             }
-            // If the ListBox has focus, draw a focus rectangle around the selected item.
             e.DrawFocusRectangle();
         }
 
         private void CbImmat_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (_suppressSelectionValidation) return;
             Avion selectedPlane = this.data.avions.Where(a => a.Immat == cbImmat.Text).FirstOrDefault();
             if (selectedPlane != null)
             {
-                Logger.WriteLine("Plane selected: " + selectedPlane.Immat + " Status=" + selectedPlane.Status.ToString() + " EnVol=" + selectedPlane.EnVol.ToString() + " DernierUtilisateur=" + selectedPlane.DernierUtilisateur);
-                //si l'avion est en maintenance, ou en vol par un autre utilisateur, on ne le selectionne pas.
-                if ((selectedPlane.Status == 1) || (selectedPlane.Status == 2) || ((selectedPlane.EnVol == 1) && (selectedPlane.DernierUtilisateur != tbCallsign.Text)))
+                if (!selectedPlane.IsSelectable(tbCallsign.Text))
                 {
                     cbImmat.SelectedItem = null;
                     lbDesignationAvion.Text = "<no plane selected>";
+                    return;
                 }
-                else
+                string planeDesign = selectedPlane.Designation;
+                lbDesignationAvion.Text = planeDesign;
+
+                //mettre a jour l'icone suivant le type_aeroport d'avion.
+
+                switch (selectedPlane.Type)
                 {
-                    string planeDesign = selectedPlane.Designation;
-                    lbDesignationAvion.Text = planeDesign;
-
-                    //mettre a jour l'icone suivant le type_aeroport d'avion.
-
-                    switch (selectedPlane.Type)
-                    {
-                        case ("Monomoteur"):
-                            {
-                                panelAircraftTypeIcon.BackgroundImage = Properties.Resources.monomoteur;
-                            }
-                            ; break;
-                        case ("Bimoteur"):
-                            {
-                                panelAircraftTypeIcon.BackgroundImage = Properties.Resources.bimoteur;
-                            }
-                            ; break;
-                        case ("Liner"):
-                            {
-                                panelAircraftTypeIcon.BackgroundImage = Properties.Resources.liner;
-                            }
-                            ; break;
-                        case ("Helico"):
-                            {
-                                panelAircraftTypeIcon.BackgroundImage = Properties.Resources.helico;
-                            }
-                            ; break;
+                    case ("Monomoteur"):
+                        {
+                            panelAircraftTypeIcon.BackgroundImage = Properties.Resources.monomoteur;
                     }
-
-                    checkParameters();
-
-                    //si cet avion est marqué comme deja en vol, c'est par l'utilisateur courant. 
-                    //marque cet avion comme n'etant plus en vol.
-                    if ((selectedPlane.EnVol == 1) && selectedPlane.DernierUtilisateur == tbCallsign.Text)
-                    {
-                        Logger.WriteLine("Freeing the airplane on the database");
-                        UpdatePlaneStatus(0);
+                    ; break;
+                    case ("Bimoteur"):
+                        {
+                            panelAircraftTypeIcon.BackgroundImage = Properties.Resources.bimoteur;
                     }
-
-                    //push this event, so that other plugins are notified that the plane was selected
-                    SimEventArg eventArg = new SimEventArg();
-                    eventArg.reason = SimEventArg.EventType.SETAIRCRAFT;
-                    eventArg.value = selectedPlane.Designation;
-                    SimEvent(eventArg);
+                    ; break;
+                    case ("Liner"):
+                        {
+                            panelAircraftTypeIcon.BackgroundImage = Properties.Resources.liner;
+                    }
+                    ; break;
+                    case ("Helico"):
+                        {
+                            panelAircraftTypeIcon.BackgroundImage = Properties.Resources.helico;
+                    }
+                    ; break;
                 }
+
+                checkParameters();
+
+                //si cet avion est marqué comme deja en vol, c'est par l'utilisateur courant. 
+                //marque cet avion comme n'etant plus en vol.
+                if ((selectedPlane.EnVol == 1) && selectedPlane.DernierUtilisateur == tbCallsign.Text)
+                {
+                    Logger.WriteLine("Freeing the airplane on the database");
+                    UpdatePlaneStatus(0);
+                }
+
+                //push this event, so that other plugins are notified that the plane was selected
+                SimEventArg eventArg = new SimEventArg();
+                eventArg.reason = SimEventArg.EventType.SETAIRCRAFT;
+                eventArg.value = selectedPlane.Designation;
+                SimEvent(eventArg);
             }
         }
-
 
 
         private void BtnReset_Click(object sender, EventArgs e)
@@ -1754,6 +1734,184 @@ namespace FlightRecPlugin
         {
             //change the cursor to default
             this.Cursor = Cursors.Default;
+        }
+
+        /// <summary>
+        /// Apply a reservation: select immatriculation if present, set departure ICAO and set comment to "vol régulier".
+        /// Public so Form1 can call it via reflection.
+        /// </summary>
+        public void ApplyReservation(string immat, string departureIcao, string arrivalIcao = "")
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new Action(() => ApplyReservation(immat, departureIcao, arrivalIcao)));
+                return;
+            }
+
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(immat) && (cbImmat != null))
+                {
+                    // helper to normalize immatriculation strings for comparison
+                    static string NormalizeImmat(string s)
+                    {
+                        if (string.IsNullOrWhiteSpace(s)) return string.Empty;
+                        return new string(s.ToUpperInvariant().Where(c => char.IsLetterOrDigit(c)).ToArray());
+                    }
+
+                    string targetNorm = NormalizeImmat(immat);
+
+                    Avion foundAvion = null;
+                    foreach (var item in cbImmat.Items.Cast<object>())
+                    {
+                        if (item == null) continue;
+                        var t = item.GetType();
+                        var imProp = t.GetProperty("Immat");
+                        string itemImmat = imProp != null ? imProp.GetValue(item)?.ToString() ?? string.Empty : item.ToString();
+                        if (NormalizeImmat(itemImmat) == targetNorm)
+                        {
+                            foundAvion = item as Avion;
+                            break;
+                        }
+                    }
+
+                    // Si l'immat réservée n'est pas présente, on l'ajoute à la flotte et à la ComboBox
+ /*                   if (foundAvion == null)
+                    {
+                        foundAvion = new Avion
+                        {
+                            Immat = immat,
+                            Designation = immat,
+                            Status = SimDataManager.Avion.StatusReserve,
+                            DernierUtilisateur = tbCallsign.Text
+                        };
+                        data.avions.Add(foundAvion);
+                        RemplirComboImmat();
+                    }
+ */
+                    // Met à jour le statut et le réservataire
+                    foundAvion.Status = SimDataManager.Avion.StatusReserve;
+                    foundAvion.DernierUtilisateur = tbCallsign.Text;
+
+                    // Force la sélection
+                    _suppressSelectionValidation = true;
+                    cbImmat.SelectedItem = foundAvion;
+                    cbImmat.Refresh();
+                    lbDesignationAvion.Text = foundAvion.Designation;
+                    // send the SETAIRCRAFT event
+                    SimEventArg eventArg = new SimEventArg();
+                    eventArg.reason = SimEventArg.EventType.SETAIRCRAFT;
+                    eventArg.value = foundAvion.Designation;
+                    SimEvent(eventArg);
+                    _suppressSelectionValidation = false;
+
+                    // Empêche la modification par l'utilisateur
+                    cbImmat.Enabled = false;
+                    checkParameters();
+
+                // Appel à l'API api_consume_reservation.php (fire and forget)
+                _ = ConsumeReservationApiAsync(tbCallsign.Text, immat, departureIcao, arrivalIcao);
+                }
+
+                if (!string.IsNullOrWhiteSpace(departureIcao) && lbStartIata != null)
+                {
+                    lbStartIata.Text = departureIcao.ToUpper();
+                }
+
+                // set arrival ICAO in ACARS (tbEndICAO or tbArrival equivalent)
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(arrivalIcao))
+                    {
+                        var tbEnd = this.GetType().GetField("tbEndICAO", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.GetValue(this) as TextBox;
+                        if (tbEnd != null)
+                        {
+                            tbEnd.Text = arrivalIcao.ToUpper();
+                        }
+                        else
+                        {
+                            // maybe property
+                            var prop = this.GetType().GetProperty("tbEndICAO", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                            if (prop != null)
+                            {
+                                var tb = prop.GetValue(this) as TextBox;
+                                if (tb != null) tb.Text = arrivalIcao.ToUpper();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("ApplyReservation: setting arrival ICAO failed: " + ex.Message);
+                }
+                
+                cbMission.SelectedItem = "LIGNES REGULIERES";
+
+                if (tbCommentaires != null)
+                {
+                    tbCommentaires.Text = "Vol régulier.";
+                }
+
+
+
+                Logger.WriteLine($"ApplyReservation applied immat={immat} dep={departureIcao}");
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("ApplyReservation error: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Appelle l'API api_consume_reservation.php pour consommer une réservation.
+        /// </summary>
+        private async Task ConsumeReservationApiAsync(string callsign, string immat, string departureIcao, string arrivalIcao)
+        {
+            try
+            {
+                using var client = new HttpClient();
+                var values = new Dictionary<string, string>
+                {
+                    { "callsign", callsign },
+                    { "immat", immat },
+                    { "departureIcao", departureIcao },
+                    { "arrivalIcao", arrivalIcao }
+                };
+                var content = new FormUrlEncodedContent(values);
+                var response = await client.PostAsync("https://www.skywings.ovh/api/api_consume_reservation.php", content);
+                var responseString = await response.Content.ReadAsStringAsync();
+                Logger.WriteLine($"api_consume_reservation.php response: {responseString}");
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine($"api_consume_reservation.php error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Appelle l'API api_complete_reservation.php pour compléter une réservation.
+        /// </summary>
+        private async Task ConsumeCompleteReservationApiAsync(string callsign, string immat, string departureIcao, string arrivalIcao)
+        {
+            try
+            {
+                using var client = new HttpClient();
+                var values = new Dictionary<string, string>
+                {
+                    { "callsign", callsign },
+                    { "immat", immat },
+                    { "departureIcao", departureIcao },
+                    { "arrivalIcao", arrivalIcao }
+                };
+                var content = new FormUrlEncodedContent(values);
+                var response = await client.PostAsync("https://www.skywings.ovh/api/api_complete_reservation.php", content);
+                var responseString = await response.Content.ReadAsStringAsync();
+                Logger.WriteLine($"api_complete_reservation.php response: {responseString}");
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine($"api_complete_reservation.php error: {ex.Message}");
+            }
         }
     }
 }

@@ -26,6 +26,11 @@ namespace SimDataManager
         public string DernierUtilisateur { get; set; }
         public int EnVol {  get; set; }
 
+        public const int StatusDisponible = 0;
+        public const int StatusMaintenance = 1;
+        public const int StatusMaintenance2 = 2;
+        public const int StatusReserve = 3; // pour réservé
+
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
@@ -70,5 +75,11 @@ namespace SimDataManager
             return avions;
         }
 
+        public bool IsSelectable(string currentCallsign)
+        {
+            if (Status == StatusDisponible) return true;
+            if (Status == StatusReserve && DernierUtilisateur == currentCallsign) return true;
+            return false;
+        }
     }
 }
