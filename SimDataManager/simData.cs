@@ -233,6 +233,22 @@ namespace SimDataManager
             return result;
         }
 
+        public Reservation CheckReservation(string callsign)
+        {
+            Task<Reservation> result = ReservationMgr.CheckReservation(callsign, BASERURL);
+            return result.Result;
+        }
+
+        public void ApplyReservation(string callsign, Reservation reservation)
+        {
+             ReservationMgr.ApplyReservation(callsign, reservation, BASERURL);
+        }
+
+        public void CompleteReservation(string callsign, Reservation reservation)
+        {
+             ReservationMgr.CompleteReservation(callsign, reservation, BASERURL);
+        }
+
         private async Task<int> LoadDataFromSheet()
         {
             int result = 0;

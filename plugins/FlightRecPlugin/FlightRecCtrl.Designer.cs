@@ -529,7 +529,7 @@ namespace FlightRecPlugin
             // pictureBox1
             // 
             pictureBox1.Image = (System.Drawing.Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(5, 42);
+            pictureBox1.Location = new Point(7, 42);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(100, 50);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;

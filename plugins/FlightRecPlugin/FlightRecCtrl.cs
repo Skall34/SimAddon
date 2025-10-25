@@ -69,6 +69,11 @@ namespace FlightRecPlugin
 
         private readonly FlightPerfs flightPerfs;
 
+        private ReservationMgr.ReservationStatus reservationStatus = ReservationMgr.ReservationStatus.Unknown;
+        private Reservation reservation;
+        private static bool checkingReservation = false;
+
+
         private simData data;
         private bool _suppressSelectionValidation = false;
 
@@ -490,6 +495,77 @@ namespace FlightRecPlugin
             return result;
         }
 
+        private void checkReservation()
+        {
+
+
+            if (!checkingReservation)
+            {
+                checkingReservation = true;
+                // After initialization, check reservation for configured callsign
+                try
+                {
+                    // call and wait so popup appears during startup
+                    if (reservationStatus == ReservationMgr.ReservationStatus.Unknown)
+                    {
+                        reservation = data.CheckReservation(Settings.Default.callsign);
+                        if (reservation.Reserved)
+                        {
+                            //there is a reservation for this callsign at this airport
+                            if ((localAirport!=null)&&(localAirport.ident == reservation.DepartureIcao))
+                            {
+                                Logger.WriteLine("CheckReservation: local airport matches reservation departure");
+                                //plane is reserved, ask if user wants to apply reservation data
+                                Logger.WriteLine("CheckReservation: reservation found for callsign " + Settings.Default.callsign);
+                                string message = "A reservation has been found for callsign " + Settings.Default.callsign + ":\n" +
+                                    "Departure: " + reservation.DepartureIcao + "\n" +
+                                    "Arrival: " + reservation.ArrivalIcao + "\n\n" +
+                                    "Do you want to apply this reservation data to the flight ?";
+                                DialogResult res = ShowMsgBox(message, "Reservation found", MessageBoxButtons.YesNo);
+                                if (res == DialogResult.Yes)
+                                {
+                                    Logger.WriteLine("CheckReservation: user accepted to apply reservation data");
+                                    //apply reservation data
+                                    //tbDepartureICAO.Text = reservation.DepartureIcao;
+                                    tbEndICAO.Text = reservation.ArrivalIcao;
+                                    cbImmat.SelectedItem = data.avions.Where(a => a.Immat == reservation.Immat).FirstOrDefault();
+                                    reservationStatus = ReservationMgr.ReservationStatus.Accepted;
+                                    ApplyReservation(reservation.Immat, reservation.DepartureIcao, reservation.ArrivalIcao);
+                                }
+                                else
+                                {
+                                    Logger.WriteLine("CheckReservation: user refused to apply reservation data");
+                                    reservationStatus = ReservationMgr.ReservationStatus.Ignored;
+                                }
+                            }
+                            else
+                            {
+                                Logger.WriteLine("CheckReservation: local airport does not match reservation departure");
+                            }
+                        }
+                        else
+                        {
+                            //no reservation found
+                            reservationStatus = ReservationMgr.ReservationStatus.Ignored;
+                            Logger.WriteLine("CheckReservation: no reservation found for callsign " + Settings.Default.callsign);
+                        }
+                    }
+                    else
+                    {
+                        //already checked just do nothing
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("CheckReservationAsync scheduling failed: " + ex.Message);
+                }
+                checkingReservation = false;
+            }
+            else
+            {
+                Logger.WriteLine("CheckReservation: already checking");
+            }
+        }
 
         public void updateSituation(situation currentFlightStatus)
         {
@@ -590,6 +666,9 @@ namespace FlightRecPlugin
                     switch (currentState)
                     {
                         case STATE.WAITING:
+
+                            checkReservation();
+
                             if (eventDetected == EVENT.ENGINESTART)
                             {
                                 //we just started the engine, so we are taxiing
@@ -656,6 +735,7 @@ namespace FlightRecPlugin
                         case STATE.TAXIING:
                             if (eventDetected == EVENT.TAKEOFF)
                             {
+                                measureTakeoffPerfs(currentFlightStatus);
                                 currentState = STATE.INFLIGHT;
                                 SimEvent(SimEventArg.EventType.TAKEOFF);
                             }
@@ -1054,11 +1134,17 @@ namespace FlightRecPlugin
                     Settings.Default.lastImmat = saveFlightDialog.Immat;
                     Settings.Default.Save();
 
+                    if (reservationStatus == ReservationMgr.ReservationStatus.Accepted)
+                    {
+                        Logger.WriteLine("Saving reservation as completed");
+                        //mark the reservation as completed
+                        data.CompleteReservation(Settings.Default.callsign,reservation);
+
+                        //reset the reservation status to unknown for the next flight
+                        reservationStatus = ReservationMgr.ReservationStatus.Unknown;
+                    }
                     //si tout va bien...
                     ShowMsgBox("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder", MessageBoxButtons.OK);
-
-                    // Appel à l'API api_complete_reservation.php (fire and forget)
-                    _ = ConsumeCompleteReservationApiAsync(tbCallsign.Text, cbImmat.Text, lbStartIata.Text, lbEndIata.Text);
 
                     //reset le vol sans demande de confirmation
                     resetFlight(true);
@@ -1810,7 +1896,7 @@ namespace FlightRecPlugin
                     checkParameters();
 
                 // Appel à l'API api_consume_reservation.php (fire and forget)
-                _ = ConsumeReservationApiAsync(tbCallsign.Text, immat, departureIcao, arrivalIcao);
+                    data.ApplyReservation(Settings.Default.callsign, reservation);
                 }
 
                 if (!string.IsNullOrWhiteSpace(departureIcao) && lbStartIata != null)
@@ -1867,51 +1953,8 @@ namespace FlightRecPlugin
         /// </summary>
         private async Task ConsumeReservationApiAsync(string callsign, string immat, string departureIcao, string arrivalIcao)
         {
-            try
-            {
-                using var client = new HttpClient();
-                var values = new Dictionary<string, string>
-                {
-                    { "callsign", callsign },
-                    { "immat", immat },
-                    { "departureIcao", departureIcao },
-                    { "arrivalIcao", arrivalIcao }
-                };
-                var content = new FormUrlEncodedContent(values);
-                var response = await client.PostAsync("https://www.skywings.ovh/api/api_consume_reservation.php", content);
-                var responseString = await response.Content.ReadAsStringAsync();
-                Logger.WriteLine($"api_consume_reservation.php response: {responseString}");
-            }
-            catch (Exception ex)
-            {
-                Logger.WriteLine($"api_consume_reservation.php error: {ex.Message}");
-            }
+
         }
 
-        /// <summary>
-        /// Appelle l'API api_complete_reservation.php pour compléter une réservation.
-        /// </summary>
-        private async Task ConsumeCompleteReservationApiAsync(string callsign, string immat, string departureIcao, string arrivalIcao)
-        {
-            try
-            {
-                using var client = new HttpClient();
-                var values = new Dictionary<string, string>
-                {
-                    { "callsign", callsign },
-                    { "immat", immat },
-                    { "departureIcao", departureIcao },
-                    { "arrivalIcao", arrivalIcao }
-                };
-                var content = new FormUrlEncodedContent(values);
-                var response = await client.PostAsync("https://www.skywings.ovh/api/api_complete_reservation.php", content);
-                var responseString = await response.Content.ReadAsStringAsync();
-                Logger.WriteLine($"api_complete_reservation.php response: {responseString}");
-            }
-            catch (Exception ex)
-            {
-                Logger.WriteLine($"api_complete_reservation.php error: {ex.Message}");
-            }
-        }
     }
 }
