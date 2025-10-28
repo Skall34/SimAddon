@@ -1141,7 +1141,7 @@ namespace FlightRecPlugin
                         Logger.WriteLine("Saving reservation as completed");
                         //mark the reservation as completed
                         data.CompleteReservation(Settings.Default.callsign,reservation);
-
+                        reservation.Reserved = false;
                         //reset the reservation status to unknown for the next flight
                         reservationStatus = ReservationMgr.ReservationStatus.Unknown;
                     }
@@ -1197,10 +1197,7 @@ namespace FlightRecPlugin
 
                 clearStartOfFLightData();
 
-
-
                 clearEndOfFlightData();
-
 
                 lbFret.Visible = true;
 
@@ -1243,6 +1240,15 @@ namespace FlightRecPlugin
 
                 pauseTime = TimeSpan.Zero;
                 isPaused = false;
+
+                if (reservationStatus == ReservationMgr.ReservationStatus.Accepted)
+                {
+                    //mark the reservation as completed
+                    data.CompleteReservation(Settings.Default.callsign, reservation);
+                    reservation.Reserved = false;
+                }
+                //whatever the reservation status, reset it to unknown for the next flight
+                reservationStatus = ReservationMgr.ReservationStatus.Unknown;
 
                 //currentState = STATE.WAITING;
                 //UpdateStatus("Waiting for engine start");
@@ -1933,7 +1939,7 @@ namespace FlightRecPlugin
                     Logger.WriteLine("ApplyReservation: setting arrival ICAO failed: " + ex.Message);
                 }
                 
-                cbMission.Text = "LIGNES REGULIERES";
+                cbMission.SelectedItem = "LIGNES REGULIERES";
 
                 if (tbCommentaires != null)
                 {

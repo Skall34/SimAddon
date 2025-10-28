@@ -13,6 +13,7 @@ namespace SimDataManager
     {
         public int Index { get; set; }
         public string Libelle { get; set; }
+        public int Active { get; set; }
 
         public static async Task<List<Mission>> FetchMissionsFromSheet(string BASEURL)
         {

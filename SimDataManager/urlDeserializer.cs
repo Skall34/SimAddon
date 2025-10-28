@@ -99,6 +99,7 @@ namespace SimDataManager
                                 {
 
                                     Libelle = item.TryGetValue("libelle", out string libMission) ? libMission : "",
+                                    Active = int.TryParse(item.TryGetValue("active", out string activeStr) ? activeStr : "0", out int activeValue) ? activeValue : 0,
                                 };
 
                                 missions.Add(mission);

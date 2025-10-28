@@ -31,7 +31,7 @@ namespace SimDataManager
         /// <summary>
         /// Call the reservation API using Settings.Default.callsign and show a popup if a reservation exists.
         /// </summary>
-        public static async Task<Reservation> CheckReservation(string callsign, string baseUrl, CancellationToken cancellationToken = default)
+        internal static async Task<Reservation> CheckReservation(string callsign, string baseUrl, CancellationToken cancellationToken = default)
         {
             var reservation = new Reservation { Reserved = false };
             reservation.Reserved = false;
