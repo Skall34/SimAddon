@@ -560,6 +560,7 @@ namespace FlightRecPlugin
             // cbMission
             // 
             cbMission.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            cbMission.DrawMode = DrawMode.OwnerDrawFixed;
             cbMission.DropDownStyle = ComboBoxStyle.DropDownList;
             cbMission.FormattingEnabled = true;
             cbMission.Location = new Point(355, 192);
@@ -567,6 +568,8 @@ namespace FlightRecPlugin
             cbMission.Name = "cbMission";
             cbMission.Size = new Size(179, 26);
             cbMission.TabIndex = 22;
+            cbMission.DrawItem += cbMission_DrawItem;
+            cbMission.SelectedIndexChanged += cbMission_SelectedIndexChanged;
             // 
             // label2
             // 

@@ -23,5 +23,13 @@ namespace SimDataManager
             List<Mission> missions = await dataReader.FetchMissionsDataAsync();
             return missions;
         }
+
+        public bool IsSelectable(bool IsReserved)
+        {
+            //a mission is selectable if active = 1 or reserved
+            if ((Active == 2)&&(!IsReserved)) return false;
+            return true;
+        }
+
     }
 }

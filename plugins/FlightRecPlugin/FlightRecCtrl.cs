@@ -506,7 +506,7 @@ namespace FlightRecPlugin
                         if (reservation.Reserved)
                         {
                             //there is a reservation for this callsign at this airport
-                            if ((localAirport!=null)&&(localAirport.ident == reservation.DepartureIcao))
+                            if ((localAirport != null) && (localAirport.ident == reservation.DepartureIcao))
                             {
                                 Logger.WriteLine("CheckReservation: local airport matches reservation departure");
                                 //plane is reserved, ask if user wants to apply reservation data
@@ -918,7 +918,8 @@ namespace FlightRecPlugin
         {
             if ((data.missions != null) && (data.missions.Count > 0))
             {
-                cbMission.Items.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
+                //cbMission.Items.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
+                cbMission.Items.AddRange(data.missions.ToArray());
             }
             //await dataReader.FillComboBoxMissionsAsync(cbMission);
             cbMission.DisplayMember = "Libelle";
@@ -1090,7 +1091,7 @@ namespace FlightRecPlugin
 
                 string fullComment = tbCommentaires.Text;
                 //crée un dictionnaire des valeurs à envoyer
-                SaveFlightDialog saveFlightDialog = new SaveFlightDialog(this,data);
+                SaveFlightDialog saveFlightDialog = new SaveFlightDialog(this, data);
 
                 saveFlightDialog.Callsign = tbCallsign.Text;
                 saveFlightDialog.Immat = cbImmat.Text;
@@ -1132,7 +1133,7 @@ namespace FlightRecPlugin
                     {
                         Logger.WriteLine("Saving reservation as completed");
                         //mark the reservation as completed
-                        data.CompleteReservation(Settings.Default.callsign,reservation);
+                        data.CompleteReservation(Settings.Default.callsign, reservation);
                         reservation.Reserved = false;
                         //reset the reservation status to unknown for the next flight
                         reservationStatus = ReservationMgr.ReservationStatus.Unknown;
@@ -1491,22 +1492,22 @@ namespace FlightRecPlugin
                     case ("Monomoteur"):
                         {
                             panelAircraftTypeIcon.BackgroundImage = Properties.Resources.monomoteur;
-                    }
+                        }
                     ; break;
                     case ("Bimoteur"):
                         {
                             panelAircraftTypeIcon.BackgroundImage = Properties.Resources.bimoteur;
-                    }
+                        }
                     ; break;
                     case ("Liner"):
                         {
                             panelAircraftTypeIcon.BackgroundImage = Properties.Resources.liner;
-                    }
+                        }
                     ; break;
                     case ("Helico"):
                         {
                             panelAircraftTypeIcon.BackgroundImage = Properties.Resources.helico;
-                    }
+                        }
                     ; break;
                 }
 
@@ -1762,7 +1763,7 @@ namespace FlightRecPlugin
 
         private void btnFlightbook_Click(object sender, EventArgs e)
         {
-            LocalFlightbookForm localFlightbookForm = new LocalFlightbookForm(this,data);
+            LocalFlightbookForm localFlightbookForm = new LocalFlightbookForm(this, data);
             localFlightbookForm.loadFlightbook(Properties.Settings.Default.LocalFlightbookFile);
             //localFlightbookForm.ShowDialog(this);
             if (OnShowDialog != null)
@@ -1862,19 +1863,19 @@ namespace FlightRecPlugin
                     }
 
                     // Si l'immat réservée n'est pas présente, on l'ajoute à la flotte et à la ComboBox
- /*                   if (foundAvion == null)
-                    {
-                        foundAvion = new Avion
-                        {
-                            Immat = immat,
-                            Designation = immat,
-                            Status = SimDataManager.Avion.StatusReserve,
-                            DernierUtilisateur = tbCallsign.Text
-                        };
-                        data.avions.Add(foundAvion);
-                        RemplirComboImmat();
-                    }
- */
+                    /*                   if (foundAvion == null)
+                                       {
+                                           foundAvion = new Avion
+                                           {
+                                               Immat = immat,
+                                               Designation = immat,
+                                               Status = SimDataManager.Avion.StatusReserve,
+                                               DernierUtilisateur = tbCallsign.Text
+                                           };
+                                           data.avions.Add(foundAvion);
+                                           RemplirComboImmat();
+                                       }
+                    */
                     // Met à jour le statut et le réservataire
                     foundAvion.Status = SimDataManager.Avion.PlaneStatus.Reserved;
                     foundAvion.DernierUtilisateur = tbCallsign.Text;
@@ -1895,7 +1896,7 @@ namespace FlightRecPlugin
                     cbImmat.Enabled = false;
                     checkParameters();
 
-                // Appel à l'API api_consume_reservation.php (fire and forget)
+                    // Appel à l'API api_consume_reservation.php (fire and forget)
                     data.ApplyReservation(Settings.Default.callsign, reservation);
                 }
 
@@ -1930,7 +1931,7 @@ namespace FlightRecPlugin
                 {
                     Logger.WriteLine("ApplyReservation: setting arrival ICAO failed: " + ex.Message);
                 }
-                
+
                 cbMission.SelectedItem = "LIGNES REGULIERES";
 
                 if (tbCommentaires != null)
@@ -1954,5 +1955,38 @@ namespace FlightRecPlugin
 
         }
 
+        private void cbMission_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Mission selectedMission = (Mission)cbMission.SelectedItem;
+            if (selectedMission != null)
+            {
+                if (!selectedMission.IsSelectable(reservationStatus == ReservationMgr.ReservationStatus.Accepted))
+                {
+                    cbMission.SelectedItem = null;
+                    return;
+                }
+            }
+        }
+
+        private void cbMission_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            // Draw the background of the item.
+            e.DrawBackground();
+            Brush myBrush = Brushes.Black;
+            // Determine the color based on the item status
+            if (e.Index >= 0)
+            {
+                Mission item = (Mission)cbMission.Items[e.Index];
+                if(item.IsSelectable(reservationStatus == ReservationMgr.ReservationStatus.Accepted))
+                {
+                    myBrush = Brushes.Black;
+                }
+                else
+                {
+                    myBrush = Brushes.LightGray;
+                }
+                e.Graphics.DrawString(item.Libelle, e.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
+            }
+        }
     }
 }
