@@ -33,9 +33,6 @@ namespace FlightRecPlugin
         private DateTime pauseEndTime;
         private bool isRecording;
 
-        List<string> missions;
-        List<string> immats;
-
         private bool atLeastOneEngineFiring;
         private bool stopEngineConfirmed;
         private int startDisabled; // if startDisabled==0, then start is possible, if not, start is disabled. each 100ms, the counter will be decremented
@@ -200,9 +197,6 @@ namespace FlightRecPlugin
             this.tbCallsign.Text = Settings.Default.callsign;
             //desactive le bouton de maj du setting. Il sera reactivé si le callsign est modifié.
             btnSaveSettings.Enabled = false;
-
-            missions = new List<string>();
-            immats = new List<string>();
 
             flightPerfs = new FlightPerfs();
             GPSRecorder = new GPSRecorder();
@@ -884,7 +878,6 @@ namespace FlightRecPlugin
                     {
                         //immatriculations.Add(avion.Immat);
                         cbImmat.Items.Add(avion);
-                        immats.Add(avion.Immat);
                     }
                 }
                 cbImmat.DisplayMember = "Immat";
@@ -926,7 +919,6 @@ namespace FlightRecPlugin
             if ((data.missions != null) && (data.missions.Count > 0))
             {
                 cbMission.Items.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
-                missions.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
             }
             //await dataReader.FillComboBoxMissionsAsync(cbMission);
             cbMission.DisplayMember = "Libelle";
@@ -1063,7 +1055,7 @@ namespace FlightRecPlugin
                 throw new Exception("The string starts with 'SKY' followed by four numbers.");
             }
 
-            if (reservation.Reserved)
+            if (reservationStatus == ReservationMgr.ReservationStatus.Accepted)
             {
                 //there is a reservation for this callsign at this airport
                 if ((localAirport != null) && (localAirport.ident != reservation.ArrivalIcao))
