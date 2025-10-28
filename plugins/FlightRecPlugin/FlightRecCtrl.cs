@@ -1236,12 +1236,17 @@ namespace FlightRecPlugin
 
                 if (reservationStatus == ReservationMgr.ReservationStatus.Accepted)
                 {
-                    //mark the reservation as completed
-                    data.CompleteReservation(Settings.Default.callsign, reservation);
-                    reservation.Reserved = false;
+                    //ask the user if he wants to cancel the reservation
+                    DialogResult resCancel = ShowMsgBox("Do you want to cancel the reservation ?", "Flight Recorder", MessageBoxButtons.YesNo);
+                    if (resCancel == DialogResult.Yes)
+                    {
+                        Logger.WriteLine("User chose to cancel the reservation");
+                        //mark the reservation as completed
+                        data.CompleteReservation(Settings.Default.callsign, reservation);
+                        reservation.Reserved = false;
+                        reservationStatus = ReservationMgr.ReservationStatus.Unknown;
+                    }
                 }
-                //whatever the reservation status, reset it to unknown for the next flight
-                reservationStatus = ReservationMgr.ReservationStatus.Unknown;
 
                 //currentState = STATE.WAITING;
                 //UpdateStatus("Waiting for engine start");
