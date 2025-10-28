@@ -70,7 +70,7 @@ namespace FlightRecPlugin
         private Reservation reservation;
         private static bool checkingReservation = false;
 
-
+        private bool staticValuesReadOnce = false;
         private simData data;
         private bool _suppressSelectionValidation = false;
 
@@ -329,7 +329,7 @@ namespace FlightRecPlugin
                 result = true;
                 Logger.WriteLine("Engine start detected. onGround=" + onGround.ToString() + " startDisabled=" + startDisabled.ToString());
             }
-            return result;
+            return atLeastOneEngineFiring;
         }
 
         private bool detectEngineStop(situation currentFlightStatus)
@@ -540,7 +540,7 @@ namespace FlightRecPlugin
                         else
                         {
                             //no reservation found
-                            reservationStatus = ReservationMgr.ReservationStatus.Ignored;
+                            reservationStatus = ReservationMgr.ReservationStatus.Unknown;
                             Logger.WriteLine("CheckReservation: no reservation found for callsign " + Settings.Default.callsign);
                         }
                     }
@@ -712,7 +712,14 @@ namespace FlightRecPlugin
                             //the flight is ended, if there's an engine start, begin a new flight
                             if (eventDetected == EVENT.ENGINESTART)
                             {
-                                resetFlight(true);
+                                //new flight started
+                                clearStartOfFLightData();
+                                clearEndOfFlightData();
+
+                                checkReservation();
+
+                                //il ne faut pas faire de reset flight ici, car sinon, on va re-détecter le demarrage moteur.
+                                //resetFlight(true);
                                 Logger.WriteLine("State change ENDED -> TAXIING");
                                 getStartOfFlightData();
                                 currentState = STATE.TAXIING;
@@ -1676,7 +1683,7 @@ namespace FlightRecPlugin
                                 float fretOnAirport = await data.GetFretOnAirport(localAirport.ident);
                                 //lbFret.Text = fretOnAirport.ToString() + " Kg available " + startAirportname;
 
-                                if (fretOnAirport > 0)
+                                if ((localAirport!=null) && (fretOnAirport > 0))
                                 {
                                     lbFret.Text = "Available freight at " + localAirport.ident + " : " + fretOnAirport.ToString();
                                     Logger.WriteLine(lbFret.Text);
@@ -1693,6 +1700,7 @@ namespace FlightRecPlugin
                             }
                         }
                     }
+                    staticValuesReadOnce = true;
                 }
             }
             catch (Exception ex)
@@ -1705,7 +1713,7 @@ namespace FlightRecPlugin
         {
             //si on est au sol, et moteur arretés, alors on continue de rafraichir les données statiques.
             //sinon (en vol, ou des que les moteurs sont allumés, on ne change plus ça).
-            if (onGround && !atLeastOneEngineFiring)
+            if ((onGround && !atLeastOneEngineFiring)||(!staticValuesReadOnce))
             {
                 ReadStaticValues();
             }
