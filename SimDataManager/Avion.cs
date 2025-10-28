@@ -21,15 +21,24 @@ namespace SimDataManager
         public string Hub { get; set; }
         public int CoutHoraire { get; set; }
         public int Etat { get; set; }
-        public int Status { get; set; }
+        public PlaneStatus Status { get; set; }
         public string Horametre { get; set; }
         public string DernierUtilisateur { get; set; }
         public int EnVol {  get; set; }
+        public int Reserved { get; set; }
 
-        public const int StatusDisponible = 0;
-        public const int StatusMaintenance = 1;
-        public const int StatusMaintenance2 = 2;
-        public const int StatusReserve = 3; // pour réservé
+        //public const int StatusDisponible = 0;
+        //public const int StatusMaintenance = 1;
+        //public const int StatusMaintenance2 = 2;
+        //public const int StatusReserve = 3; // pour réservé
+
+        public enum PlaneStatus
+        {
+            Disponible = 0, //soit dispo
+            Maintenance = 1, //soit en maintenance
+            Maintenance2 = 2, //soit en maintenance longue
+            Reserved = 3 //soit déja en vol, soit réservé par qqun
+        }
 
         public override bool Equals(object obj)
         {
@@ -72,13 +81,31 @@ namespace SimDataManager
             string url = BASEURL + "/api/api_getFlotte.php";
             UrlDeserializer dataReader = new UrlDeserializer(url);
             List<Avion> avions = await dataReader.FetchAvionsDataAsync();
+
+            foreach(Avion avion in avions)
+            {
+                avion.Status = PlaneStatus.Disponible; // Par défaut, l'avion est disponible
+
+                if ((avion.EnVol != 0)||(avion.Reserved!=0))
+                {
+                    avion.Status = PlaneStatus.Reserved; // Indiquer que l'avion est en vol
+                }
+                if (avion.Etat == 1)
+                {
+                    avion.Status = PlaneStatus.Maintenance; // Indiquer que l'avion est en maintenance
+                }
+                if (avion.Etat == 2)
+                {
+                    avion.Status = PlaneStatus.Maintenance2; // Indiquer que l'avion est en maintenance longue ?
+                }
+            }
             return avions;
         }
 
         public bool IsSelectable(string currentCallsign)
         {
-            if (Status == StatusDisponible) return true;
-            if (Status == StatusReserve && DernierUtilisateur == currentCallsign) return true;
+            if (Status == Avion.PlaneStatus.Disponible) return true;
+            if ((Status == Avion.PlaneStatus.Reserved) && (DernierUtilisateur == currentCallsign)) return true;
             return false;
         }
     }

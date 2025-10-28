@@ -976,17 +976,6 @@ namespace FlightRecPlugin
             isRecording = true;
         }
 
-        private void resetEndOfFlightData()
-        {
-
-            lbEndFuel.Text = "Waiting end...";
-            lbEndPosition.Text = "Waiting end...";
-            lbEndTime.Text = "--:--";
-            lbEndIata.Text = "Waiting end...";
-
-            tbCommentaires.Text = string.Empty;
-        }
-
         private void getEndOfFlightData()
         {
             // disable start detection for 300 x 100 ms =30s  disable the start text boxes.
@@ -1072,6 +1061,19 @@ namespace FlightRecPlugin
             if (!regex.IsMatch(tbCallsign.Text))
             {
                 throw new Exception("The string starts with 'SKY' followed by four numbers.");
+            }
+
+            if (reservation.Reserved)
+            {
+                //there is a reservation for this callsign at this airport
+                if ((localAirport != null) && (localAirport.ident != reservation.ArrivalIcao))
+                {
+                    cbMission.Enabled = true;
+                    //unselect the mission if the arrival airport does not match the reservation
+                    cbMission.SelectedItem = null;
+
+                    throw new Exception("The airport does not match the reservation arrival airport (" + reservation.ArrivalIcao + ").");
+                }
             }
 
             return true;
@@ -1450,14 +1452,14 @@ namespace FlightRecPlugin
                 Avion item = (Avion)cbImmat.Items[e.Index];
                 switch (item.Status)
                 {
-                    case Avion.StatusDisponible:
+                    case Avion.PlaneStatus.Disponible:
                         myBrush = Brushes.Black;
                         break;
-                    case Avion.StatusMaintenance:
-                    case Avion.StatusMaintenance2:
+                    case Avion.PlaneStatus.Maintenance:
+                    case Avion.PlaneStatus.Maintenance2:
                         myBrush = Brushes.LightGray;
                         break;
-                    case Avion.StatusReserve:
+                    case Avion.PlaneStatus.Reserved:
                         if (item.DernierUtilisateur == tbCallsign.Text)
                             myBrush = Brushes.Blue; // réservataire
                         else
@@ -1876,7 +1878,7 @@ namespace FlightRecPlugin
                     }
  */
                     // Met à jour le statut et le réservataire
-                    foundAvion.Status = SimDataManager.Avion.StatusReserve;
+                    foundAvion.Status = SimDataManager.Avion.PlaneStatus.Reserved;
                     foundAvion.DernierUtilisateur = tbCallsign.Text;
 
                     // Force la sélection
@@ -1931,14 +1933,12 @@ namespace FlightRecPlugin
                     Logger.WriteLine("ApplyReservation: setting arrival ICAO failed: " + ex.Message);
                 }
                 
-                cbMission.SelectedItem = "LIGNES REGULIERES";
+                cbMission.Text = "LIGNES REGULIERES";
 
                 if (tbCommentaires != null)
                 {
                     tbCommentaires.Text = "Vol régulier.";
                 }
-
-
 
                 Logger.WriteLine($"ApplyReservation applied immat={immat} dep={departureIcao}");
             }

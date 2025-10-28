@@ -51,13 +51,13 @@ namespace SimDataManager
                                     Immat = item.TryGetValue("immat", out string immat) ? immat : "-----",
                                     Etat = int.TryParse(item.TryGetValue("etat", out string etat) ? etat : "", out int etatValue) ? etatValue : 0,
                                     DernierUtilisateur = item.TryGetValue("callsign", out string utilisateur) ? utilisateur : "",
-                                    EnVol = int.TryParse(item.TryGetValue("en_vol", out string envol) ? envol : "", out int envolValue) ? envolValue : 0
+                                    EnVol = int.TryParse(item.TryGetValue("en_vol", out string envol) ? envol : "", out int envolValue) ? envolValue : 0,
+                                    Reserved = int.TryParse(item.TryGetValue("reservee", out string reservee) ? reservee : "0", out int reserveValue) ? reserveValue : 0,
                                 };
 
                                 avions.Add(avion);
                             }
                         }
-
                     }
                     else
                     {
