@@ -520,9 +520,9 @@ namespace FlightRecPlugin
                                 {
                                     Logger.WriteLine("CheckReservation: user accepted to apply reservation data");
                                     //apply reservation data
-                                    //tbDepartureICAO.Text = reservation.DepartureIcao;
                                     tbEndICAO.Text = reservation.ArrivalIcao;
                                     cbImmat.SelectedItem = data.avions.Where(a => a.Immat == reservation.Immat).FirstOrDefault();
+                                    cbMission.SelectedItem = "";
                                     reservationStatus = ReservationMgr.ReservationStatus.Accepted;
                                     ApplyReservation(reservation.Immat, reservation.DepartureIcao, reservation.ArrivalIcao);
                                 }
@@ -604,6 +604,7 @@ namespace FlightRecPlugin
                     {
                         //the start detection disable timer expired, restore the start textboxes.
                         gbStartInfos.Enabled = true;
+                        Cursor = Cursors.Default;
                     }
                 }
 
@@ -661,7 +662,10 @@ namespace FlightRecPlugin
                     {
                         case STATE.WAITING:
 
-                            checkReservation();
+                            if (localAirport != null)
+                            {
+                                checkReservation();
+                            }
 
                             if (eventDetected == EVENT.ENGINESTART)
                             {
@@ -734,6 +738,12 @@ namespace FlightRecPlugin
                             //wait for manual flight reset
                             break;
                         case STATE.TAXIING:
+
+                            if ((localAirport) != null && (reservation == null))
+                            {
+                                checkReservation();
+                            }
+
                             if (eventDetected == EVENT.TAKEOFF)
                             {
                                 measureTakeoffPerfs(currentFlightStatus);
@@ -981,6 +991,13 @@ namespace FlightRecPlugin
             // disable start detection for 300 x 100 ms =30s  disable the start text boxes.
             startDisabled = 100;
             gbStartInfos.Enabled = false;
+           
+            //change the mouse cursor to wait
+            Cursor = Cursors.WaitCursor;
+
+
+            Logger.WriteLine("Getting end of flight data");
+
 
             //on recupere les etats de fin de vol : heure, carbu, position.
             _endPosition = _currentPosition; // data.GetPosition();
@@ -1253,6 +1270,11 @@ namespace FlightRecPlugin
                         reservation.Reserved = false;
                         reservationStatus = ReservationMgr.ReservationStatus.Unknown;
                     }
+                }
+                if (reservationStatus == ReservationMgr.ReservationStatus.Ignored)
+                {
+                    //reset the reservation status to unknown for the next flight
+                    reservationStatus = ReservationMgr.ReservationStatus.Unknown;
                 }
 
                 //currentState = STATE.WAITING;
@@ -1944,8 +1966,14 @@ namespace FlightRecPlugin
                 {
                     Logger.WriteLine("ApplyReservation: setting arrival ICAO failed: " + ex.Message);
                 }
-
-                cbMission.SelectedItem = "LIGNES REGULIERES";
+                // Sélectionne la mission "LIGNES REGULIERES" si présente
+                try { 
+                cbMission.SelectedItem = data.missions.Single(m=> m.Libelle ==  "LIGNES REGULIERES");
+                    }
+                catch (Exception)
+                {
+                    // mission non trouvée, on ignore
+                }
 
                 if (tbCommentaires != null)
                 {

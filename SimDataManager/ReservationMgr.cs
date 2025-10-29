@@ -15,6 +15,7 @@ namespace SimDataManager
         public string DepartureIcao { get; set; } = string.Empty;
         public string ArrivalIcao { get; set; } = string.Empty;
         public string Message { get; set; } = string.Empty;
+        public bool checkedOnce { get; set; } = false;
     }
 
     public static class ReservationMgr
@@ -115,6 +116,7 @@ namespace SimDataManager
             {
                 Logger.WriteLine("CheckReservation exception: " + ex.Message);
             }
+            reservation.checkedOnce = true;
             return reservation;
         }
 
