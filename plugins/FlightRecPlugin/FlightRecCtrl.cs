@@ -25,6 +25,8 @@ namespace FlightRecPlugin
         const string name = "FlightRecorder";
         Version? version;
 
+        int updateCounter = 0;
+
         DebugForm dbg;
         bool simReady;
         bool isPaused;
@@ -500,7 +502,6 @@ namespace FlightRecPlugin
         private void checkReservation()
         {
 
-
             if (!checkingReservation)
             {
                 checkingReservation = true;
@@ -577,6 +578,12 @@ namespace FlightRecPlugin
 
         public void updateSituation(situation currentFlightStatus)
         {
+            updateCounter += 1;
+            if (updateCounter >= 1000)
+            {
+                //every 10th update, refresh the static values
+                updateCounter = 0;
+            }
             try
             {
                 if (isRecording)
@@ -678,7 +685,11 @@ namespace FlightRecPlugin
 
                             if (localAirport != null)
                             {
-                                checkReservation();
+                                //only check reservation every 50 updates
+                                if (updateCounter%50==0)
+                                {
+                                    checkReservation();
+                                }
                             }
 
                             if (eventDetected == EVENT.ENGINESTART)
