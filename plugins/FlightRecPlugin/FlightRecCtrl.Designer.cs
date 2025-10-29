@@ -540,7 +540,7 @@ namespace FlightRecPlugin
             // 
             label15.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label15.AutoSize = true;
-            label15.Location = new Point(285, 195);
+            label15.Location = new Point(245, 195);
             label15.Margin = new Padding(4, 0, 4, 0);
             label15.Name = "label15";
             label15.Size = new Size(63, 18);
@@ -563,10 +563,10 @@ namespace FlightRecPlugin
             cbMission.DrawMode = DrawMode.OwnerDrawFixed;
             cbMission.DropDownStyle = ComboBoxStyle.DropDownList;
             cbMission.FormattingEnabled = true;
-            cbMission.Location = new Point(355, 192);
+            cbMission.Location = new Point(315, 192);
             cbMission.MaxDropDownItems = 12;
             cbMission.Name = "cbMission";
-            cbMission.Size = new Size(179, 26);
+            cbMission.Size = new Size(219, 26);
             cbMission.TabIndex = 22;
             cbMission.DrawItem += cbMission_DrawItem;
             cbMission.SelectedIndexChanged += cbMission_SelectedIndexChanged;

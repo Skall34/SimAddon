@@ -328,6 +328,9 @@ namespace FlightRecPlugin
                 //on a detecté un demarrage moteur
                 result = true;
                 Logger.WriteLine("Engine start detected. onGround=" + onGround.ToString() + " startDisabled=" + startDisabled.ToString());
+
+                // Appel à l'API api_consume_reservation.php (fire and forget)
+                data.ApplyReservation(Settings.Default.callsign, reservation);
             }
             return atLeastOneEngineFiring;
         }
@@ -521,10 +524,12 @@ namespace FlightRecPlugin
                                     Logger.WriteLine("CheckReservation: user accepted to apply reservation data");
                                     //apply reservation data
                                     tbEndICAO.Text = reservation.ArrivalIcao;
+                                    tbEndICAO.Enabled = false;
                                     cbImmat.SelectedItem = data.avions.Where(a => a.Immat == reservation.Immat).FirstOrDefault();
                                     cbMission.SelectedItem = "";
                                     reservationStatus = ReservationMgr.ReservationStatus.Accepted;
                                     ApplyReservation(reservation.Immat, reservation.DepartureIcao, reservation.ArrivalIcao);
+                                    cbMission.Enabled = false;
                                 }
                                 else
                                 {
@@ -1931,8 +1936,7 @@ namespace FlightRecPlugin
                     cbImmat.Enabled = false;
                     checkParameters();
 
-                    // Appel à l'API api_consume_reservation.php (fire and forget)
-                    data.ApplyReservation(Settings.Default.callsign, reservation);
+                   
                 }
 
                 if (!string.IsNullOrWhiteSpace(departureIcao) && lbStartIata != null)
