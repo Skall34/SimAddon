@@ -265,9 +265,17 @@ namespace FlightRecPlugin
                             UpdatePlaneStatus(0);
                             cbImmat.Enabled = true;
                             //tbEndICAO.Enabled = true;
+
                             System.Threading.Thread.Sleep(2000);
                             this.Cursor = Cursors.Default;
                         }
+
+                        //if the reservation is ongoing, we need to free the reservation
+                        if (reservationStatus == ReservationMgr.ReservationStatus.Accepted)
+                        {
+                            data.CompleteReservation(Settings.Default.callsign, reservation);
+                        }
+
                     }
                     else
                     {
@@ -328,9 +336,6 @@ namespace FlightRecPlugin
                 //on a detecté un demarrage moteur
                 result = true;
                 Logger.WriteLine("Engine start detected. onGround=" + onGround.ToString() + " startDisabled=" + startDisabled.ToString());
-
-                // Appel à l'API api_consume_reservation.php (fire and forget)
-                data.ApplyReservation(Settings.Default.callsign, reservation);
             }
             return atLeastOneEngineFiring;
         }
@@ -516,7 +521,8 @@ namespace FlightRecPlugin
                                 Logger.WriteLine("CheckReservation: reservation found for callsign " + Settings.Default.callsign);
                                 string message = "A reservation has been found for callsign " + Settings.Default.callsign + ":\n" +
                                     "Departure: " + reservation.DepartureIcao + "\n" +
-                                    "Arrival: " + reservation.ArrivalIcao + "\n\n" +
+                                    "Arrival: " + reservation.ArrivalIcao + "\n"+
+                                    "Plane: "+ reservation.Immat +"\n\n" +
                                     "Do you want to apply this reservation data to the flight ?";
                                 DialogResult res = ShowMsgBox(message, "Reservation found", MessageBoxButtons.YesNo);
                                 if (res == DialogResult.Yes)
@@ -528,7 +534,10 @@ namespace FlightRecPlugin
                                     cbImmat.SelectedItem = data.avions.Where(a => a.Immat == reservation.Immat).FirstOrDefault();
                                     cbMission.SelectedItem = "";
                                     reservationStatus = ReservationMgr.ReservationStatus.Accepted;
+
+                                    //apply the reservation in the sim data manager
                                     ApplyReservation(reservation.Immat, reservation.DepartureIcao, reservation.ArrivalIcao);
+
                                     cbMission.Enabled = false;
                                 }
                                 else
@@ -1253,7 +1262,6 @@ namespace FlightRecPlugin
                 _endPayload = 0;
 
                 //on peut préparer un nouveau vol
-                cbImmat.Enabled = true;
                 tbEndICAO.Enabled = true;
                 lbPayload.Enabled = true;
 
@@ -1263,23 +1271,34 @@ namespace FlightRecPlugin
                 pauseTime = TimeSpan.Zero;
                 isPaused = false;
 
-                if (reservationStatus == ReservationMgr.ReservationStatus.Accepted)
+                switch (reservationStatus)
                 {
-                    //ask the user if he wants to cancel the reservation
-                    DialogResult resCancel = ShowMsgBox("Do you want to cancel the reservation ?", "Flight Recorder", MessageBoxButtons.YesNo);
-                    if (resCancel == DialogResult.Yes)
-                    {
-                        Logger.WriteLine("User chose to cancel the reservation");
-                        //mark the reservation as completed
-                        data.CompleteReservation(Settings.Default.callsign, reservation);
-                        reservation.Reserved = false;
+                    case ReservationMgr.ReservationStatus.Accepted:
+                        Logger.WriteLine("ResetFlight: reservation was accepted");
+                        //ask the user if he wants to cancel the reservation
+                        DialogResult resCancel = ShowMsgBox("Do you want to cancel the reservation ?", "Flight Recorder", MessageBoxButtons.YesNo);
+                        if (resCancel == DialogResult.Yes)
+                        {
+                            Logger.WriteLine("User chose to cancel the reservation");
+                            //mark the reservation as completed
+                            data.CompleteReservation(Settings.Default.callsign, reservation);
+                            reservation.Reserved = false;
+                            reservationStatus = ReservationMgr.ReservationStatus.Unknown;
+                            //reactivate the mission selection 
+                            cbMission.Enabled = true;
+                            cbImmat.Enabled = true;
+                        }
+                        break;
+                    case ReservationMgr.ReservationStatus.Ignored:
+                        Logger.WriteLine("ResetFlight: reservation was ignored");
+                        //reset the reservation status to unknown for the next flight
                         reservationStatus = ReservationMgr.ReservationStatus.Unknown;
-                    }
-                }
-                if (reservationStatus == ReservationMgr.ReservationStatus.Ignored)
-                {
-                    //reset the reservation status to unknown for the next flight
-                    reservationStatus = ReservationMgr.ReservationStatus.Unknown;
+                        cbImmat.Enabled = true;
+                        break;
+                    case ReservationMgr.ReservationStatus.Unknown:
+                        Logger.WriteLine("ResetFlight: reservation status unknown");
+                        cbImmat.Enabled = true;
+                        break;
                 }
 
                 //currentState = STATE.WAITING;
@@ -1498,7 +1517,7 @@ namespace FlightRecPlugin
                         myBrush = Brushes.LightGray;
                         break;
                     case Avion.PlaneStatus.Reserved:
-                        if (item.DernierUtilisateur == tbCallsign.Text)
+                        if ((item.DernierUtilisateur == tbCallsign.Text)&&(reservationStatus == ReservationMgr.ReservationStatus.Accepted))
                             myBrush = Brushes.Blue; // réservataire
                         else
                             myBrush = Brushes.LightGray; // réservé, non sélectionnable
@@ -1515,7 +1534,7 @@ namespace FlightRecPlugin
             Avion selectedPlane = this.data.avions.Where(a => a.Immat == cbImmat.Text).FirstOrDefault();
             if (selectedPlane != null)
             {
-                if (!selectedPlane.IsSelectable(tbCallsign.Text))
+                if (!selectedPlane.IsSelectable(Settings.Default.callsign, reservationStatus))
                 {
                     cbImmat.SelectedItem = null;
                     lbDesignationAvion.Text = "<no plane selected>";
@@ -1936,7 +1955,8 @@ namespace FlightRecPlugin
                     cbImmat.Enabled = false;
                     checkParameters();
 
-                   
+                    // Marque l'avion comme réservé dans la base de données
+                    data.ApplyReservation(Settings.Default.callsign, reservation);
                 }
 
                 if (!string.IsNullOrWhiteSpace(departureIcao) && lbStartIata != null)

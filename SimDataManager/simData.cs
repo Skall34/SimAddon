@@ -246,7 +246,14 @@ namespace SimDataManager
 
         public void CompleteReservation(string callsign, Reservation reservation)
         {
-             ReservationMgr.CompleteReservation(callsign, reservation, BASERURL);
+            ReservationMgr.CompleteReservation(callsign, reservation, BASERURL);
+            //mark the plane as not reserved 
+            Avion avion = avions.Find(a => a.Immat == reservation.Immat);
+            if (avion != null)
+            {
+                avion.Reserved = 0;
+                avion.Status = Avion.PlaneStatus.Disponible;
+            }
         }
 
         private async Task<int> LoadDataFromSheet()

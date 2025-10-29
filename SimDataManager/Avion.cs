@@ -102,10 +102,13 @@ namespace SimDataManager
             return avions;
         }
 
-        public bool IsSelectable(string currentCallsign)
+        public bool IsSelectable(string currentCallsign, ReservationMgr.ReservationStatus resaStatus)
         {
+            // Un avion est sélectionnable s'il est disponible ou s'il est réservé par le currentCallsign avec une réservation acceptée
             if (Status == Avion.PlaneStatus.Disponible) return true;
-            if ((Status == Avion.PlaneStatus.Reserved) && (DernierUtilisateur == currentCallsign)) return true;
+
+            if ((Status == Avion.PlaneStatus.Reserved) && (DernierUtilisateur == currentCallsign) &&
+                (resaStatus== ReservationMgr.ReservationStatus.Accepted)) return true;
             return false;
         }
     }
