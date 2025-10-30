@@ -1135,12 +1135,13 @@ namespace FlightRecPlugin
                     getEndOfFlightData();
                 }
 
-                //cet appel declenche une exception si une conditio nde save n'es tpas remplie.
+                //cet appel declenche une exception si une condition de save n'est pas remplie.
                 CheckBeforeSave();
 
                 string fullComment = tbCommentaires.Text;
                 //crée un dictionnaire des valeurs à envoyer
                 SaveFlightDialog saveFlightDialog = new SaveFlightDialog(this, data);
+                saveFlightDialog.IsReservationLocked = (reservationStatus == ReservationMgr.ReservationStatus.Accepted);
 
                 saveFlightDialog.Callsign = tbCallsign.Text;
                 saveFlightDialog.Immat = cbImmat.Text;
@@ -1156,7 +1157,7 @@ namespace FlightRecPlugin
                 saveFlightDialog.Mission = cbMission.Text;
                 saveFlightDialog.GPSTrace = GPSRecorder.GetTraceJSON();
                 saveFlightDialog.SimPlane = lbLibelleAvion.Text;
-
+                
                 bool isTopMost = false;
                 Form parentForm = (Form)this.TopLevelControl;
                 //en cas de "always on top"
@@ -1278,6 +1279,7 @@ namespace FlightRecPlugin
 
                 //btnSubmit.Enabled = false;
                 submitFlightToolStripMenuItem.Enabled = false;
+                cbMission.Enabled = true;
 
                 pauseTime = TimeSpan.Zero;
                 isPaused = false;

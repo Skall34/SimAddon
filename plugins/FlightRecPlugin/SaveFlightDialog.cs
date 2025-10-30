@@ -183,6 +183,7 @@ namespace FlightRecPlugin
         }
 
         public string GPSTrace { get; set; }
+        public bool IsReservationLocked { get; set; } = false;
 
         public SaveFlightDialog(FlightRecCtrl parent, simData _data)
         {
@@ -395,7 +396,15 @@ namespace FlightRecPlugin
 
         private void SaveFlightDialog_Load(object sender, EventArgs e)
         {
+            if (IsReservationLocked)
+            {
+                cbImmat.Enabled = false;
+                tbDepICAO.Enabled = false;
+                tbArrICAO.Enabled = false;
+                cbMission.Enabled = false;
 
+                // Ajoutez ici d'autres champs à griser si nécessaire
+            }
         }
     }
 }
