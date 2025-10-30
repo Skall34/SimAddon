@@ -339,7 +339,7 @@ namespace FlightRecPlugin
                 result = true;
                 Logger.WriteLine("Engine start detected. onGround=" + onGround.ToString() + " startDisabled=" + startDisabled.ToString());
             }
-            return atLeastOneEngineFiring;
+            return result;
         }
 
         private bool detectEngineStop(situation currentFlightStatus)
@@ -508,6 +508,15 @@ namespace FlightRecPlugin
                 // After initialization, check reservation for configured callsign
                 try
                 {
+                    //only check reservation, if the planes and missions data are loaded
+                    if (data.avions == null || data.avions.Count == 0 ||
+                        data.missions == null || data.missions.Count == 0)
+                    {
+                        Logger.WriteLine("CheckReservation: planes or missions data not yet loaded");
+                        checkingReservation = false;
+                        return;
+                    }
+
                     // call and wait so popup appears during startup
                     if (reservationStatus == ReservationMgr.ReservationStatus.Unknown)
                     {
@@ -697,12 +706,31 @@ namespace FlightRecPlugin
                                 //we just started the engine, so we are taxiing
                                 Logger.WriteLine("State change WAITING -> TAXIING");
                                 getStartOfFlightData();
-                                currentState = STATE.TAXIING;
                                 //Update the google sheet database indicating that this plane is being used
                                 UpdatePlaneStatus(1);
                                 //start the timer which will update the plane status
                                 updatePlaneStatusTimer.Start();
-                                cbImmat.Enabled = false;
+
+                                //disable the immat selection if one is selected
+                                if (cbImmat.SelectedIndex>=0)
+                                {
+                                    cbImmat.Enabled = false;
+                                }
+                                else
+                                {
+                                    Logger.WriteLine("No plane selected when engine started !");
+                                    //try to guess the plane based on the current plane in the sim
+                                    if (guessPlaneFromSim())
+                                    {
+                                        cbImmat.Enabled = false;
+                                    }
+                                    else
+                                    {
+                                        Logger.WriteLine("No plane could be guessed from sim !");
+                                        ShowMsgBox("No plane selected for this flight !\nPlease select a plane before starting the engines.", "No plane selected", MessageBoxButtons.OK);
+                                    }
+                                }
+                                currentState = STATE.TAXIING;
                                 SimEvent(SimEventArg.EventType.ENGINESTART);
                             }
                             break;
@@ -764,7 +792,7 @@ namespace FlightRecPlugin
                             break;
                         case STATE.TAXIING:
 
-                            if ((localAirport) != null && (reservation == null))
+                            if ((localAirport) != null && ((reservation == null)||(!reservation.checkedOnce)))
                             {
                                 checkReservation();
                             }
@@ -882,6 +910,25 @@ namespace FlightRecPlugin
                 Logger.WriteLine(ex.Message);
             }
 
+        }
+
+        private bool guessPlaneFromSim()
+        {
+            bool found = false;
+            //try to guess the plane based on the current plane in the sim
+            string currentSimPlane = data.GetAircraftType();
+            Avion guessedPlane = data.avions.Where(a => a.Designation == currentSimPlane).FirstOrDefault();
+            if (guessedPlane != null)
+            {
+                cbImmat.SelectedItem = guessedPlane;
+                Logger.WriteLine("Guessed plane from sim: " + guessedPlane.Immat);
+                found = true;
+            }
+            else
+            {
+                Logger.WriteLine("Could not guess plane from sim: " + currentSimPlane);
+            }
+            return found;
         }
 
         private void clearEndOfFlightData()
@@ -1187,6 +1234,13 @@ namespace FlightRecPlugin
                         reservation.Reserved = false;
                         //reset the reservation status to unknown for the next flight
                         reservationStatus = ReservationMgr.ReservationStatus.Unknown;
+
+                        //clear the mission selection
+                        cbMission.SelectedItem = null;
+                        //re-enable the missions
+                        cbMission.Enabled = true;
+                        cbMission.Refresh();
+
                     }
                     //si tout va bien...
                     ShowMsgBox("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder", MessageBoxButtons.OK);
@@ -1228,13 +1282,13 @@ namespace FlightRecPlugin
         private void resetFlight(bool force) //force ==true => pas de demande de confirmation
         {
             Logger.WriteLine("Resetting flight");
-            DialogResult res = DialogResult.OK;
+            DialogResult res = DialogResult.Yes;
             if (!force)
             {
-                res = ShowMsgBox("Confirm flight reset ?", "Flight Recorder", MessageBoxButtons.OKCancel);
+                res = ShowMsgBox("Confirm flight RESET ?", "Flight Recorder", MessageBoxButtons.YesNo);
             }
 
-            if (res == DialogResult.OK)
+            if (res == DialogResult.Yes)
             {
                 localAirport = null;
 
@@ -1289,7 +1343,7 @@ namespace FlightRecPlugin
                     case ReservationMgr.ReservationStatus.Accepted:
                         Logger.WriteLine("ResetFlight: reservation was accepted");
                         //ask the user if he wants to cancel the reservation
-                        DialogResult resCancel = ShowMsgBox("Do you want to cancel the reservation ?", "Flight Recorder", MessageBoxButtons.YesNo);
+                        DialogResult resCancel = ShowMsgBox("Do you want to CANCEL the reservation ?", "Flight Recorder", MessageBoxButtons.YesNo);
                         if (resCancel == DialogResult.Yes)
                         {
                             Logger.WriteLine("User chose to cancel the reservation");
@@ -1298,8 +1352,11 @@ namespace FlightRecPlugin
                             reservation.Reserved = false;
                             reservationStatus = ReservationMgr.ReservationStatus.Unknown;
                             //reactivate the mission selection 
+                            cbMission.SelectedItem = null;
                             cbMission.Enabled = true;
+                            cbMission.Refresh();
                             cbImmat.Enabled = true;
+                            cbImmat.Refresh();
                         }
                         break;
                     case ReservationMgr.ReservationStatus.Ignored:
@@ -1953,9 +2010,13 @@ namespace FlightRecPlugin
                     foundAvion.DernierUtilisateur = tbCallsign.Text;
 
                     // Force la sélection
-                    _suppressSelectionValidation = true;
+                    //_suppressSelectionValidation = true;
                     cbImmat.SelectedItem = foundAvion;
+
                     cbImmat.Refresh();
+                    // Empêche la modification par l'utilisateur
+                    cbImmat.Enabled = false;
+
                     lbDesignationAvion.Text = foundAvion.Designation;
                     // send the SETAIRCRAFT event
                     SimEventArg eventArg = new SimEventArg();
@@ -1964,8 +2025,6 @@ namespace FlightRecPlugin
                     SimEvent(eventArg);
                     _suppressSelectionValidation = false;
 
-                    // Empêche la modification par l'utilisateur
-                    cbImmat.Enabled = false;
                     checkParameters();
 
                     // Marque l'avion comme réservé dans la base de données
@@ -2040,6 +2099,9 @@ namespace FlightRecPlugin
             {
                 if (!selectedMission.IsSelectable(reservationStatus == ReservationMgr.ReservationStatus.Accepted))
                 {
+                    string message = "No reservation found for this mission\n";
+                    message+= "Please make a reservation on the website before selecting this mission.";
+                    ShowMsgBox(message, "Flight Recorder", MessageBoxButtons.OK);
                     cbMission.SelectedItem = null;
                     return;
                 }
