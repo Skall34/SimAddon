@@ -45,6 +45,7 @@ namespace FlightRecPlugin
         PositionSnapshot _endPosition;
 
         private Aeroport localAirport;
+        private Avion currentPlane;
 
         private double _startFuel;
         private double _endFuel;
@@ -74,7 +75,6 @@ namespace FlightRecPlugin
 
         private bool staticValuesReadOnce = false;
         private simData data;
-        private bool _suppressSelectionValidation = false;
 
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
         public event ISimAddonPluginCtrl.UpdateStatusHandler OnStatusUpdate;
@@ -265,8 +265,6 @@ namespace FlightRecPlugin
                             updatePlaneStatusTimer.Stop();
 
                             UpdatePlaneStatus(0);
-                            cbImmat.Enabled = true;
-                            //tbEndICAO.Enabled = true;
 
                             System.Threading.Thread.Sleep(2000);
                             this.Cursor = Cursors.Default;
@@ -565,7 +563,6 @@ namespace FlightRecPlugin
                         {
                             //no reservation found
                             reservationStatus = ReservationMgr.ReservationStatus.Unknown;
-                            Logger.WriteLine("CheckReservation: no reservation found for callsign " + Settings.Default.callsign);
                         }
                     }
                     else
@@ -590,7 +587,7 @@ namespace FlightRecPlugin
             updateCounter += 1;
             if (updateCounter >= 1000)
             {
-                //every 10th update, refresh the static values
+                //every 1000th update, refresh the static values
                 updateCounter = 0;
             }
             try
@@ -706,10 +703,6 @@ namespace FlightRecPlugin
                                 //we just started the engine, so we are taxiing
                                 Logger.WriteLine("State change WAITING -> TAXIING");
                                 getStartOfFlightData();
-                                //Update the google sheet database indicating that this plane is being used
-                                UpdatePlaneStatus(1);
-                                //start the timer which will update the plane status
-                                updatePlaneStatusTimer.Start();
 
                                 //disable the immat selection if one is selected
                                 if (cbImmat.SelectedIndex>=0)
@@ -779,11 +772,8 @@ namespace FlightRecPlugin
                                 //resetFlight(true);
                                 Logger.WriteLine("State change ENDED -> TAXIING");
                                 getStartOfFlightData();
+
                                 currentState = STATE.TAXIING;
-                                //Update the google sheet database indicating that this plane is being used
-                                UpdatePlaneStatus(1);
-                                //start the timer which will update the plane status
-                                updatePlaneStatusTimer.Start();
                                 cbImmat.Enabled = false;
                                 SimEvent(SimEventArg.EventType.ENGINESTART);
                             }
@@ -815,6 +805,12 @@ namespace FlightRecPlugin
                                 getEndOfFlightData();
                                 currentState = STATE.ENDED;
                                 SimEvent(SimEventArg.EventType.ENGINESTOP);
+                            }
+                            else if (eventDetected == EVENT.ENGINESTART)
+                            {
+                                //we just started the engine, while taxiing (should not happen, but who knows)
+                                Logger.WriteLine("State change TAXIING -> TAXIING");
+                                getStartOfFlightData();
                             }
                             break;
                         case STATE.GLIDING:
@@ -954,7 +950,6 @@ namespace FlightRecPlugin
 
         private void RemplirComboImmat()
         {
-            //lbFret.Text = "Acars initializing ..... please wait";
             // Effacez les éléments existants dans la combobox
             cbImmat.Items.Clear();
             if ((data.avions != null) && (data.avions.Count > 0))
@@ -1054,6 +1049,11 @@ namespace FlightRecPlugin
             this.lbStartTime.Text = _startTime.ToShortTimeString();
             //0.00 => only keep 2 decimals for the fuel
 
+            //Update the google sheet database indicating that this plane is being used
+            UpdatePlaneStatus(1);
+            //start the timer which will update the plane status
+            updatePlaneStatusTimer.Start();
+
             this.lbStartFuel.Text = _startFuel.ToString("0.00");
             isRecording = true;
         }
@@ -1097,6 +1097,7 @@ namespace FlightRecPlugin
             _note = AnalyseFlight();
             isRecording = false;
 
+            updatePlaneStatusTimer.Stop();
             //Update the google sheet database indicating that this plane is no more used
             UpdatePlaneStatus(0);
 
@@ -1177,7 +1178,6 @@ namespace FlightRecPlugin
                 //if end of flight is not detected, get the data
                 if (atLeastOneEngineFiring)
                 {
-
                     Logger.WriteLine("Forcing end of flight detection before save");
                     getEndOfFlightData();
                 }
@@ -1307,19 +1307,9 @@ namespace FlightRecPlugin
                 stopEngineConfirmed = false;
 
                 //libère l'avion dans la base de données
-                if (cbImmat.SelectedItem != null)
-                {
-                    Avion selectedPlane = (Avion)cbImmat.SelectedItem;
-                    if (selectedPlane != null)
-                    {
-                        //si l'avion est marqué comme en vol, on le libère.
-                        //stop the timer
-                        updatePlaneStatusTimer.Stop();
-
-                        Logger.WriteLine("Freeing the airplane on the database");
-                        UpdatePlaneStatus(0);
-                    }
-                }
+                updatePlaneStatusTimer.Stop();
+                Logger.WriteLine("Freeing the airplane on the database");
+                UpdatePlaneStatus(0);
 
                 //reenable start detection at next timer tick
                 startDisabled = 1;
@@ -1349,6 +1339,7 @@ namespace FlightRecPlugin
                             Logger.WriteLine("User chose to cancel the reservation");
                             //mark the reservation as completed
                             data.CompleteReservation(Settings.Default.callsign, reservation);
+
                             reservation.Reserved = false;
                             reservationStatus = ReservationMgr.ReservationStatus.Unknown;
                             //reactivate the mission selection 
@@ -1370,9 +1361,12 @@ namespace FlightRecPlugin
                         cbImmat.Enabled = true;
                         break;
                 }
+                //reset the reservation checked flag
+                if (reservation != null)
+                {
+                    reservation.checkedOnce = false;
+                }
 
-                //currentState = STATE.WAITING;
-                //UpdateStatus("Waiting for engine start");
                 Logger.WriteLine("Flight reset");
             }
             else
@@ -1460,28 +1454,33 @@ namespace FlightRecPlugin
 
         }
 
-        public async void UpdatePlaneStatus(int isFlying)
+        public async void UpdatePlaneStatus(int isFlying,string forceImmat=null)
         {
             try
             {
                 //crée un dictionnaire des valeurs à envoyer
                 Dictionary<string, string> values = new Dictionary<string, string>();
-                //UrlDeserializer.PlaneUpdateQuery planedata = new UrlDeserializer.PlaneUpdateQuery
-                //{
-                //    query = "updatePlaneStatus",
-                //    qtype = "json",
-                //    cs = tbCallsign.Text,
-                //    plane = cbImmat.Text,
-                //    sicao = lbStartIata.Text,
-                //    flying = isFlying,
-                //    endIcao = tbEndICAO.Text
-                //};
+
+
+                //check that cbImmat is not null or empty. Only then we can send the update
+                Avion plane = (Avion)cbImmat.SelectedItem;
+
+                if (forceImmat!=null)
+                {
+                    plane = data.avions.Where(a => a.Immat == forceImmat).FirstOrDefault();
+                }
+
+                if (plane == null) { 
+                    Logger.WriteLine("Cannot update plane status: selected plane is null");
+                    return;
+                }
 
                 values["callsign"] = tbCallsign.Text;
-                values["plane"] = cbImmat.Text;
+                values["plane"] = forceImmat == null?cbImmat.Text: forceImmat;
                 values["departure_icao"] = lbStartIata.Text;
                 values["flying"] = isFlying.ToString();
                 values["arrival_icao"] = tbEndICAO.Text;
+
                 if (_currentPosition != null)
                 {
                     //if the current position is not null, use it to update the position
@@ -1505,16 +1504,19 @@ namespace FlightRecPlugin
                         if (isFlying == 1)
                         {
                             _planeReserved = true;
+                            plane.EnVol = 1;
                         }
                         else
                         {
                             _planeReserved = false;
+                            plane.EnVol = 0;
                         }
                     }
                     else
                     {
                         //si tout va mal ...
-
+                        _planeReserved = false;
+                        plane.EnVol = 0;
                     }
                 }
                 else
@@ -1558,10 +1560,6 @@ namespace FlightRecPlugin
             //only send the update if the text is long enough
             if (text.Length == 4)
             {
-                UpdatePlaneStatus(_planeReserved ? 1 : 0);
-                //todo ! search for this airport in the database.
-                //if found, udate the tooltip with the airport name.
-
                 //push this event, so that other plugins are notified that the destination was set
                 SimEventArg eventArg = new SimEventArg();
                 eventArg.reason = SimEventArg.EventType.SETDESTINATION;
@@ -1600,7 +1598,19 @@ namespace FlightRecPlugin
 
         private void CbImmat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_suppressSelectionValidation) return;
+            //free the previous plane if it was marked as in flight
+            if (currentPlane != null)
+            {
+                if ((currentPlane.EnVol == 1) && (currentPlane.DernierUtilisateur == tbCallsign.Text))
+                {
+                    Logger.WriteLine("Freeing the previous airplane on the database");
+                    UpdatePlaneStatus(0,currentPlane.Immat);
+                }
+            }
+
+            //reset the atLeastOneEngineFiring flag to force the detection of engine start for the new plane
+            atLeastOneEngineFiring = false;
+
             Avion selectedPlane = this.data.avions.Where(a => a.Immat == cbImmat.Text).FirstOrDefault();
             if (selectedPlane != null)
             {
@@ -1639,15 +1649,19 @@ namespace FlightRecPlugin
                     ; break;
                 }
 
+                //vérifie les paramètres de l'avion selectionné (ex si l'avion est dans la base locale, si l'immat est correcte, etc)
                 checkParameters();
 
-                //si cet avion est marqué comme deja en vol, c'est par l'utilisateur courant. 
-                //marque cet avion comme n'etant plus en vol.
-                if ((selectedPlane.EnVol == 1) && selectedPlane.DernierUtilisateur == tbCallsign.Text)
-                {
-                    Logger.WriteLine("Freeing the airplane on the database");
-                    UpdatePlaneStatus(0);
-                }
+                ////si cet avion est marqué comme deja en vol, c'est par l'utilisateur courant. 
+                ////marque cet avion comme n'etant plus en vol.
+                //if ((selectedPlane.EnVol == 1) && selectedPlane.DernierUtilisateur == tbCallsign.Text)
+                //{
+                //    Logger.WriteLine("Freeing the airplane on the database");
+                //    UpdatePlaneStatus(0);
+                //}
+
+                //store last plane used
+                currentPlane = selectedPlane;
 
                 //push this event, so that other plugins are notified that the plane was selected
                 SimEventArg eventArg = new SimEventArg();
@@ -1681,12 +1695,6 @@ namespace FlightRecPlugin
 
         private void engineStopTimer_Tick(object sender, EventArgs e)
         {
-            //if (currentState != STATE.INFLIGHT)
-            //{
-            //    //if this happen, then the engine are definitively stopped.
-            //    getEndOfFlightData();
-            //}
-
             cbImmat.Enabled = true;
             tbEndICAO.Enabled = true;
             //stop this timer
@@ -1725,25 +1733,6 @@ namespace FlightRecPlugin
                 //si l'avion n'est pas dans la base locale, on ne peut pas verifier l'immatriculation.  
                 foundError = true;
             }
-
-            //if (Properties.Settings.Default.lastSimPlane != string.Empty)
-            //{
-
-            //    if (planeNomComplet == Properties.Settings.Default.lastSimPlane)
-            //    {
-            //        if (Settings.Default.lastImmat != cbImmat.Text)
-            //        {
-            //            foundError = true;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (Settings.Default.lastImmat == cbImmat.Text)
-            //        {
-            //            foundError = true;
-            //        }
-            //    }
-            //}
 
             if (foundError)
             {
@@ -1991,20 +1980,6 @@ namespace FlightRecPlugin
                         }
                     }
 
-                    // Si l'immat réservée n'est pas présente, on l'ajoute à la flotte et à la ComboBox
-                    /*                   if (foundAvion == null)
-                                       {
-                                           foundAvion = new Avion
-                                           {
-                                               Immat = immat,
-                                               Designation = immat,
-                                               Status = SimDataManager.Avion.StatusReserve,
-                                               DernierUtilisateur = tbCallsign.Text
-                                           };
-                                           data.avions.Add(foundAvion);
-                                           RemplirComboImmat();
-                                       }
-                    */
                     // Met à jour le statut et le réservataire
                     foundAvion.Status = SimDataManager.Avion.PlaneStatus.Reserved;
                     foundAvion.DernierUtilisateur = tbCallsign.Text;
@@ -2023,7 +1998,6 @@ namespace FlightRecPlugin
                     eventArg.reason = SimEventArg.EventType.SETAIRCRAFT;
                     eventArg.value = foundAvion.Designation;
                     SimEvent(eventArg);
-                    _suppressSelectionValidation = false;
 
                     checkParameters();
 
@@ -2082,14 +2056,6 @@ namespace FlightRecPlugin
             {
                 Logger.WriteLine("ApplyReservation error: " + ex.Message);
             }
-        }
-
-        /// <summary>
-        /// Appelle l'API api_consume_reservation.php pour consommer une réservation.
-        /// </summary>
-        private async Task ConsumeReservationApiAsync(string callsign, string immat, string departureIcao, string arrivalIcao)
-        {
-
         }
 
         private void cbMission_SelectedIndexChanged(object sender, EventArgs e)

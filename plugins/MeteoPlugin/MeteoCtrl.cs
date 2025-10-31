@@ -203,7 +203,7 @@ namespace MeteoPlugin
                         if (airport != null)
                         {
                             //update the name of the airport in the metar data if there any
-                            if (metarData != null)
+                            if ((metarData != null)&&(metarData.icao!= null))
                             {
                                 metarData.icao.name = airport.name;
                             }

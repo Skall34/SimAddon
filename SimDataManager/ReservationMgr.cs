@@ -36,6 +36,7 @@ namespace SimDataManager
         {
             var reservation = new Reservation { Reserved = false };
             reservation.Reserved = false;
+            reservation.checkedOnce = true;
             try
             {
                 // Try to get callsign from FlightRecorder plugin Settings or control
@@ -104,7 +105,6 @@ namespace SimDataManager
 
                 if (!reservation.Reserved)
                 {
-                    Logger.WriteLine("CheckReservation: no reservation for " + callsign);
                     return reservation;
                 }
             }
@@ -116,13 +116,12 @@ namespace SimDataManager
             {
                 Logger.WriteLine("CheckReservation exception: " + ex.Message);
             }
-            reservation.checkedOnce = true;
             return reservation;
         }
 
         /// <summary>
         /// Tell the server that the reservation has been used.
-        internal static async Task CompleteReservation(string callsign, Reservation reservation, string BASERURL, CancellationToken cancellationToken = default)
+        internal static async Task CompleteReservation(string callsign, Reservation reservation, string BASEURL, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -135,7 +134,7 @@ namespace SimDataManager
                 };
 
                 var content = new FormUrlEncodedContent(values);
-                var response = await httpClient.PostAsync(BASERURL + "/api/api_complete_reservation.php", content, cancellationToken).ConfigureAwait(false);
+                var response = await httpClient.PostAsync(BASEURL + "/api/api_complete_reservation.php", content, cancellationToken).ConfigureAwait(false);
                 var responseString = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                 Logger.WriteLine($"api_complete_reservation.php response: {responseString}");
             }
