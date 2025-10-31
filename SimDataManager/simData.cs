@@ -282,6 +282,15 @@ namespace SimDataManager
             //this.Cursor = Cursors.Default;
         }
 
+        public async void UpdatePlaneFromSheet()
+        {
+            if (avions.Count == 0)
+            {
+                Logger.WriteLine("planes database is empty, cannot update planes status !");
+                return;
+            }
+            Avion.UpdateAvionsStatus(avions, BASERURL);
+        }
 
         public async Task<bool> UpdatePlaneStatus(int isFlying, Dictionary<string, string> planedata)
         {

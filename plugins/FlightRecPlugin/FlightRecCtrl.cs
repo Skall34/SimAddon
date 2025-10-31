@@ -966,7 +966,6 @@ namespace FlightRecPlugin
                 }
                 cbImmat.DisplayMember = "Immat";
 
-
                 //pre-select the last used immat (stored as setting)
                 string lastImmat = Settings.Default.lastImmat;
                 if (lastImmat != string.Empty)
@@ -974,13 +973,15 @@ namespace FlightRecPlugin
                     try
                     {
                         Avion selected = data.avions.Where(a => a.Immat == lastImmat).First();
-                        cbImmat.SelectedItem = selected;
-
-                        //send the SETAIRCRAFT event
-                        SimEventArg eventArg = new SimEventArg();
-                        eventArg.reason = SimEventArg.EventType.SETAIRCRAFT;
-                        eventArg.value = selected.Designation;
-                        SimEvent(eventArg);
+                        if ((selected != null) && (currentPlane != null) && (selected != currentPlane))
+                        {
+                            cbImmat.SelectedItem = selected;
+                            //send the SETAIRCRAFT event
+                            SimEventArg eventArg = new SimEventArg();
+                            eventArg.reason = SimEventArg.EventType.SETAIRCRAFT;
+                            eventArg.value = selected.Designation;
+                            SimEvent(eventArg);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -1762,14 +1763,19 @@ namespace FlightRecPlugin
                     this.lbPayload.Text = data.GetPayload().ToString("0.00");
                     ledCheckPayload.Color = Color.LightGreen;
 
-                    //recupere l'emplacement courant :
-                    _currentPosition = data.GetPosition();
+                    if (data.avions.Count > 0)
+                    {
+                        data.UpdatePlaneFromSheet();
+                    }
 
                     //Recupere le libellé de l'avion
                     string planeNomComplet = data.GetAircraftType();
                     lbLibelleAvion.Text = planeNomComplet;
 
                     checkParameters();
+
+                    //recupere l'emplacement courant :
+                    _currentPosition = data.GetPosition();
 
                     double lat = _currentPosition.Location.Latitude;
                     double lon = _currentPosition.Location.Longitude;

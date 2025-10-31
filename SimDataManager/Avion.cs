@@ -102,6 +102,45 @@ namespace SimDataManager
             return avions;
         }
 
+        //update the list of avions with their status (reserved, in flight, maintenance, available)
+        public static async void UpdateAvionsStatus(List<Avion> avions, string BASEURL)
+        {
+            //fecth the list of planes from the database
+            string url = BASEURL + "/api/api_getFlotte.php";
+            UrlDeserializer dataReader = new UrlDeserializer(url);
+            List<Avion> planesInDB = await dataReader.FetchAvionsDataAsync();
+
+            foreach (Avion avion in avions)
+            {
+                //find the corresponding plane in the database
+                Avion planeInDB = planesInDB.Find(p => p.Immat == avion.Immat);
+                if (planeInDB != null)
+                {
+                    //copy the plane in DB properties to the current plane
+                    avion.Etat = planeInDB.Etat;
+                    avion.EnVol = planeInDB.EnVol;
+                    avion.Reserved = planeInDB.Reserved;
+                    //update the status
+                    if ((avion.EnVol != 0) || (avion.Reserved != 0))
+                    {
+                        avion.Status = PlaneStatus.Reserved; // Indiquer que l'avion est en vol
+                    }
+                    else if (avion.Etat == 1)
+                    {
+                        avion.Status = PlaneStatus.Maintenance; // Indiquer que l'avion est en maintenance
+                    }
+                    else if (avion.Etat == 2)
+                    {
+                        avion.Status = PlaneStatus.Maintenance2; // Indiquer que l'avion est en maintenance longue ?
+                    }
+                    else
+                    {
+                        avion.Status = PlaneStatus.Disponible; // Par défaut, l'avion est disponible
+                    }
+                }
+            }
+        }
+
         public bool IsSelectable(string currentCallsign, ReservationMgr.ReservationStatus resaStatus)
         {
             // Un avion est sélectionnable s'il est disponible ou s'il est réservé par le currentCallsign avec une réservation acceptée
