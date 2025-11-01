@@ -103,6 +103,9 @@ namespace FlightRecPlugin
             resetFlightToolStripMenuItem = new ToolStripMenuItem();
             submitFlightToolStripMenuItem = new ToolStripMenuItem();
             debugToolStripMenuItem = new ToolStripMenuItem();
+            loginToolStripMenuItem = new ToolStripMenuItem();
+            logoutToolStripMenuItem = new ToolStripMenuItem();
+            checkSessionToolStripMenuItem = new ToolStripMenuItem();
             engineStopTimer = new Timer(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox5 = new GroupBox();
@@ -852,14 +855,14 @@ namespace FlightRecPlugin
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { resetFlightToolStripMenuItem, submitFlightToolStripMenuItem, debugToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { resetFlightToolStripMenuItem, submitFlightToolStripMenuItem, debugToolStripMenuItem, loginToolStripMenuItem, logoutToolStripMenuItem, checkSessionToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(134, 70);
+            contextMenuStrip1.Size = new Size(147, 136);
             // 
             // resetFlightToolStripMenuItem
             // 
             resetFlightToolStripMenuItem.Name = "resetFlightToolStripMenuItem";
-            resetFlightToolStripMenuItem.Size = new Size(133, 22);
+            resetFlightToolStripMenuItem.Size = new Size(146, 22);
             resetFlightToolStripMenuItem.Text = "Reset flight";
             resetFlightToolStripMenuItem.Click += resetFlightToolStripMenuItem_Click;
             // 
@@ -867,16 +870,37 @@ namespace FlightRecPlugin
             // 
             submitFlightToolStripMenuItem.Enabled = false;
             submitFlightToolStripMenuItem.Name = "submitFlightToolStripMenuItem";
-            submitFlightToolStripMenuItem.Size = new Size(133, 22);
+            submitFlightToolStripMenuItem.Size = new Size(146, 22);
             submitFlightToolStripMenuItem.Text = "Save Flight";
             submitFlightToolStripMenuItem.Click += submitFlightToolStripMenuItem_Click;
             // 
             // debugToolStripMenuItem
             // 
             debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            debugToolStripMenuItem.Size = new Size(133, 22);
+            debugToolStripMenuItem.Size = new Size(146, 22);
             debugToolStripMenuItem.Text = "Debug";
             debugToolStripMenuItem.Click += debugToolStripMenuItem_Click;
+            // 
+            // loginToolStripMenuItem
+            // 
+            loginToolStripMenuItem.Name = "loginToolStripMenuItem";
+            loginToolStripMenuItem.Size = new Size(146, 22);
+            loginToolStripMenuItem.Text = "Login";
+            loginToolStripMenuItem.Click += loginToolStripMenuItem_Click;
+            // 
+            // logoutToolStripMenuItem
+            // 
+            logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
+            logoutToolStripMenuItem.Size = new Size(146, 22);
+            logoutToolStripMenuItem.Text = "Logout";
+            logoutToolStripMenuItem.Click += logoutToolStripMenuItem_Click;
+            // 
+            // checkSessionToolStripMenuItem
+            // 
+            checkSessionToolStripMenuItem.Name = "checkSessionToolStripMenuItem";
+            checkSessionToolStripMenuItem.Size = new Size(146, 22);
+            checkSessionToolStripMenuItem.Text = "CheckSession";
+            checkSessionToolStripMenuItem.Click += checkSessionToolStripMenuItem_Click;
             // 
             // engineStopTimer
             // 
@@ -1058,5 +1082,8 @@ namespace FlightRecPlugin
         private ToolStripMenuItem debugToolStripMenuItem;
         private Button btnFlightbook;
         private Timer updatePlaneStatusTimer;
+        private ToolStripMenuItem loginToolStripMenuItem;
+        private ToolStripMenuItem logoutToolStripMenuItem;
+        private ToolStripMenuItem checkSessionToolStripMenuItem;
     }
 }

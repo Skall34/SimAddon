@@ -189,6 +189,9 @@ namespace SimDataManager
         private string BASERURL;
 
         private bool _isConnected;
+
+        private SiteConnection SiteConnection;
+
         public bool isConnected { get {
                 return (_isConnected);
             }
@@ -209,7 +212,25 @@ namespace SimDataManager
             missions = new List<Mission>();
 
             //flightPerfs = new FlightPerfs();
+            SiteConnection = new SiteConnection(BASERURL);
+        }
 
+        public async Task<string> loginToSite()
+        {
+
+            string sessionToken = await SiteConnection.Login();
+            Logger.WriteLine("Login result token: " + sessionToken);
+            return sessionToken;
+        }
+
+        public void logoutFromSite()
+        {
+            SiteConnection.Logout();
+        }
+
+        public async Task<bool> checkSession(string token)
+        {
+            return await SiteConnection.CheckSession(token);
         }
 
         public async Task<int> loadDataFromSheet()

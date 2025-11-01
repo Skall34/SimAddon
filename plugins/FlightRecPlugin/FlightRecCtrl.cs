@@ -529,8 +529,8 @@ namespace FlightRecPlugin
                                 Logger.WriteLine("CheckReservation: reservation found for callsign " + Settings.Default.callsign);
                                 string message = "A reservation has been found for callsign " + Settings.Default.callsign + ":\n" +
                                     "Departure: " + reservation.DepartureIcao + "\n" +
-                                    "Arrival: " + reservation.ArrivalIcao + "\n"+
-                                    "Plane: "+ reservation.Immat +"\n\n" +
+                                    "Arrival: " + reservation.ArrivalIcao + "\n" +
+                                    "Plane: " + reservation.Immat + "\n\n" +
                                     "Do you want to apply this reservation data to the flight ?";
                                 DialogResult res = ShowMsgBox(message, "Reservation found", MessageBoxButtons.YesNo);
                                 if (res == DialogResult.Yes)
@@ -692,7 +692,7 @@ namespace FlightRecPlugin
                             if (localAirport != null)
                             {
                                 //only check reservation every 50 updates
-                                if (updateCounter%50==0)
+                                if (updateCounter % 50 == 0)
                                 {
                                     checkReservation();
                                 }
@@ -705,7 +705,7 @@ namespace FlightRecPlugin
                                 getStartOfFlightData();
 
                                 //disable the immat selection if one is selected
-                                if (cbImmat.SelectedIndex>=0)
+                                if (cbImmat.SelectedIndex >= 0)
                                 {
                                     cbImmat.Enabled = false;
                                 }
@@ -782,7 +782,7 @@ namespace FlightRecPlugin
                             break;
                         case STATE.TAXIING:
 
-                            if ((localAirport) != null && ((reservation == null)||(!reservation.checkedOnce)))
+                            if ((localAirport) != null && ((reservation == null) || (!reservation.checkedOnce)))
                             {
                                 checkReservation();
                             }
@@ -1064,7 +1064,7 @@ namespace FlightRecPlugin
             // disable start detection for 300 x 100 ms =30s  disable the start text boxes.
             startDisabled = 100;
             gbStartInfos.Enabled = false;
-           
+
             //change the mouse cursor to wait
             Cursor = Cursors.WaitCursor;
 
@@ -1205,7 +1205,7 @@ namespace FlightRecPlugin
                 saveFlightDialog.Mission = cbMission.Text;
                 saveFlightDialog.GPSTrace = GPSRecorder.GetTraceJSON();
                 saveFlightDialog.SimPlane = lbLibelleAvion.Text;
-                
+
                 bool isTopMost = false;
                 Form parentForm = (Form)this.TopLevelControl;
                 //en cas de "always on top"
@@ -1455,7 +1455,7 @@ namespace FlightRecPlugin
 
         }
 
-        public async void UpdatePlaneStatus(int isFlying,string forceImmat=null)
+        public async void UpdatePlaneStatus(int isFlying, string forceImmat = null)
         {
             try
             {
@@ -1466,18 +1466,19 @@ namespace FlightRecPlugin
                 //check that cbImmat is not null or empty. Only then we can send the update
                 Avion plane = (Avion)cbImmat.SelectedItem;
 
-                if (forceImmat!=null)
+                if (forceImmat != null)
                 {
                     plane = data.avions.Where(a => a.Immat == forceImmat).FirstOrDefault();
                 }
 
-                if (plane == null) { 
+                if (plane == null)
+                {
                     Logger.WriteLine("Cannot update plane status: selected plane is null");
                     return;
                 }
 
                 values["callsign"] = tbCallsign.Text;
-                values["plane"] = forceImmat == null?cbImmat.Text: forceImmat;
+                values["plane"] = forceImmat == null ? cbImmat.Text : forceImmat;
                 values["departure_icao"] = lbStartIata.Text;
                 values["flying"] = isFlying.ToString();
                 values["arrival_icao"] = tbEndICAO.Text;
@@ -1586,7 +1587,7 @@ namespace FlightRecPlugin
                         myBrush = Brushes.LightGray;
                         break;
                     case Avion.PlaneStatus.Reserved:
-                        if ((item.DernierUtilisateur == tbCallsign.Text)&&(reservationStatus == ReservationMgr.ReservationStatus.Accepted))
+                        if ((item.DernierUtilisateur == tbCallsign.Text) && (reservationStatus == ReservationMgr.ReservationStatus.Accepted))
                             myBrush = Brushes.Blue; // réservataire
                         else
                             myBrush = Brushes.LightGray; // réservé, non sélectionnable
@@ -1605,7 +1606,7 @@ namespace FlightRecPlugin
                 if ((currentPlane.EnVol == 1) && (currentPlane.DernierUtilisateur == tbCallsign.Text))
                 {
                     Logger.WriteLine("Freeing the previous airplane on the database");
-                    UpdatePlaneStatus(0,currentPlane.Immat);
+                    UpdatePlaneStatus(0, currentPlane.Immat);
                 }
             }
 
@@ -1794,7 +1795,7 @@ namespace FlightRecPlugin
                                 float fretOnAirport = await data.GetFretOnAirport(localAirport.ident);
                                 //lbFret.Text = fretOnAirport.ToString() + " Kg available " + startAirportname;
 
-                                if ((localAirport!=null) && (fretOnAirport > 0))
+                                if ((localAirport != null) && (fretOnAirport > 0))
                                 {
                                     lbFret.Text = "Available freight at " + localAirport.ident + " : " + fretOnAirport.ToString();
                                     Logger.WriteLine(lbFret.Text);
@@ -1824,7 +1825,7 @@ namespace FlightRecPlugin
         {
             //si on est au sol, et moteur arretés, alors on continue de rafraichir les données statiques.
             //sinon (en vol, ou des que les moteurs sont allumés, on ne change plus ça).
-            if ((onGround && !atLeastOneEngineFiring)||(!staticValuesReadOnce))
+            if ((onGround && !atLeastOneEngineFiring) || (!staticValuesReadOnce))
             {
                 ReadStaticValues();
             }
@@ -2043,9 +2044,10 @@ namespace FlightRecPlugin
                     Logger.WriteLine("ApplyReservation: setting arrival ICAO failed: " + ex.Message);
                 }
                 // Sélectionne la mission "LIGNES REGULIERES" si présente
-                try { 
-                cbMission.SelectedItem = data.missions.Single(m=> m.Libelle ==  "LIGNES REGULIERES");
-                    }
+                try
+                {
+                    cbMission.SelectedItem = data.missions.Single(m => m.Libelle == "LIGNES REGULIERES");
+                }
                 catch (Exception)
                 {
                     // mission non trouvée, on ignore
@@ -2072,7 +2074,7 @@ namespace FlightRecPlugin
                 if (!selectedMission.IsSelectable(reservationStatus == ReservationMgr.ReservationStatus.Accepted))
                 {
                     string message = "No reservation found for this mission\n";
-                    message+= "Please make a reservation on the website before selecting this mission.";
+                    message += "Please make a reservation on the website before selecting this mission.";
                     ShowMsgBox(message, "Flight Recorder", MessageBoxButtons.OK);
                     cbMission.SelectedItem = null;
                     return;
@@ -2089,7 +2091,7 @@ namespace FlightRecPlugin
             if (e.Index >= 0)
             {
                 Mission item = (Mission)cbMission.Items[e.Index];
-                if(item.IsSelectable(reservationStatus == ReservationMgr.ReservationStatus.Accepted))
+                if (item.IsSelectable(reservationStatus == ReservationMgr.ReservationStatus.Accepted))
                 {
                     myBrush = Brushes.Black;
                 }
@@ -2098,6 +2100,30 @@ namespace FlightRecPlugin
                     myBrush = Brushes.LightGray;
                 }
                 e.Graphics.DrawString(item.Libelle, e.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
+            }
+        }
+
+        private async void loginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string sessionToken = await data.loginToSite();
+            Settings.Default.SessionToken = sessionToken;
+            Settings.Default.Save();
+        }
+
+        private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            data.logoutFromSite();
+        }
+
+        private async void checkSessionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!await data.checkSession(Settings.Default.SessionToken))
+            {
+                MessageBox.Show("Session expired, please log in again.", "Flight Recorder", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                MessageBox.Show("Session is still valid.", "Flight Recorder", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

@@ -14,5 +14,8 @@
     <Setting Name="LocalFlightbookFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">localFlightbook.json</Value>
     </Setting>
+    <Setting Name="SessionToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

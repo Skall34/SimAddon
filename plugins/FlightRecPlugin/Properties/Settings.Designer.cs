@@ -70,5 +70,17 @@ namespace FlightRecPlugin.Properties {
                 this["LocalFlightbookFile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SessionToken {
+            get {
+                return ((string)(this["SessionToken"]));
+            }
+            set {
+                this["SessionToken"] = value;
+            }
+        }
     }
 }
