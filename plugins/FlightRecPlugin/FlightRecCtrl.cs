@@ -241,6 +241,32 @@ namespace FlightRecPlugin
             eventArg.reason = SimEventArg.EventType.SETCALLSIGN;
             eventArg.value = tbCallsign.Text;
             SimEvent(eventArg);
+
+            //check connection to data server
+            Task.Run(async () =>
+            {
+                if ((Settings.Default.SessionToken == "")||(!await data.checkSession(Settings.Default.SessionToken)))
+                {
+                    UpdateStatus("Logging in to data server...");
+                    string sessionToken = await data.loginToSite();
+                    if (sessionToken == "")
+                    {
+                        Logger.WriteLine("Login failed");
+                    }
+                    else
+                    {
+                        Logger.WriteLine("Login OK");
+                        Settings.Default.SessionToken = sessionToken;
+                        Settings.Default.Save();
+                        UpdateStatus("Logged in to data server");
+                    }
+                }
+                else
+                {
+                    UpdateStatus("Logged in to data server");
+                    Logger.WriteLine("Already logged in to data server");
+                }
+            });
         }
 
         public async void FormClosing(object sender, FormClosingEventArgs e)
