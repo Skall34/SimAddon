@@ -191,6 +191,7 @@ namespace SimDataManager
         private bool _isConnected;
 
         private SiteConnection SiteConnection;
+        private string sessionToken;
 
         public bool isConnected { get {
                 return (_isConnected);
@@ -217,8 +218,7 @@ namespace SimDataManager
 
         public async Task<string> loginToSite()
         {
-
-            string sessionToken = await SiteConnection.Login();
+            sessionToken = await SiteConnection.Login();
             Logger.WriteLine("Login result token: " + sessionToken);
             return sessionToken;
         }
@@ -226,11 +226,19 @@ namespace SimDataManager
         public void logoutFromSite()
         {
             SiteConnection.Logout();
+            sessionToken = string.Empty;
         }
 
         public async Task<bool> checkSession(string token)
         {
-            return await SiteConnection.CheckSession(token);
+            bool result = false;
+            result = await SiteConnection.CheckSession(token);
+            if (result) {
+                //update the current token if session is valid
+                sessionToken = token;
+            }
+            return result;
+
         }
 
         public async Task<int> loadDataFromSheet()
@@ -262,12 +270,12 @@ namespace SimDataManager
 
         public void ApplyReservation(string callsign, Reservation reservation)
         {
-             ReservationMgr.ApplyReservation(callsign, reservation, BASERURL);
+             ReservationMgr.ApplyReservation(callsign, reservation, BASERURL,sessionToken);
         }
 
         public void CompleteReservation(string callsign, Reservation reservation)
         {
-            ReservationMgr.CompleteReservation(callsign, reservation, BASERURL);
+            ReservationMgr.CompleteReservation(callsign, reservation, BASERURL,sessionToken);
             //mark the plane as not reserved 
             Avion avion = avions.Find(a => a.Immat == reservation.Immat);
             if (avion != null)
@@ -318,9 +326,12 @@ namespace SimDataManager
             //crée un dictionnaire des valeurs à envoyer
             bool result = false;
             string phpUrl = BASERURL + "/api/api_update_status.php";
+            Dictionary<string, string> dataToSend = new Dictionary<string, string>(planedata);
+            dataToSend["session_token"] = sessionToken;
+
             using (var client = new HttpClient())
             {
-                var content = new FormUrlEncodedContent(planedata);
+                var content = new FormUrlEncodedContent(dataToSend);
 
                 try
                 {
@@ -357,25 +368,29 @@ namespace SimDataManager
             return result;
         }
 
-        public async Task<int> saveFlight(UrlDeserializer.SaveFlightQuery flightdata)
-        {
-            UrlDeserializer urlDeserializer = new UrlDeserializer(BASERURL);
+        //public async Task<int> saveFlight(UrlDeserializer.SaveFlightQuery flightdata, string sessionToken = "")
+        //{
+        //    UrlDeserializer urlDeserializer = new UrlDeserializer(BASERURL);
 
-            //sauve le vol dans le fichier "lastflight.json"
-            await urlDeserializer.SaveLocalJsonAsync(flightdata, "lastflight.json");
-            //envoie le vol vers le serveur
-            int result = await urlDeserializer.PushJSonAsync<UrlDeserializer.SaveFlightQuery>(flightdata);
-            //int result = await urlDeserializer.PushFlightAsync(data);
+        //    //sauve le vol dans le fichier "lastflight.json"
+        //    await urlDeserializer.SaveLocalJsonAsync(flightdata, "lastflight.json");
+        //    //envoie le vol vers le serveur
+        //    int result = await urlDeserializer.PushJSonAsync<UrlDeserializer.SaveFlightQuery>(flightdata);
+        //    //int result = await urlDeserializer.PushFlightAsync(data);
 
-            return result;
-        }
+        //    return result;
+        //}
 
         public async Task<bool> SendFlightDataToPhpAsync(Dictionary<string, string> flightData)
         {
             string phpUrl = BASERURL + "/api/api_import_vol_direct.php";
+
+            Dictionary<string, string> dataToSend = new Dictionary<string, string>(flightData);
+            dataToSend["session_token"] = sessionToken;
+
             using (var client = new HttpClient())
             {
-                var content = new FormUrlEncodedContent(flightData);
+                var content = new FormUrlEncodedContent(dataToSend);
 
                 try
                 {

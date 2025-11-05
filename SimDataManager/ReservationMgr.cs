@@ -121,7 +121,7 @@ namespace SimDataManager
 
         /// <summary>
         /// Tell the server that the reservation has been used.
-        internal static async Task CompleteReservation(string callsign, Reservation reservation, string BASEURL, CancellationToken cancellationToken = default)
+        internal static async Task CompleteReservation(string callsign, Reservation reservation, string BASEURL, string sessionToken)
         {
             try
             {
@@ -134,8 +134,8 @@ namespace SimDataManager
                 };
 
                 var content = new FormUrlEncodedContent(values);
-                var response = await httpClient.PostAsync(BASEURL + "/api/api_complete_reservation.php", content, cancellationToken).ConfigureAwait(false);
-                var responseString = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+                var response = await httpClient.PostAsync(BASEURL + "/api/api_complete_reservation.php", content, CancellationToken.None).ConfigureAwait(false);
+                var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 Logger.WriteLine($"api_complete_reservation.php response: {responseString}");
             }
             catch (OperationCanceledException)
@@ -150,7 +150,7 @@ namespace SimDataManager
 
         /// <summary>
         /// Confirm the reservation will be used.
-        internal static async Task ApplyReservation(string callsign, Reservation reservation, string BASEURL, CancellationToken cancellationToken = default)
+        internal static async Task ApplyReservation(string callsign, Reservation reservation, string BASEURL, string sessionToken)
         {
             try
             {
@@ -162,8 +162,8 @@ namespace SimDataManager
                     { "arrivalIcao", reservation.ArrivalIcao }
                 };
                 var content = new FormUrlEncodedContent(values);
-                var response = await httpClient.PostAsync(BASEURL + "/api/api_consume_reservation.php", content, cancellationToken).ConfigureAwait(false);
-                var responseString = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+                var response = await httpClient.PostAsync(BASEURL + "/api/api_consume_reservation.php", content).ConfigureAwait(false);
+                var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 Logger.WriteLine($"api_consume_reservation.php response: {responseString}");
             }
             catch (OperationCanceledException)
