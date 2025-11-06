@@ -229,13 +229,6 @@ namespace FlightRecPlugin
             RemplirComboImmat();
             RemplirComboMissions();
 
-            this.Enabled = true;
-
-            UpdateStatus("FlightRecorder is ready");
-            Logger.WriteLine("FlightRecorder is ready");
-
-            timerUpdateStaticValues.Start();
-
             //send the callsign event
             SimEventArg eventArg = new SimEventArg();
             eventArg.reason = SimEventArg.EventType.SETCALLSIGN;
@@ -267,6 +260,13 @@ namespace FlightRecPlugin
                     Logger.WriteLine("Already logged in to data server");
                 }
             });
+
+            timerUpdateStaticValues.Start();
+
+            this.Enabled = true;
+
+            UpdateStatus("FlightRecorder is ready");
+            Logger.WriteLine("FlightRecorder is ready");
         }
 
         public async void FormClosing(object sender, FormClosingEventArgs e)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace SimDataManager
@@ -15,11 +16,11 @@ namespace SimDataManager
         public string Libelle { get; set; }
         public int Active { get; set; }
 
-        public static async Task<List<Mission>> FetchMissionsFromSheet(string BASEURL)
+        public static async Task<List<Mission>> FetchMissionsFromSheet(HttpClient client, string BASEURL)
         {
             int result = 0;
             string url = BASEURL + "/api/api_getMissions.php";
-            UrlDeserializer dataReader = new UrlDeserializer(url);
+            UrlDeserializer dataReader = new UrlDeserializer(client, url);
             List<Mission> missions = await dataReader.FetchMissionsDataAsync();
             return missions;
         }

@@ -18,57 +18,67 @@ namespace SimDataManager
     {
         private readonly string _url;
 
+        private HttpClient _client;
+
         public UrlDeserializer(string url)
         {
             _url = url;
+            _client = new HttpClient();
+        }
+
+        public UrlDeserializer(HttpClient client, string url)
+        {
+            _url = url;
+            _client = client;
         }
 
         public async Task<List<Avion>> FetchAvionsDataAsync()
         {
             List<Avion> avions = new List<Avion>();
 
-            using (HttpClient client = new HttpClient())
+            try
             {
-                try
+                HttpResponseMessage response = await _client.GetAsync(_url);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    HttpResponseMessage response = await client.GetAsync(_url);
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    // Désérialisation du JSON
+                    var data = JsonConvert.DeserializeObject<AvionsPhpList>(jsonString);
 
-                    if (response.IsSuccessStatusCode)
+                    if ((data != null) && (data.immats != null))
                     {
-                        string jsonString = await response.Content.ReadAsStringAsync();
-                        // Désérialisation du JSON
-                        var data = JsonConvert.DeserializeObject<AvionsPhpList>(jsonString);
-
-                        if ((data!=null) && (data.immats!=null))
+                        int i = 0;
+                        foreach (Dictionary<string, string> item in data.immats)
                         {
-                            int i = 0;
-                            foreach (Dictionary<string,string>item in data.immats)
+                            Avion avion = new Avion
                             {
-                                Avion avion = new Avion
-                                {
-                                    Index = i++,
-                                    Type = item.TryGetValue("categorie", out string type) ? type : "unknown",
-                                    Immat = item.TryGetValue("immat", out string immat) ? immat : "-----",
-                                    Etat = int.TryParse(item.TryGetValue("etat", out string etat) ? etat : "", out int etatValue) ? etatValue : 0,
-                                    DernierUtilisateur = item.TryGetValue("callsign", out string utilisateur) ? utilisateur : "",
-                                    EnVol = int.TryParse(item.TryGetValue("en_vol", out string envol) ? envol : "", out int envolValue) ? envolValue : 0,
-                                    Reserved = int.TryParse(item.TryGetValue("reservee", out string reservee) ? reservee : "0", out int reserveValue) ? reserveValue : 0,
-                                };
+                                Index = i++,
+                                Type = item.TryGetValue("categorie", out string type) ? type : "unknown",
+                                Immat = item.TryGetValue("immat", out string immat) ? immat : "-----",
+                                Etat = int.TryParse(item.TryGetValue("etat", out string etat) ? etat : "", out int etatValue) ? etatValue : 0,
+                                DernierUtilisateur = item.TryGetValue("callsign", out string utilisateur) ? utilisateur : "",
+                                EnVol = int.TryParse(item.TryGetValue("en_vol", out string envol) ? envol : "", out int envolValue) ? envolValue : 0,
+                                Reserved = int.TryParse(item.TryGetValue("reservee", out string reservee) ? reservee : "0", out int reserveValue) ? reserveValue : 0,
+                            };
 
-                                avions.Add(avion);
-                            }
+                            avions.Add(avion);
                         }
                     }
-                    else
-                    {
-                        // Gérer les erreurs si la requête n'a pas réussi
-                        Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
-                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    // Gérer les exceptions
-                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                    // Gérer les erreurs si la requête n'a pas réussi
+                    Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Gérer les exceptions
+                Logger.WriteLine("Exception lors de la récupération des données : " + ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Logger.WriteLine("Inner exception : " + ex.InnerException.Message);
                 }
             }
 
@@ -79,45 +89,42 @@ namespace SimDataManager
         {
             List<Mission> missions = new List<Mission>();
 
-            using (HttpClient client = new HttpClient())
+            try
             {
-                try
+                HttpResponseMessage response = await _client.GetAsync(_url);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    HttpResponseMessage response = await client.GetAsync(_url);
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    // Désérialisation du JSON
+                    var data = JsonConvert.DeserializeObject<MissionsPhpList>(jsonString);
 
-                    if (response.IsSuccessStatusCode)
+                    if ((null != data) && (data.missions != null))
                     {
-                        string jsonString = await response.Content.ReadAsStringAsync();
-                        // Désérialisation du JSON
-                        var data = JsonConvert.DeserializeObject<MissionsPhpList>(jsonString);
-
-                        if ((null != data) && (data.missions!=null))
+                        foreach (var item in data.missions)
                         {
-                            foreach (var item in data.missions)
+                            Mission mission = new Mission
                             {
-                                Mission mission = new Mission
-                                {
 
-                                    Libelle = item.TryGetValue("libelle", out string libMission) ? libMission : "",
-                                    Active = int.TryParse(item.TryGetValue("active", out string activeStr) ? activeStr : "0", out int activeValue) ? activeValue : 0,
-                                };
+                                Libelle = item.TryGetValue("libelle", out string libMission) ? libMission : "",
+                                Active = int.TryParse(item.TryGetValue("active", out string activeStr) ? activeStr : "0", out int activeValue) ? activeValue : 0,
+                            };
 
-                                missions.Add(mission);
-                            }
-
+                            missions.Add(mission);
                         }
-                    }
-                    else
-                    {
-                        // Gérer les erreurs si la requête n'a pas réussi
-                        Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
+
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    // Gérer les exceptions
-                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                    // Gérer les erreurs si la requête n'a pas réussi
+                    Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
                 }
+            }
+            catch (Exception ex)
+            {
+                // Gérer les exceptions
+                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
             }
 
             return (missions);
@@ -126,79 +133,73 @@ namespace SimDataManager
 
         public async Task<List<Aeroport>> FetchAirportsDataAsync(string filename)
         {
-            List<Aeroport> aeroports ;
+            List<Aeroport> aeroports;
 
-            using (HttpClient client = new HttpClient())
+            try
             {
-                try
-                {
-                    HttpResponseMessage response = await client.GetAsync(_url);
+                HttpResponseMessage response = await _client.GetAsync(_url);
 
-                    if (response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    // Désérialisation du JSON
+                    aeroports = Aeroport.deserializeAeroports(jsonString);
+                    //if we received airports, store them locally
+                    if (aeroports.Count > 0)
                     {
-                        string jsonString = await response.Content.ReadAsStringAsync();
-                        // Désérialisation du JSON
-                        aeroports = Aeroport.deserializeAeroports(jsonString);
-                        //if we received airports, store them locally
-                        if (aeroports.Count > 0)
-                        {                           
-                            StreamWriter sw= new StreamWriter(filename);
-                            JsonSerializer serializer = new JsonSerializer();
-                            serializer.Formatting = Formatting.Indented;
-                            serializer.Serialize(sw, aeroports);
-                            sw.Close();
-                        }
-                    }
-                    else
-                    {
-                        aeroports = new List<Aeroport>();
-                        // Gérer les erreurs si la requête n'a pas réussi
-                        Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
+                        StreamWriter sw = new StreamWriter(filename);
+                        JsonSerializer serializer = new JsonSerializer();
+                        serializer.Formatting = Formatting.Indented;
+                        serializer.Serialize(sw, aeroports);
+                        sw.Close();
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    //MessageBox.Show(ex.Message,"Error while loading airports",MessageBoxButtons.OK,MessageBoxIcon.Error);
-
                     aeroports = new List<Aeroport>();
-                    // Gérer les exceptions
-                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                    // Gérer les erreurs si la requête n'a pas réussi
+                    Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
                 }
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message,"Error while loading airports",MessageBoxButtons.OK,MessageBoxIcon.Error);
+
+                aeroports = new List<Aeroport>();
+                // Gérer les exceptions
+                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
             }
 
             return aeroports;
         }
 
 
-        
+
         public async Task<float> FetchFreightDataAsync()
         {
             float result;
-            using (HttpClient client = new HttpClient())
+            try
             {
-                try
+                HttpResponseMessage response = await _client.GetAsync(_url);
+                if (response.IsSuccessStatusCode)
                 {
-                    HttpResponseMessage response = await client.GetAsync(_url);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string jsonString = await response.Content.ReadAsStringAsync();
-                        // Désérialisation du JSON
-                        result = Aeroport.deserializeFreight(jsonString);
-                        //if we received airports, store them locally
-                    }
-                    else
-                    {
-                        result = -1;
-                        // Gérer les erreurs si la requête n'a pas réussi
-                        Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
-                    }
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    // Désérialisation du JSON
+                    result = Aeroport.deserializeFreight(jsonString);
+                    //if we received airports, store them locally
                 }
-                catch (Exception ex)
+                else
                 {
                     result = -1;
-                    // Gérer les exceptions
-                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                    // Gérer les erreurs si la requête n'a pas réussi
+                    Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
                 }
+            }
+            catch (Exception ex)
+            {
+                result = -1;
+                // Gérer les exceptions
+                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
             }
             return result;
         }
@@ -385,32 +386,29 @@ namespace SimDataManager
         internal async Task<DateTime> FetchLastUpdateAsync()
         {
             DateTime result = DateTime.MinValue;
-            using (HttpClient client = new HttpClient())
+            try
             {
-                try
+                HttpResponseMessage response = await _client.GetAsync(_url);
+                if (response.IsSuccessStatusCode)
                 {
-                    HttpResponseMessage response = await client.GetAsync(_url);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string jsonString = await response.Content.ReadAsStringAsync();
-                        // Désérialisation du JSON
-                        SimDataManager.lastUpdate temp = JsonConvert.DeserializeObject<SimDataManager.lastUpdate>(jsonString);
-                        //if we received airports, store them locally
-                        result = DateTime.Parse(temp.last_update);
-                    }
-                    else
-                    {
-                        result = DateTime.MinValue;
-                        // Gérer les erreurs si la requête n'a pas réussi
-                        Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
-                    }
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    // Désérialisation du JSON
+                    SimDataManager.lastUpdate temp = JsonConvert.DeserializeObject<SimDataManager.lastUpdate>(jsonString);
+                    //if we received airports, store them locally
+                    result = DateTime.Parse(temp.last_update);
                 }
-                catch (Exception ex)
+                else
                 {
                     result = DateTime.MinValue;
-                    // Gérer les exceptions
-                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                    // Gérer les erreurs si la requête n'a pas réussi
+                    Logger.WriteLine("Erreur lors de la récupération des données : " + response.StatusCode);
                 }
+            }
+            catch (Exception ex)
+            {
+                result = DateTime.MinValue;
+                // Gérer les exceptions
+                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
             }
             return result;
         }

@@ -411,7 +411,7 @@ namespace MeteoPlugin
             if ( eventArg.reason == SimEventArg.EventType.SETDESTINATION)
             {
                 string icao = eventArg.value;
-                if (Regex.IsMatch(icao, @"^[A-Z]{4}$"))
+                if (Regex.IsMatch(icao, @"^[A-Z0-9]{4}$"))
                 {
                     //check if the airport is in the list
                     Aeroport a = simdata.aeroports.FirstOrDefault(x => x.ident == icao);

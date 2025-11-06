@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace SimDataManager
@@ -76,10 +77,10 @@ namespace SimDataManager
             return name1.CompareTo(name2);
         }
 
-        public static async Task<List<Avion>> FetchAvionsFromSheet(string BASEURL)
+        public static async Task<List<Avion>> FetchAvionsFromSheet(HttpClient client, string BASEURL)
         {
             string url = BASEURL + "/api/api_getFlotte.php";
-            UrlDeserializer dataReader = new UrlDeserializer(url);
+            UrlDeserializer dataReader = new UrlDeserializer(client,url);
             List<Avion> avions = await dataReader.FetchAvionsDataAsync();
 
             foreach(Avion avion in avions)
@@ -103,11 +104,11 @@ namespace SimDataManager
         }
 
         //update the list of avions with their status (reserved, in flight, maintenance, available)
-        public static async void UpdateAvionsStatus(List<Avion> avions, string BASEURL)
+        public static async void UpdateAvionsStatus(HttpClient client, List<Avion> avions, string BASEURL)
         {
             //fecth the list of planes from the database
             string url = BASEURL + "/api/api_getFlotte.php";
-            UrlDeserializer dataReader = new UrlDeserializer(url);
+            UrlDeserializer dataReader = new UrlDeserializer(client, url);
             List<Avion> planesInDB = await dataReader.FetchAvionsDataAsync();
 
             foreach (Avion avion in avions)

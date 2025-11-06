@@ -201,6 +201,7 @@ namespace SimDataManager
             //}
         }
 
+        private static HttpClient httpClient;
 
         public simData(string GSheetURL)
         {
@@ -214,6 +215,7 @@ namespace SimDataManager
 
             //flightPerfs = new FlightPerfs();
             SiteConnection = new SiteConnection(BASERURL);
+            httpClient = new HttpClient();
         }
 
         public async Task<string> loginToSite()
@@ -243,10 +245,18 @@ namespace SimDataManager
 
         public async Task<int> loadDataFromSheet()
         {
-            int result = 0;
-            await LoadAirportsFromSheet();
-            await LoadDataFromSheet();
-            return result;
+            // Lancer les tâches simultanément
+            var tAirports = LoadAirportsFromSheet();
+            var tData = LoadDataFromSheet();
+
+            // Attendre les deux
+            await Task.WhenAll(tAirports, tData).ConfigureAwait(false);
+
+            // Optionnel : récupérer les résultats si besoin
+            int resAirports = await tAirports;
+            int resData = await tData;
+
+            return resAirports + resData;
         }
 
         //get the fleet, and missions from the google sheet
@@ -288,8 +298,8 @@ namespace SimDataManager
         private async Task<int> LoadDataFromSheet()
         {
             int result = 0;
-            List<Mission> missions = await Mission.FetchMissionsFromSheet(BASERURL);           
-            List<Avion> avions = await Avion.FetchAvionsFromSheet(BASERURL);
+            List<Mission> missions = await Mission.FetchMissionsFromSheet(httpClient, BASERURL);           
+            List<Avion> avions = await Avion.FetchAvionsFromSheet(httpClient, BASERURL);
 
             this.avions.Clear();
             this.missions.Clear();
@@ -311,75 +321,76 @@ namespace SimDataManager
             //this.Cursor = Cursors.Default;
         }
 
+        private static bool updateInProgress = false;
         public async void UpdatePlaneFromSheet()
         {
+            if (updateInProgress)
+            {
+                Logger.WriteLine("UpdatePlaneFromSheet already in progress, skipping this call.");
+                return;
+            }
+            updateInProgress = true;
             if (avions.Count == 0)
             {
                 Logger.WriteLine("planes database is empty, cannot update planes status !");
                 return;
             }
-            Avion.UpdateAvionsStatus(avions, BASERURL);
+            Avion.UpdateAvionsStatus(httpClient, avions, BASERURL);
+            updateInProgress = false;
         }
 
         public async Task<bool> UpdatePlaneStatus(int isFlying, Dictionary<string, string> planedata)
         {
+            if (updateInProgress) {
+                Logger.WriteLine("UpdatePlaneStatus already in progress, skipping this call.");
+                return false;
+            }
+            updateInProgress = true;
             //crée un dictionnaire des valeurs à envoyer
             bool result = false;
             string phpUrl = BASERURL + "/api/api_update_status.php";
             Dictionary<string, string> dataToSend = new Dictionary<string, string>(planedata);
             dataToSend["session_token"] = sessionToken;
 
-            using (var client = new HttpClient())
+            var content = new FormUrlEncodedContent(dataToSend);
+
+            try
             {
-                var content = new FormUrlEncodedContent(dataToSend);
+                var response = await httpClient.PostAsync(phpUrl, content);
+                string responseContent = await response.Content.ReadAsStringAsync();
 
-                try
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    var response = await client.PostAsync(phpUrl, content);
-                    string responseContent = await response.Content.ReadAsStringAsync();
-
-                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                    {
-                        Logger.WriteLine("Erreur lors de l'envoi des données de vol : " + response.StatusCode);
-                        // Affiche tout, même si c'est vide
-                        string message = $"api_update_status return code: {response.StatusCode}\nRéponse brute:\n{responseContent}";
-                        Logger.WriteLine(message);
-                    }
-                    else
-                    {
-                        Logger.WriteLine("UpdatePlaneStatus reponse: " + responseContent);
-                    }
-
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        // Affiche le détail dans le popup
-                        return false;
-                    }
-
-                    return true;
+                    Logger.WriteLine("Erreur lors de l'envoi des données de vol : " + response.StatusCode);
+                    // Affiche tout, même si c'est vide
+                    string message = $"api_update_status return code: {response.StatusCode}\nRéponse brute:\n{responseContent}";
+                    Logger.WriteLine(message);
                 }
-                catch (Exception ex)
+                else
                 {
-                    Logger.WriteLine("Erreur lors de l'envoi des données de vol : " + ex.Message);
-                    return false;
+                    Logger.WriteLine("UpdatePlaneStatus OK");
                 }
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    // Affiche le détail dans le popup
+                    result = false;
+                }
+
+                result = true;
             }
-
+            catch (Exception ex)
+            {
+                Logger.WriteLine("Exception lors de l'envoi des données de vol : " + ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Logger.WriteLine("Détail de l'erreur : " + ex.InnerException.Message);
+                }
+                result = false;
+            }
+            updateInProgress = false;
             return result;
         }
-
-        //public async Task<int> saveFlight(UrlDeserializer.SaveFlightQuery flightdata, string sessionToken = "")
-        //{
-        //    UrlDeserializer urlDeserializer = new UrlDeserializer(BASERURL);
-
-        //    //sauve le vol dans le fichier "lastflight.json"
-        //    await urlDeserializer.SaveLocalJsonAsync(flightdata, "lastflight.json");
-        //    //envoie le vol vers le serveur
-        //    int result = await urlDeserializer.PushJSonAsync<UrlDeserializer.SaveFlightQuery>(flightdata);
-        //    //int result = await urlDeserializer.PushFlightAsync(data);
-
-        //    return result;
-        //}
 
         public async Task<bool> SendFlightDataToPhpAsync(Dictionary<string, string> flightData)
         {
@@ -388,33 +399,34 @@ namespace SimDataManager
             Dictionary<string, string> dataToSend = new Dictionary<string, string>(flightData);
             dataToSend["session_token"] = sessionToken;
 
-            using (var client = new HttpClient())
+            var content = new FormUrlEncodedContent(dataToSend);
+
+            try
             {
-                var content = new FormUrlEncodedContent(dataToSend);
+                var response = await httpClient.PostAsync(phpUrl, content);
+                string responseContent = await response.Content.ReadAsStringAsync();
 
-                try
+                // Affiche tout, même si c'est vide
+                string message = $"Code: {response.StatusCode}\nRéponse brute:\n{responseContent}";
+                Logger.WriteLine(message);
+
+                if (!response.IsSuccessStatusCode)
                 {
-                    var response = await client.PostAsync( phpUrl, content);
-                    string responseContent = await response.Content.ReadAsStringAsync();
-
-                    // Affiche tout, même si c'est vide
-                    string message = $"Code: {response.StatusCode}\nRéponse brute:\n{responseContent}";
-                    Logger.WriteLine(message);
-
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        // Affiche le détail dans le popup
-                        return false;
-                    }
-                    Logger.WriteLine("Réponse du serveur : " + responseContent);
-
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    Logger.WriteLine("Erreur lors de l'envoi des données de vol : " + ex.Message);
+                    // Affiche le détail dans le popup
                     return false;
                 }
+                Logger.WriteLine("Réponse du serveur : " + responseContent);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("Exception lors de l'envoi des données de vol : " + ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Logger.WriteLine("Détail de l'erreur : " + ex.InnerException.Message);
+                }
+                return false;
             }
         }
 
@@ -422,7 +434,7 @@ namespace SimDataManager
         public async Task<float> GetFretOnAirport(string airportIdent)
         {
             string url = BASERURL + "/api/api_getFretByIcao.php?ICAO=" + airportIdent;
-            UrlDeserializer dataReader = new UrlDeserializer(url);
+            UrlDeserializer dataReader = new UrlDeserializer(httpClient,url);
             float fret = await dataReader.FetchFreightDataAsync();
 
             return fret;
