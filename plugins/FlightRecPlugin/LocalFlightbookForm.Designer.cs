@@ -131,6 +131,7 @@
             // 
             // btnClear
             // 
+            btnClear.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             btnClear.Location = new System.Drawing.Point(12, 409);
             btnClear.Name = "btnClear";
             btnClear.Size = new System.Drawing.Size(75, 23);
