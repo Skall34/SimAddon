@@ -30,6 +30,19 @@ namespace FlightplanPlugin
             }
         }
 
+        public string pdfStorageFolder
+        {
+            get
+            {
+                return tbPdfFolder.Text;
+            }
+
+            set
+            {
+                tbPdfFolder.Text = value;
+            }
+        }
+
         private void SettingsForm_Load(object sender, EventArgs e)
         {
 
@@ -45,6 +58,17 @@ namespace FlightplanPlugin
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        private void btnBrowsePdfFolder_Click(object sender, EventArgs e)
+        {
+            //open a dialog to allow the user to choose a storage folder
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            DialogResult result = folderBrowserDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                pdfStorageFolder = folderBrowserDialog.SelectedPath;
+            }
         }
     }
 }

@@ -34,5 +34,17 @@ namespace FlightplanPlugin.Properties {
                 this["SimbriefUsername"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PdfFolder {
+            get {
+                return ((string)(this["PdfFolder"]));
+            }
+            set {
+                this["PdfFolder"] = value;
+            }
+        }
     }
 }

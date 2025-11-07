@@ -30,7 +30,7 @@ namespace BushTripPlugin
         private double declinaison;
 
         private string SimBriefDirectory;
-        private string SimBriefPdfFile;
+        private string SimBriefPdfFileLink;
         private string tmpPDFfile;
 
         public FlightplanCtrl()
@@ -677,10 +677,12 @@ namespace BushTripPlugin
                     //show a messagebox to ask for simbrief username
                     SettingsForm settingsForm = new SettingsForm();
                     settingsForm.SimbriefUserName = Settings.Default.SimbriefUsername;
+                    settingsForm.pdfStorageFolder = Settings.Default.PdfFolder;
                     DialogResult result = OnShowDialog(this, settingsForm);
                     if (result == DialogResult.OK)
                     {
                         Settings.Default.SimbriefUsername = settingsForm.SimbriefUserName;
+                        Settings.Default.PdfFolder = settingsForm.pdfStorageFolder;
                         Settings.Default.Save();
                     }
                     else
@@ -719,7 +721,7 @@ namespace BushTripPlugin
                         OFP simbriefPlan = (OFP)serializer.Deserialize(fileStream);
                         //save the simbrief files info
                         SimBriefDirectory = simbriefPlan.files.directory;
-                        SimBriefPdfFile = simbriefPlan.files.pdf.link;
+                        SimBriefPdfFileLink = simbriefPlan.files.pdf.link;
 
                         flightPlan = converter.FlightplanFromOFP(simbriefPlan);
                     }
@@ -752,6 +754,7 @@ namespace BushTripPlugin
             //show a messagebox to ask for simbrief username
             SettingsForm settingsForm = new SettingsForm();
             settingsForm.SimbriefUserName = Settings.Default.SimbriefUsername;
+            settingsForm.pdfStorageFolder = Settings.Default.PdfFolder;
 
             if (OnShowDialog != null)
             {
@@ -759,6 +762,7 @@ namespace BushTripPlugin
                 if (result == DialogResult.OK)
                 {
                     Settings.Default.SimbriefUsername = settingsForm.SimbriefUserName;
+                    Settings.Default.PdfFolder = settingsForm.pdfStorageFolder;
                     Settings.Default.Save();
                 }
                 return;
@@ -798,17 +802,22 @@ namespace BushTripPlugin
             }
             else
             {
-                if (SimBriefPdfFile != string.Empty)
+                if (SimBriefPdfFileLink != string.Empty)
                 {
                     using (var client = new System.Net.WebClient())
                     {
                         try
                         {
-                            string pdfFileName = Path.Combine(SimBriefDirectory, Path.GetFileName(SimBriefPdfFile));
+                            string pdfFileName = Path.Combine(SimBriefDirectory, Path.GetFileName(SimBriefPdfFileLink));
                             //download the pdf file to a temporary location
                             //save it in the temp folder
-                            tmpPDFfile = Path.GetTempFileName() + ".pdf";
-
+                            string saveFolder = Settings.Default.PdfFolder;
+                            if (saveFolder==string.Empty)
+                            {
+                                saveFolder = Path.GetTempPath();
+                            }
+                            
+                            tmpPDFfile = Path.Combine(saveFolder, SimBriefPdfFileLink);
                             client.DownloadFile(pdfFileName, tmpPDFfile);
                             //open the pdf file
                             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()

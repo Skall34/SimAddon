@@ -32,12 +32,15 @@
             btnCancel = new Button();
             lblSimbriefUser = new Label();
             tbSimbriefUsername = new TextBox();
+            label1 = new Label();
+            tbPdfFolder = new TextBox();
+            btnBrowsePdfFolder = new Button();
             SuspendLayout();
             // 
             // btnOK
             // 
             btnOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnOK.Location = new Point(242, 45);
+            btnOK.Location = new Point(406, 76);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(75, 23);
             btnOK.TabIndex = 0;
@@ -48,7 +51,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(161, 45);
+            btnCancel.Location = new Point(325, 76);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 1;
@@ -72,13 +75,42 @@
             tbSimbriefUsername.Size = new Size(183, 23);
             tbSimbriefUsername.TabIndex = 3;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 41);
+            label1.Name = "label1";
+            label1.Size = new Size(112, 15);
+            label1.TabIndex = 4;
+            label1.Text = "Flight brief storage :";
+            // 
+            // tbPdfFolder
+            // 
+            tbPdfFolder.Location = new Point(130, 38);
+            tbPdfFolder.Name = "tbPdfFolder";
+            tbPdfFolder.Size = new Size(308, 23);
+            tbPdfFolder.TabIndex = 5;
+            // 
+            // btnBrowsePdfFolder
+            // 
+            btnBrowsePdfFolder.Location = new Point(444, 38);
+            btnBrowsePdfFolder.Name = "btnBrowsePdfFolder";
+            btnBrowsePdfFolder.Size = new Size(39, 23);
+            btnBrowsePdfFolder.TabIndex = 6;
+            btnBrowsePdfFolder.Text = "...";
+            btnBrowsePdfFolder.UseVisualStyleBackColor = true;
+            btnBrowsePdfFolder.Click += btnBrowsePdfFolder_Click;
+            // 
             // SettingsForm
             // 
             AcceptButton = btnOK;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancel;
-            ClientSize = new Size(329, 80);
+            ClientSize = new Size(493, 111);
+            Controls.Add(btnBrowsePdfFolder);
+            Controls.Add(tbPdfFolder);
+            Controls.Add(label1);
             Controls.Add(tbSimbriefUsername);
             Controls.Add(lblSimbriefUser);
             Controls.Add(btnCancel);
@@ -100,5 +132,8 @@
         private Button btnCancel;
         private Label lblSimbriefUser;
         private TextBox tbSimbriefUsername;
+        private Label label1;
+        private TextBox tbPdfFolder;
+        private Button btnBrowsePdfFolder;
     }
 }
