@@ -245,6 +245,7 @@ namespace FlightRecPlugin
                     if (sessionToken == "")
                     {
                         Logger.WriteLine("Login failed");
+                        UpdateStatus("Logged in to data server failed");
                     }
                     else
                     {
