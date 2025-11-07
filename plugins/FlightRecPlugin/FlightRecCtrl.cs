@@ -1000,7 +1000,7 @@ namespace FlightRecPlugin
                     try
                     {
                         Avion selected = data.avions.Where(a => a.Immat == lastImmat).First();
-                        if ((selected != null) && (currentPlane != null) && (selected != currentPlane))
+                        if (selected != null) 
                         {
                             cbImmat.SelectedItem = selected;
                             //send the SETAIRCRAFT event
