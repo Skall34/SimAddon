@@ -29,6 +29,14 @@ namespace SimDataManager
         public int? UserId { get; private set; }
         public string UserCallsign { get; private set; } = string.Empty;
 
+        public enum ConnectionStatus
+        {
+            Unknown,
+            Connected,
+            Disconnected,
+        };
+        public ConnectionStatus Status { get; set; }
+
         public SiteConnection(string siteURL)
         {
             BASEURL = siteURL;
@@ -37,6 +45,7 @@ namespace SimDataManager
             SessionTokenName = string.Empty;
             UserId = null;
             UserCallsign = string.Empty;
+            Status = ConnectionStatus.Unknown;
 
         }
 
@@ -53,6 +62,7 @@ namespace SimDataManager
         {
             if (string.IsNullOrWhiteSpace(BASEURL))
             {
+                Status = ConnectionStatus.Disconnected;
                 Logger.WriteLine("Login: BASEURL not set.");
                 return string.Empty;
             }
@@ -67,6 +77,7 @@ namespace SimDataManager
             }
             catch (Exception ex)
             {
+                Status = ConnectionStatus.Disconnected;
                 Logger.WriteLine("Login: could not find free port: " + ex.Message);
                 return string.Empty;
             }
@@ -90,6 +101,7 @@ namespace SimDataManager
                 }
                 catch (Exception ex)
                 {
+                    Status = ConnectionStatus.Disconnected;
                     Logger.WriteLine("Login: failed to start local listener: " + ex.Message);
                     return string.Empty;
                 }
@@ -105,6 +117,7 @@ namespace SimDataManager
                 }
                 catch (Exception ex)
                 {
+                    Status = ConnectionStatus.Disconnected;
                     Logger.WriteLine("Login: could not open browser: " + ex.Message);
                     try { listener.Stop(); } catch { }
                     return string.Empty;
@@ -117,6 +130,7 @@ namespace SimDataManager
 
                 if (completed == delayTask)
                 {
+                    Status = ConnectionStatus.Disconnected;
                     Logger.WriteLine("Login: timeout waiting for browser callback");
                     try { listener.Stop(); } catch { }
                     return string.Empty;
@@ -129,6 +143,7 @@ namespace SimDataManager
                 }
                 catch (Exception ex)
                 {
+                    Status = ConnectionStatus.Disconnected;
                     Logger.WriteLine("Login: error receiving callback: " + ex.Message);
                     try { listener.Stop(); } catch { }
                     return string.Empty;
@@ -186,6 +201,7 @@ namespace SimDataManager
                     SessionTokenName = "simaddon_token"; // server expects this cookie name
 
                     Logger.WriteLine($"Login: captured session token {SessionTokenName}={SessionToken} (source key: {foundKey ?? "(state fallback)"})");
+                    Status = ConnectionStatus.Connected;
 
                     // Add cookie for the site domain into the internal cookie jar so subsequent HttpClient calls include it
                     try
@@ -271,6 +287,7 @@ namespace SimDataManager
                 // so for simplicity we leave it and rely on logout request above to invalidate server session.
             }
             catch { }
+            Status = ConnectionStatus.Disconnected;
         }
 
         /// <summary>
@@ -283,6 +300,7 @@ namespace SimDataManager
             if (string.IsNullOrWhiteSpace(BASEURL))
             {
                 Logger.WriteLine("CheckSession: BASEURL not set.");
+                Status = ConnectionStatus.Disconnected;
                 return false;
             }
 
@@ -339,6 +357,7 @@ namespace SimDataManager
                                 Logger.WriteLine("CheckSession: server redirected to login page.");
                                 UserId = null;
                                 UserCallsign = string.Empty;
+                                Status = ConnectionStatus.Disconnected;
                                 return false;
                             }
                         }
@@ -387,6 +406,7 @@ namespace SimDataManager
                                         }
 
                                         Logger.WriteLine($"CheckSession: authenticated user id={UserId} callsign='{UserCallsign}'");
+                                        Status = ConnectionStatus.Connected;
                                         return true;
                                     }
                                     else
@@ -394,6 +414,7 @@ namespace SimDataManager
                                         Logger.WriteLine("CheckSession: authenticated=false");
                                         UserId = null;
                                         UserCallsign = string.Empty;
+                                        Status = ConnectionStatus.Disconnected;
                                         return false;
                                     }
                                 }
@@ -409,11 +430,13 @@ namespace SimDataManager
                     if (response.IsSuccessStatusCode)
                     {
                         Logger.WriteLine("CheckSession: HTTP 200 with no JSON authenticated field; assuming session valid.");
+                        Status = ConnectionStatus.Connected;
                         return true;
                     }
 
                     UserId = null;
                     UserCallsign = string.Empty;
+                    Status = ConnectionStatus.Disconnected;
                     return false;
                 }
                 catch (Exception ex)
@@ -421,6 +444,7 @@ namespace SimDataManager
                     Logger.WriteLine("CheckSession: error checking session: " + ex.Message);
                     UserId = null;
                     UserCallsign = string.Empty;
+                    Status = ConnectionStatus.Disconnected;
                     return false;
                 }
             }

@@ -169,7 +169,7 @@ namespace ATISPlugin
             {
 
                 //todo : rafraichis la list des aéroports assez proches pour être interrogés.
-                if ((simdata != null) && (simdata.isConnected))
+                if ((simdata != null) && (simdata.isConnectedToSim))
                 {
                     uint VHFRange = NavigationHelper.GetVHFRangeNauticalMiles(data.position.Altitude);
                     List<Aeroport> proches = Aeroport.FindAirportsInRange(simdata.aeroports, data.position.Location.Latitude, data.position.Location.Longitude, VHFRange);

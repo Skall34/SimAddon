@@ -118,7 +118,7 @@ namespace MeteoPlugin
             try
             {
                 //todo : rafraichis la list des aéroports assez proches pour être interrogés.
-                if ((simdata != null) && (simdata.isConnected))
+                if ((simdata != null) && (simdata.isConnectedToSim))
                 {
 
                     uint VHFRange = NavigationHelper.GetVHFRangeNauticalMiles(data.position.Altitude);

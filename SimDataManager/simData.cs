@@ -188,16 +188,16 @@ namespace SimDataManager
         //private readonly string BASERURL = "https://script.google.com/macros/s/AKfycbyhK_pky8u_OUPNwtQJtpRSiWwE0gF64zHHkbbDJuY6I9-3jjegoiIIfJfV0QKcVC2IAg/exec";
         private string BASERURL;
 
-        private bool _isConnected;
+        private bool _isConnectedToSim;
 
         private SiteConnection SiteConnection;
         private string sessionToken;
 
-        public bool isConnected { get {
-                return (_isConnected);
+        public bool isConnectedToSim { get {
+                return (_isConnectedToSim);
             }
             //set {
-            //    _isConnected = value;
+            //    _isConnectedToSim = value;
             //}
         }
 
@@ -205,7 +205,7 @@ namespace SimDataManager
 
         public simData(string GSheetURL)
         {
-            _isConnected = false;
+            _isConnectedToSim = false;
 
             BASERURL = GSheetURL;
 
@@ -240,7 +240,11 @@ namespace SimDataManager
                 sessionToken = token;
             }
             return result;
+        }
 
+        public bool isConnectedToSite()
+        {
+            return SiteConnection.Status == SiteConnection.ConnectionStatus.Connected;
         }
 
         public async Task<int> loadDataFromSheet()
@@ -444,7 +448,7 @@ namespace SimDataManager
         public void OpenConnection()
         {
             FSUIPCConnection.Open();
-            _isConnected = true;
+            _isConnectedToSim = true;
             payloadServices = FSUIPCConnection.PayloadServices;
             FSUIPCConnection.Process();
             payloadServices.RefreshData();
@@ -463,7 +467,7 @@ namespace SimDataManager
                 payloadServices?.RefreshData();
             }catch(Exception)
             {
-                _isConnected=false;
+                _isConnectedToSim=false;
                 throw;
             }
         }

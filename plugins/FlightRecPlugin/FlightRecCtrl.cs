@@ -1784,7 +1784,7 @@ namespace FlightRecPlugin
         {
             try
             {
-                if (data.isConnected && data.GetReadyToFly())
+                if (data.isConnectedToSim && data.GetReadyToFly())
                 {
                     Logger.WriteLine("Reading static values");
                     //commence à lire qq variables du simu : fuel & cargo, immat avion...

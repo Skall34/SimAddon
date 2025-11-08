@@ -242,7 +242,7 @@ namespace SimAddon
         {
             string statusText = string.Empty;
             //si la connection vers le simu est OK
-            if (_simData.isConnected)
+            if (_simData.isConnectedToSim)
             {
                 statusText = "Connected";
                 this.lblConnectionStatus.ForeColor = Color.Green;
