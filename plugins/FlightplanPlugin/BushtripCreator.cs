@@ -1,19 +1,5 @@
-﻿using FSUIPC;
-using Microsoft.VisualBasic.Logging;
-using SimAddonLogger;
+﻿using SimAddonLogger;
 using SimDataManager;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml;
 
 namespace BushTripPlugin
 {
@@ -72,7 +58,7 @@ namespace BushTripPlugin
                 }
                 else
                 {
-                    pluginCtrl.ShowMsgBox( "Please select a destination", "No destination", MessageBoxButtons.OK);
+                    pluginCtrl.ShowMsgBox("Please select a destination", "No destination", MessageBoxButtons.OK);
                     OK = false;
                 }
 
@@ -347,9 +333,9 @@ namespace BushTripPlugin
                     checkMultiHop.Checked = true;
                 }
                 ComboBox comboBox = sender as ComboBox;
-                if (comboBox.SelectionLength>0)
+                if (comboBox.SelectionLength > 0)
                 {
-                    comboBox.Text = comboBox.Text.Replace(comboBox.SelectedText,e.KeyChar.ToString());
+                    comboBox.Text = comboBox.Text.Replace(comboBox.SelectedText, e.KeyChar.ToString());
                     searched = comboBox.Text.ToLower();
                 }
                 else

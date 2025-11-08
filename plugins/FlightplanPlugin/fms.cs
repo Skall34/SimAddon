@@ -1,10 +1,5 @@
 ﻿using SimAddonLogger;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BushTripPlugin
 {
@@ -29,11 +24,11 @@ namespace BushTripPlugin
         {
             public enum WPTYPE
             {
-                AIRPORT=1,
-                NDB=2,
-                VOR=3,
-                NAMED=11,
-                UNNAMED=28
+                AIRPORT = 1,
+                NDB = 2,
+                VOR = 3,
+                NAMED = 11,
+                UNNAMED = 28
             }
             public WPTYPE wpType;
             public string name;
@@ -52,7 +47,7 @@ namespace BushTripPlugin
             string[] lines = rawText.Split(Environment.NewLine);
             if (lines.Length > 0)
             {
-                if (lines[0]=="I")
+                if (lines[0] == "I")
                 {
                     //first read the version
                     string[] versionItems = lines[1].Split(' ');
@@ -79,9 +74,9 @@ namespace BushTripPlugin
                     //read departure block
                     int numline = 3;
                     string[] elements = lines[numline].Split(' ');
-                    while (elements[0]!="NUMENR")
+                    while (elements[0] != "NUMENR")
                     {
-                        if (elements[0]=="ADEP")
+                        if (elements[0] == "ADEP")
                         {
                             departure = elements[1];
                         }
@@ -135,10 +130,10 @@ namespace BushTripPlugin
                     numenr = int.Parse(elements[1]);
 
                     numline++;
-                    for (int i=0;i<numenr;i++)
+                    for (int i = 0; i < numenr; i++)
                     {
-                        string enr = lines[i+numline];
-                        string[]wpItems = enr.Split(" ");
+                        string enr = lines[i + numline];
+                        string[] wpItems = enr.Split(" ");
                         try
                         {
                             IFormatProvider formatProvider = CultureInfo.InvariantCulture.NumberFormat;
@@ -153,7 +148,8 @@ namespace BushTripPlugin
                             };
                             waypoints.Add(wpt);
                         }
-                        catch (Exception ex) { 
+                        catch (Exception ex)
+                        {
                             Logger.WriteLine(ex.ToString());
                         }
                     }

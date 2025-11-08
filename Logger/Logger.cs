@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimAddonLogger
 {
@@ -18,7 +15,7 @@ namespace SimAddonLogger
 
         private static string _logFileName;
 
-        private static string lastLine="";
+        private static string lastLine = "";
         private static uint nbLastLine = 0;
         private static bool lastlineWritten = false;
 
@@ -34,10 +31,11 @@ namespace SimAddonLogger
                 int lineNumber = frame.GetFileLineNumber();
                 string fileName = Path.GetFileName(frame.GetFileName());
                 // Return the name of the calling method
-                return ( fileName+ ":" + lineNumber + "@" + method.Name );
-            }catch(Exception e)
+                return (fileName + ":" + lineNumber + "@" + method.Name);
+            }
+            catch (Exception e)
             {
-                Trace.WriteLine("Error while getting func infos"+e.Message);
+                Trace.WriteLine("Error while getting func infos" + e.Message);
             }
             return "<unknown func>";
         }
@@ -46,7 +44,7 @@ namespace SimAddonLogger
         {
             // Get the application name
             string appName = Assembly.GetEntryAssembly().GetName().Name;
-            
+
             // Get the path to the user's AppData folder
             string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
@@ -57,10 +55,10 @@ namespace SimAddonLogger
             Directory.CreateDirectory(fullPath);
 
             string logFile = Path.Combine(fullPath, logFileName);
-            
-            if (File.Exists(logFile+".log"))
+
+            if (File.Exists(logFile + ".log"))
             {
-                File.Copy(logFile + ".log", logFile + ".bak",true);
+                File.Copy(logFile + ".log", logFile + ".bak", true);
                 File.Delete(logFile + ".log");
             }
             logger = new TextWriterTraceListener(logFile + ".log");
@@ -106,7 +104,8 @@ namespace SimAddonLogger
             Trace.AutoFlush = true;
         }
 
-        public static void WriteLine(string message) {
+        public static void WriteLine(string message)
+        {
             string callingFunc = GetCallingMethodName();
             string newLine = callingFunc + " : " + message;
             if (newLine != lastLine)
@@ -116,7 +115,7 @@ namespace SimAddonLogger
                     Trace.WriteLine(DateTime.Now.ToLongTimeString() + $" : {lastLine} ({nbLastLine})");
                 }
                 Trace.WriteLine(DateTime.Now.ToLongTimeString() + " : " + newLine);
-                
+
                 lastLine = newLine;
                 nbLastLine = 0;
                 lastlineWritten = true;

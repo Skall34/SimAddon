@@ -1,14 +1,6 @@
-﻿using FSUIPC;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using SimAddonLogger;
 using SimDataManager;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace ATISPlugin
 {
@@ -25,7 +17,7 @@ namespace ATISPlugin
 
     public class FlightplanData
     {
-        public string flight_rules{ get; set; }
+        public string flight_rules { get; set; }
         public string aircraft { get; set; }
         public string aircraft_faa { get; set; }
         public string aircraft_short { get; set; }
@@ -65,7 +57,7 @@ namespace ATISPlugin
         public string last_updated { get; set; }
     }
 
-    public class ControllerData 
+    public class ControllerData
     {
         public int cid { get; set; }
         public string name { get; set; }
@@ -78,7 +70,7 @@ namespace ATISPlugin
         public int visual_range { get; set; }
 
         public string[] text_atis;
-        public  string last_updated { get; set; }
+        public string last_updated { get; set; }
         public string logon_time { get; set; }
     }
 
@@ -172,7 +164,7 @@ namespace ATISPlugin
         {
             // Construire l'URL avec le code ICAO
             string url = $"https://data.vatsim.net/v3/afv-atis-data.json";
-            bool result = false; 
+            bool result = false;
             try
             {
                 // Envoyer la requête HTTP GET
@@ -200,7 +192,7 @@ namespace ATISPlugin
             List<string> airportsInRange = new List<string>();
             foreach (ATISData airport in data)
             {
-                double distance = NavigationHelper.GetDistance(airport.latitude,airport.longitude,targetLatitude,targetLongitude);
+                double distance = NavigationHelper.GetDistance(airport.latitude, airport.longitude, targetLatitude, targetLongitude);
                 if (distance < range)
                 {
                     airportsInRange.Add(airport.name);

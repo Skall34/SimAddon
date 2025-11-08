@@ -18,7 +18,7 @@ namespace SimAddonPlugin
             CRASHING
         }
 
-        public EventType reason{ get; set; }
+        public EventType reason { get; set; }
         public string value { get; set; }
     }
 
@@ -30,7 +30,7 @@ namespace SimAddonPlugin
         enum WindowMode
         {
             FULL,
-            COMPACT           
+            COMPACT
         }
 
         void SetExecutionFolder(string path);
@@ -61,14 +61,14 @@ namespace SimAddonPlugin
         public event OnSimEventHandler OnSimEvent;
         public void ManageSimEvent(object sender, SimEventArg eventArg);
 
-        public delegate DialogResult OnShowMsgboxHandler(object sender, string title, string caption,  MessageBoxButtons buttons);
+        public delegate DialogResult OnShowMsgboxHandler(object sender, string title, string caption, MessageBoxButtons buttons);
         public event OnShowMsgboxHandler OnShowMsgbox;
 
         public delegate DialogResult OnShowDialogHandler(object sender, Form dialog);
         public event OnShowDialogHandler OnShowDialog;
     }
 
-    public  class situation
+    public class situation
     {
         public bool readyToFly { get; set; }
         public double airSpeed { get; set; }
@@ -95,7 +95,7 @@ namespace SimAddonPlugin
 
         public double magVariation { get; set; }
 
-        public  PositionSnapshot position { get; set; }
+        public PositionSnapshot position { get; set; }
 
         public float COM1Frequency { get; set; }
         public float COM1StdbyFrequency { get; set; }

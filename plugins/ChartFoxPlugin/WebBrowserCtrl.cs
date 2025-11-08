@@ -2,10 +2,7 @@
 using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
-using System.Net.Http.Json;
-using System.Reflection;
 using System.Text.Json;
-using System.Windows.Forms;
 
 namespace ChartFoxPlugin
 {
@@ -147,7 +144,7 @@ namespace ChartFoxPlugin
                     try
                     {
                         // Assuming the destination is a URL
-                        string destinationUrl = settings.DestUrl.Replace("<destICAO>",destination);
+                        string destinationUrl = settings.DestUrl.Replace("<destICAO>", destination);
                         Uri uri = new Uri(destinationUrl);
                         webView21.Source = uri;
                     }

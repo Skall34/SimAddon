@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using flightplan;
+﻿using flightplan;
 using simbrief;
 
 namespace BushTripPlugin
@@ -15,7 +10,7 @@ namespace BushTripPlugin
             LittleNavmap result = new LittleNavmap();
             result.CurrentStep = 0;
             result.Item = new LittleNavmapFlightplan();
-            result.Item.Header=new LittleNavmapFlightplanHeader();
+            result.Item.Header = new LittleNavmapFlightplanHeader();
             result.Item.Header.ProgramName = "simbrief";
             int nbWaypoints = 2 + simbrief.navlog.Length;
             result.Item.Waypoints = new LittleNavmapFlightplanWaypoint[nbWaypoints];
@@ -27,9 +22,9 @@ namespace BushTripPlugin
             origin.Pos.Lat = simbrief.origin.pos_lat;
             origin.Type = "AIRPORT";
             origin.Region = simbrief.origin.icao_region;
-            if (simbrief.origin.trans_level!=0)
+            if (simbrief.origin.trans_level != 0)
             {
-                origin.Comment += "Transition altitude: " + simbrief.origin.trans_alt.ToString()+Environment.NewLine;
+                origin.Comment += "Transition altitude: " + simbrief.origin.trans_alt.ToString() + Environment.NewLine;
             }
             if (simbrief.origin.trans_alt != 0)
             {
@@ -57,23 +52,28 @@ namespace BushTripPlugin
                     case "apt":
                         {
                             wp.Type = "AIRPORT";
-                        }; break;
+                        }
+                        ; break;
                     case "ltlg":
                         {
                             wp.Type = "USER";
-                        }; break;
+                        }
+                        ; break;
                     case "vor":
                         {
                             wp.Type = "VOR";
-                        }; break;
+                        }
+                        ; break;
                     case "wpt":
                         {
                             wp.Type = "WAYPOINT";
-                        }; break;
+                        }
+                        ; break;
                     default:
                         {
                             wp.Type = "WAYPOINT";
-                        };break;
+                        }
+                        ; break;
                 }
                 result.Item.Waypoints[i] = wp;
             }
@@ -88,14 +88,14 @@ namespace BushTripPlugin
             dest.Type = "AIRPORT";
             if (simbrief.origin.trans_level != 0)
             {
-                dest.Comment += "Transition altitude: " + simbrief.destination.trans_alt.ToString() + Environment.NewLine ;
+                dest.Comment += "Transition altitude: " + simbrief.destination.trans_alt.ToString() + Environment.NewLine;
             }
             if (simbrief.origin.trans_alt != 0)
             {
                 dest.Comment += "Transition level: " + simbrief.destination.trans_level.ToString() + Environment.NewLine;
             }
 
-            result.Item.Waypoints[nbWaypoints-1] = dest;
+            result.Item.Waypoints[nbWaypoints - 1] = dest;
 
             return result;
         }
@@ -107,7 +107,7 @@ namespace BushTripPlugin
             result.Item.Header = new LittleNavmapFlightplanHeader();
             result.Item.Header.ProgramName = "FMS";
             result.Item.Waypoints = new LittleNavmapFlightplanWaypoint[fmsData.numenr];
-            for (int i=0;i<fmsData.numenr;i++)
+            for (int i = 0; i < fmsData.numenr; i++)
             {
                 fms.fmsWpt wpt = fmsData.waypoints[i];
                 LittleNavmapFlightplanWaypoint lnmpWp = new LittleNavmapFlightplanWaypoint()
@@ -129,23 +129,28 @@ namespace BushTripPlugin
                     case fms.fmsWpt.WPTYPE.AIRPORT:
                         {
                             lnmpWp.Type = "AIRPORT";
-                        };break;
+                        }
+                        ; break;
                     case fms.fmsWpt.WPTYPE.NDB:
                         {
                             lnmpWp.Type = "NDB";
-                        };break;
+                        }
+                        ; break;
                     case fms.fmsWpt.WPTYPE.VOR:
                         {
                             lnmpWp.Type = "VOR";
-                        }; break;
+                        }
+                        ; break;
                     case fms.fmsWpt.WPTYPE.NAMED:
                         {
                             lnmpWp.Type = "WAYPOINT";
-                        }; break;
+                        }
+                        ; break;
                     case fms.fmsWpt.WPTYPE.UNNAMED:
                         {
                             lnmpWp.Type = "USER";
-                        }; break;
+                        }
+                        ; break;
 
 
                 }

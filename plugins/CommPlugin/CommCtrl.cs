@@ -2,7 +2,6 @@
 using SimDataManager;
 using System.Drawing.Text;
 using System.Reflection;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CommPlugin
 {
@@ -129,7 +128,7 @@ namespace CommPlugin
                 rotaryKnobS2.Value = (squawk / 100) % 10; // Hundreds place
                 rotaryKnobS3.Value = (squawk / 10) % 10; // Tens place
                 rotaryKnobS4.Value = squawk % 10; // Units place
-                
+
                 gotData = true;
             }
 

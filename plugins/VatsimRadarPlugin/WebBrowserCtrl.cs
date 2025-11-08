@@ -2,10 +2,7 @@
 using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
-using System.Net.Http.Json;
-using System.Reflection;
 using System.Text.Json;
-using System.Windows.Forms;
 
 namespace ChartFoxPlugin
 {
@@ -30,8 +27,8 @@ namespace ChartFoxPlugin
         void loadSettings()
         {
             string currentDir = executionFolder;
-            
-            string filePath = Path.Combine(currentDir,"settings.json"); // Path to your JSON file
+
+            string filePath = Path.Combine(currentDir, "settings.json"); // Path to your JSON file
             try
             {
                 // Read the JSON file content

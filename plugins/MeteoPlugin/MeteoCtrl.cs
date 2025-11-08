@@ -1,11 +1,8 @@
 ﻿using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
-using System;
 using System.Drawing.Text;
-using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using static MeteoPlugin.Meteo;
 
 namespace MeteoPlugin
@@ -203,7 +200,7 @@ namespace MeteoPlugin
                         if (airport != null)
                         {
                             //update the name of the airport in the metar data if there any
-                            if ((metarData != null)&&(metarData.icao!= null))
+                            if ((metarData != null) && (metarData.icao != null))
                             {
                                 metarData.icao.name = airport.name;
                             }
@@ -344,7 +341,7 @@ namespace MeteoPlugin
                     e.Graphics.DrawString(lb.Items[i].ToString(), myFont, myBrush, e.Bounds, StringFormat.GenericDefault);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -408,7 +405,7 @@ namespace MeteoPlugin
 
         public void ManageSimEvent(object sender, SimEventArg eventArg)
         {
-            if ( eventArg.reason == SimEventArg.EventType.SETDESTINATION)
+            if (eventArg.reason == SimEventArg.EventType.SETDESTINATION)
             {
                 string icao = eventArg.value;
                 if (Regex.IsMatch(icao, @"^[A-Z0-9]{4}$"))

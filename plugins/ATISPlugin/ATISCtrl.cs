@@ -3,7 +3,6 @@ using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace ATISPlugin
 {
@@ -23,7 +22,7 @@ namespace ATISPlugin
         //                            .Replace("BKN", "BROKEN AT")
         //                            .Replace(" /",". ");
 
-        private Dictionary<string, string> abbreviations = new Dictionary<string,string>{
+        private Dictionary<string, string> abbreviations = new Dictionary<string, string>{
             {@" \",". " },
             {"ACK",". ACKNOWLEDGE " },
             {"ADVS",". ADVISE" },
@@ -157,7 +156,7 @@ namespace ATISPlugin
 
         private void annonce(string textToSpeech)
         {
-            if (OnTalk!=null)
+            if (OnTalk != null)
             {
                 OnTalk(this, textToSpeech);
             }
@@ -193,7 +192,8 @@ namespace ATISPlugin
                                 try
                                 {
                                     cbICAO.Items.Remove(a);
-                                }catch(Exception ex)
+                                }
+                                catch (Exception)
                                 {
 
                                 }
@@ -244,7 +244,7 @@ namespace ATISPlugin
                 }
                 else
                 {
-                    decoded = debut + hour + ":" + minute+ " ." + fin;
+                    decoded = debut + hour + ":" + minute + " ." + fin;
                 }
             }
 
@@ -256,7 +256,7 @@ namespace ATISPlugin
                 string temp = result.Groups["temp"].Value;
                 string dew = result.Groups["dew"].Value;
                 string fin = result.Groups["end"].Value;
-                decoded = debut +" AIR TEMPERATURE "+ temp + "°C, DEW POINT " + dew+"°C ." + fin;
+                decoded = debut + " AIR TEMPERATURE " + temp + "°C, DEW POINT " + dew + "°C ." + fin;
             }
 
             r = new Regex(@"^(?<start>.+)(?<dir>\d{3})(?<speed>\d{2})KT(?<end>.*)");
@@ -267,7 +267,7 @@ namespace ATISPlugin
                 string dir = result.Groups["dir"].Value;
                 string speed = result.Groups["speed"].Value;
                 string fin = result.Groups["end"].Value;
-                decoded = debut + ". WIND : " + speed + " KNOTS AT " + dir+ " ." + fin;
+                decoded = debut + ". WIND : " + speed + " KNOTS AT " + dir + " ." + fin;
             }
 
             r = new Regex(@"^(?<start>.+)(?<startdir>\d{3})V(?<stopdir>\d{3})(?<end>.*)");
@@ -278,7 +278,7 @@ namespace ATISPlugin
                 string startdir = result.Groups["startdir"].Value;
                 string stopdir = result.Groups["stopdir"].Value;
                 string fin = result.Groups["end"].Value;
-                decoded = debut + " VARIABLE BETWEEN " + startdir + " AND " + stopdir+ " ." + fin;
+                decoded = debut + " VARIABLE BETWEEN " + startdir + " AND " + stopdir + " ." + fin;
             }
 
             r = new Regex(@"^(?<start>.+)TRL (?<trl>\d{2})(?<end>.+)");
@@ -288,7 +288,7 @@ namespace ATISPlugin
                 string debut = result.Groups["start"].Value;
                 string trl = result.Groups["trl"].Value;
                 string fin = result.Groups["end"].Value;
-                decoded = debut + ". TRANSITION LEVEL " + trl +" ."+ Environment.NewLine + fin;
+                decoded = debut + ". TRANSITION LEVEL " + trl + " ." + Environment.NewLine + fin;
             }
 
             r = new Regex(@"^(?<start>.+)BKN(?<level>\d{3})(?<end>.+)");
@@ -325,9 +325,9 @@ namespace ATISPlugin
             foreach (string key in abbreviations.Keys)
             {
                 string[] elements = decoded.Split(" ");
-                string[] newElements=new string[elements.Length];
+                string[] newElements = new string[elements.Length];
 
-                for (int i= 0; i < elements.Length; i++)
+                for (int i = 0; i < elements.Length; i++)
                 {
                     if (elements[i] != key)
                     {
@@ -338,7 +338,7 @@ namespace ATISPlugin
                         newElements[i] = abbreviations[key];
                     }
                 }
-                decoded = string.Join(" ",newElements);
+                decoded = string.Join(" ", newElements);
             }
             return decoded;
         }
@@ -380,7 +380,7 @@ namespace ATISPlugin
                                 {
                                     string atisText = decodeATIS(s);
                                     tbATISText.Text += atisText + " ";
-                                    speechText += atisText+Environment.NewLine;
+                                    speechText += atisText + Environment.NewLine;
                                 }
                                 annonce(speechText);
                                 tbATISText.Text += Environment.NewLine + "-------------------" + Environment.NewLine;

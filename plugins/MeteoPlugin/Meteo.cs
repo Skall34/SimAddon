@@ -1,7 +1,5 @@
 ﻿using SimAddonLogger;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using static MeteoPlugin.Meteo.METARData;
 
 namespace MeteoPlugin
 {
@@ -26,12 +24,12 @@ namespace MeteoPlugin
                 }
             }
 
-            public class METARIcao:METARItem
+            public class METARIcao : METARItem
             {
                 public string code { get; set; }
                 public string name { get; set; }
 
-                public METARIcao(string category,string METARPart)
+                public METARIcao(string category, string METARPart)
                 {
                     _category = category;
                     code = METARPart;
@@ -56,10 +54,11 @@ namespace MeteoPlugin
             public class METARDate : METARItem
             {
                 public string day { get; set; }
-                public  string hour { get; set; }
+                public string hour { get; set; }
                 public string minutes { get; set; }
 
-                public METARDate (string category, string METARPart) {
+                public METARDate(string category, string METARPart)
+                {
                     _category = category;
                     Regex r = new Regex("^(?<day>\\d{2})(?<hour>\\d{2})(?<minute>\\d{2})Z");
                     Match result = r.Match(METARPart);
@@ -77,17 +76,17 @@ namespace MeteoPlugin
 
                 public override string ToString()
                 {
-                    return _category + " : " + day+"/"+ hour+":"+minutes;                   
+                    return _category + " : " + day + "/" + hour + ":" + minutes;
                 }
 
                 public override string ToSpeech()
                 {
                     string speechMinutes = minutes;
-                    if (minutes=="00")
+                    if (minutes == "00")
                     {
                         minutes = " 0 0";
                     }
-                    return "at " + hour+" "+minutes+" .";
+                    return "at " + hour + " " + minutes + " .";
                 }
             }
             public class METARWind : METARItem
@@ -138,7 +137,7 @@ namespace MeteoPlugin
                     }
                     if (HasGusts)
                     {
-                        result += string.Format(" with {0} {1} gusts",GustsSpeed,Unit);
+                        result += string.Format(" with {0} {1} gusts", GustsSpeed, Unit);
                     }
                     return result;
                 }
@@ -220,7 +219,7 @@ namespace MeteoPlugin
                     {
                         Distance = result.Groups["distance"].Value;
                         Unit = result.Groups["unit"].Value;
-                        if (Unit=="")
+                        if (Unit == "")
                         {
                             //in case of no unit, use meters
                             Unit = "M";
@@ -233,19 +232,19 @@ namespace MeteoPlugin
                     }
                     else
                     {
-                            throw new InvalidDataException("Invalid METAR wind variation format" + METARPart);
+                        throw new InvalidDataException("Invalid METAR wind variation format" + METARPart);
                     }
 
                 }
 
                 public override string ToString()
                 {
-                        return _category + " : " + Distance + " " + Unit;
+                    return _category + " : " + Distance + " " + Unit;
                 }
                 public override string ToSpeech()
                 {
                     string speechUnit = "meters";
-                    if (Unit=="KM")
+                    if (Unit == "KM")
                     {
                         speechUnit = "kilometers";
                     }
@@ -253,7 +252,7 @@ namespace MeteoPlugin
                     {
                         speechUnit = "miles";
                     }
-                    return _category + " : " + Distance + " " + speechUnit+" .";
+                    return _category + " : " + Distance + " " + speechUnit + " .";
                 }
             }
 
@@ -277,7 +276,7 @@ namespace MeteoPlugin
                 public METARRunwayVisualRange(string category, string METARPart)
                 {
                     _category = category;
-                    string[]subparts = METARPart.Split('/');
+                    string[] subparts = METARPart.Split('/');
                     if (subparts.Length == 3)
                     {
                         Runway = subparts[0].Substring(1);
@@ -311,7 +310,7 @@ namespace MeteoPlugin
                     }
                     else
                     {
-                        throw new InvalidDataException("bad RVR value "+METARPart);
+                        throw new InvalidDataException("bad RVR value " + METARPart);
                     }
 
                 }
@@ -355,7 +354,7 @@ namespace MeteoPlugin
                         { "SH","shower" },
                         { "TS","thunderstorm" },
                         { "FZ","freezing" },
-                    };          
+                    };
                 }
 
 
@@ -494,7 +493,7 @@ namespace MeteoPlugin
                 public override string ToString()
                 {
                     string result = _category + " : " + Qualifier + " ";
-                    if (Descriptor!=string.Empty)
+                    if (Descriptor != string.Empty)
                     {
                         result += Descriptor + " ";
                     }
@@ -570,7 +569,7 @@ namespace MeteoPlugin
                     else
                     {
                         IsCAVOK = false;
-                        if ((METARPart == "CLR")||(METARPart=="NSC"))
+                        if ((METARPart == "CLR") || (METARPart == "NSC"))
                         {
                             Amount = METARPart;
                         }
@@ -587,7 +586,7 @@ namespace MeteoPlugin
                             }
                             else
                             {
-                                throw new InvalidDataException("Error while parsing cloud layer "+METARPart);
+                                throw new InvalidDataException("Error while parsing cloud layer " + METARPart);
                             }
                         }
                     }
@@ -605,7 +604,7 @@ namespace MeteoPlugin
                     {
                         try
                         {
-                            if ((Amount == "CLR")||(Amount == "NSC"))
+                            if ((Amount == "CLR") || (Amount == "NSC"))
                             {
                                 result += " : " + CloudAmountValue.Values[Amount];
                             }
@@ -680,7 +679,7 @@ namespace MeteoPlugin
                 {
                     _category = category;
                     Regex r = new Regex("^(?<temp>M?\\d{2})\\/(?<dew>M?\\d{2})$");
-                    Match result= r.Match(METARPart);
+                    Match result = r.Match(METARPart);
                     if (result.Success)
                     {
                         if (result.Groups["temp"].Value.StartsWith('M'))
@@ -696,7 +695,8 @@ namespace MeteoPlugin
                         {
                             DewPointTemperature = -1 * int.Parse(result.Groups["dew"].Value.Substring(1));
                         }
-                        else {
+                        else
+                        {
                             DewPointTemperature = int.Parse(result.Groups["dew"].Value);
                         }
                     }
@@ -725,7 +725,9 @@ namespace MeteoPlugin
             public class METARAltimeter : METARItem
             {
 
-                public int hpaValue { get
+                public int hpaValue
+                {
+                    get
                     {
                         if (Unit == "hpa")
                         {
@@ -737,7 +739,9 @@ namespace MeteoPlugin
                         }
                     }
                 }
-                public float inHgValue { get
+                public float inHgValue
+                {
+                    get
                     {
                         if (Unit == "hpa")
                         {
@@ -778,11 +782,11 @@ namespace MeteoPlugin
 
                 public override string ToString()
                 {
-                    return _category + " : " + hpaValue.ToString() + " hpa ( "+inHgValue.ToString("0.00")+" inHg )";
+                    return _category + " : " + hpaValue.ToString() + " hpa ( " + inHgValue.ToString("0.00") + " inHg )";
                 }
                 public override string ToSpeech()
                 {
-                    return  "QNH : " + hpaValue.ToString() + " hectopascal .";
+                    return "QNH : " + hpaValue.ToString() + " hectopascal .";
                 }
             }
 
@@ -790,14 +794,14 @@ namespace MeteoPlugin
             {
                 public string Runway { get; set; }
 
-                public METARWindShear(string category,string METARPart)
+                public METARWindShear(string category, string METARPart)
                 {
                     _category = category;
                     Regex r = new Regex(@"^(RWY(?<runway>\\d{2}\\S?))|(ALL RWY)");
                     Match result = r.Match(METARPart);
                     if (result.Success)
                     {
-                        if(METARPart=="ALL RWY")
+                        if (METARPart == "ALL RWY")
                         {
                             Runway = "all runways";
                         }
@@ -819,7 +823,8 @@ namespace MeteoPlugin
                     {
                         result += " on " + Runway;
                     }
-                    else {
+                    else
+                    {
                         result = " on runway " + Runway;
                     }
                     return result;
@@ -827,7 +832,7 @@ namespace MeteoPlugin
             }
 
             public List<METARItem> items;
-            public  string ICAO { get; set; }
+            public string ICAO { get; set; }
             public METARDate Date { get; set; }
             public METARIcao icao { get; set; }
 
@@ -852,7 +857,7 @@ namespace MeteoPlugin
 
             public METARData(string rawMETAR)
             {
-                items=new List<METARItem>();
+                items = new List<METARItem>();
                 if (rawMETAR != null)
                 {
                     try
@@ -885,7 +890,7 @@ namespace MeteoPlugin
 
                             index++;
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             //can happen if there is no wind variation
                         }
@@ -896,7 +901,7 @@ namespace MeteoPlugin
                             items.Add(Visibility);
                             index++;
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
 
@@ -906,7 +911,7 @@ namespace MeteoPlugin
                             items.Add(RunwayVisualRange);
                             index++;
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
 
@@ -921,7 +926,7 @@ namespace MeteoPlugin
                                 items.Add(PresentWeatherItem);
                                 index++;
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 //if we can't decode that as weather when we're done with weather decoding. 
                                 weatherdone = true;
@@ -939,7 +944,7 @@ namespace MeteoPlugin
                                 items.Add(layer);
                                 index++;
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 cloudlayersDone = true;
                             }
@@ -951,7 +956,7 @@ namespace MeteoPlugin
                             items.Add(Temperature);
                             index++;
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
 
@@ -961,7 +966,7 @@ namespace MeteoPlugin
                             items.Add(Altimeter);
                             index++;
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
 
@@ -971,7 +976,7 @@ namespace MeteoPlugin
                             items.Add(RecentWeather);
                             index++;
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
 
@@ -987,7 +992,7 @@ namespace MeteoPlugin
                                 index++;
                             }
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             Logger.WriteLine("bad windshear definition " + parts[index]);
                         }
@@ -1023,7 +1028,7 @@ namespace MeteoPlugin
                             items.Add(TemporaryWind);
                             index++;
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
 
                         }
@@ -1034,7 +1039,7 @@ namespace MeteoPlugin
                             items.Add(TemporaryVisibility);
                             index++;
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
 
@@ -1044,7 +1049,7 @@ namespace MeteoPlugin
                             items.Add(TemporaryWeather);
                             index++;
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
 
@@ -1059,13 +1064,13 @@ namespace MeteoPlugin
                                 items.Add(layer);
                                 index++;
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 cloudlayersDone = true;
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         Logger.WriteLine("Error while decoding metar " + rawMETAR);
                     }
@@ -1081,17 +1086,17 @@ namespace MeteoPlugin
                 string decoded = "";
                 try
                 {
-                        foreach (METARItem item in items)
+                    foreach (METARItem item in items)
+                    {
+                        try
                         {
-                            try
-                            {
-                                decoded += item.ToString() + Environment.NewLine;
-                            }
-                            catch (Exception ex)
-                            {
-                                Logger.WriteLine(ex.Message);
-                            }
+                            decoded += item.ToString() + Environment.NewLine;
                         }
+                        catch (Exception ex)
+                        {
+                            Logger.WriteLine(ex.Message);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -1130,7 +1135,7 @@ namespace MeteoPlugin
 
         private static readonly HttpClient httpClient = new HttpClient();
 
-        public static async  Task<string> getMetar(string ICAO)
+        public static async Task<string> getMetar(string ICAO)
         {
             // Construire l'URL avec le code ICAO
             //string url = $"https://aviationweather.gov/cgi-bin/data/metar.php?ids={ICAO}";

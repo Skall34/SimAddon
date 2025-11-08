@@ -1,20 +1,14 @@
-﻿using System.Windows.Forms;
-using System.Xml.Serialization;
-using SimDataManager;
-using SimAddonPlugin;
+﻿using flightplan;
+using FlightplanPlugin;
+using FlightplanPlugin.Properties;
 //using System.Text.Json;
-using System;
 using Newtonsoft.Json;
 using SimAddonLogger;
-using SimAddonControls;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Runtime.Intrinsics.Arm;
-using System.Globalization;
+using SimAddonPlugin;
 using simbrief;
-using flightplan;
-using System.Numerics;
-using FlightplanPlugin.Properties;
-using FlightplanPlugin;
+using SimDataManager;
+using System.Globalization;
+using System.Xml.Serialization;
 
 namespace BushTripPlugin
 {
@@ -812,11 +806,11 @@ namespace BushTripPlugin
                             //download the pdf file to a temporary location
                             //save it in the temp folder
                             string saveFolder = Settings.Default.PdfFolder;
-                            if (saveFolder==string.Empty)
+                            if (saveFolder == string.Empty)
                             {
                                 saveFolder = Path.GetTempPath();
                             }
-                            
+
                             tmpPDFfile = Path.Combine(saveFolder, SimBriefPdfFileLink);
                             client.DownloadFile(pdfFileName, tmpPDFfile);
                             //open the pdf file
