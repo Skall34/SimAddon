@@ -59,6 +59,7 @@
             panel1 = new Panel();
             splitContainer2 = new SplitContainer();
             compas1 = new SimAddonControls.Compas();
+            createNewFlightplanToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -117,24 +118,24 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { createToolStripMenuItem, toolStripSeparator1, importToolStripMenuItem, exportToolStripMenuItem, toolStripSeparator4, simbriefToolStripMenuItem, toolStripSeparator2, restartToolStripMenuItem, toolStripSeparator3, settingsToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(119, 160);
+            contextMenuStrip1.Size = new Size(181, 182);
             // 
             // createToolStripMenuItem
             // 
             createToolStripMenuItem.Name = "createToolStripMenuItem";
-            createToolStripMenuItem.Size = new Size(118, 22);
+            createToolStripMenuItem.Size = new Size(180, 22);
             createToolStripMenuItem.Text = "Create";
             createToolStripMenuItem.Click += createToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(115, 6);
+            toolStripSeparator1.Size = new Size(177, 6);
             // 
             // importToolStripMenuItem
             // 
             importToolStripMenuItem.Name = "importToolStripMenuItem";
-            importToolStripMenuItem.Size = new Size(118, 22);
+            importToolStripMenuItem.Size = new Size(180, 22);
             importToolStripMenuItem.Text = "Import";
             importToolStripMenuItem.Click += importToolStripMenuItem_Click;
             // 
@@ -142,26 +143,26 @@
             // 
             exportToolStripMenuItem.Enabled = false;
             exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            exportToolStripMenuItem.Size = new Size(118, 22);
+            exportToolStripMenuItem.Size = new Size(180, 22);
             exportToolStripMenuItem.Text = "Export";
             exportToolStripMenuItem.Click += exportToolStripMenuItem_Click;
             // 
             // toolStripSeparator4
             // 
             toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new Size(115, 6);
+            toolStripSeparator4.Size = new Size(177, 6);
             // 
             // simbriefToolStripMenuItem
             // 
-            simbriefToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { getLastFlightplanToolStripMenuItem, getFlightBriefingToolStripMenuItem });
+            simbriefToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createNewFlightplanToolStripMenuItem, getLastFlightplanToolStripMenuItem, getFlightBriefingToolStripMenuItem });
             simbriefToolStripMenuItem.Name = "simbriefToolStripMenuItem";
-            simbriefToolStripMenuItem.Size = new Size(118, 22);
+            simbriefToolStripMenuItem.Size = new Size(180, 22);
             simbriefToolStripMenuItem.Text = "Simbrief";
             // 
             // getLastFlightplanToolStripMenuItem
             // 
             getLastFlightplanToolStripMenuItem.Name = "getLastFlightplanToolStripMenuItem";
-            getLastFlightplanToolStripMenuItem.Size = new Size(167, 22);
+            getLastFlightplanToolStripMenuItem.Size = new Size(187, 22);
             getLastFlightplanToolStripMenuItem.Text = "Get last flightplan";
             getLastFlightplanToolStripMenuItem.Click += getLastFlightplanToolStripMenuItem_Click;
             // 
@@ -169,32 +170,32 @@
             // 
             getFlightBriefingToolStripMenuItem.Enabled = false;
             getFlightBriefingToolStripMenuItem.Name = "getFlightBriefingToolStripMenuItem";
-            getFlightBriefingToolStripMenuItem.Size = new Size(167, 22);
+            getFlightBriefingToolStripMenuItem.Size = new Size(187, 22);
             getFlightBriefingToolStripMenuItem.Text = "Get flight briefing";
             getFlightBriefingToolStripMenuItem.Click += getFlightBriefingToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(115, 6);
+            toolStripSeparator2.Size = new Size(177, 6);
             // 
             // restartToolStripMenuItem
             // 
             restartToolStripMenuItem.Enabled = false;
             restartToolStripMenuItem.Name = "restartToolStripMenuItem";
-            restartToolStripMenuItem.Size = new Size(118, 22);
+            restartToolStripMenuItem.Size = new Size(180, 22);
             restartToolStripMenuItem.Text = "Restart";
             restartToolStripMenuItem.Click += restartToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(115, 6);
+            toolStripSeparator3.Size = new Size(177, 6);
             // 
             // settingsToolStripMenuItem
             // 
             settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            settingsToolStripMenuItem.Size = new Size(118, 22);
+            settingsToolStripMenuItem.Size = new Size(180, 22);
             settingsToolStripMenuItem.Text = "Settings";
             settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
             // 
@@ -348,6 +349,13 @@
             compas1.TabIndex = 1;
             compas1.Unit = "NM";
             // 
+            // createNewFlightplanToolStripMenuItem
+            // 
+            createNewFlightplanToolStripMenuItem.Name = "createNewFlightplanToolStripMenuItem";
+            createNewFlightplanToolStripMenuItem.Size = new Size(187, 22);
+            createNewFlightplanToolStripMenuItem.Text = "Create new flightplan";
+            createNewFlightplanToolStripMenuItem.Click += createNewFlightplanToolStripMenuItem_Click;
+            // 
             // FlightplanCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -407,5 +415,6 @@
         private ToolStripMenuItem getLastFlightplanToolStripMenuItem;
         private ToolStripMenuItem getFlightBriefingToolStripMenuItem;
         private SplitContainer splitContainer2;
+        private ToolStripMenuItem createNewFlightplanToolStripMenuItem;
     }
 }

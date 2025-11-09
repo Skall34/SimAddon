@@ -7,8 +7,11 @@ using SimAddonLogger;
 using SimAddonPlugin;
 using simbrief;
 using SimDataManager;
+using System.Diagnostics;
 using System.Globalization;
 using System.Xml.Serialization;
+using static SimDataManager.SiteConnection;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace BushTripPlugin
 {
@@ -827,6 +830,24 @@ namespace BushTripPlugin
                         }
                     }
                 }
+            }
+        }
+
+        private void createNewFlightplanToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string simbriefUrl = "https://dispatch.simbrief.com/options/new";
+            // Open the default browser to the login URL
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = simbriefUrl,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("Simbrief: could not open browser for new flightplan: " + ex.Message);
             }
         }
     }
