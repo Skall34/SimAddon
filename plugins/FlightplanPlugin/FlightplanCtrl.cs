@@ -378,6 +378,11 @@ namespace BushTripPlugin
                         // Remplacez 'FlightPlan' par la classe générée à partir du XSD
                         XmlSerializer serializer = new XmlSerializer(typeof(OFP));
 
+                        //lit le fichier, nettoie le en utilisant simbriefXmlHelper
+                        string rawXml = File.ReadAllText(filePath); 
+                        string cleanXml = simbrief.SimbriefXmlHelper.Sanitize(rawXml);
+                        File.WriteAllText(filePath, cleanXml);
+
                         // Lecture du fichier et désérialisation
                         using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
                         {
@@ -441,8 +446,8 @@ namespace BushTripPlugin
                 }
                 catch (Exception ex)
                 {
-                    Logger.WriteLine(ex.ToString());
-                    ShowMsgBox(ex.Message, "Error during import", MessageBoxButtons.OK);
+                    Logger.WriteLine(ex.ToString()+" : "+ex.InnerException.Message);
+                    ShowMsgBox(ex.Message +" : "+ex.InnerException.Message, "Error during import", MessageBoxButtons.OK);
                 }
 
             }

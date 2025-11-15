@@ -16,7 +16,13 @@
         <xs:element name="date_expire_is_estimated" type="xs:string" minOccurs="0" />
         <xs:element name="date_modified" type="xs:string" minOccurs="0" />
         <xs:element name="notam_schedule" type="xs:string" minOccurs="0" />
-        <xs:element name="notam_html" type="xs:string" minOccurs="0" />
+        <xs:element name="notam_html" minOccurs="0">
+          <xs:complexType mixed="true">
+            <xs:sequence>
+              <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name="notam_text" type="xs:string" minOccurs="0" />
         <xs:element name="notam_raw" type="xs:string" minOccurs="0" />
         <xs:element name="notam_nrc" type="xs:string" minOccurs="0" />
@@ -122,8 +128,14 @@
       <xs:sequence>
         <xs:element name="takeoff_altn" type="xs:string" minOccurs="0" />
         <xs:element name="enroute_altn" type="xs:string" minOccurs="0" />
-        <xs:element name="etops" type="xs:string" minOccurs="0" />
-        <xs:element name="sigmets" minOccurs="0" maxOccurs="1">
+          <xs:element name="etops" minOccurs="0" >
+           <xs:complexType>
+             <xs:sequence>
+               <xs:element name="rule" type="xs:string" minOccurs="0" />
+             </xs:sequence> 
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="sigmets" minOccurs="0" maxOccurs="1">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="sigmet" minOccurs="0" maxOccurs="unbounded">
@@ -148,10 +160,69 @@
           </xs:complexType>
         </xs:element>
         <xs:element name="tracks" type="xs:string" minOccurs="0" />
-        <xs:element name="vatsim_prefile" type="xs:string" minOccurs="0" />
-        <xs:element name="ivao_prefile" type="xs:string" minOccurs="0" />
-        <xs:element name="pilotedge_prefile" type="xs:string" minOccurs="0" />
-        <xs:element name="poscon_prefile" type="xs:string" minOccurs="0" />
+        <xs:element name="vatsim_prefile" minOccurs="0" >
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="site" type="xs:string" minOccurs="0" />
+              <xs:element name="link" type="xs:string" minOccurs="0" />
+                    <xs:element name="form" minOccurs="0">
+                    <xs:complexType mixed="true">
+                      <xs:sequence>
+                        <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+                      </xs:sequence>
+                    </xs:complexType>
+                    </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ivao_prefile" minOccurs="0" >
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="site" type="xs:string" minOccurs="0" />
+              <xs:element name="link" type="xs:string" minOccurs="0" />
+              <xs:element name="form" minOccurs="0">
+                <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="pilotedge_prefile" minOccurs="0" >
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="site" type="xs:string" minOccurs="0" />
+              <xs:element name="link" type="xs:string" minOccurs="0" />
+              <xs:element name="form" minOccurs="0">
+                <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="poscon_prefile" minOccurs="0" >
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="site" type="xs:string" minOccurs="0" />
+              <xs:element name="link" type="xs:string" minOccurs="0" />
+              <xs:element name="form" minOccurs="0">
+                <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
         <xs:element name="map_data" type="xs:string" minOccurs="0" />
         <xs:element name="fetch" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
@@ -421,8 +492,13 @@
               <xs:element name="contingency" type="xs:string" minOccurs="0" />
               <xs:element name="alternate_burn" type="xs:string" minOccurs="0" />
               <xs:element name="reserve" type="xs:string" minOccurs="0" />
-              <xs:element name="etops" type="xs:string" minOccurs="0" />
-              <xs:element name="extra" type="xs:string" minOccurs="0" />
+              <xs:element name="etops" minOccurs="0" >
+               <xs:complexType>
+                 <xs:sequence>
+                   <xs:element name="rule" type="xs:string" minOccurs="0" />
+                 </xs:sequence> 
+                </xs:complexType>
+              </xs:element>              <xs:element name="extra" type="xs:string" minOccurs="0" />
               <xs:element name="extra_required" type="xs:string" minOccurs="0" />
               <xs:element name="extra_optional" type="xs:string" minOccurs="0" />
               <xs:element name="min_takeoff" type="xs:string" minOccurs="0" />
@@ -722,7 +798,13 @@
             <xs:sequence>
               <xs:element name="nat_tracks" type="xs:string" minOccurs="0" />
               <xs:element name="tlr_section" type="xs:string" minOccurs="0" />
-              <xs:element name="plan_html" type="xs:string" minOccurs="0" />
+              <xs:element name="plan_html" minOccurs="0">
+                <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>         
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -1321,7 +1403,13 @@
                     <xs:element name="name" type="xs:string" minOccurs="0" />
                     <xs:element name="site" type="xs:string" minOccurs="0" />
                     <xs:element name="link" type="xs:string" minOccurs="0" />
-                    <xs:element name="form" type="xs:string" minOccurs="0" />
+                    <xs:element name="form" minOccurs="0">
+                      <xs:complexType mixed="true">
+                        <xs:sequence>
+                          <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -1331,7 +1419,13 @@
                     <xs:element name="name" type="xs:string" minOccurs="0" />
                     <xs:element name="site" type="xs:string" minOccurs="0" />
                     <xs:element name="link" type="xs:string" minOccurs="0" />
-                    <xs:element name="form" type="xs:string" minOccurs="0" />
+                    <xs:element name="form"  minOccurs="0">
+                      <xs:complexType mixed="true">
+                        <xs:sequence>
+                          <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -1341,7 +1435,13 @@
                     <xs:element name="name" type="xs:string" minOccurs="0" />
                     <xs:element name="site" type="xs:string" minOccurs="0" />
                     <xs:element name="link" type="xs:string" minOccurs="0" />
-                    <xs:element name="form" type="xs:string" minOccurs="0" />
+                    <xs:element name="form" minOccurs="0">
+                    <xs:complexType mixed="true">
+                      <xs:sequence>
+                        <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+                      </xs:sequence>
+                    </xs:complexType>
+                    </xs:element>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -1351,7 +1451,13 @@
                     <xs:element name="name" type="xs:string" minOccurs="0" />
                     <xs:element name="site" type="xs:string" minOccurs="0" />
                     <xs:element name="link" type="xs:string" minOccurs="0" />
-                    <xs:element name="form" type="xs:string" minOccurs="0" />
+                    <xs:element name="form" minOccurs="0">
+                      <xs:complexType mixed="true">
+                        <xs:sequence>
+                          <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -1415,7 +1521,13 @@
               <xs:element name="planformat" type="xs:string" minOccurs="0" />
               <xs:element name="pounds" type="xs:string" minOccurs="0" />
               <xs:element name="navlog" type="xs:string" minOccurs="0" />
-              <xs:element name="etops" type="xs:string" minOccurs="0" />
+              <xs:element name="etops" minOccurs="0" >
+               <xs:complexType>
+                 <xs:sequence>
+                   <xs:element name="rule" type="xs:string" minOccurs="0" />
+                 </xs:sequence> 
+                </xs:complexType>
+              </xs:element>
               <xs:element name="stepclimbs" type="xs:string" minOccurs="0" />
               <xs:element name="tlr" type="xs:string" minOccurs="0" />
               <xs:element name="notams_opt" type="xs:string" minOccurs="0" />
