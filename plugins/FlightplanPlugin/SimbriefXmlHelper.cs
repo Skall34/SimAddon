@@ -16,15 +16,21 @@ namespace simbrief
         // remplace les <input ...> non auto-fermés par <input .../>
         private static readonly Regex InputTagFixRegex = new Regex(@"<input([^>]*)(?<!/)>", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        // éléments à entourer par CDATA
+        // éléments à entourer par CDATA (on ne change pas leur contenu autrement)
         private static readonly string[] ElementsToWrapCData = new[]
         {
-            "link",
             "pilotedge_prefile",
             "vatsim_prefile",
             "ivao_prefile",
             "poscon_prefile"
         };
+
+        // regex ciblée pour <link>...</link>
+        private static readonly Regex LinkRegex = new Regex(@"<\s*link\s*>(.*?)<\s*/\s*link\s*>",
+                                                            RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+
+        // pattern pour détecter & non échappés (nous n'échappons pas les entités valides déjà présentes)
+        private const string AmpersandPattern = @"&(?!([A-Za-z]+|#\d+|#x[0-9A-Fa-f]+);)";
 
         public static string Sanitize(string xml)
         {
@@ -39,7 +45,27 @@ namespace simbrief
             // ferme les balises <input> si non fermées
             xml = InputTagFixRegex.Replace(xml, "<input$1/>");
 
-            // Entourer le contenu des éléments problématiques par CDATA (en évitant de casser les séquences "]]>")
+            // --- Traitement spécial pour <link> : échapper le contenu (ampersands, et caractères '<' '>');
+            xml = LinkRegex.Replace(xml, new MatchEvaluator(m =>
+            {
+                string inner = m.Groups[1].Value;
+
+                // Ne pas rééchapper si déjà en CDATA
+                if (inner.StartsWith("<![CDATA[", StringComparison.Ordinal) && inner.EndsWith("]]>", StringComparison.Ordinal))
+                {
+                    return $"<link>{inner}</link>";
+                }
+
+                // Échapper les & nus : & -> &amp; sauf si déjà entité
+                string escaped = Regex.Replace(inner, AmpersandPattern, "&amp;");
+
+                // Échapper aussi les '<' et '>' à l'intérieur du contenu pour rester XML valide
+                escaped = escaped.Replace("<", "&lt;").Replace(">", "&gt;");
+
+                return $"<link>{escaped}</link>";
+            }));
+
+            // --- Conserver le comportement CDATA pour les autres éléments listés (inchangé)
             foreach (var tag in ElementsToWrapCData)
             {
                 var regex = new Regex($@"<\s*{Regex.Escape(tag)}\s*>(.*?)<\s*/\s*{Regex.Escape(tag)}\s*>",
