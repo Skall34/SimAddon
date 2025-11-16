@@ -447,7 +447,8 @@ namespace BushTripPlugin
                 catch (Exception ex)
                 {
                     Logger.WriteLine(ex.ToString()+" : "+ex.InnerException.Message);
-                    ShowMsgBox(ex.Message +" : "+ex.InnerException.Message, "Error during import", MessageBoxButtons.OK);
+                    string innerMessage = ex.InnerException != null ? " : " + ex.InnerException.Message : "";
+                    ShowMsgBox(ex.Message +" : "+ innerMessage, "Error during import", MessageBoxButtons.OK);
                 }
 
             }

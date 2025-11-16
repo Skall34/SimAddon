@@ -64,6 +64,7 @@ namespace FlightRecPlugin
         private bool _planeReserved;
         private double _currentFuel;
         private bool _refuelDetected;
+        private bool _noEngineFlight;
 
         private GPSRecorder GPSRecorder;
 
@@ -174,6 +175,8 @@ namespace FlightRecPlugin
             _currentFuel = 0;
             _refuelDetected = false;
             _endPayload = 0;
+            _noEngineFlight = false;
+
             pauseTime = TimeSpan.Zero;
             isPaused = false;
             isRecording = false;
@@ -715,98 +718,183 @@ namespace FlightRecPlugin
                     switch (currentState)
                     {
                         case STATE.WAITING:
-
-                            if (localAirport != null)
                             {
-                                //only check reservation every 50 updates
-                                if (updateCounter % 50 == 0)
-                                {
-                                    checkReservation();
-                                }
-                            }
 
-                            if (eventDetected == EVENT.ENGINESTART)
-                            {
-                                //we just started the engine, so we are taxiing
-                                Logger.WriteLine("State change WAITING -> TAXIING");
-                                getStartOfFlightData();
-
-                                //disable the immat selection if one is selected
-                                if (cbImmat.SelectedIndex >= 0)
+                                if (localAirport != null)
                                 {
-                                    cbImmat.Enabled = false;
-                                }
-                                else
-                                {
-                                    Logger.WriteLine("No plane selected when engine started !");
-                                    //try to guess the plane based on the current plane in the sim
-                                    if (guessPlaneFromSim())
+                                    //only check reservation every 50 updates
+                                    if (updateCounter % 50 == 0)
                                     {
-                                        cbImmat.Enabled = false;
-                                    }
-                                    else
-                                    {
-                                        Logger.WriteLine("No plane could be guessed from sim !");
-                                        ShowMsgBox("No plane selected for this flight !\nPlease select a plane before starting the engines.", "No plane selected", MessageBoxButtons.OK);
+                                        checkReservation();
                                     }
                                 }
-                                currentState = STATE.TAXIING;
-                                SimEvent(SimEventArg.EventType.ENGINESTART);
+
+                                switch (eventDetected)
+                                {
+                                    case EVENT.ENGINESTART:
+                                        {
+                                            //we just started the engine, so we are taxiing
+                                            Logger.WriteLine("State change WAITING -> TAXIING");
+                                            getStartOfFlightData();
+
+                                            //disable the immat selection if one is selected
+                                            if (cbImmat.SelectedIndex >= 0)
+                                            {
+                                                cbImmat.Enabled = false;
+                                            }
+                                            else
+                                            {
+                                                Logger.WriteLine("No plane selected when engine started !");
+                                                //try to guess the plane based on the current plane in the sim
+                                                if (guessPlaneFromSim())
+                                                {
+                                                    cbImmat.Enabled = false;
+                                                }
+                                                else
+                                                {
+                                                    Logger.WriteLine("No plane could be guessed from sim !");
+                                                    ShowMsgBox("No plane selected for this flight !\nPlease select a plane before starting the engines.", "No plane selected", MessageBoxButtons.OK);
+                                                }
+                                            }
+                                            currentState = STATE.TAXIING;
+                                            SimEvent(SimEventArg.EventType.ENGINESTART);
+
+                                        }
+                                        ; break;
+                                    case EVENT.TAKEOFF:
+                                        {
+                                            //we just took off, so we are inflight
+                                            getStartOfFlightData();
+
+                                            //takeoff detected while waiting for engine start. Consider a no-engine flight.
+                                            _noEngineFlight = true;
+
+                                            //we just took off, so we are inflight
+                                            measureTakeoffPerfs(currentFlightStatus);
+                                            Logger.WriteLine("State change WAITING -> INFLIGHT");
+                                            currentState = STATE.INFLIGHT;
+                                            SimEvent(SimEventArg.EventType.TAKEOFF);
+                                        }
+                                        ; break;
+                                    case EVENT.LANDING:
+                                        {
+                                            //we just landed, so we are taxiing
+                                            measureLandingPerfs(currentFlightStatus);
+                                            Logger.WriteLine("State change WAITING -> TAXIING");
+                                            currentState = STATE.TAXIING;
+                                            SimEvent(SimEventArg.EventType.LANDING);
+                                        }
+                                        ; break;
+                                    case EVENT.ENGINESTOP:
+                                        {
+                                            //we just stopped the engine, so the flight is ended.
+                                            Logger.WriteLine("State change WAITING -> ENDED (ENGINE STOP)");
+                                            getEndOfFlightData();
+                                            currentState = STATE.ENDED;
+                                            SimEvent(SimEventArg.EventType.ENGINESTOP);
+                                        }
+                                        ; break;
+                                    case EVENT.CRASHING:
+                                        {
+                                            //we just crashed, so the flight is ended.
+                                            Logger.WriteLine("State change WAITING -> ENDED (CRASH)");
+                                            getEndOfFlightData();
+                                            currentState = STATE.ENDED;
+                                            SimEvent(SimEventArg.EventType.CRASHING);
+                                        }
+                                        ; break;
+                                }
                             }
-                            break;
+                            ; break;
                         case STATE.INFLIGHT:
-                            if (eventDetected == EVENT.LANDING)
                             {
-                                measureLandingPerfs(currentFlightStatus);
-                                //we just landed, so we are taxiing
-                                Logger.WriteLine("State change INFLIGHT -> TAXIING");
-                                currentState = STATE.TAXIING;
-                                SimEvent(SimEventArg.EventType.LANDING);
+                                switch (eventDetected)
+                                {
+                                    case EVENT.LANDING:
+                                        {
+                                            measureLandingPerfs(currentFlightStatus);
+                                            //we just landed, so we are taxiing
+                                            Logger.WriteLine("State change INFLIGHT -> TAXIING");
+                                            if(_noEngineFlight)
+                                            {
+                                                getEndOfFlightData();
+                                                currentState = STATE.ENDED;
+                                            }
+                                            else
+                                            {
+                                                currentState = STATE.TAXIING;
+                                                SimEvent(SimEventArg.EventType.LANDING);
+                                            }
+                                        }
+                                        ; break;
+                                    case EVENT.CRASHING:
+                                        {
+                                            //we crashed, so the flight is ended.
+                                            Logger.WriteLine("State change INFLIGHT -> ENDED (CRASH)");
+                                            getEndOfFlightData();
+                                            currentState = STATE.ENDED;
+                                            SimEvent(SimEventArg.EventType.CRASHING);
+                                        }
+                                        ; break;
+                                    case EVENT.ENGINESTOP:
+                                        {
+                                            Logger.WriteLine("State change INFLIGHT -> GLIDING");
+                                            //we need to wait for the validation timer to end before really stopping the flight.
+                                            currentState = STATE.GLIDING;
+                                            SimEvent(SimEventArg.EventType.ENGINESTOP);
+                                        }
+                                        ; break;
+                                }
                             }
-                            else if (eventDetected == EVENT.CRASHING)
-                            {
-                                //we crashed, so the flight is ended.
-                                Logger.WriteLine("State change INFLIGHT -> ENDED (CRASH)");
-                                getEndOfFlightData();
-                                currentState = STATE.ENDED;
-                                SimEvent(SimEventArg.EventType.CRASHING);
-                            }
-                            else if (eventDetected == EVENT.ENGINESTOP)
-                            {
-                                Logger.WriteLine("State change INFLIGHT -> GLIDING");
-                                //we need to wait for the validation timer to end before really stopping the flight.
-                                currentState = STATE.GLIDING;
-                                SimEvent(SimEventArg.EventType.ENGINESTOP);
-                            }
-                            break;
+                            ;  break;
                         case STATE.ENDED:
-                            //we are ended, so we need to wait for a reset (engine start)
-                            if (updatePlaneStatusTimer.Enabled)
                             {
-                                updatePlaneStatusTimer.Stop();
+                                //we are ended, so we need to wait for a reset (engine start)
+                                if (updatePlaneStatusTimer.Enabled)
+                                {
+                                    updatePlaneStatusTimer.Stop();
+                                }
+
+                                //the flight is ended, if there's an engine start, begin a new flight
+                                switch (eventDetected)
+                                {
+                                    case EVENT.ENGINESTART:
+                                        {
+                                            //new flight started
+                                            clearStartOfFLightData();
+                                            clearEndOfFlightData();
+
+                                            checkReservation();
+
+                                            //il ne faut pas faire de reset flight ici, car sinon, on va re-détecter le demarrage moteur.
+                                            //resetFlight(true);
+                                            Logger.WriteLine("State change ENDED -> TAXIING");
+                                            getStartOfFlightData();
+
+                                            currentState = STATE.TAXIING;
+                                            cbImmat.Enabled = false;
+                                            SimEvent(SimEventArg.EventType.ENGINESTART);
+                                        }
+                                        ; break;
+                                    case EVENT.TAKEOFF:
+                                        {
+                                            //we just took off, so we are inflight
+                                            getStartOfFlightData();
+
+                                            //takeoff detected while waiting for engine start. Consider a no-engine flight.
+                                            _noEngineFlight = true;
+
+                                            //we just took off, so we are inflight
+                                            measureTakeoffPerfs(currentFlightStatus);
+                                            Logger.WriteLine("State change WAITING -> INFLIGHT");
+                                            currentState = STATE.INFLIGHT;
+                                            SimEvent(SimEventArg.EventType.TAKEOFF);
+                                        }
+                                            ; break;
+                                }
+                                //wait for manual flight reset
                             }
-
-                            //the flight is ended, if there's an engine start, begin a new flight
-                            if (eventDetected == EVENT.ENGINESTART)
-                            {
-                                //new flight started
-                                clearStartOfFLightData();
-                                clearEndOfFlightData();
-
-                                checkReservation();
-
-                                //il ne faut pas faire de reset flight ici, car sinon, on va re-détecter le demarrage moteur.
-                                //resetFlight(true);
-                                Logger.WriteLine("State change ENDED -> TAXIING");
-                                getStartOfFlightData();
-
-                                currentState = STATE.TAXIING;
-                                cbImmat.Enabled = false;
-                                SimEvent(SimEventArg.EventType.ENGINESTART);
-                            }
-
-                            //wait for manual flight reset
-                            break;
+                            ; break;
                         case STATE.TAXIING:
 
                             if ((localAirport) != null && ((reservation == null) || (!reservation.checkedOnce)))

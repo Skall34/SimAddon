@@ -347,8 +347,6 @@ namespace FlightRecPlugin
                     throw new Exception("Aéroport d’arrivée non détecté !");
                 if (string.IsNullOrWhiteSpace(Mission))
                     throw new Exception("Mission non sélectionnée !");
-                if (DepartureFuel == 0 || ArrivalFuel == 0)
-                    throw new Exception("Carburant non détecté !");
                 if (DepartureTime == DateTime.UnixEpoch || ArrivalTime == DateTime.UnixEpoch)
                     throw new Exception("Heure de départ ou d’arrivée non détectée !");
 

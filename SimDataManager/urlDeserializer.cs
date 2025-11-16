@@ -124,7 +124,8 @@ namespace SimDataManager
             catch (Exception ex)
             {
                 // Gérer les exceptions
-                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                string innerMessage = ex.InnerException != null ? " : " + ex.InnerException.Message : "";
+                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message + innerMessage);
             }
 
             return (missions);
@@ -167,7 +168,8 @@ namespace SimDataManager
 
                 aeroports = new List<Aeroport>();
                 // Gérer les exceptions
-                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                string innerMessage = ex.InnerException != null ? " : " + ex.InnerException.Message : "";
+                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message + innerMessage);
             }
 
             return aeroports;
@@ -199,7 +201,8 @@ namespace SimDataManager
             {
                 result = -1;
                 // Gérer les exceptions
-                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                string innerMessage = ex.InnerException != null ? " : " + ex.InnerException.Message : "";
+                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message + innerMessage);
             }
             return result;
         }
@@ -245,7 +248,8 @@ namespace SimDataManager
                 {
                     result = string.Empty;
                     // Gérer les exceptions
-                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                    string innerMessage = ex.InnerException != null ? " : " + ex.InnerException.Message : "";
+                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message + innerMessage);
                 }
             }
             return result;
@@ -310,7 +314,8 @@ namespace SimDataManager
                 {
                     result = 0;
                     // Gérer les exceptions
-                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                    string innerMessage = ex.InnerException != null ? " : " + ex.InnerException.Message : "";
+                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message + innerMessage);
                 }
             }
             return result;
@@ -343,7 +348,8 @@ namespace SimDataManager
                 {
                     result = 0;
                     // Gérer les exceptions
-                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                    string innerMessage = ex.InnerException != null ? " : " + ex.InnerException.Message : "";
+                    Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message + innerMessage);
                 }
             }
             return result;
@@ -408,7 +414,9 @@ namespace SimDataManager
             {
                 result = DateTime.MinValue;
                 // Gérer les exceptions
-                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message);
+                //ajouter inner exception
+                string innerMessage = ex.InnerException != null ? " : " + ex.InnerException.Message : "";
+                Logger.WriteLine("Erreur lors de la récupération des données : " + ex.Message + innerMessage);
             }
             return result;
         }
