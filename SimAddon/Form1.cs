@@ -17,6 +17,7 @@ namespace SimAddon
 
     public partial class Form1 : Form
     {
+        private LoadingForm splashScreen;
         private bool autostart = false;
         private bool autoHide = false;
         private System.Windows.Forms.Timer timerZulu;
@@ -49,14 +50,57 @@ namespace SimAddon
             return false; // Retourne false si "-auto" n'est pas trouvé
         }
 
+        // helper thread-safe pour mettre à jour le splash
+        private void SetSplashProgress(int value,string status)
+        {
+            if (splashScreen == null) return;
+            int v = Math.Max(0, Math.Min(100, value));
+            if (splashScreen.IsHandleCreated && splashScreen.InvokeRequired)
+            {
+                splashScreen.Invoke((Action)(() => splashScreen.updateProgress(v,status)));
+            }
+            else
+            {
+                try { splashScreen.updateProgress(v,status); } catch { }
+            }
+        }
+
         //private bool modifiedFuel;
         public Form1()
         {
+
             pluginTabs = new Collection<TabPage>();
             pluginsSettings = new PluginsSettings();
             pluginsSettings.loadFromJsonFile("plugins.json");
 
             InitializeComponent();
+
+            // create and show splash as early as possible
+            splashScreen = new LoadingForm();
+            splashScreen.StartPosition = FormStartPosition.CenterScreen;
+            splashScreen.TopMost = true;
+            splashScreen.Show();
+            // set initial progress and ensure UI updates
+            SetSplashProgress(5,"Initializing...");
+            Application.DoEvents();
+
+            splashScreen.Progress = 0;
+
+            splashScreen.Show();
+
+            splashScreen.BringToFront();
+
+            splashScreen.Refresh();
+
+            splashScreen.Update();
+
+            splashScreen.TopMost = true;
+
+            splashScreen.Invalidate();
+
+            splashScreen.Update();
+
+            splashScreen.Refresh();
 
             // Dans Form1.Designer.cs ou dans le constructeur de Form1
             this.timerZulu = new System.Windows.Forms.Timer();
@@ -81,6 +125,7 @@ namespace SimAddon
             autoHide = Properties.Settings.Default.AutoHide;
             autoHideToolStripMenuItem.Checked = autoHide;
 
+            SetSplashProgress(10, "Searching for plugins...");
             plugsMgr = new PluginsMgr();
             plugsMgr.LoadPluginsFromFolder("plugins", tabControl1);
 
@@ -202,8 +247,6 @@ namespace SimAddon
                 currentStatus.squawkCode = _simData.GetSquawk();
                 currentStatus.squawkMode = _simData.GetSquawkMode(); // 0 = off, 1 = standby, 2 = on, test=3
 
-                //byte ViewMode = _simData.GetViewMode();
-                //lblConnectionStatus.Text = "viewMode " + ViewMode;
             }
             catch (Exception ex)
             {
@@ -325,6 +368,10 @@ namespace SimAddon
             this.timerZulu.Start();
             //initialise l'object qui sert à capter les données qui viennent du simu
             Logger.WriteLine("initialize the connection to the simulator");
+
+            // show splash progress while loading UI/plugins/data
+            SetSplashProgress(10,"Loading plugins...");
+
             tabControl1.SuspendLayout();
             foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
             {
@@ -376,14 +423,18 @@ namespace SimAddon
             //save the plugins settings to the file
             pluginsSettings.saveToJsonFile("plugins.json");
 
+            SetSplashProgress(50,"Loading data from server...");
             Plugin_OnStatusUpdate(this, "Loading data from server...");
             Logger.WriteLine("Loading data from server...");
+
             await _simData.loadDataFromSheet();
+
             //met à jour l'etat de connection au simu dans la barre de statut
             Plugin_OnStatusUpdate(this, "Data loaded.");
             Logger.WriteLine("Data loaded from server.");
             UpdateLabelConnectionStatus();
 
+            SetSplashProgress(60, "Initializing plugins...");
             foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
             {
                 try
@@ -397,21 +448,25 @@ namespace SimAddon
             }
             Cursor = Cursors.Default;
 
+            SetSplashProgress(98,"Starting...");
+
             //demarre le timer de connection (fait un essai de connexion toutes les 1000ms)
             this.timerConnection.Start();
 
-            //// After initialization, check reservation for configured callsign
-            //try
-            //{
-            //    Logger.WriteLine("CheckReservation: starting");
-            //    // call and wait so popup appears during startup
-            //    await CheckReservationAsync();
-            //    Logger.WriteLine("CheckReservation: finished");
-            //}
-            //catch (Exception ex)
-            //{
-            //    Logger.WriteLine("CheckReservationAsync scheduling failed: " + ex.Message);
-            //}
+            SetSplashProgress(100,"done");
+
+            // close/hide splash
+            try
+            {
+                if (splashScreen != null)
+                {
+                    splashScreen.Close();
+                    splashScreen.Dispose();
+                    splashScreen = null;
+                }
+            }
+            catch { }
+
         }
 
 
