@@ -1872,17 +1872,17 @@ namespace FlightRecPlugin
         {
             try
             {
+                if (data.avions.Count > 0)
+                {
+                    data.UpdatePlaneFromSheet();
+                }
+
                 if (data.isConnectedToSim && data.GetReadyToFly())
                 {
                     Logger.WriteLine("Reading static values");
                     //commence à lire qq variables du simu : fuel & cargo, immat avion...
                     this.lbPayload.Text = data.GetPayload().ToString("0.00");
                     ledCheckPayload.Color = Color.LightGreen;
-
-                    if (data.avions.Count > 0)
-                    {
-                        data.UpdatePlaneFromSheet();
-                    }
 
                     //Recupere le libellé de l'avion
                     string planeNomComplet = data.GetAircraftType();

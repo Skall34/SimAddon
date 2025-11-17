@@ -66,8 +66,10 @@ namespace FlightRecPlugin
             Directory.CreateDirectory(storageFolder);
         }
 
-        public void loadFromJson(string jsonfilename)
+        //load the flightbook. Return the size of the file in Mo
+        public float loadFromJson(string jsonfilename)
         {
+            float filesizeInMo = 0;
             try
             {
                 if (Path.IsPathFullyQualified(jsonfilename) == false)
@@ -76,11 +78,15 @@ namespace FlightRecPlugin
                 }
                 string json = System.IO.File.ReadAllText(jsonfilename, Encoding.UTF8);
                 Flights = System.Text.Json.JsonSerializer.Deserialize<List<Flight>>(json);
+                FileInfo fileInfo = new FileInfo(jsonfilename);
+
+                filesizeInMo = ((float)fileInfo.Length) / (1024 * 1024);
             }
             catch (Exception ex)
             {
                 Logger.WriteLine($"An error occurred while loading flights from JSON: {ex.Message}");
             }
+            return filesizeInMo;
         }
 
         public void saveToJson(string filename)

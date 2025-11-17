@@ -25,7 +25,7 @@ namespace FlightRecPlugin
         {
             FlightbookFilePath = flightbookFilePath;
             // Logic to load the flightbook from the specified file path
-            LocalFlightBook.loadFromJson(FlightbookFilePath);
+            float filesize = LocalFlightBook.loadFromJson(FlightbookFilePath);
             foreach (var flight in LocalFlightBook.Flights)
             {
                 //add a flight entry to the UI listview1
@@ -36,6 +36,8 @@ namespace FlightRecPlugin
                 item.SubItems.Add(flight.commentaire);
                 listView1.Items.Add(item);
             }
+
+            lblLocalFlightbookSize.Text = $"Local Flightbook Size: {filesize:F2} MB";
         }
 
         public LocalFlightbookForm(FlightRecCtrl parent, simData _data)

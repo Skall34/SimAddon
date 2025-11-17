@@ -44,6 +44,7 @@
             toolTip1 = new System.Windows.Forms.ToolTip(components);
             tbFlightDetails = new System.Windows.Forms.TextBox();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
+            lblLocalFlightbookSize = new System.Windows.Forms.Label();
             contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -168,11 +169,21 @@
             splitContainer1.SplitterDistance = 286;
             splitContainer1.TabIndex = 4;
             // 
+            // lblLocalFlightbookSize
+            // 
+            lblLocalFlightbookSize.AutoSize = true;
+            lblLocalFlightbookSize.Location = new System.Drawing.Point(93, 413);
+            lblLocalFlightbookSize.Name = "lblLocalFlightbookSize";
+            lblLocalFlightbookSize.Size = new System.Drawing.Size(115, 15);
+            lblLocalFlightbookSize.TabIndex = 5;
+            lblLocalFlightbookSize.Text = "Local flightbook size";
+            // 
             // LocalFlightbookForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(563, 444);
+            Controls.Add(lblLocalFlightbookSize);
             Controls.Add(splitContainer1);
             Controls.Add(btnClear);
             Controls.Add(btnOK);
@@ -186,6 +197,7 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -205,5 +217,6 @@
         private System.Windows.Forms.ToolStripMenuItem pushToServerToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.Label lblLocalFlightbookSize;
     }
 }
