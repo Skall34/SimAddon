@@ -49,7 +49,6 @@ namespace MeteoPlugin
             VariableWindTimer = new System.Windows.Forms.Timer(components);
             VariableWindAnimation = new System.Windows.Forms.Timer(components);
             splitContainer1 = new SplitContainer();
-            compas2 = new SimAddonControls.Compas();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -193,7 +192,6 @@ namespace MeteoPlugin
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel3.Controls.Add(compas1, 0, 0);
             tableLayoutPanel3.Controls.Add(tableLayoutPanel4, 1, 0);
-            tableLayoutPanel3.Controls.Add(compas2, 0, 1);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(0, 0);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -295,20 +293,6 @@ namespace MeteoPlugin
             splitContainer1.SplitterDistance = 406;
             splitContainer1.TabIndex = 14;
             // 
-            // compas2
-            // 
-            compas2.Headings = null;
-            compas2.LabelText = "Compas";
-            compas2.Location = new Point(3, 264);
-            compas2.Name = "compas2";
-            compas2.NbNeedles = 0;
-            compas2.NeedleImages = null;
-            compas2.NumericValue = 0D;
-            compas2.RectangleSize = new Size(60, 20);
-            compas2.Size = new Size(356, 14);
-            compas2.TabIndex = 2;
-            compas2.Unit = "NM";
-            // 
             // MeteoCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -355,6 +339,5 @@ namespace MeteoPlugin
         private SplitContainer splitContainer1;
         private TableLayoutPanel tableLayoutPanel4;
         private Panel panel2;
-        private SimAddonControls.Compas compas2;
     }
 }

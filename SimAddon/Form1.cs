@@ -423,7 +423,7 @@ namespace SimAddon
             //save the plugins settings to the file
             pluginsSettings.saveToJsonFile("plugins.json");
 
-            SetSplashProgress(50,"Loading data from server...");
+            SetSplashProgress(40,"Loading data from server...");
             Plugin_OnStatusUpdate(this, "Loading data from server...");
             Logger.WriteLine("Loading data from server...");
 
@@ -434,11 +434,13 @@ namespace SimAddon
             Logger.WriteLine("Data loaded from server.");
             UpdateLabelConnectionStatus();
 
-            SetSplashProgress(60, "Initializing plugins...");
+            SetSplashProgress(50, "Initializing plugins...");
+            int nblugins = plugsMgr.plugins.Count;
             foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
             {
                 try
                 {
+                    SetSplashProgress(nblugins > 0 ? 50 + (45 / nblugins) : 95, "Initializing plugin " + plugin.getName() + "...");
                     plugin.init(ref _simData);
                 }
                 catch (Exception ex)
