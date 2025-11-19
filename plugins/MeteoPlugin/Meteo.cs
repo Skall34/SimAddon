@@ -1138,9 +1138,10 @@ namespace MeteoPlugin
         public static async Task<string> getMetar(string ICAO)
         {
             // Construire l'URL avec le code ICAO
+            string url = $"https://aviationweather.gov/api/data/metar?ids={ICAO}"; //. (opt &format=json)
             //string url = $"https://aviationweather.gov/cgi-bin/data/metar.php?ids={ICAO}";
             //use vatsim METAR
-            string url = $"https://metar.vatsim.net/{ICAO}";
+            //string url = $"https://metar.vatsim.net/{ICAO}";
 
             try
             {
@@ -1154,6 +1155,12 @@ namespace MeteoPlugin
                 // Extraire la section METAR du contenu HTML (selon le format attendu)
                 string metar = responseBody.TrimEnd();
                 Logger.WriteLine($"Got metar data : {metar}");
+                // si le metar commence par "METAR", supprimer cette partie
+                if (metar.StartsWith("METAR"))
+                {
+                    metar = metar.Substring(6); // Supprimer "METAR " (y compris l'espace)
+                }
+
                 return metar;
             }
             catch (Exception ex)

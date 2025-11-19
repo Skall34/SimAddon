@@ -379,7 +379,7 @@ namespace BushTripPlugin
                         XmlSerializer serializer = new XmlSerializer(typeof(OFP));
 
                         //lit le fichier, nettoie le en utilisant simbriefXmlHelper
-                        string rawXml = File.ReadAllText(filePath); 
+                        string rawXml = File.ReadAllText(filePath);
                         string cleanXml = simbrief.SimbriefXmlHelper.Sanitize(rawXml);
                         File.WriteAllText(filePath, cleanXml);
 
@@ -446,9 +446,9 @@ namespace BushTripPlugin
                 }
                 catch (Exception ex)
                 {
-                    Logger.WriteLine(ex.ToString()+" : "+ex.InnerException.Message);
+                    Logger.WriteLine(ex.ToString() + " : " + ex.InnerException.Message);
                     string innerMessage = ex.InnerException != null ? " : " + ex.InnerException.Message : "";
-                    ShowMsgBox(ex.Message +" : "+ innerMessage, "Error during import", MessageBoxButtons.OK);
+                    ShowMsgBox(ex.Message + " : " + innerMessage, "Error during import", MessageBoxButtons.OK);
                 }
 
             }
@@ -637,12 +637,6 @@ namespace BushTripPlugin
                 parentForm.TopMost = true;
             }
 
-        }
-
-        private void btnCreateTrip_Click(object sender, EventArgs e)
-        {
-            //CreateTrip();
-            contextMenuStrip1.Show(btnCreateTrip, 0, btnCreateTrip.Height);
         }
 
         void ISimAddonPluginCtrl.SetExecutionFolder(string path)
@@ -855,6 +849,11 @@ namespace BushTripPlugin
             {
                 Logger.WriteLine("Simbrief: could not open browser for new flightplan: " + ex.Message);
             }
+        }
+
+        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

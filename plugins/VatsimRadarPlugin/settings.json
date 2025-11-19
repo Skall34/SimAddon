@@ -1,5 +1,16 @@
 {
   "Name": "ATC",
-  "Url": "https://vatsim-radar.com/",
-  "DestUrl": "https://vatsim-radar.com/?airport=<destICAO>"
+  "ATCs": [
+    {
+      "ATCName": "Vatsim",
+      "Url": "https://vatsim-radar.com/",
+      "DestUrl": "https://vatsim-radar.com/?airport=\u003CdestICAO\u003E"
+    },
+    {
+      "ATCName": "Ivao",
+      "Url": "https://webeye.ivao.aero/",
+      "DestUrl": "https://webeye.ivao.aero/?airportId=\u003CdestICAO\u003E"
+    }
+  ],
+  "lastATCUsed": "Vatsim"
 }
