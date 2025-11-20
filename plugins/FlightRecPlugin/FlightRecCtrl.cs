@@ -1158,6 +1158,12 @@ namespace FlightRecPlugin
                 string startAirportname = localAirport.name;
                 lbStartPosition.Text = startAirportname;
                 lbStartIata.Text = localAirport.ident;
+
+                //send the SETDEPARTURE event so that METAR can load local weather
+                SimEventArg startEvent = new SimEventArg();
+                startEvent.reason = SimEventArg.EventType.SETDEPARTURE;
+                startEvent.value = localAirport.ident;
+                SimEvent(startEvent);
             }
 
             _startFuel = data.GetFuelWeight();
@@ -2130,6 +2136,12 @@ namespace FlightRecPlugin
                 if (!string.IsNullOrWhiteSpace(departureIcao) && lbStartIata != null)
                 {
                     lbStartIata.Text = departureIcao.ToUpper();
+
+                    //send the SETDEPARTURE event so that METAR can load local weather
+                    SimEventArg startEvent = new SimEventArg();
+                    startEvent.reason = SimEventArg.EventType.SETDEPARTURE;
+                    startEvent.value = departureIcao.ToUpper();
+                    SimEvent(startEvent);
                 }
 
                 // set arrival ICAO in ACARS (tbEndICAO or tbArrival equivalent)

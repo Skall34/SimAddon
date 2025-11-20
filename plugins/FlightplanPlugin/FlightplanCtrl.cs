@@ -49,6 +49,14 @@ namespace BushTripPlugin
         public event ISimAddonPluginCtrl.OnShowMsgboxHandler OnShowMsgbox;
         public event ISimAddonPluginCtrl.OnShowDialogHandler OnShowDialog;
 
+        private void SimEvent(SimEventArg eventArg)
+        {
+            if (OnSimEvent != null)
+            {
+                OnSimEvent(this, eventArg);
+            }
+        }
+
         public void SetWindowMode(ISimAddonPluginCtrl.WindowMode mode)
         {
             if (mode == ISimAddonPluginCtrl.WindowMode.COMPACT)
@@ -308,6 +316,14 @@ namespace BushTripPlugin
                 tsGlobalStatus.Text = "Flight plan loaded";
                 restartToolStripMenuItem.Enabled = true;
                 exportToolStripMenuItem.Enabled = true;
+
+                //send an event to notify that the departure is set
+                SimEventArg startEvent = new SimEventArg();
+                startEvent.reason = SimEventArg.EventType.SETDEPARTURE;
+                //get the first waypoint ident
+                startEvent.value = flightPlan.Item.Waypoints[0].Ident;
+                SimEvent(startEvent);
+
             }
             else
             {

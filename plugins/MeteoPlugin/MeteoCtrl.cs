@@ -405,7 +405,7 @@ namespace MeteoPlugin
 
         public void ManageSimEvent(object sender, SimEventArg eventArg)
         {
-            if (eventArg.reason == SimEventArg.EventType.SETDESTINATION)
+            if (eventArg.reason == SimEventArg.EventType.SETDEPARTURE)
             {
                 string icao = eventArg.value;
                 if (Regex.IsMatch(icao, @"^[A-Z0-9]{4}$"))

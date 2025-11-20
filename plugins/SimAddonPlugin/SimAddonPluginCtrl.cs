@@ -13,6 +13,7 @@ namespace SimAddonPlugin
             TAKEOFF,
             LANDING,
             SETCALLSIGN,
+            SETDEPARTURE,
             SETDESTINATION,
             SETAIRCRAFT,
             CRASHING
