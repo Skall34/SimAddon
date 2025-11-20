@@ -56,19 +56,19 @@
             imageList1 = new ImageList(components);
             menuStrip1 = new MenuStrip();
             flightplanToolStripMenuItem = new ToolStripMenuItem();
-            toolStripMenuItem1 = new ToolStripMenuItem();
+            createToolStripMenuItem1 = new ToolStripMenuItem();
             toolStripSeparator5 = new ToolStripSeparator();
-            toolStripMenuItem2 = new ToolStripMenuItem();
-            toolStripMenuItem3 = new ToolStripMenuItem();
+            importToolStripMenuItem2 = new ToolStripMenuItem();
+            exportToolStripMenuItem3 = new ToolStripMenuItem();
             toolStripSeparator6 = new ToolStripSeparator();
-            toolStripMenuItem4 = new ToolStripMenuItem();
-            toolStripMenuItem5 = new ToolStripMenuItem();
-            toolStripMenuItem6 = new ToolStripMenuItem();
-            toolStripMenuItem7 = new ToolStripMenuItem();
+            simbriefToolStripMenuItem4 = new ToolStripMenuItem();
+            simbrief_createToolStripMenuItem5 = new ToolStripMenuItem();
+            simbrief_GetLastFPtoolStripMenuItem6 = new ToolStripMenuItem();
+            simbrief_getBriefingToolStripMenuItem7 = new ToolStripMenuItem();
             toolStripSeparator7 = new ToolStripSeparator();
-            toolStripMenuItem8 = new ToolStripMenuItem();
+            restartToolStripMenuItem8 = new ToolStripMenuItem();
             toolStripSeparator8 = new ToolStripSeparator();
-            toolStripMenuItem9 = new ToolStripMenuItem();
+            settingsToolStripMenuItem9 = new ToolStripMenuItem();
             tableLayoutPanel1 = new TableLayoutPanel();
             tbComment = new TextBox();
             panel1 = new Panel();
@@ -295,96 +295,96 @@
             // 
             // flightplanToolStripMenuItem
             // 
-            flightplanToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripSeparator5, toolStripMenuItem2, toolStripMenuItem3, toolStripSeparator6, toolStripMenuItem4, toolStripSeparator7, toolStripMenuItem8, toolStripSeparator8, toolStripMenuItem9 });
+            flightplanToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createToolStripMenuItem1, toolStripSeparator5, importToolStripMenuItem2, exportToolStripMenuItem3, toolStripSeparator6, simbriefToolStripMenuItem4, toolStripSeparator7, restartToolStripMenuItem8, toolStripSeparator8, settingsToolStripMenuItem9 });
             flightplanToolStripMenuItem.Name = "flightplanToolStripMenuItem";
             flightplanToolStripMenuItem.Size = new Size(72, 20);
             flightplanToolStripMenuItem.Text = "Flightplan";
             // 
-            // toolStripMenuItem1
+            // createToolStripMenuItem1
             // 
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(118, 22);
-            toolStripMenuItem1.Text = "Create";
-            toolStripMenuItem1.Click += createToolStripMenuItem_Click;
+            createToolStripMenuItem1.Name = "createToolStripMenuItem1";
+            createToolStripMenuItem1.Size = new Size(180, 22);
+            createToolStripMenuItem1.Text = "Create";
+            createToolStripMenuItem1.Click += createToolStripMenuItem_Click;
             // 
             // toolStripSeparator5
             // 
             toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new Size(115, 6);
+            toolStripSeparator5.Size = new Size(177, 6);
             // 
-            // toolStripMenuItem2
+            // importToolStripMenuItem2
             // 
-            toolStripMenuItem2.Name = "toolStripMenuItem2";
-            toolStripMenuItem2.Size = new Size(118, 22);
-            toolStripMenuItem2.Text = "Import";
-            toolStripMenuItem2.Click += importToolStripMenuItem_Click;
+            importToolStripMenuItem2.Name = "importToolStripMenuItem2";
+            importToolStripMenuItem2.Size = new Size(180, 22);
+            importToolStripMenuItem2.Text = "Import";
+            importToolStripMenuItem2.Click += importToolStripMenuItem_Click;
             // 
-            // toolStripMenuItem3
+            // exportToolStripMenuItem3
             // 
-            toolStripMenuItem3.Enabled = false;
-            toolStripMenuItem3.Name = "toolStripMenuItem3";
-            toolStripMenuItem3.Size = new Size(118, 22);
-            toolStripMenuItem3.Text = "Export";
-            toolStripMenuItem3.Click += exportToolStripMenuItem_Click;
+            exportToolStripMenuItem3.Enabled = false;
+            exportToolStripMenuItem3.Name = "exportToolStripMenuItem3";
+            exportToolStripMenuItem3.Size = new Size(180, 22);
+            exportToolStripMenuItem3.Text = "Export";
+            exportToolStripMenuItem3.Click += exportToolStripMenuItem_Click;
             // 
             // toolStripSeparator6
             // 
             toolStripSeparator6.Name = "toolStripSeparator6";
-            toolStripSeparator6.Size = new Size(115, 6);
+            toolStripSeparator6.Size = new Size(177, 6);
             // 
-            // toolStripMenuItem4
+            // simbriefToolStripMenuItem4
             // 
-            toolStripMenuItem4.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem5, toolStripMenuItem6, toolStripMenuItem7 });
-            toolStripMenuItem4.Name = "toolStripMenuItem4";
-            toolStripMenuItem4.Size = new Size(118, 22);
-            toolStripMenuItem4.Text = "Simbrief";
+            simbriefToolStripMenuItem4.DropDownItems.AddRange(new ToolStripItem[] { simbrief_createToolStripMenuItem5, simbrief_GetLastFPtoolStripMenuItem6, simbrief_getBriefingToolStripMenuItem7 });
+            simbriefToolStripMenuItem4.Name = "simbriefToolStripMenuItem4";
+            simbriefToolStripMenuItem4.Size = new Size(180, 22);
+            simbriefToolStripMenuItem4.Text = "Simbrief";
             // 
-            // toolStripMenuItem5
+            // simbrief_createToolStripMenuItem5
             // 
-            toolStripMenuItem5.Name = "toolStripMenuItem5";
-            toolStripMenuItem5.Size = new Size(187, 22);
-            toolStripMenuItem5.Text = "Create new flightplan";
-            toolStripMenuItem5.Click += createNewFlightplanToolStripMenuItem_Click;
+            simbrief_createToolStripMenuItem5.Name = "simbrief_createToolStripMenuItem5";
+            simbrief_createToolStripMenuItem5.Size = new Size(187, 22);
+            simbrief_createToolStripMenuItem5.Text = "Create new flightplan";
+            simbrief_createToolStripMenuItem5.Click += createNewFlightplanToolStripMenuItem_Click;
             // 
-            // toolStripMenuItem6
+            // simbrief_GetLastFPtoolStripMenuItem6
             // 
-            toolStripMenuItem6.Name = "toolStripMenuItem6";
-            toolStripMenuItem6.Size = new Size(187, 22);
-            toolStripMenuItem6.Text = "Get last flightplan";
-            toolStripMenuItem6.Click += getLastFlightplanToolStripMenuItem_Click;
+            simbrief_GetLastFPtoolStripMenuItem6.Name = "simbrief_GetLastFPtoolStripMenuItem6";
+            simbrief_GetLastFPtoolStripMenuItem6.Size = new Size(187, 22);
+            simbrief_GetLastFPtoolStripMenuItem6.Text = "Get last flightplan";
+            simbrief_GetLastFPtoolStripMenuItem6.Click += getLastFlightplanToolStripMenuItem_Click;
             // 
-            // toolStripMenuItem7
+            // simbrief_getBriefingToolStripMenuItem7
             // 
-            toolStripMenuItem7.Enabled = false;
-            toolStripMenuItem7.Name = "toolStripMenuItem7";
-            toolStripMenuItem7.Size = new Size(187, 22);
-            toolStripMenuItem7.Text = "Get flight briefing";
-            toolStripMenuItem7.Click += getFlightBriefingToolStripMenuItem_Click;
+            simbrief_getBriefingToolStripMenuItem7.Enabled = false;
+            simbrief_getBriefingToolStripMenuItem7.Name = "simbrief_getBriefingToolStripMenuItem7";
+            simbrief_getBriefingToolStripMenuItem7.Size = new Size(187, 22);
+            simbrief_getBriefingToolStripMenuItem7.Text = "Get flight briefing";
+            simbrief_getBriefingToolStripMenuItem7.Click += getFlightBriefingToolStripMenuItem_Click;
             // 
             // toolStripSeparator7
             // 
             toolStripSeparator7.Name = "toolStripSeparator7";
-            toolStripSeparator7.Size = new Size(115, 6);
+            toolStripSeparator7.Size = new Size(177, 6);
             // 
-            // toolStripMenuItem8
+            // restartToolStripMenuItem8
             // 
-            toolStripMenuItem8.Enabled = false;
-            toolStripMenuItem8.Name = "toolStripMenuItem8";
-            toolStripMenuItem8.Size = new Size(118, 22);
-            toolStripMenuItem8.Text = "Restart";
-            toolStripMenuItem8.Click += restartToolStripMenuItem_Click;
+            restartToolStripMenuItem8.Enabled = false;
+            restartToolStripMenuItem8.Name = "restartToolStripMenuItem8";
+            restartToolStripMenuItem8.Size = new Size(180, 22);
+            restartToolStripMenuItem8.Text = "Restart";
+            restartToolStripMenuItem8.Click += restartToolStripMenuItem_Click;
             // 
             // toolStripSeparator8
             // 
             toolStripSeparator8.Name = "toolStripSeparator8";
-            toolStripSeparator8.Size = new Size(115, 6);
+            toolStripSeparator8.Size = new Size(177, 6);
             // 
-            // toolStripMenuItem9
+            // settingsToolStripMenuItem9
             // 
-            toolStripMenuItem9.Name = "toolStripMenuItem9";
-            toolStripMenuItem9.Size = new Size(118, 22);
-            toolStripMenuItem9.Text = "Settings";
-            toolStripMenuItem9.Click += settingsToolStripMenuItem_Click;
+            settingsToolStripMenuItem9.Name = "settingsToolStripMenuItem9";
+            settingsToolStripMenuItem9.Size = new Size(180, 22);
+            settingsToolStripMenuItem9.Text = "Settings";
+            settingsToolStripMenuItem9.Click += settingsToolStripMenuItem_Click;
             // 
             // tableLayoutPanel1
             // 
@@ -526,18 +526,18 @@
         private ToolStripMenuItem createNewFlightplanToolStripMenuItem;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem flightplanToolStripMenuItem;
-        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem createToolStripMenuItem1;
         private ToolStripSeparator toolStripSeparator5;
-        private ToolStripMenuItem toolStripMenuItem2;
-        private ToolStripMenuItem toolStripMenuItem3;
+        private ToolStripMenuItem importToolStripMenuItem2;
+        private ToolStripMenuItem exportToolStripMenuItem3;
         private ToolStripSeparator toolStripSeparator6;
-        private ToolStripMenuItem toolStripMenuItem4;
-        private ToolStripMenuItem toolStripMenuItem5;
-        private ToolStripMenuItem toolStripMenuItem6;
-        private ToolStripMenuItem toolStripMenuItem7;
+        private ToolStripMenuItem simbriefToolStripMenuItem4;
+        private ToolStripMenuItem simbrief_createToolStripMenuItem5;
+        private ToolStripMenuItem simbrief_GetLastFPtoolStripMenuItem6;
+        private ToolStripMenuItem simbrief_getBriefingToolStripMenuItem7;
         private ToolStripSeparator toolStripSeparator7;
-        private ToolStripMenuItem toolStripMenuItem8;
+        private ToolStripMenuItem restartToolStripMenuItem8;
         private ToolStripSeparator toolStripSeparator8;
-        private ToolStripMenuItem toolStripMenuItem9;
+        private ToolStripMenuItem settingsToolStripMenuItem9;
     }
 }
