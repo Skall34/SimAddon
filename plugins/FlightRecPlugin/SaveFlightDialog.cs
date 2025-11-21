@@ -26,6 +26,8 @@ namespace FlightRecPlugin
 
         private string _simPlane = string.Empty;
 
+        public string returnMessage { get; set; } = string.Empty;
+
         public string Callsign { get; set; }
         public string Immat
         {
@@ -350,7 +352,7 @@ namespace FlightRecPlugin
                 if (DepartureTime == DateTime.UnixEpoch || ArrivalTime == DateTime.UnixEpoch)
                     throw new Exception("Heure de départ ou d’arrivée non détectée !");
 
-                result = await data.SendFlightDataToPhpAsync(flightData);
+                (result, returnMessage) = await data.SendFlightDataToPhpAsync(flightData);
                 // Fin JFK 18062025
 
                 if (result)

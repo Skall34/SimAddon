@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -396,8 +398,15 @@ namespace SimDataManager
             return result;
         }
 
-        public async Task<bool> SendFlightDataToPhpAsync(Dictionary<string, string> flightData)
+        private class FlightDataResponse
         {
+            public string status{ get; set; }
+            public string message { get; set; }
+        }
+
+        public async Task<(bool,string)> SendFlightDataToPhpAsync(Dictionary<string, string> flightData)
+        {
+            
             string phpUrl = BASERURL + "/api/api_import_vol_direct.php";
 
             Dictionary<string, string> dataToSend = new Dictionary<string, string>(flightData);
@@ -411,17 +420,21 @@ namespace SimDataManager
                 string responseContent = await response.Content.ReadAsStringAsync();
 
                 // Affiche tout, même si c'est vide
-                string message = $"Code: {response.StatusCode}\nRéponse brute:\n{responseContent}";
+                string message = $"Code: {response.StatusCode}\nRéponse brute:{responseContent}";
                 Logger.WriteLine(message);
+
+                //deserialize the response to get the message
+                FlightDataResponse responseData = System.Text.Json.JsonSerializer.Deserialize<FlightDataResponse>(responseContent);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    // Affiche le détail dans le popup
-                    return false;
-                }
-                Logger.WriteLine("Réponse du serveur : " + responseContent);
 
-                return true;
+                    // Affiche le détail dans le popup
+                    return (false,responseData.message);
+                }
+                Logger.WriteLine("Réponse du serveur : " + responseData.message);
+
+                return (true, responseData.message);
             }
             catch (Exception ex)
             {
@@ -430,7 +443,7 @@ namespace SimDataManager
                 {
                     Logger.WriteLine("Détail de l'erreur : " + ex.InnerException.Message);
                 }
-                return false;
+                return (false,ex.Message);
             }
         }
 

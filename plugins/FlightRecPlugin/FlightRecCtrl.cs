@@ -1266,13 +1266,16 @@ namespace FlightRecPlugin
             }
 
             // Define the regular expression pattern
-            string pattern = @"^SKY\d{4}$";
+            //string pattern = @"^SKY\d{4}$";
+            //the pattern must be 3 letters followed by 4 digits
+            string pattern = @"^[A-Z]{3}\d{4}$";
+
             // Create a Regex object with the pattern
             Regex regex = new Regex(pattern);
             // Check if the input string matches the pattern
             if (!regex.IsMatch(tbCallsign.Text))
             {
-                throw new Exception("The string starts with 'SKY' followed by four numbers.");
+                throw new Exception("The string starts with 3 letters followed by 4 numbers.");
             }
 
             if (reservationStatus == ReservationMgr.ReservationStatus.Accepted)
@@ -1339,6 +1342,7 @@ namespace FlightRecPlugin
 
                 if (saveFlightDialog.ShowDialog() == DialogResult.OK)
                 {
+                    string returnMessage = saveFlightDialog.returnMessage;
                     //store last plane used
                     string SimPlane = lbLibelleAvion.Text;
                     LocalPlanesDB.SetPlane(SimPlane, saveFlightDialog.Immat);
@@ -1365,7 +1369,7 @@ namespace FlightRecPlugin
 
                     }
                     //si tout va bien...
-                    ShowMsgBox("Flight saved. Thank you for flying with SKYWINGS :)", "Flight Recorder", MessageBoxButtons.OK);
+                    ShowMsgBox("Flight saved. "+returnMessage, "Flight Recorder", MessageBoxButtons.OK);
 
                     //reset le vol sans demande de confirmation
                     resetFlight(true);
