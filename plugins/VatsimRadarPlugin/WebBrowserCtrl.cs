@@ -25,10 +25,10 @@ namespace ATCPlugin
 
         JsonSettings settings;
         ATCSettings currentATCSettings;
-
+        simData simData;
         public WebBrowserCtrl()
         {
-            InitializeComponent();
+            InitializeComponent();           
         }
 
         void loadSettings()
@@ -46,30 +46,30 @@ namespace ATCPlugin
 
                 //add menu entries for each ATC in the settings
                 Logger.WriteLine($"JSON file successfully read from {filePath}");
-                ATCMenu.DropDownItems.Clear();
-                foreach (var atc in settings.ATCs)
-                {
-                    Logger.WriteLine($"Loaded ATC: {atc.ATCName}, URL: {atc.Url}, DestURL: {atc.DestUrl}");
-                    //add each atc as menu item under the ATCMenu
-                    ATCMenu.DropDownItems.Add(atc.ATCName, null, (s, e) =>
-                    {
-                        currentATCSettings = atc;
-                        webView21.Source = new Uri(currentATCSettings.Url);
-                        settings.lastATCUsed = atc.ATCName;
-                        //save settings
-                        string jsonContent = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
-                        try
-                        {
-                            // Write the JSON content to the file
-                            File.WriteAllText(filePath, jsonContent);
-                            Logger.WriteLine($"JSON file successfully written to {filePath}");
-                        }
-                        catch (Exception ex2)
-                        {
-                            Logger.WriteLine($"An error occurred: {ex2.Message}");
-                        }
-                    });
-                }
+                //ATCMenu.DropDownItems.Clear();
+                //foreach (var atc in settings.ATCs)
+                //{
+                //    Logger.WriteLine($"Loaded ATC: {atc.ATCName}, URL: {atc.Url}, DestURL: {atc.DestUrl}");
+                //    //add each atc as menu item under the ATCMenu
+                //    ATCMenu.DropDownItems.Add(atc.ATCName, null, (s, e) =>
+                //    {
+                //        currentATCSettings = atc;
+                //        webView21.Source = new Uri(currentATCSettings.Url);
+                //        settings.lastATCUsed = atc.ATCName;
+                //        //save settings
+                //        string jsonContent = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+                //        try
+                //        {
+                //            // Write the JSON content to the file
+                //            File.WriteAllText(filePath, jsonContent);
+                //            Logger.WriteLine($"JSON file successfully written to {filePath}");
+                //        }
+                //        catch (Exception ex2)
+                //        {
+                //            Logger.WriteLine($"An error occurred: {ex2.Message}");
+                //        }
+                //    });
+                //}
             }
             catch (Exception ex)
             {
@@ -115,7 +115,7 @@ namespace ATCPlugin
 
         public void init(ref simData _data)
         {
-
+            simData = _data;
             InitializeWebView2();
         }
 
@@ -175,13 +175,15 @@ namespace ATCPlugin
             }
             try
             {
-                currentATCSettings = settings.ATCs.Where(a => a.ATCName == settings.lastATCUsed).First();
-                webView21.Source = new Uri(currentATCSettings.Url);
+                string url = simData.flyingNetwork.GetRadarUrl();
+                //currentATCSettings = settings.ATCs.Where(a => a.ATCName == settings.lastATCUsed).First();
+                webView21.Source = new Uri(url);
             }
-            catch
+            catch(Exception ex)
             {
-                currentATCSettings = settings.ATCs[0];
-                webView21.Source = new Uri(currentATCSettings.Url);
+                Logger.WriteLine("Error loading ATC "+ex.Message);
+                //currentATCSettings = settings.ATCs[0];
+                //webView21.Source = new Uri(currentATCSettings.Url);
             }
         }
 
@@ -200,7 +202,8 @@ namespace ATCPlugin
                     try
                     {
                         // Assuming the destination is a URL
-                        string destinationUrl = currentATCSettings.DestUrl.Replace("<destICAO>", destination);
+                        //string destinationUrl = currentATCSettings.DestUrl.Replace("<destICAO>", destination);
+                        string destinationUrl = simData.flyingNetwork.GetRadarSearchUrl(destination);
                         Uri uri = new Uri(destinationUrl);
                         webView21.Source = uri;
                     }
@@ -212,6 +215,19 @@ namespace ATCPlugin
                 else
                 {
                     Logger.WriteLine("Destination data is not a string.");
+                }
+            }
+
+            if (eventArg.reason == SimEventArg.EventType.CHANGENETWORK)
+            {
+                try
+                {
+                    string url = simData.flyingNetwork.GetRadarUrl();
+                    webView21.Source = new Uri(url);
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("Error loading ATC " + ex.Message);
                 }
             }
         }

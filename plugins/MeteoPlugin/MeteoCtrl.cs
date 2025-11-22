@@ -174,7 +174,10 @@ namespace MeteoPlugin
             //clear airport infos.
             lbAirportInfo.Items.Clear();
             lblDecodedMETAR.Text = string.Empty;
-            string rawMetarText = await Meteo.getMetar(searchItem);
+            string url = simdata.flyingNetwork.GetMETARUrl(searchItem);
+            Logger.WriteLine("METAR request URL : " + url);
+            string serverData = await Meteo.getMetar(url);
+            string rawMetarText = simdata.flyingNetwork.GetRawMETARText(serverData);
             tbMETAR.Text = rawMetarText;
             try
             {

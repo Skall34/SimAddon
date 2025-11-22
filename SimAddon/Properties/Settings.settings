@@ -17,5 +17,8 @@
     <Setting Name="GSheetAPIUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)">https://skywings.ovh/</Value>
     </Setting>
+    <Setting Name="FlyingNetwork" Type="System.String" Scope="User">
+      <Value Profile="(Default)">VATSIM</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

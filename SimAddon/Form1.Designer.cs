@@ -50,7 +50,11 @@ namespace SimAddon
             openWebSiteToolStripMenuItem = new ToolStripMenuItem();
             traceFolderToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
+            networkToolStripMenuItem = new ToolStripMenuItem();
+            vATSIMToolStripMenuItem = new ToolStripMenuItem();
+            iVAOToolStripMenuItem = new ToolStripMenuItem();
             tabControl1 = new TabControl();
+            toolStripSeparator4 = new ToolStripSeparator();
             statusStrip.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
@@ -97,60 +101,83 @@ namespace SimAddon
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1, screenshotToolStripMenuItem, toolStripSeparator2, openWebSiteToolStripMenuItem, traceFolderToolStripMenuItem, toolStripSeparator3 });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1, screenshotToolStripMenuItem, toolStripSeparator2, openWebSiteToolStripMenuItem, traceFolderToolStripMenuItem, toolStripSeparator3, networkToolStripMenuItem, toolStripSeparator4 });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(167, 132);
+            contextMenuStrip1.Size = new Size(181, 182);
             contextMenuStrip1.Opening += contextMenuStrip1_Opening;
             // 
             // alwaysOnTopToolStripMenuItem
             // 
             alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            alwaysOnTopToolStripMenuItem.Size = new Size(166, 22);
+            alwaysOnTopToolStripMenuItem.Size = new Size(180, 22);
             alwaysOnTopToolStripMenuItem.Text = "Always On Top";
             alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
             // 
             // autoHideToolStripMenuItem
             // 
             autoHideToolStripMenuItem.Name = "autoHideToolStripMenuItem";
-            autoHideToolStripMenuItem.Size = new Size(166, 22);
+            autoHideToolStripMenuItem.Size = new Size(180, 22);
             autoHideToolStripMenuItem.Text = "Auto hide";
             autoHideToolStripMenuItem.Click += autoHideToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(163, 6);
+            toolStripSeparator1.Size = new Size(177, 6);
             // 
             // screenshotToolStripMenuItem
             // 
             screenshotToolStripMenuItem.Name = "screenshotToolStripMenuItem";
-            screenshotToolStripMenuItem.Size = new Size(166, 22);
+            screenshotToolStripMenuItem.Size = new Size(180, 22);
             screenshotToolStripMenuItem.Text = "Screenshot";
             screenshotToolStripMenuItem.Click += screenshotToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(163, 6);
+            toolStripSeparator2.Size = new Size(177, 6);
             // 
             // openWebSiteToolStripMenuItem
             // 
             openWebSiteToolStripMenuItem.Name = "openWebSiteToolStripMenuItem";
-            openWebSiteToolStripMenuItem.Size = new Size(166, 22);
+            openWebSiteToolStripMenuItem.Size = new Size(180, 22);
             openWebSiteToolStripMenuItem.Text = "Open web site";
             openWebSiteToolStripMenuItem.Click += openWebSiteToolStripMenuItem_Click;
             // 
             // traceFolderToolStripMenuItem
             // 
             traceFolderToolStripMenuItem.Name = "traceFolderToolStripMenuItem";
-            traceFolderToolStripMenuItem.Size = new Size(166, 22);
+            traceFolderToolStripMenuItem.Size = new Size(180, 22);
             traceFolderToolStripMenuItem.Text = "Open trace folder";
             traceFolderToolStripMenuItem.Click += traceFolderToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(163, 6);
+            toolStripSeparator3.Size = new Size(177, 6);
+            // 
+            // networkToolStripMenuItem
+            // 
+            networkToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { vATSIMToolStripMenuItem, iVAOToolStripMenuItem });
+            networkToolStripMenuItem.Name = "networkToolStripMenuItem";
+            networkToolStripMenuItem.Size = new Size(180, 22);
+            networkToolStripMenuItem.Text = "Network";
+            // 
+            // vATSIMToolStripMenuItem
+            // 
+            vATSIMToolStripMenuItem.CheckOnClick = true;
+            vATSIMToolStripMenuItem.Name = "vATSIMToolStripMenuItem";
+            vATSIMToolStripMenuItem.Size = new Size(180, 22);
+            vATSIMToolStripMenuItem.Text = "VATSIM";
+            vATSIMToolStripMenuItem.Click += vATSIMToolStripMenuItem_Click;
+            // 
+            // iVAOToolStripMenuItem
+            // 
+            iVAOToolStripMenuItem.CheckOnClick = true;
+            iVAOToolStripMenuItem.Name = "iVAOToolStripMenuItem";
+            iVAOToolStripMenuItem.Size = new Size(180, 22);
+            iVAOToolStripMenuItem.Text = "IVAO";
+            iVAOToolStripMenuItem.Click += iVAOToolStripMenuItem_Click;
             // 
             // tabControl1
             // 
@@ -161,6 +188,11 @@ namespace SimAddon
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(574, 807);
             tabControl1.TabIndex = 7;
+            // 
+            // toolStripSeparator4
+            // 
+            toolStripSeparator4.Name = "toolStripSeparator4";
+            toolStripSeparator4.Size = new Size(177, 6);
             // 
             // Form1
             // 
@@ -207,6 +239,10 @@ namespace SimAddon
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripStatusLabel toolStripHeureZulu;
         private ToolStripMenuItem traceFolderToolStripMenuItem;
+        private ToolStripMenuItem networkToolStripMenuItem;
+        private ToolStripMenuItem vATSIMToolStripMenuItem;
+        private ToolStripMenuItem iVAOToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator4;
     }
 }
 

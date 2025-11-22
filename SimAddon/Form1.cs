@@ -9,12 +9,10 @@ using System.Text.Json;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SimAddon.Properties;
 
 namespace SimAddon
 {
-
-
-
     public partial class Form1 : Form
     {
         private LoadingForm splashScreen;
@@ -51,18 +49,45 @@ namespace SimAddon
         }
 
         // helper thread-safe pour mettre à jour le splash
-        private void SetSplashProgress(int value,string status)
+        private void SetSplashProgress(int value, string status)
         {
             if (splashScreen == null) return;
             int v = Math.Max(0, Math.Min(100, value));
             if (splashScreen.IsHandleCreated && splashScreen.InvokeRequired)
             {
-                splashScreen.Invoke((Action)(() => splashScreen.updateProgress(v,status)));
+                splashScreen.Invoke((Action)(() => splashScreen.updateProgress(v, status)));
             }
             else
             {
-                try { splashScreen.updateProgress(v,status); } catch { }
+                try { splashScreen.updateProgress(v, status); } catch { }
             }
+        }
+
+        private void WriteWindowTitle()
+        {
+            // Get the version information of your application
+            Assembly assembly = Assembly.GetEntryAssembly();
+            if (null != assembly)
+            {
+                AssemblyName assemblyName = assembly.GetName();
+                version = assembly.GetName().Version;
+                if (null == version)
+                {
+                    version = new Version("unknown");
+                }
+                // Set the form's title to include the version number
+                Text = $"SimAddon - Version {version.ToString(3)}";
+                if (autostart)
+                {
+                    Text += " autostarted";
+                }
+                Logger.WriteLine($"Version : {version.ToString(3)}");
+            }
+            else
+            {
+                version = new Version("unknown");
+            }
+            Text += " on " + Properties.Settings.Default.FlyingNetwork;
         }
 
         //private bool modifiedFuel;
@@ -81,7 +106,7 @@ namespace SimAddon
             splashScreen.TopMost = true;
             splashScreen.Show();
             // set initial progress and ensure UI updates
-            SetSplashProgress(5,"Initializing...");
+            SetSplashProgress(5, "Initializing...");
             Application.DoEvents();
 
             splashScreen.Progress = 0;
@@ -141,31 +166,20 @@ namespace SimAddon
                 Logger.WriteLine("Autostarted");
             }
 
-            // Get the version information of your application
-            Assembly assembly = Assembly.GetEntryAssembly();
-            if (null != assembly)
-            {
-                AssemblyName assemblyName = assembly.GetName();
-                version = assembly.GetName().Version;
-                if (null == version)
-                {
-                    version = new Version("unknown");
-                }
-                // Set the form's title to include the version number
-                Text = $"SimAddon - Version {version.ToString(3)}";
-                if (autostart)
-                {
-                    Text += " autostarted";
-                }
-                Logger.WriteLine($"Version : {version.ToString(3)}");
-            }
-            else
-            {
-                version = new Version("unknown");
-            }
-
             //create the object to get the dat from sim and the structure to push situation update to plugins
             _simData = new simData(Properties.Settings.Default.GSheetAPIUrl);
+            _simData.useFlyingNetwork(Properties.Settings.Default.FlyingNetwork);
+            if (Settings.Default.FlyingNetwork == FlyingNetwork.VATSIM.ToString())
+            {
+                vATSIMToolStripMenuItem.Checked = true;
+            }
+            else if (Settings.Default.FlyingNetwork == FlyingNetwork.IVAO.ToString())
+            {
+                iVAOToolStripMenuItem.Checked = true;
+            }
+
+            WriteWindowTitle();
+
             currentStatus = new situation();
 
             this.Cursor = Cursors.WaitCursor;
@@ -335,7 +349,7 @@ namespace SimAddon
                 }
                 catch (Exception ex)
                 {
-                    Logger.WriteLine(plugin.getName() +" : " + ex.Message);
+                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
                 }
             }
             e.Cancel = isCanceled;
@@ -370,7 +384,7 @@ namespace SimAddon
             Logger.WriteLine("initialize the connection to the simulator");
 
             // show splash progress while loading UI/plugins/data
-            SetSplashProgress(10,"Loading plugins...");
+            SetSplashProgress(10, "Loading plugins...");
 
             tabControl1.SuspendLayout();
             foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
@@ -423,7 +437,7 @@ namespace SimAddon
             //save the plugins settings to the file
             pluginsSettings.saveToJsonFile("plugins.json");
 
-            SetSplashProgress(40,"Loading data from server...");
+            SetSplashProgress(40, "Loading data from server...");
             Plugin_OnStatusUpdate(this, "Loading data from server...");
             Logger.WriteLine("Loading data from server...");
 
@@ -450,12 +464,12 @@ namespace SimAddon
             }
             Cursor = Cursors.Default;
 
-            SetSplashProgress(98,"Starting...");
+            SetSplashProgress(98, "Starting...");
 
             //demarre le timer de connection (fait un essai de connexion toutes les 1000ms)
             this.timerConnection.Start();
 
-            SetSplashProgress(100,"done");
+            SetSplashProgress(100, "done");
 
             // close/hide splash
             try
@@ -615,20 +629,20 @@ namespace SimAddon
         public void SetTakeoff()
         {
             //what to do in application if flight recorder detected a takeoff ?
-//            if (autoHide)
-//            {
-//                LastWindowState = this.WindowState;
-//                this.WindowState = FormWindowState.Minimized;
-//            }
+            //            if (autoHide)
+            //            {
+            //                LastWindowState = this.WindowState;
+            //                this.WindowState = FormWindowState.Minimized;
+            //            }
         }
 
         public void SetLanding()
         {
             //what to do in application if flight recorder detected a landing ?
-//            if (autoHide)
-//            {
-//                this.WindowState = LastWindowState;
-//            }
+            //            if (autoHide)
+            //            {
+            //                this.WindowState = LastWindowState;
+            //            }
         }
 
         public void SetCallsign(object sender, string callsign)
@@ -771,6 +785,60 @@ namespace SimAddon
                 UseShellExecute = true, // This is necessary to open the URL in the default browser
                 Verb = "open" // This is necessary to open the folder in the file explorer
             });
+        }
+
+        private void vATSIMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (vATSIMToolStripMenuItem.Checked)
+            {
+                iVAOToolStripMenuItem.Checked = false;
+                _simData.useFlyingNetwork(FlyingNetwork.VATSIM);
+                Settings.Default.FlyingNetwork = FlyingNetwork.VATSIM.ToString();
+                Settings.Default.Save();
+            }
+            WriteWindowTitle();
+
+            SimEventArg eventArg = new SimEventArg();
+            eventArg.reason = SimEventArg.EventType.CHANGENETWORK;
+            //push the event to all the plugins
+            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+            {
+                try
+                {
+                    plugin.ManageSimEvent(this, eventArg);
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
+                }
+            }
+        }
+
+        private void iVAOToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (iVAOToolStripMenuItem.Checked)
+            {
+                vATSIMToolStripMenuItem.Checked = false;
+                _simData.useFlyingNetwork(FlyingNetwork.IVAO);
+                Settings.Default.FlyingNetwork = FlyingNetwork.IVAO.ToString();
+                Settings.Default.Save();
+            }
+            WriteWindowTitle();
+            SimEventArg eventArg = new SimEventArg();
+            eventArg.reason = SimEventArg.EventType.CHANGENETWORK;
+            //push the event to all the plugins
+            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+            {
+                try
+                {
+                    plugin.ManageSimEvent(this, eventArg);
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
+                }
+            }
+
         }
     }
 }

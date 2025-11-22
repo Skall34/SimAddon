@@ -16,7 +16,8 @@ namespace SimAddonPlugin
             SETDEPARTURE,
             SETDESTINATION,
             SETAIRCRAFT,
-            CRASHING
+            CRASHING,
+            CHANGENETWORK
         }
 
         public EventType reason { get; set; }

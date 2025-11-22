@@ -29,58 +29,34 @@
         private void InitializeComponent()
         {
             webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
-            menuStrip1 = new MenuStrip();
-            ATCMenu = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
-            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // webView21
             // 
-            webView21.AllowExternalDrop = true;
+            webView21.AllowExternalDrop = false;
             webView21.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             webView21.CreationProperties = null;
             webView21.DefaultBackgroundColor = Color.White;
-            webView21.Location = new Point(3, 27);
+            webView21.Location = new Point(3, 3);
             webView21.Name = "webView21";
-            webView21.Size = new Size(794, 420);
+            webView21.Size = new Size(794, 444);
             webView21.TabIndex = 0;
             webView21.ZoomFactor = 1D;
-            // 
-            // menuStrip1
-            // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { ATCMenu });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 24);
-            menuStrip1.TabIndex = 1;
-            menuStrip1.Text = "menuStrip1";
-            // 
-            // ATCMenu
-            // 
-            ATCMenu.Name = "ATCMenu";
-            ATCMenu.Size = new Size(73, 20);
-            ATCMenu.Text = "Select ATC";
             // 
             // WebBrowserCtrl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(webView21);
-            Controls.Add(menuStrip1);
             Name = "WebBrowserCtrl";
             Size = new Size(800, 450);
             ((System.ComponentModel.ISupportInitialize)webView21).EndInit();
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
         private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem ATCMenu;
     }
 }

@@ -82,5 +82,17 @@ namespace SimAddon.Properties {
                 this["GSheetAPIUrl"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("VATSIM")]
+        public string FlyingNetwork {
+            get {
+                return ((string)(this["FlyingNetwork"]));
+            }
+            set {
+                this["FlyingNetwork"] = value;
+            }
+        }
     }
 }

@@ -102,7 +102,9 @@ namespace FlightRecPlugin
             contextMenuStrip1 = new ContextMenuStrip(components);
             resetFlightToolStripMenuItem = new ToolStripMenuItem();
             submitFlightToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
             debugToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
             loginToolStripMenuItem = new ToolStripMenuItem();
             logoutToolStripMenuItem = new ToolStripMenuItem();
             checkSessionToolStripMenuItem = new ToolStripMenuItem();
@@ -509,9 +511,11 @@ namespace FlightRecPlugin
             groupBox7.Controls.Add(cbMission);
             groupBox7.Controls.Add(label2);
             groupBox7.Controls.Add(cbNote);
-            groupBox7.Location = new Point(5, 3);
+            groupBox7.Location = new Point(5, 0);
+            groupBox7.Margin = new Padding(0);
             groupBox7.Name = "groupBox7";
-            groupBox7.Size = new Size(540, 230);
+            groupBox7.Padding = new Padding(0);
+            groupBox7.Size = new Size(540, 233);
             groupBox7.TabIndex = 54;
             groupBox7.TabStop = false;
             groupBox7.Text = "Flight evaluation";
@@ -520,19 +524,19 @@ namespace FlightRecPlugin
             // 
             tbCommentaires.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tbCommentaires.BackColor = Color.FromArgb(255, 192, 128);
-            tbCommentaires.Location = new Point(112, 25);
+            tbCommentaires.Location = new Point(109, 22);
             tbCommentaires.Margin = new Padding(5, 4, 5, 4);
             tbCommentaires.Multiline = true;
             tbCommentaires.Name = "tbCommentaires";
             tbCommentaires.ReadOnly = true;
             tbCommentaires.ScrollBars = ScrollBars.Vertical;
-            tbCommentaires.Size = new Size(420, 160);
+            tbCommentaires.Size = new Size(426, 169);
             tbCommentaires.TabIndex = 20;
             // 
             // pictureBox1
             // 
             pictureBox1.Image = (System.Drawing.Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(7, 42);
+            pictureBox1.Location = new Point(7, 43);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(100, 50);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -543,7 +547,7 @@ namespace FlightRecPlugin
             // 
             label15.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label15.AutoSize = true;
-            label15.Location = new Point(245, 195);
+            label15.Location = new Point(248, 201);
             label15.Margin = new Padding(4, 0, 4, 0);
             label15.Name = "label15";
             label15.Size = new Size(63, 18);
@@ -553,7 +557,7 @@ namespace FlightRecPlugin
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(20, 21);
+            label12.Location = new Point(17, 22);
             label12.Margin = new Padding(5, 0, 5, 0);
             label12.Name = "label12";
             label12.Size = new Size(83, 18);
@@ -566,7 +570,7 @@ namespace FlightRecPlugin
             cbMission.DrawMode = DrawMode.OwnerDrawFixed;
             cbMission.DropDownStyle = ComboBoxStyle.DropDownList;
             cbMission.FormattingEnabled = true;
-            cbMission.Location = new Point(315, 192);
+            cbMission.Location = new Point(318, 198);
             cbMission.MaxDropDownItems = 12;
             cbMission.Name = "cbMission";
             cbMission.Size = new Size(219, 26);
@@ -578,7 +582,7 @@ namespace FlightRecPlugin
             // 
             label2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new Point(20, 195);
+            label2.Location = new Point(17, 201);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(83, 18);
@@ -591,7 +595,7 @@ namespace FlightRecPlugin
             cbNote.DropDownStyle = ComboBoxStyle.DropDownList;
             cbNote.FormattingEnabled = true;
             cbNote.Items.AddRange(new object[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
-            cbNote.Location = new Point(112, 192);
+            cbNote.Location = new Point(109, 198);
             cbNote.MaxDropDownItems = 10;
             cbNote.Name = "cbNote";
             cbNote.Size = new Size(66, 26);
@@ -855,14 +859,14 @@ namespace FlightRecPlugin
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { resetFlightToolStripMenuItem, submitFlightToolStripMenuItem, debugToolStripMenuItem, loginToolStripMenuItem, logoutToolStripMenuItem, checkSessionToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { resetFlightToolStripMenuItem, submitFlightToolStripMenuItem, toolStripSeparator1, debugToolStripMenuItem, toolStripSeparator2, loginToolStripMenuItem, logoutToolStripMenuItem, checkSessionToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 158);
+            contextMenuStrip1.Size = new Size(147, 148);
             // 
             // resetFlightToolStripMenuItem
             // 
             resetFlightToolStripMenuItem.Name = "resetFlightToolStripMenuItem";
-            resetFlightToolStripMenuItem.Size = new Size(180, 22);
+            resetFlightToolStripMenuItem.Size = new Size(146, 22);
             resetFlightToolStripMenuItem.Text = "Reset flight";
             resetFlightToolStripMenuItem.Click += resetFlightToolStripMenuItem_Click;
             // 
@@ -870,35 +874,45 @@ namespace FlightRecPlugin
             // 
             submitFlightToolStripMenuItem.Enabled = false;
             submitFlightToolStripMenuItem.Name = "submitFlightToolStripMenuItem";
-            submitFlightToolStripMenuItem.Size = new Size(180, 22);
+            submitFlightToolStripMenuItem.Size = new Size(146, 22);
             submitFlightToolStripMenuItem.Text = "Save Flight";
             submitFlightToolStripMenuItem.Click += submitFlightToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(143, 6);
             // 
             // debugToolStripMenuItem
             // 
             debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            debugToolStripMenuItem.Size = new Size(180, 22);
+            debugToolStripMenuItem.Size = new Size(146, 22);
             debugToolStripMenuItem.Text = "Debug";
             debugToolStripMenuItem.Click += debugToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(143, 6);
             // 
             // loginToolStripMenuItem
             // 
             loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            loginToolStripMenuItem.Size = new Size(180, 22);
+            loginToolStripMenuItem.Size = new Size(146, 22);
             loginToolStripMenuItem.Text = "Login";
             loginToolStripMenuItem.Click += loginToolStripMenuItem_Click;
             // 
             // logoutToolStripMenuItem
             // 
             logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            logoutToolStripMenuItem.Size = new Size(180, 22);
+            logoutToolStripMenuItem.Size = new Size(146, 22);
             logoutToolStripMenuItem.Text = "Logout";
             logoutToolStripMenuItem.Click += logoutToolStripMenuItem_Click;
             // 
             // checkSessionToolStripMenuItem
             // 
             checkSessionToolStripMenuItem.Name = "checkSessionToolStripMenuItem";
-            checkSessionToolStripMenuItem.Size = new Size(180, 22);
+            checkSessionToolStripMenuItem.Size = new Size(146, 22);
             checkSessionToolStripMenuItem.Text = "CheckSession";
             checkSessionToolStripMenuItem.Click += checkSessionToolStripMenuItem_Click;
             // 
@@ -1085,5 +1099,7 @@ namespace FlightRecPlugin
         private ToolStripMenuItem loginToolStripMenuItem;
         private ToolStripMenuItem logoutToolStripMenuItem;
         private ToolStripMenuItem checkSessionToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripSeparator toolStripSeparator2;
     }
 }

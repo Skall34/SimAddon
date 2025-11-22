@@ -205,6 +205,12 @@ namespace SimDataManager
 
         private static HttpClient httpClient;
 
+        private FlyingNetwork _flyingNetwork;
+
+        public FlyingNetwork flyingNetwork {
+            get { return _flyingNetwork; }
+        }
+
         public simData(string GSheetURL)
         {
             _isConnectedToSim = false;
@@ -218,6 +224,27 @@ namespace SimDataManager
             //flightPerfs = new FlightPerfs();
             SiteConnection = new SiteConnection(BASERURL);
             httpClient = new HttpClient();
+        }
+
+        public void useFlyingNetwork(string networkName)
+        {
+            if (networkName.Equals(FlyingNetwork.VATSIM, StringComparison.OrdinalIgnoreCase))
+            {
+                _flyingNetwork = new VATSIMFlyingNetwork();
+            }
+            else if (networkName.Equals(FlyingNetwork.IVAO, StringComparison.OrdinalIgnoreCase))
+            {
+                _flyingNetwork = new IVAOFlyingNetwork();
+            }
+            else
+            {
+                if (networkName.Equals(string.Empty))
+                {
+                    _flyingNetwork = null;
+                    return;
+                }
+                throw new ArgumentException("Invalid network name");
+            }
         }
 
         public async Task<string> loginToSite()

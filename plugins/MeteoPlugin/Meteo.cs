@@ -1135,10 +1135,10 @@ namespace MeteoPlugin
 
         private static readonly HttpClient httpClient = new HttpClient();
 
-        public static async Task<string> getMetar(string ICAO)
+        public static async Task<string> getMetar(string url)
         {
             // Construire l'URL avec le code ICAO
-            string url = $"https://aviationweather.gov/api/data/metar?ids={ICAO}"; //. (opt &format=json)
+            //string url = $"https://aviationweather.gov/api/data/metar?ids={ICAO}"; //. (opt &format=json)
             //string url = $"https://aviationweather.gov/cgi-bin/data/metar.php?ids={ICAO}";
             //use vatsim METAR
             //string url = $"https://metar.vatsim.net/{ICAO}";
