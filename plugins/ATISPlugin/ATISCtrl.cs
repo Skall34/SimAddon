@@ -9,7 +9,7 @@ namespace ATISPlugin
     public partial class ATISCtrl : UserControl, ISimAddonPluginCtrl
     {
         private simData simdata;
-
+        private genericATC ATC;
         //ecoded.Replace("RWY", "RUNWAY")
         //                            .Replace("DEP", "DEPARTURE")
         //                            .Replace("ARR", "ARRIVAL")
@@ -73,14 +73,6 @@ namespace ATISPlugin
             InitializeComponent();
             this.cbICAO.ValueMember = "fullName";
             this.cbICAO.DisplayMember = "fullName";
-            //if (!File.Exists("dictionnary.json"))
-            //{
-            //    SaveDictionaryToJsonFile(abbreviations, "dictionnary.json");
-            //}
-            //else
-            //{
-            //    abbreviations = LoadDictionaryFromJsonFile("dictionnary.json");
-            //}
         }
 
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
@@ -89,19 +81,6 @@ namespace ATISPlugin
         public event ISimAddonPluginCtrl.UpdateStatusHandler OnStatusUpdate;
         public event ISimAddonPluginCtrl.OnShowMsgboxHandler OnShowMsgbox;
         public event ISimAddonPluginCtrl.OnShowDialogHandler OnShowDialog;
-
-        //event ISimAddonPluginCtrl.UpdateStatusHandler ISimAddonPluginCtrl.OnStatusUpdate
-        //{
-        //    add
-        //    {
-        //        updateStatusHandler = value;
-        //    }
-
-        //    remove
-        //    {
-        //        updateStatusHandler = null;
-        //    }
-        //}
 
         private void UpdateStatus(string message)
         {
@@ -125,7 +104,16 @@ namespace ATISPlugin
             //nothing particular for init
             simdata = _data;
             //ask a first refresh of vatsim data
-            VATSIM.refresh();
+            if (simdata.flyingNetwork.Name == FlyingNetwork.VATSIM)
+            {
+                ATC = new VATSIMATC();
+            }
+            else
+            {
+                ATC = new IVAOATC();
+            }
+            string url = simdata.flyingNetwork.GetGlobalATISUrl();
+            ATC.refresh(url);
         }
 
         public TabPage registerPage()
@@ -166,32 +154,21 @@ namespace ATISPlugin
         {
             try
             {
-
                 //todo : rafraichis la list des aéroports assez proches pour être interrogés.
                 if ((simdata != null) && (simdata.isConnectedToSim))
                 {
                     uint VHFRange = NavigationHelper.GetVHFRangeNauticalMiles(data.position.Altitude);
-                    List<Aeroport> proches = Aeroport.FindAirportsInRange(simdata.aeroports, data.position.Location.Latitude, data.position.Location.Longitude, VHFRange);
-                    List<Aeroport> possibles = new List<Aeroport>();
-                    foreach (Aeroport a in proches)
-                    {
-                        List<ControllerData> controllers = VATSIM.FindControllers(a.ident);
-                        if (controllers.Count > 0)
-                        {
-                            possibles.Add(a);
-                        }
-                    }
+                    List<string> possibles = ATC.FindATISInRange(data.position.Location.Latitude, data.position.Location.Longitude, VHFRange);
 
                     if (possibles.Count > 0)
                     {
-                        possibles.Sort((x, y) => x.distance.CompareTo(y.distance));
-                        foreach (Aeroport a in cbICAO.Items)
+                        foreach (string s in cbICAO.Items)
                         {
-                            if (!possibles.Contains(a))
+                            if (!possibles.Contains(s))
                             {
                                 try
                                 {
-                                    cbICAO.Items.Remove(a);
+                                    cbICAO.Items.Remove(s);
                                 }
                                 catch (Exception)
                                 {
@@ -200,11 +177,11 @@ namespace ATISPlugin
                             }
                         }
 
-                        foreach (Aeroport a in possibles)
+                        foreach (string s in possibles)
                         {
-                            if (!cbICAO.Items.Contains(a))
+                            if (!cbICAO.Items.Contains(s))
                             {
-                                cbICAO.Items.Add(a);
+                                cbICAO.Items.Add(s);
                             }
                         }
                     }
@@ -345,8 +322,9 @@ namespace ATISPlugin
 
         private async void requestATIS()
         {
+            string url = simdata.flyingNetwork.GetGlobalATISUrl();
 
-            bool refreshOK = await VATSIM.refresh();
+            bool refreshOK = await ATC.refresh(url);
             tbATISText.Text = string.Empty;
             tbController.Text = string.Empty;
             lvControllers.Items.Clear();
@@ -367,50 +345,36 @@ namespace ATISPlugin
                 //ne pas chercher si aucun critere de recherche n'a été entré.
                 if (searchItem.Trim() != string.Empty)
                 {
-
-                    if (VATSIM.data.atis != null)
-                    {
-                        List<ATISData> atis = VATSIM.FindATIS(searchItem);
+                    string localUrl = simdata.flyingNetwork.GetAirportATISUrl(searchItem.ToLower());
+                    List<string> atis = await ATC.GetATIS(searchItem, localUrl);
                         if (atis.Count > 0)
                         {
-                            foreach (ATISData a in atis)
+                            foreach (string s in atis)
                             {
-                                string speechText = string.Empty;
-                                foreach (string s in a.text_atis)
-                                {
-                                    string atisText = decodeATIS(s);
-                                    tbATISText.Text += atisText + " ";
-                                    speechText += atisText + Environment.NewLine;
-                                }
-                                annonce(speechText);
+                                string atisText = decodeATIS(s);
+                                tbATISText.Text += atisText + " ";
                                 tbATISText.Text += Environment.NewLine + "-------------------" + Environment.NewLine;
-
                             }
                         }
                         else
                         {
                             tbATISText.Text = "No ATIS available";
                         }
-                    }
-                    else
-                    {
-                        tbATISText.Text = "No ATIS available";
-                    }
 
-                    if (VATSIM.data.controllers != null)
-                    {
-                        List<ControllerData> controlers = VATSIM.FindControllers(searchItem);
-                        foreach (ControllerData controller in controlers)
-                        {
-                            string rating = VATSIM.GetRatingLabel(controller);
-                            string facility = VATSIM.GetFacilityLabel(controller);
-                            string frequency = controller.frequency;
-                            string callsign = controller.callsign;
-                            ListViewItem newItem = new ListViewItem(new string[] { facility, rating, callsign, frequency });
-                            newItem.Tag = controller;
-                            lvControllers.Items.Add(newItem);
-                        }
-                    }
+                    //if (VATSIM.data.controllers != null)
+                    //{
+                    //    List<VatsimData.ControllerData> controlers = VATSIM.FindControllers(searchItem);
+                    //    foreach (VatsimData.ControllerData controller in controlers)
+                    //    {
+                    //        string rating = VATSIM.GetRatingLabel(controller);
+                    //        string facility = VATSIM.GetFacilityLabel(controller);
+                    //        string frequency = controller.frequency;
+                    //        string callsign = controller.callsign;
+                    //        ListViewItem newItem = new ListViewItem(new string[] { facility, rating, callsign, frequency });
+                    //        newItem.Tag = controller;
+                    //        lvControllers.Items.Add(newItem);
+                    //    }
+                    //}
                 }
 
 
@@ -439,7 +403,8 @@ namespace ATISPlugin
         private void UpdateVATSIMTimer_Tick(object sender, EventArgs e)
         {
             //refresh VATSIM data at least every 5 minutes.
-            VATSIM.refresh();
+            string url = simdata.flyingNetwork.GetGlobalATISUrl();
+            ATC.refresh(url);
         }
 
         private void cbICAO_KeyPress(object sender, KeyPressEventArgs e)
@@ -454,7 +419,7 @@ namespace ATISPlugin
         {
             if (lvControllers.SelectedItems.Count > 0)
             {
-                ControllerData c = (ControllerData)lvControllers.SelectedItems[0].Tag;
+                VatsimData.ControllerData c = (VatsimData.ControllerData)lvControllers.SelectedItems[0].Tag;
                 if (c != null)
                 {
                     string text = string.Empty;
@@ -486,7 +451,19 @@ namespace ATISPlugin
 
         public void ManageSimEvent(object sender, SimEventArg eventArg)
         {
-            throw new NotImplementedException();
+            if (eventArg.reason == SimEventArg.EventType.CHANGENETWORK)
+            {
+                if (simdata.flyingNetwork.Name == FlyingNetwork.VATSIM)
+                {
+                    ATC = new VATSIMATC();
+                }
+                else
+                {
+                    ATC = new IVAOATC();
+                }
+                string url = simdata.flyingNetwork.GetGlobalATISUrl();
+                ATC.refresh(url);
+            }
         }
     }
 }

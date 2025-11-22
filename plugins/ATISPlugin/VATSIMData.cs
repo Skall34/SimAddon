@@ -5,143 +5,144 @@ using SimDataManager;
 namespace ATISPlugin
 {
 
-    public class GeneralData
-    {
-        public int version { get; set; }
-        public int reload { get; set; }
-        public string update { get; set; }
-        public string update_timestamp { get; set; }
-        public int connected_clients { get; set; }
-        public int unique_users { get; set; }
-    }
-
-    public class FlightplanData
-    {
-        public string flight_rules { get; set; }
-        public string aircraft { get; set; }
-        public string aircraft_faa { get; set; }
-        public string aircraft_short { get; set; }
-        public string departure { get; set; }
-        public string arrival { get; set; }
-        public string alternate { get; set; }
-        public string deptime { get; set; }
-        public string route_time { get; set; }
-        public string fuel_time { get; set; }
-        public string remarks { get; set; }
-        public string route { get; set; }
-        public int revision_id { get; set; }
-        public string assigned_transponder { get; set; }
-    }
-
-    public class PilotData
-    {
-        public int cid { get; set; }
-        public string name { get; set; }
-
-        public string callsign { get; set; }
-        public string server { get; set; }
-        public int pilot_rating { get; set; }
-        public int military_rating { get; set; }
-        public double latitude { get; set; }
-        public double longitude { get; set; }
-        public int altitude { get; set; }
-        public int groundspeed { get; set; }
-        public string transponder { get; set; }
-        public int heading { get; set; }
-        public double qnh_i_hg { get; set; }
-        public int qnh_mb { get; set; }
-
-        public FlightplanData flight_plan;
-
-        public string logon_time { get; set; }
-        public string last_updated { get; set; }
-    }
-
-    public class ControllerData
-    {
-        public int cid { get; set; }
-        public string name { get; set; }
-        public string callsign { get; set; }
-        public string frequency { get; set; }
-
-        public int facility { get; set; }
-        public int rating { get; set; }
-        public string server { get; set; }
-        public int visual_range { get; set; }
-
-        public string[] text_atis;
-        public string last_updated { get; set; }
-        public string logon_time { get; set; }
-    }
-
-    public class ATISData : ControllerData
-    {
-        public string real_name { get; set; }
-        public double latitude { get; set; }
-        public double longitude { get; set; }
-    }
-
-    public class ServerData
-    {
-        public string ident { get; set; }
-        public string hostname_or_ip { get; set; }
-        public string location { get; set; }
-        public string name { get; set; }
-        public bool client_connection_allowed { get; set; }
-        public bool is_sweatbox { get; set; }
-    }
-
-    public class PreFileData
-    {
-        public int cid { get; set; }
-        public string name { get; set; }
-        public string callsign { get; set; }
-
-        public FlightplanData flight_plan;
-        public string date_time { get; set; }
-    }
-
-    public class FacilityData
-    {
-        public int id { get; set; }
-
-        [JsonProperty("short")]
-        public string short_name { get; set; }
-
-        [JsonProperty("long")]
-        public string long_name { get; set; }
-    }
-
-    public class RatingData
-    {
-        public int id { get; set; }
-
-        [JsonProperty("short")]
-        public string short_name { get; set; }
-
-        [JsonProperty("long")]
-        public string long_name { get; set; }
-    }
-
-    public class PilotRatingData
-    {
-        public int id { get; set; }
-
-        public string short_name { get; set; }
-
-        public string long_name { get; set; }
-    }
-    public class MilitaryRatingData
-    {
-        public int id { get; set; }
-
-        public string short_name { get; set; }
-
-        public string long_name { get; set; }
-    }
 
     public class VatsimData
     {
+        public class GeneralData
+        {
+            public int version { get; set; }
+            public int reload { get; set; }
+            public string update { get; set; }
+            public string update_timestamp { get; set; }
+            public int connected_clients { get; set; }
+            public int unique_users { get; set; }
+        }
+
+        public class FlightplanData
+        {
+            public string flight_rules { get; set; }
+            public string aircraft { get; set; }
+            public string aircraft_faa { get; set; }
+            public string aircraft_short { get; set; }
+            public string departure { get; set; }
+            public string arrival { get; set; }
+            public string alternate { get; set; }
+            public string deptime { get; set; }
+            public string route_time { get; set; }
+            public string fuel_time { get; set; }
+            public string remarks { get; set; }
+            public string route { get; set; }
+            public int revision_id { get; set; }
+            public string assigned_transponder { get; set; }
+        }
+
+        public class PilotData
+        {
+            public int cid { get; set; }
+            public string name { get; set; }
+
+            public string callsign { get; set; }
+            public string server { get; set; }
+            public int pilot_rating { get; set; }
+            public int military_rating { get; set; }
+            public double latitude { get; set; }
+            public double longitude { get; set; }
+            public int altitude { get; set; }
+            public int groundspeed { get; set; }
+            public string transponder { get; set; }
+            public int heading { get; set; }
+            public double qnh_i_hg { get; set; }
+            public int qnh_mb { get; set; }
+
+            public FlightplanData flight_plan;
+
+            public string logon_time { get; set; }
+            public string last_updated { get; set; }
+        }
+
+        public class ControllerData
+        {
+            public int cid { get; set; }
+            public string name { get; set; }
+            public string callsign { get; set; }
+            public string frequency { get; set; }
+
+            public int facility { get; set; }
+            public int rating { get; set; }
+            public string server { get; set; }
+            public int visual_range { get; set; }
+
+            public string[] text_atis;
+            public string last_updated { get; set; }
+            public string logon_time { get; set; }
+        }
+
+        public class ATISData : ControllerData
+        {
+            public string real_name { get; set; }
+            public double latitude { get; set; }
+            public double longitude { get; set; }
+        }
+
+        public class ServerData
+        {
+            public string ident { get; set; }
+            public string hostname_or_ip { get; set; }
+            public string location { get; set; }
+            public string name { get; set; }
+            public bool client_connection_allowed { get; set; }
+            public bool is_sweatbox { get; set; }
+        }
+
+        public class PreFileData
+        {
+            public int cid { get; set; }
+            public string name { get; set; }
+            public string callsign { get; set; }
+
+            public FlightplanData flight_plan;
+            public string date_time { get; set; }
+        }
+
+        public class FacilityData
+        {
+            public int id { get; set; }
+
+            [JsonProperty("short")]
+            public string short_name { get; set; }
+
+            [JsonProperty("long")]
+            public string long_name { get; set; }
+        }
+
+        public class RatingData
+        {
+            public int id { get; set; }
+
+            [JsonProperty("short")]
+            public string short_name { get; set; }
+
+            [JsonProperty("long")]
+            public string long_name { get; set; }
+        }
+
+        public class PilotRatingData
+        {
+            public int id { get; set; }
+
+            public string short_name { get; set; }
+
+            public string long_name { get; set; }
+        }
+        public class MilitaryRatingData
+        {
+            public int id { get; set; }
+
+            public string short_name { get; set; }
+
+            public string long_name { get; set; }
+        }
+
         public GeneralData general;
         public PilotData[] pilots;
         public ControllerData[] controllers;
@@ -154,63 +155,63 @@ namespace ATISPlugin
         public MilitaryRatingData[] military_ratings;
     }
 
-    //a clas to get only ATIS Data from vatsim
-    public class ATIS
+    ////a clas to get only ATIS Data from vatsim
+    //public class ATIS
+    //{
+    //    public static List<ATISData> data = new List<ATISData>();
+
+    //    private static readonly HttpClient httpClient = new HttpClient();
+    //    public static async Task<bool> refresh()
+    //    {
+    //        // Construire l'URL avec le code ICAO
+    //        string url = $"https://data.vatsim.net/v3/afv-atis-data.json";
+    //        bool result = false;
+    //        try
+    //        {
+    //            // Envoyer la requête HTTP GET
+    //            HttpResponseMessage response = await httpClient.GetAsync(url);
+    //            response.EnsureSuccessStatusCode(); // Vérifier que la requête a réussi
+
+    //            // Lire le contenu de la réponse
+    //            string responseBody = await response.Content.ReadAsStringAsync();
+
+    //            // Extraire la section METAR du contenu HTML (selon le format attendu)
+    //            string RawATISData = responseBody.TrimEnd();
+    //            data = JsonConvert.DeserializeObject<List<ATISData>>(RawATISData);
+    //            result = true;
+    //            return result;
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Logger.WriteLine($"Erreur lors de la récupération de la liste des ATIS : {ex.Message}");
+    //            return false;
+    //        }
+    //    }
+
+    //    public static List<String> FindATISInRange(double targetLatitude, double targetLongitude, uint range)
+    //    {
+    //        List<string> airportsInRange = new List<string>();
+    //        foreach (ATISData airport in data)
+    //        {
+    //            double distance = NavigationHelper.GetDistance(airport.latitude, airport.longitude, targetLatitude, targetLongitude);
+    //            if (distance < range)
+    //            {
+    //                airportsInRange.Add(airport.name);
+    //            }
+    //        }
+    //        return airportsInRange;
+    //    }
+    //}
+
+    public class VATSIMATC : genericATC
     {
-        public static List<ATISData> data = new List<ATISData>();
+        public VatsimData data = new VatsimData();
 
         private static readonly HttpClient httpClient = new HttpClient();
-        public static async Task<bool> refresh()
+        public override async Task<bool> refresh(string url)
         {
             // Construire l'URL avec le code ICAO
-            string url = $"https://data.vatsim.net/v3/afv-atis-data.json";
-            bool result = false;
-            try
-            {
-                // Envoyer la requête HTTP GET
-                HttpResponseMessage response = await httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode(); // Vérifier que la requête a réussi
-
-                // Lire le contenu de la réponse
-                string responseBody = await response.Content.ReadAsStringAsync();
-
-                // Extraire la section METAR du contenu HTML (selon le format attendu)
-                string RawATISData = responseBody.TrimEnd();
-                data = JsonConvert.DeserializeObject<List<ATISData>>(RawATISData);
-                result = true;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Logger.WriteLine($"Erreur lors de la récupération de la liste des ATIS : {ex.Message}");
-                return false;
-            }
-        }
-
-        public static List<String> FindATISInRange(double targetLatitude, double targetLongitude, uint range)
-        {
-            List<string> airportsInRange = new List<string>();
-            foreach (ATISData airport in data)
-            {
-                double distance = NavigationHelper.GetDistance(airport.latitude, airport.longitude, targetLatitude, targetLongitude);
-                if (distance < range)
-                {
-                    airportsInRange.Add(airport.name);
-                }
-            }
-            return airportsInRange;
-        }
-    }
-
-    public class VATSIM
-    {
-        public static VatsimData data = new VatsimData();
-
-        private static readonly HttpClient httpClient = new HttpClient();
-        public static async Task<bool> refresh()
-        {
-            // Construire l'URL avec le code ICAO
-            string url = $"https://data.vatsim.net/v3/vatsim-data.json";
+            //string url = $"https://data.vatsim.net/v3/vatsim-data.json";
             bool result = false;
             try
             {
@@ -234,10 +235,10 @@ namespace ATISPlugin
             }
         }
 
-        public static List<String> FindATISInRange(double targetLatitude, double targetLongitude, uint range)
+        public override List<string> FindATISInRange(double targetLatitude, double targetLongitude, uint range)
         {
             List<string> airportsInRange = new List<string>();
-            foreach (ATISData airport in data.atis)
+            foreach (VatsimData.ATISData airport in data.atis)
             {
 
                 double distance = NavigationHelper.GetDistance(airport.latitude, airport.longitude, targetLatitude, targetLongitude);
@@ -249,17 +250,18 @@ namespace ATISPlugin
             return airportsInRange;
         }
 
-        public static List<ATISData> FindATIS(string ICAO)
+        public override async Task<List<string>> GetATIS(string ICAO, string url = "")
         {
-            List<ATISData> result = new List<ATISData>();
+            List<string> result = new List<string>();
 
             if (data.atis != null)
             {
-                foreach (ATISData a in data.atis)
+                foreach (VatsimData.ATISData a in data.atis)
                 {
                     if (a.callsign.StartsWith(ICAO))
                     {
-                        result.Add(a);
+                        string allAtis = string.Join(" ", a.text_atis);    
+                        result.Add(allAtis);
                     }
                 }
             }
@@ -267,7 +269,7 @@ namespace ATISPlugin
             return result;
         }
 
-        public static string GetRatingLabel(ControllerData c)
+        public string GetRatingLabel(VatsimData.ControllerData c)
         {
             string result = "";
             int rating = c.rating;
@@ -275,7 +277,7 @@ namespace ATISPlugin
             return result;
         }
 
-        public static string GetFacilityLabel(ControllerData c)
+        public string GetFacilityLabel(VatsimData.ControllerData c)
         {
             string result = "";
             int facility = c.facility;
@@ -284,12 +286,12 @@ namespace ATISPlugin
         }
 
 
-        public static List<ControllerData> FindControllers(string ICAO)
+        public List<VatsimData.ControllerData> FindControllers(string ICAO)
         {
-            List<ControllerData> result = new List<ControllerData>();
+            List<VatsimData.ControllerData> result = new List<VatsimData.ControllerData>();
             if (data.controllers != null)
             {
-                foreach (ControllerData c in data.controllers)
+                foreach (VatsimData.ControllerData c in data.controllers)
                 {
                     if (c.callsign.StartsWith(ICAO))
                     {
@@ -318,7 +320,7 @@ namespace ATISPlugin
             }
             if (data.atis != null)
             {
-                foreach (ControllerData c in data.atis)
+                foreach (VatsimData.ControllerData c in data.atis)
                 {
                     if (c.callsign.StartsWith(ICAO))
                     {

@@ -31,10 +31,14 @@ namespace SimDataManager
         {
             return string.Format("https://metar.vatsim.net/{0}", ICAO);
         }
-
-        public override string GetATISUrl(string ICAO)
+        public override string GetGlobalATISUrl()
         {
-            return string.Format("https://api.vatsim.net/v2/weather/atis/{0}", ICAO);
+            return string.Format("https://data.vatsim.net/v3/vatsim-data.json");
+        }
+
+        public override string GetAirportATISUrl(string ICAO)
+        {
+            return string.Empty;
         }
     }
 
@@ -84,10 +88,15 @@ namespace SimDataManager
             return string.Empty;
         }
 
-
-        public override string GetATISUrl(string ICAO)
+        public override string GetGlobalATISUrl()
         {
-            return string.Format("https://api.ivao.aero/v2/weather{0}/atis?apiKey={1}", ICAO, APIKEY);
+            return string.Format("https://api.ivao.aero/v2/tracker/now/atc/summary?apiKey={0}", APIKEY);
+        }
+
+
+        public override string GetAirportATISUrl(string ICAO)
+        {
+            return string.Format("https://api.ivao.aero/v2/airports/{0}/atis/latest?apiKey={1}", ICAO, APIKEY);
         }
     }
 }
