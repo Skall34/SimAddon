@@ -4,6 +4,7 @@ using SimDataManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -189,6 +190,14 @@ namespace ATISPlugin
                 }
             }
             return atisList;
+        }
+
+        public override System.Drawing.Image GetNetworkImage()
+        {
+            //get the folder of the current assembly
+            string dllpath =Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            Image result = Image.FromFile(Path.Combine(dllpath,"IVAOlogo.png"));
+            return result;
         }
     }
 }

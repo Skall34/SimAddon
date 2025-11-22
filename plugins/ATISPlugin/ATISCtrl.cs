@@ -112,6 +112,7 @@ namespace ATISPlugin
             {
                 ATC = new IVAOATC();
             }
+            panel1.BackgroundImage = ATC.GetNetworkImage();
             string url = simdata.flyingNetwork.GetGlobalATISUrl();
             ATC.refresh(url);
         }
@@ -461,6 +462,7 @@ namespace ATISPlugin
                 {
                     ATC = new IVAOATC();
                 }
+                panel1.BackgroundImage = ATC.GetNetworkImage();
                 string url = simdata.flyingNetwork.GetGlobalATISUrl();
                 ATC.refresh(url);
             }

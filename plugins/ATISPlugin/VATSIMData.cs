@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SimAddonLogger;
 using SimDataManager;
+using System.Reflection;
 
 namespace ATISPlugin
 {
@@ -330,6 +331,17 @@ namespace ATISPlugin
                 }
             }
             return result;
+        }
+
+        public override System.Drawing.Image GetNetworkImage()
+        {
+            //the image is in the same folder as the plugin dll
+            //load the images for a png file in the same folder as the dll
+            string dllpath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            Image result = Image.FromFile(Path.Combine(dllpath, "VATSIMlogo.png"));
+            return result;
+
+
         }
     }
 

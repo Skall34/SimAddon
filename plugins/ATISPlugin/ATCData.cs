@@ -22,5 +22,10 @@ namespace ATISPlugin
         {
            return new List<string>();
         }
+
+        public virtual Image GetNetworkImage()
+        {
+            return null;
+        }
     }
 }
