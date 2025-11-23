@@ -41,7 +41,6 @@ namespace ATISPlugin
             splitContainer2 = new SplitContainer();
             lvControllers = new ListView();
             columnType = new ColumnHeader();
-            columnRating = new ColumnHeader();
             columnCallsign = new ColumnHeader();
             columnFreq = new ColumnHeader();
             tbController = new TextBox();
@@ -191,7 +190,7 @@ namespace ATISPlugin
             // 
             // lvControllers
             // 
-            lvControllers.Columns.AddRange(new ColumnHeader[] { columnType, columnRating, columnCallsign, columnFreq });
+            lvControllers.Columns.AddRange(new ColumnHeader[] { columnType, columnCallsign, columnFreq });
             lvControllers.Dock = DockStyle.Fill;
             lvControllers.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lvControllers.FullRowSelect = true;
@@ -210,12 +209,6 @@ namespace ATISPlugin
             // 
             columnType.Text = "Facility";
             columnType.Width = 120;
-            // 
-            // columnRating
-            // 
-            columnRating.Text = "Rating";
-            columnRating.TextAlign = HorizontalAlignment.Center;
-            columnRating.Width = 120;
             // 
             // columnCallsign
             // 
@@ -282,7 +275,6 @@ namespace ATISPlugin
         private System.Windows.Forms.Timer UpdateVATSIMTimer;
         private ListView lvControllers;
         private ColumnHeader columnType;
-        private ColumnHeader columnRating;
         private ColumnHeader columnFreq;
         private ColumnHeader columnCallsign;
         private SplitContainer splitContainer2;

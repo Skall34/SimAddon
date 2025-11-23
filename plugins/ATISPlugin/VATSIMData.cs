@@ -156,54 +156,6 @@ namespace ATISPlugin
         public MilitaryRatingData[] military_ratings;
     }
 
-    ////a clas to get only ATIS Data from vatsim
-    //public class ATIS
-    //{
-    //    public static List<ATISData> data = new List<ATISData>();
-
-    //    private static readonly HttpClient httpClient = new HttpClient();
-    //    public static async Task<bool> refresh()
-    //    {
-    //        // Construire l'URL avec le code ICAO
-    //        string url = $"https://data.vatsim.net/v3/afv-atis-data.json";
-    //        bool result = false;
-    //        try
-    //        {
-    //            // Envoyer la requête HTTP GET
-    //            HttpResponseMessage response = await httpClient.GetAsync(url);
-    //            response.EnsureSuccessStatusCode(); // Vérifier que la requête a réussi
-
-    //            // Lire le contenu de la réponse
-    //            string responseBody = await response.Content.ReadAsStringAsync();
-
-    //            // Extraire la section METAR du contenu HTML (selon le format attendu)
-    //            string RawATISData = responseBody.TrimEnd();
-    //            data = JsonConvert.DeserializeObject<List<ATISData>>(RawATISData);
-    //            result = true;
-    //            return result;
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            Logger.WriteLine($"Erreur lors de la récupération de la liste des ATIS : {ex.Message}");
-    //            return false;
-    //        }
-    //    }
-
-    //    public static List<String> FindATISInRange(double targetLatitude, double targetLongitude, uint range)
-    //    {
-    //        List<string> airportsInRange = new List<string>();
-    //        foreach (ATISData airport in data)
-    //        {
-    //            double distance = NavigationHelper.GetDistance(airport.latitude, airport.longitude, targetLatitude, targetLongitude);
-    //            if (distance < range)
-    //            {
-    //                airportsInRange.Add(airport.name);
-    //            }
-    //        }
-    //        return airportsInRange;
-    //    }
-    //}
-
     public class VATSIMATC : genericATC
     {
         public VatsimData data = new VatsimData();
@@ -239,17 +191,21 @@ namespace ATISPlugin
         public override List<ATCInfo> FindATISList()
         {
             List<ATCInfo> airportsInRange = new List<ATCInfo>();
-
+            if (data.atis == null)
+            {
+                return airportsInRange;
+            }
             foreach (VatsimData.ATISData airport in data.atis)
             {
                     ATCInfo info = new ATCInfo();
                     info.name = airport.callsign;
                     info.tag = airport.callsign;
-                    airportsInRange.Add(info);
+                    info.frequency = airport.frequency;
+                    info.facility = airport.name;
+                airportsInRange.Add(info);
             }
             //return the list of available atis, ordered alphabetically by name
             return airportsInRange.OrderBy(a => a.name).ToList();
-
         }
 
         public override async Task<List<string>> GetATISText(ATCInfo info, string url = "")

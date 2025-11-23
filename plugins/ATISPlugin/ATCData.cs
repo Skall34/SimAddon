@@ -10,6 +10,8 @@ namespace ATISPlugin
     {
         public string name { get; set; }
         public string tag { get; set; }
+        public string frequency { get; set; }
+        public string facility { get; set; }
     }
 
     public class genericATC

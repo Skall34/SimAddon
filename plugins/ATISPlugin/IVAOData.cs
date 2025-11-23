@@ -15,7 +15,7 @@ namespace ATISPlugin
         public class AtcSession
         {
             public string position { get; set; }
-            public float frequency { get; set; }
+            public string frequency { get; set; }
         }
         public class RegionPoint
         {
@@ -69,7 +69,7 @@ namespace ATISPlugin
             public string position { get; set; }
             public string composePosition { get; set; }
             public bool military { get; set; }
-            public float frequency { get; set; }
+            public string frequency { get; set; }
             public float latitude { get; set; }
             public float longitude { get; set; }
             public RegionPoint[] regionMap { get; set; }
@@ -137,7 +137,9 @@ namespace ATISPlugin
                         ATCInfo info = new ATCInfo()
                         {
                             name = atc.atcPosition.composePosition,
-                            tag = atc.id.ToString()
+                            tag = atc.id.ToString(),
+                            frequency = atc.atcSession.frequency,
+                            facility = atc.atcPosition.airport.name
                         };
                         atisList.Add(info);
                 }
@@ -149,7 +151,9 @@ namespace ATISPlugin
                             ATCInfo info = new ATCInfo()
                             {
                                 name = atc.subCenter.composePosition,
-                                tag = atc.id.ToString()
+                                tag = atc.id.ToString(),
+                                frequency = atc.subCenter.frequency,
+                                facility = atc.subCenter.atcCallsign != null ? atc.subCenter.atcCallsign : "Unknown Center"
                             };
                             atisList.Add(info);
                     }

@@ -116,8 +116,8 @@ namespace ATISPlugin
                 ATC = new IVAOATC();
             }
             panel1.BackgroundImage = ATC.GetNetworkImage();
-            refreshATISData();
 
+            _ = RunWithProgress(RefreshATISData());
         }
 
         public TabPage registerPage()
@@ -156,65 +156,6 @@ namespace ATISPlugin
 
         public void updateSituation(situation data)
         {
-            try
-            {
-                //rafraichis la liste des aéroports proches toutes les 10 mises à jour.
-                if (data.counter % 10 != 0)
-                {
-                    return;
-                }
-
-                //todo : rafraichis la list des aéroports assez proches pour être interrogés.
-                if ((simdata != null) && (simdata.isConnectedToSim))
-                {
-                    //ne pas rafraichir si la dropdown est ouverte.
-                    if (cbICAO.Focused)
-                    {
-                        //ne pas rafraichir la liste si l'utilisateur est en train de taper quelque chose.
-                        return;
-                    }
-                    List<ATCInfo> possibles = ATC.FindATISList();
-
-                    string selectedName = string.Empty;
-                    if (cbICAO.SelectedItem != null)
-                    {
-                        selectedName = ((ATCInfo)cbICAO.SelectedItem).name;
-                    }
-                    else
-                    {
-                        selectedName = cbICAO.Text.ToUpper();
-                    }
-                    cbICAO.Items.Clear();
-                    if (possibles.Count > 0)
-                    {
-                        int selectedIndex = -1;
-                        for (int i = 0; i < possibles.Count; i++)
-                        {
-                            cbICAO.Items.Add(possibles[i]);
-                            if (possibles[i].name == selectedName)
-                            {
-                                selectedIndex = i;
-                            }
-                        }
-                        if (selectedIndex >= 0)
-                        {
-                            //cbICAO.SelectedIndex = selectedIndex;
-                        }
-                        else
-                        {
-                            cbICAO.SelectedItem = null;
-                            cbICAO.Text = selectedName;
-                        }
-                    }
-                }
-                else
-                {
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.WriteLine(ex.Message);
-            }
         }
 
         private string decodeATIS(string rawATIS)
@@ -444,19 +385,26 @@ namespace ATISPlugin
                 {
                     string localUrl = simdata.flyingNetwork.GetAirportATISUrl();
                     List<string> atis = await ATC.GetATISText(searchItem, localUrl);
-                        if (atis.Count > 0)
+                    if (atis.Count > 0)
+                    {
+                        foreach (string s in atis)
                         {
-                            foreach (string s in atis)
-                            {
-                                string atisText = decodeATIS(s);
-                                tbATISText.Text += atisText + " ";
-                                tbATISText.Text += Environment.NewLine + "-------------------" + Environment.NewLine;
-                            }
+                            string atisText = decodeATIS(s);
+                            tbATISText.Text += atisText + " ";
+                            tbATISText.Text += Environment.NewLine + "-------------------" + Environment.NewLine;
                         }
-                        else
-                        {
-                            tbATISText.Text = "No ATIS available";
-                        }
+                    }
+                    else
+                    {
+                        tbATISText.Text = "No ATIS available";
+                    }
+
+                    lvControllers.Items.Clear();
+                    ListViewItem item = new ListViewItem(searchItem.facility);
+                    item.SubItems.Add(searchItem.name);
+                    item.SubItems.Add(searchItem.frequency.ToString());
+                    item.Tag = searchItem;
+                    lvControllers.Items.Add(item);
                 }
             }
             else
@@ -483,7 +431,7 @@ namespace ATISPlugin
         private void UpdateVATSIMTimer_Tick(object sender, EventArgs e)
         {
             //refresh VATSIM data at least every 5 minutes.
-            refreshATISData();
+            _ = RunWithProgress(RefreshATISData());
         }
 
         private void cbICAO_KeyPress(object sender, KeyPressEventArgs e)
@@ -496,26 +444,6 @@ namespace ATISPlugin
 
         private void lvControllers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lvControllers.SelectedItems.Count > 0)
-            {
-                VatsimData.ControllerData c = (VatsimData.ControllerData)lvControllers.SelectedItems[0].Tag;
-                if (c != null)
-                {
-                    string text = string.Empty;
-                    if (c.text_atis != null)
-                    {
-                        foreach (string s in c.text_atis)
-                        {
-                            text += s;
-                        }
-                    }
-                    tbController.Text = text;
-                }
-            }
-            else
-            {
-                tbController.Text = string.Empty;
-            }
         }
 
         private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e)
@@ -528,16 +456,65 @@ namespace ATISPlugin
             throw new NotImplementedException();
         }
 
-        private async void refreshATISData()
+        private async Task<bool> RefreshATISData()
         {
-            if (_refreshInProgress) return;
+            if (_refreshInProgress) return false;
             string url = simdata.flyingNetwork.GetGlobalATISUrl();
 
             if (url != null)
             {
                 // kick the refresh and show progress until it completes
-                _ = RunWithProgress(ATC.refresh(url));
+                await ATC.refresh(url);
+
+                try
+                {
+                    //ne pas rafraichir si la dropdown est ouverte.
+                    if (cbICAO.DroppedDown)
+                    {
+                        //ne pas rafraichir la liste si l'utilisateur est en train de taper quelque chose.
+                        return false;
+                    }
+                    List<ATCInfo> possibles = ATC.FindATISList();
+
+                    string selectedName = string.Empty;
+                    if (cbICAO.SelectedItem != null)
+                    {
+                        selectedName = ((ATCInfo)cbICAO.SelectedItem).name;
+                    }
+                    else
+                    {
+                        selectedName = cbICAO.Text.ToUpper();
+                    }
+                    cbICAO.Items.Clear();
+                    if (possibles.Count > 0)
+                    {
+                        int selectedIndex = -1;
+                        for (int i = 0; i < possibles.Count; i++)
+                        {
+                            cbICAO.Items.Add(possibles[i]);
+                            if (possibles[i].name == selectedName)
+                            {
+                                selectedIndex = i;
+                            }
+                        }
+                        if (selectedIndex >= 0)
+                        {
+                            //cbICAO.SelectedIndex = selectedIndex;
+                        }
+                        else
+                        {
+                            cbICAO.SelectedItem = null;
+                            cbICAO.Text = selectedName;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine(ex.Message);
+                }
+
             }
+            return true;
         }
 
         public void ManageSimEvent(object sender, SimEventArg eventArg)
@@ -554,10 +531,11 @@ namespace ATISPlugin
                 }
                 panel1.BackgroundImage = ATC.GetNetworkImage();
                 cbICAO.Items.Clear();
+                cbICAO.Text = string.Empty;
                 tbATISText.Text = string.Empty;
 
                 //pendant le refresh, fais avancer la progressbar
-                refreshATISData();
+                _ = RunWithProgress(RefreshATISData());
             }
         }
     }
