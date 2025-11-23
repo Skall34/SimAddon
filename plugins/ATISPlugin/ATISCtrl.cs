@@ -3,6 +3,7 @@ using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace ATISPlugin
 {
@@ -10,6 +11,8 @@ namespace ATISPlugin
     {
         private simData simdata;
         private genericATC ATC;
+        private bool _refreshInProgress = false;
+
         //ecoded.Replace("RWY", "RUNWAY")
         //                            .Replace("DEP", "DEPARTURE")
         //                            .Replace("ARR", "ARRIVAL")
@@ -71,8 +74,8 @@ namespace ATISPlugin
         public ATISCtrl()
         {
             InitializeComponent();
-            this.cbICAO.ValueMember = "fullName";
-            this.cbICAO.DisplayMember = "fullName";
+            this.cbICAO.ValueMember = "name";
+            this.cbICAO.DisplayMember = "name";
         }
 
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
@@ -113,8 +116,8 @@ namespace ATISPlugin
                 ATC = new IVAOATC();
             }
             panel1.BackgroundImage = ATC.GetNetworkImage();
-            string url = simdata.flyingNetwork.GetGlobalATISUrl();
-            ATC.refresh(url);
+            refreshATISData();
+
         }
 
         public TabPage registerPage()
@@ -155,39 +158,53 @@ namespace ATISPlugin
         {
             try
             {
+                //rafraichis la liste des aéroports proches toutes les 10 mises à jour.
+                if (data.counter % 10 != 0)
+                {
+                    return;
+                }
+
                 //todo : rafraichis la list des aéroports assez proches pour être interrogés.
                 if ((simdata != null) && (simdata.isConnectedToSim))
                 {
-                    uint VHFRange = NavigationHelper.GetVHFRangeNauticalMiles(data.position.Altitude);
-                    List<string> possibles = ATC.FindATISInRange(data.position.Location.Latitude, data.position.Location.Longitude, VHFRange);
-
-                    if (possibles.Count > 0)
+                    //ne pas rafraichir si la dropdown est ouverte.
+                    if (cbICAO.Focused)
                     {
-                        foreach (string s in cbICAO.Items)
-                        {
-                            if (!possibles.Contains(s))
-                            {
-                                try
-                                {
-                                    cbICAO.Items.Remove(s);
-                                }
-                                catch (Exception)
-                                {
+                        //ne pas rafraichir la liste si l'utilisateur est en train de taper quelque chose.
+                        return;
+                    }
+                    List<ATCInfo> possibles = ATC.FindATISList();
 
-                                }
-                            }
-                        }
-
-                        foreach (string s in possibles)
-                        {
-                            if (!cbICAO.Items.Contains(s))
-                            {
-                                cbICAO.Items.Add(s);
-                            }
-                        }
+                    string selectedName = string.Empty;
+                    if (cbICAO.SelectedItem != null)
+                    {
+                        selectedName = ((ATCInfo)cbICAO.SelectedItem).name;
                     }
                     else
                     {
+                        selectedName = cbICAO.Text.ToUpper();
+                    }
+                    cbICAO.Items.Clear();
+                    if (possibles.Count > 0)
+                    {
+                        int selectedIndex = -1;
+                        for (int i = 0; i < possibles.Count; i++)
+                        {
+                            cbICAO.Items.Add(possibles[i]);
+                            if (possibles[i].name == selectedName)
+                            {
+                                selectedIndex = i;
+                            }
+                        }
+                        if (selectedIndex >= 0)
+                        {
+                            //cbICAO.SelectedIndex = selectedIndex;
+                        }
+                        else
+                        {
+                            cbICAO.SelectedItem = null;
+                            cbICAO.Text = selectedName;
+                        }
                     }
                 }
                 else
@@ -321,33 +338,112 @@ namespace ATISPlugin
             return decoded;
         }
 
+        // helper: runs an async bool operation and shows an animated progress until it completes
+        private async Task<bool> RunWithProgress(Task<bool> operation)
+        {
+            if (_refreshInProgress) return false;
+            _refreshInProgress = true;
+
+            // Prepare progress bar
+            try
+            {
+                if (!progressBar1.Visible)
+                {
+                    progressBar1.Style = ProgressBarStyle.Continuous;
+                    progressBar1.Value = 0;
+                    progressBar1.Visible = true;
+                }
+
+                using (var timer = new System.Windows.Forms.Timer())
+                {
+                    timer.Interval = 150; // update every 150ms
+                    timer.Tick += (s, e) =>
+                    {
+                        try
+                        {
+                            if (!progressBar1.Visible) return;
+                            int next = progressBar1.Value + 7;
+                            if (next > progressBar1.Maximum) next = progressBar1.Minimum;
+                            progressBar1.Value = next;
+                        }
+                        catch { }
+                    };
+                    timer.Start();
+
+                    bool result = false;
+                    try
+                    {
+                        result = await operation.ConfigureAwait(false); // attend la tâche asynchrone
+                    }
+                    catch
+                    {
+                        result = false;
+                    }
+                    finally
+                    {
+                        try { timer.Stop(); timer.Dispose(); } catch { }
+                        // hide/reset progress bar on UI thread
+                        if (this.IsHandleCreated && this.InvokeRequired)
+                        {
+                            this.Invoke((Action)(() =>
+                            {
+                                progressBar1.Visible = false;
+                                progressBar1.Style = ProgressBarStyle.Blocks;
+                                progressBar1.Value = 0;
+                            }));
+                        }
+                        else
+                        {
+                            try
+                            {
+                                progressBar1.Visible = false;
+                                progressBar1.Style = ProgressBarStyle.Blocks;
+                                progressBar1.Value = 0;
+                            }
+                            catch { }
+                        }
+                        _refreshInProgress = false;
+                    }
+
+                    return result;
+                }
+            }
+            catch
+            {
+                _refreshInProgress = false;
+                try { progressBar1.Visible = false; } catch { }
+                return false;
+            }
+        }
+
         private async void requestATIS()
         {
             string url = simdata.flyingNetwork.GetGlobalATISUrl();
 
-            bool refreshOK = await ATC.refresh(url);
+            // show progress during ATC.refresh
+            bool refreshOK = await RunWithProgress(ATC.refresh(url));
+
             tbATISText.Text = string.Empty;
             tbController.Text = string.Empty;
             lvControllers.Items.Clear();
-
             if (refreshOK)
             {
-                string searchItem = "";
+                ATCInfo searchItem = null;
                 if (cbICAO.SelectedItem != null)
                 {
-                    searchItem = ((Aeroport)cbICAO.SelectedItem).ident;
+                    searchItem = (ATCInfo)cbICAO.SelectedItem;
                 }
                 else
                 {
-                    searchItem = cbICAO.Text.ToUpper();
-                    cbICAO.Text = searchItem;
+                    searchItem = new ATCInfo() { name = cbICAO.Text.ToUpper(), tag = "" };
+                    cbICAO.Text = searchItem.name;
                 }
 
                 //ne pas chercher si aucun critere de recherche n'a été entré.
-                if (searchItem.Trim() != string.Empty)
+                if (searchItem.name.Trim() != string.Empty)
                 {
-                    string localUrl = simdata.flyingNetwork.GetAirportATISUrl(searchItem.ToLower());
-                    List<string> atis = await ATC.GetATIS(searchItem, localUrl);
+                    string localUrl = simdata.flyingNetwork.GetAirportATISUrl();
+                    List<string> atis = await ATC.GetATISText(searchItem, localUrl);
                         if (atis.Count > 0)
                         {
                             foreach (string s in atis)
@@ -361,24 +457,7 @@ namespace ATISPlugin
                         {
                             tbATISText.Text = "No ATIS available";
                         }
-
-                    //if (VATSIM.data.controllers != null)
-                    //{
-                    //    List<VatsimData.ControllerData> controlers = VATSIM.FindControllers(searchItem);
-                    //    foreach (VatsimData.ControllerData controller in controlers)
-                    //    {
-                    //        string rating = VATSIM.GetRatingLabel(controller);
-                    //        string facility = VATSIM.GetFacilityLabel(controller);
-                    //        string frequency = controller.frequency;
-                    //        string callsign = controller.callsign;
-                    //        ListViewItem newItem = new ListViewItem(new string[] { facility, rating, callsign, frequency });
-                    //        newItem.Tag = controller;
-                    //        lvControllers.Items.Add(newItem);
-                    //    }
-                    //}
                 }
-
-
             }
             else
             {
@@ -404,8 +483,7 @@ namespace ATISPlugin
         private void UpdateVATSIMTimer_Tick(object sender, EventArgs e)
         {
             //refresh VATSIM data at least every 5 minutes.
-            string url = simdata.flyingNetwork.GetGlobalATISUrl();
-            ATC.refresh(url);
+            refreshATISData();
         }
 
         private void cbICAO_KeyPress(object sender, KeyPressEventArgs e)
@@ -450,6 +528,18 @@ namespace ATISPlugin
             throw new NotImplementedException();
         }
 
+        private async void refreshATISData()
+        {
+            if (_refreshInProgress) return;
+            string url = simdata.flyingNetwork.GetGlobalATISUrl();
+
+            if (url != null)
+            {
+                // kick the refresh and show progress until it completes
+                _ = RunWithProgress(ATC.refresh(url));
+            }
+        }
+
         public void ManageSimEvent(object sender, SimEventArg eventArg)
         {
             if (eventArg.reason == SimEventArg.EventType.CHANGENETWORK)
@@ -463,8 +553,11 @@ namespace ATISPlugin
                     ATC = new IVAOATC();
                 }
                 panel1.BackgroundImage = ATC.GetNetworkImage();
-                string url = simdata.flyingNetwork.GetGlobalATISUrl();
-                ATC.refresh(url);
+                cbICAO.Items.Clear();
+                tbATISText.Text = string.Empty;
+
+                //pendant le refresh, fais avancer la progressbar
+                refreshATISData();
             }
         }
     }

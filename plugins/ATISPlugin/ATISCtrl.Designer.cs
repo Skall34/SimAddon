@@ -37,6 +37,7 @@ namespace ATISPlugin
             btnRequest = new Button();
             label1 = new Label();
             panel1 = new Panel();
+            progressBar1 = new ProgressBar();
             splitContainer2 = new SplitContainer();
             lvControllers = new ListView();
             columnType = new ColumnHeader();
@@ -89,6 +90,7 @@ namespace ATISPlugin
             tableLayoutPanel1.Controls.Add(btnRequest, 2, 0);
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
             tableLayoutPanel1.Controls.Add(panel1, 0, 2);
+            tableLayoutPanel1.Controls.Add(progressBar1, 1, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Margin = new Padding(0);
@@ -160,6 +162,13 @@ namespace ATISPlugin
             panel1.Name = "panel1";
             panel1.Size = new Size(180, 64);
             panel1.TabIndex = 6;
+            // 
+            // progressBar1
+            // 
+            progressBar1.Location = new Point(183, 294);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(227, 23);
+            progressBar1.TabIndex = 7;
             // 
             // splitContainer2
             // 
@@ -279,5 +288,6 @@ namespace ATISPlugin
         private SplitContainer splitContainer2;
         private TextBox tbController;
         private Panel panel1;
+        private ProgressBar progressBar1;
     }
 }

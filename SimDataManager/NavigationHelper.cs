@@ -189,11 +189,11 @@ namespace SimDataManager
             // Validate input
             if (altitudeFeet < 0)
             {
-                throw new ArgumentException("Altitude cannot be negative.");
+                altitudeFeet = 0;
             }
 
             // Calculate range in nautical miles
-            return (uint)(1.065 * Math.Sqrt(altitudeFeet));
+            return (uint)(50 + 1.065 * Math.Sqrt(altitudeFeet));
         }
 
     }

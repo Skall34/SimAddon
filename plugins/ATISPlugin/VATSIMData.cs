@@ -236,25 +236,26 @@ namespace ATISPlugin
             }
         }
 
-        public override List<string> FindATISInRange(double targetLatitude, double targetLongitude, uint range)
+        public override List<ATCInfo> FindATISList()
         {
-            List<string> airportsInRange = new List<string>();
+            List<ATCInfo> airportsInRange = new List<ATCInfo>();
+
             foreach (VatsimData.ATISData airport in data.atis)
             {
-
-                double distance = NavigationHelper.GetDistance(airport.latitude, airport.longitude, targetLatitude, targetLongitude);
-                if (distance < range)
-                {
-                    airportsInRange.Add(airport.name);
-                }
+                    ATCInfo info = new ATCInfo();
+                    info.name = airport.callsign;
+                    info.tag = airport.callsign;
+                    airportsInRange.Add(info);
             }
-            return airportsInRange;
+            //return the list of available atis, ordered alphabetically by name
+            return airportsInRange.OrderBy(a => a.name).ToList();
+
         }
 
-        public override async Task<List<string>> GetATIS(string ICAO, string url = "")
+        public override async Task<List<string>> GetATISText(ATCInfo info, string url = "")
         {
             List<string> result = new List<string>();
-
+            string ICAO = info.name;
             if (data.atis != null)
             {
                 foreach (VatsimData.ATISData a in data.atis)

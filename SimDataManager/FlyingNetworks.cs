@@ -36,7 +36,7 @@ namespace SimDataManager
             return string.Format("https://data.vatsim.net/v3/vatsim-data.json");
         }
 
-        public override string GetAirportATISUrl(string ICAO)
+        public override string GetAirportATISUrl()
         {
             return string.Empty;
         }
@@ -94,9 +94,9 @@ namespace SimDataManager
         }
 
 
-        public override string GetAirportATISUrl(string ICAO)
+        public override string GetAirportATISUrl()
         {
-            return string.Format("https://api.ivao.aero/v2/airports/{0}/atis/latest?apiKey={1}", ICAO, APIKEY);
+            return string.Format("https://api.ivao.aero/v2/tracker/sessions/<sessionId>/atis/latest?apiKey={0}", APIKEY);
         }
     }
 }

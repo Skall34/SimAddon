@@ -66,10 +66,12 @@ namespace ATISPlugin
             public string centerId { get; set; }
             public string atcCallsign { get; set; }
             public string middleIdentifier { get; set; }
-                        public string position { get; set; }
+            public string position { get; set; }
             public string composePosition { get; set; }
             public bool military { get; set; }
             public float frequency { get; set; }
+            public float latitude { get; set; }
+            public float longitude { get; set; }
             public RegionPoint[] regionMap { get; set; }
             public float[][] regionMapPolygon { get; set; }
 
@@ -121,9 +123,9 @@ namespace ATISPlugin
             }
         }
 
-        public override List<string> FindATISInRange(double targetLatitude, double targetLongitude, uint range)
+        public override List<ATCInfo> FindATISList()
         {
-            List<string> atisList = new List<string>();
+            List<ATCInfo> atisList = new List<ATCInfo>();
             if (data == null)
             {
                 return atisList;
@@ -132,14 +134,29 @@ namespace ATISPlugin
             {
                 if (atc.atcPosition != null && atc.atcPosition.airport != null)
                 {
-                    double distance = NavigationHelper.GetDistance(targetLatitude, targetLongitude, atc.atcPosition.airport.latitude, atc.atcPosition.airport.longitude);
-                    if (distance <= range)
+                        ATCInfo info = new ATCInfo()
+                        {
+                            name = atc.atcPosition.composePosition,
+                            tag = atc.id.ToString()
+                        };
+                        atisList.Add(info);
+                }
+                else
+                {
+                    //no ATC position, look in the subcenter if any
+                    if (atc.subCenter != null)
                     {
-                        atisList.Add(atc.atcPosition.airport.icao);
+                            ATCInfo info = new ATCInfo()
+                            {
+                                name = atc.subCenter.composePosition,
+                                tag = atc.id.ToString()
+                            };
+                            atisList.Add(info);
                     }
                 }
             }
-            return atisList;
+            //return the list of atis found ordered by name
+            return atisList.OrderBy(a => a.name).ToList();
         }
 
         public class ATISInfo
@@ -153,14 +170,17 @@ namespace ATISPlugin
             public string updated_at { get; set; }
         }
 
-        public override async Task<List<string>> GetATIS(string ICAO,string url = "")
+        public override async Task<List<string>> GetATISText(ATCInfo info,string url = "")
         {
-            List<string> result = new List<string>();
+            //construire l'url avec le tag de l'atc en remplacement de <sessionId>
+            string fullurl = url.Replace("<sessionId>", info.tag);
+
+            List<string> result;
             //make a web request to url, using the httpClient
             try
             {
                 // Envoyer la requête HTTP GET
-                HttpResponseMessage response = await httpClient.GetAsync(url);
+                HttpResponseMessage response = await httpClient.GetAsync(fullurl);
                 response.EnsureSuccessStatusCode(); // Vérifier que la requête a réussi
 
                 // Lire le contenu de la réponse
@@ -169,27 +189,15 @@ namespace ATISPlugin
                 // Extraire la section METAR du contenu HTML (selon le format attendu)
                 string RawIVAOData = responseBody.TrimEnd();
                 ATISInfo data = JsonConvert.DeserializeObject<ATISInfo>(RawIVAOData);
-                return data.lines.ToList();
+                result = data.lines.ToList();
             }
             catch (Exception ex)
             {
                 Logger.WriteLine($"Erreur lors de la récupération de la liste des ATIS : {ex.Message}");
+                result=new List<string>();
             }
 
-
-            List<string> atisList = new List<string>();
-            if (data == null)
-            {
-                return atisList;
-            }
-            foreach (var atc in data)
-            {
-                if (atc.atcPosition != null && atc.atcPosition.airport != null && atc.atcPosition.airport.icao.Equals(ICAO, StringComparison.OrdinalIgnoreCase))
-                {
-                    atisList.Add(atc.callsign);
-                }
-            }
-            return atisList;
+            return result;
         }
 
         public override System.Drawing.Image GetNetworkImage()

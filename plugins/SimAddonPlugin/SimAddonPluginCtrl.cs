@@ -72,6 +72,8 @@ namespace SimAddonPlugin
 
     public class situation
     {
+        //a counter from 0 to 999 incremented at each update
+        public int counter { get; set; }
         public bool readyToFly { get; set; }
         public double airSpeed { get; set; }
         public short crashedFlag { get; set; }

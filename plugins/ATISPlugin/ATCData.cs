@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace ATISPlugin
 {
+    public class ATCInfo
+    {
+        public string name { get; set; }
+        public string tag { get; set; }
+    }
+
     public class genericATC
     {
         public virtual async Task<bool> refresh(string url)
@@ -13,12 +19,12 @@ namespace ATISPlugin
             return false;
         }
 
-        public virtual List<string> FindATISInRange(double targetLatitude, double targetLongitude, uint range)
+        public virtual List<ATCInfo> FindATISList()
         {
-            return new List<string>();
+            return new List<ATCInfo>();
         }
 
-        public virtual async Task<List<string>> GetATIS(string ICAO, string url = "")
+        public virtual async Task<List<string>> GetATISText(ATCInfo info, string url = "")
         {
            return new List<string>();
         }

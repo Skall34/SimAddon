@@ -181,6 +181,7 @@ namespace SimAddon
             WriteWindowTitle();
 
             currentStatus = new situation();
+            currentStatus.counter = 0;
 
             this.Cursor = Cursors.WaitCursor;
 
@@ -234,7 +235,14 @@ namespace SimAddon
                 UpdateLabelConnectionStatus();
                 //rafraichis les données venant du simu
                 _simData.Refresh();
+                currentStatus.counter++;
+                //si le counter arrive à 1000, le remet à 0 pour éviter un overflow
+                if (currentStatus.counter >= 1000)
+                {
+                    currentStatus.counter = 0;
+                }
 
+                //remplis la structure currentStatus avec les données venant du simu
                 currentStatus.magVariation = _simData.GetMagVariation();
                 currentStatus.readyToFly = _simData.GetReadyToFly();
                 currentStatus.airSpeed = _simData.GetAirSpeed();

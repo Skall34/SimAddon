@@ -72,13 +72,13 @@ namespace SimDataManager
         public virtual string GetGlobalATISUrl()
         {
             //by default, return aviation weather url
-            return string.Format("https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString={0}&hoursBeforeNow=2");
+            return string.Format("https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=2");
         }
 
-        public virtual string GetAirportATISUrl(string ICAO)
+        public virtual string GetAirportATISUrl()
         {
             //by default, return aviation weather url
-            return string.Format("https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString={0}&hoursBeforeNow=2", ICAO);
+            return string.Format("https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=2");
         }
     }
 }
