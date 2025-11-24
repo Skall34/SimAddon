@@ -848,5 +848,25 @@ namespace SimAddon
             }
 
         }
+
+        private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //open the documentation web page starting the default browser
+            try
+            {
+                string url = "https://github.com/Skall34/SimAddon/wiki";
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true // This is necessary to open the URL in the default browser
+                });
+
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine($"Error opening documentation web site: {ex.Message}");
+                Plugin_OnShowMsgbox(this, "Error", "Unable to open the documentation web site.", MessageBoxButtons.OK);
+            }
+        }
     }
 }

@@ -53,8 +53,10 @@ namespace SimAddon
             networkToolStripMenuItem = new ToolStripMenuItem();
             vATSIMToolStripMenuItem = new ToolStripMenuItem();
             iVAOToolStripMenuItem = new ToolStripMenuItem();
-            tabControl1 = new TabControl();
             toolStripSeparator4 = new ToolStripSeparator();
+            tabControl1 = new TabControl();
+            documentationToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator5 = new ToolStripSeparator();
             statusStrip.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
@@ -101,9 +103,9 @@ namespace SimAddon
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1, screenshotToolStripMenuItem, toolStripSeparator2, openWebSiteToolStripMenuItem, traceFolderToolStripMenuItem, toolStripSeparator3, networkToolStripMenuItem, toolStripSeparator4 });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { documentationToolStripMenuItem, toolStripSeparator5, alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1, screenshotToolStripMenuItem, toolStripSeparator2, openWebSiteToolStripMenuItem, traceFolderToolStripMenuItem, toolStripSeparator3, networkToolStripMenuItem, toolStripSeparator4 });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 182);
+            contextMenuStrip1.Size = new Size(181, 210);
             contextMenuStrip1.Opening += contextMenuStrip1_Opening;
             // 
             // alwaysOnTopToolStripMenuItem
@@ -167,7 +169,7 @@ namespace SimAddon
             // 
             vATSIMToolStripMenuItem.CheckOnClick = true;
             vATSIMToolStripMenuItem.Name = "vATSIMToolStripMenuItem";
-            vATSIMToolStripMenuItem.Size = new Size(180, 22);
+            vATSIMToolStripMenuItem.Size = new Size(113, 22);
             vATSIMToolStripMenuItem.Text = "VATSIM";
             vATSIMToolStripMenuItem.Click += vATSIMToolStripMenuItem_Click;
             // 
@@ -175,9 +177,14 @@ namespace SimAddon
             // 
             iVAOToolStripMenuItem.CheckOnClick = true;
             iVAOToolStripMenuItem.Name = "iVAOToolStripMenuItem";
-            iVAOToolStripMenuItem.Size = new Size(180, 22);
+            iVAOToolStripMenuItem.Size = new Size(113, 22);
             iVAOToolStripMenuItem.Text = "IVAO";
             iVAOToolStripMenuItem.Click += iVAOToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator4
+            // 
+            toolStripSeparator4.Name = "toolStripSeparator4";
+            toolStripSeparator4.Size = new Size(177, 6);
             // 
             // tabControl1
             // 
@@ -189,10 +196,17 @@ namespace SimAddon
             tabControl1.Size = new Size(574, 807);
             tabControl1.TabIndex = 7;
             // 
-            // toolStripSeparator4
+            // documentationToolStripMenuItem
             // 
-            toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new Size(177, 6);
+            documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
+            documentationToolStripMenuItem.Size = new Size(180, 22);
+            documentationToolStripMenuItem.Text = "Documentation";
+            documentationToolStripMenuItem.Click += documentationToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator5
+            // 
+            toolStripSeparator5.Name = "toolStripSeparator5";
+            toolStripSeparator5.Size = new Size(177, 6);
             // 
             // Form1
             // 
@@ -243,6 +257,8 @@ namespace SimAddon
         private ToolStripMenuItem vATSIMToolStripMenuItem;
         private ToolStripMenuItem iVAOToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator4;
+        private ToolStripMenuItem documentationToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator5;
     }
 }
 
