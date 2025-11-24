@@ -117,6 +117,7 @@ namespace ATISPlugin
             // cbICAO
             // 
             cbICAO.Dock = DockStyle.Fill;
+            cbICAO.DropDownStyle = ComboBoxStyle.DropDownList;
             cbICAO.FormattingEnabled = true;
             cbICAO.Location = new Point(184, 4);
             cbICAO.Margin = new Padding(4);

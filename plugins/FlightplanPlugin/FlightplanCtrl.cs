@@ -36,11 +36,8 @@ namespace BushTripPlugin
             waypointIndex = 0;
             lastWaypointIndex = 0;
             restartToolStripMenuItem.Enabled = false;
-            restartToolStripMenuItem8.Enabled = false;
             exportToolStripMenuItem.Enabled = false;
-            exportToolStripMenuItem3.Enabled = false;
             getFlightBriefingToolStripMenuItem.Enabled = false;
-            simbrief_getBriefingToolStripMenuItem7.Enabled = false;
             tmpPDFfile = string.Empty;
 
         }
@@ -318,10 +315,8 @@ namespace BushTripPlugin
                 lblDistanceTotale.Text = "Total distance :" + distance.ToString() + " miles";
                 tsGlobalStatus.Text = "Flight plan loaded";
                 restartToolStripMenuItem.Enabled = true;
-                restartToolStripMenuItem8.Enabled = true;
                 exportToolStripMenuItem.Enabled = true;
-                exportToolStripMenuItem3.Enabled = true;
-
+                
                 //send an event to notify that the departure is set
                 SimEventArg startEvent = new SimEventArg();
                 startEvent.reason = SimEventArg.EventType.SETDEPARTURE;
@@ -756,7 +751,6 @@ namespace BushTripPlugin
                         OnSimEvent(this, eventArg);
                     }
                     getFlightBriefingToolStripMenuItem.Enabled = true;
-                    simbrief_getBriefingToolStripMenuItem7.Enabled = true;
                     finalResult = true;
                 }
                 catch (Exception ex)
@@ -794,13 +788,11 @@ namespace BushTripPlugin
             if (importOK)
             {
                 getFlightBriefingToolStripMenuItem.Enabled = true;
-                simbrief_getBriefingToolStripMenuItem7.Enabled = true;
             }
             else
             {
                 //disable the get briefing menu
                 getFlightBriefingToolStripMenuItem.Enabled = false;
-                simbrief_getBriefingToolStripMenuItem7.Enabled = false;
             }
         }
 

@@ -54,21 +54,6 @@
             ColRoute = new ColumnHeader();
             ColDistance = new ColumnHeader();
             imageList1 = new ImageList(components);
-            menuStrip1 = new MenuStrip();
-            flightplanToolStripMenuItem = new ToolStripMenuItem();
-            createToolStripMenuItem1 = new ToolStripMenuItem();
-            toolStripSeparator5 = new ToolStripSeparator();
-            importToolStripMenuItem2 = new ToolStripMenuItem();
-            exportToolStripMenuItem3 = new ToolStripMenuItem();
-            toolStripSeparator6 = new ToolStripSeparator();
-            simbriefToolStripMenuItem4 = new ToolStripMenuItem();
-            simbrief_createToolStripMenuItem5 = new ToolStripMenuItem();
-            simbrief_GetLastFPtoolStripMenuItem6 = new ToolStripMenuItem();
-            simbrief_getBriefingToolStripMenuItem7 = new ToolStripMenuItem();
-            toolStripSeparator7 = new ToolStripSeparator();
-            restartToolStripMenuItem8 = new ToolStripMenuItem();
-            toolStripSeparator8 = new ToolStripSeparator();
-            settingsToolStripMenuItem9 = new ToolStripMenuItem();
             tableLayoutPanel1 = new TableLayoutPanel();
             tbComment = new TextBox();
             panel1 = new Panel();
@@ -80,7 +65,6 @@
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
-            menuStrip1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
@@ -120,7 +104,6 @@
             splitContainer1.Panel1.ContextMenuStrip = contextMenuStrip1;
             splitContainer1.Panel1.Controls.Add(lblDistanceTotale);
             splitContainer1.Panel1.Controls.Add(lvWaypoints);
-            splitContainer1.Panel1.Controls.Add(menuStrip1);
             // 
             // splitContainer1.Panel2
             // 
@@ -224,7 +207,7 @@
             // lblDistanceTotale
             // 
             lblDistanceTotale.AutoSize = true;
-            lblDistanceTotale.Location = new Point(3, 30);
+            lblDistanceTotale.Location = new Point(0, 0);
             lblDistanceTotale.Name = "lblDistanceTotale";
             lblDistanceTotale.Size = new Size(99, 15);
             lblDistanceTotale.TabIndex = 5;
@@ -240,10 +223,10 @@
             lvWaypoints.FullRowSelect = true;
             lvWaypoints.GridLines = true;
             lvWaypoints.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-            lvWaypoints.Location = new Point(3, 55);
+            lvWaypoints.Location = new Point(3, 26);
             lvWaypoints.MultiSelect = false;
             lvWaypoints.Name = "lvWaypoints";
-            lvWaypoints.Size = new Size(512, 271);
+            lvWaypoints.Size = new Size(512, 300);
             lvWaypoints.SmallImageList = imageList1;
             lvWaypoints.TabIndex = 2;
             lvWaypoints.UseCompatibleStateImageBehavior = false;
@@ -283,108 +266,6 @@
             imageList1.Images.SetKeyName(3, "VOR");
             imageList1.Images.SetKeyName(4, "VORDME");
             imageList1.Images.SetKeyName(5, "WAYPOINT");
-            // 
-            // menuStrip1
-            // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { flightplanToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(521, 24);
-            menuStrip1.TabIndex = 9;
-            menuStrip1.Text = "menuStrip1";
-            // 
-            // flightplanToolStripMenuItem
-            // 
-            flightplanToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createToolStripMenuItem1, toolStripSeparator5, importToolStripMenuItem2, exportToolStripMenuItem3, toolStripSeparator6, simbriefToolStripMenuItem4, toolStripSeparator7, restartToolStripMenuItem8, toolStripSeparator8, settingsToolStripMenuItem9 });
-            flightplanToolStripMenuItem.Name = "flightplanToolStripMenuItem";
-            flightplanToolStripMenuItem.Size = new Size(72, 20);
-            flightplanToolStripMenuItem.Text = "Flightplan";
-            // 
-            // createToolStripMenuItem1
-            // 
-            createToolStripMenuItem1.Name = "createToolStripMenuItem1";
-            createToolStripMenuItem1.Size = new Size(180, 22);
-            createToolStripMenuItem1.Text = "Create";
-            createToolStripMenuItem1.Click += createToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator5
-            // 
-            toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new Size(177, 6);
-            // 
-            // importToolStripMenuItem2
-            // 
-            importToolStripMenuItem2.Name = "importToolStripMenuItem2";
-            importToolStripMenuItem2.Size = new Size(180, 22);
-            importToolStripMenuItem2.Text = "Import";
-            importToolStripMenuItem2.Click += importToolStripMenuItem_Click;
-            // 
-            // exportToolStripMenuItem3
-            // 
-            exportToolStripMenuItem3.Enabled = false;
-            exportToolStripMenuItem3.Name = "exportToolStripMenuItem3";
-            exportToolStripMenuItem3.Size = new Size(180, 22);
-            exportToolStripMenuItem3.Text = "Export";
-            exportToolStripMenuItem3.Click += exportToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator6
-            // 
-            toolStripSeparator6.Name = "toolStripSeparator6";
-            toolStripSeparator6.Size = new Size(177, 6);
-            // 
-            // simbriefToolStripMenuItem4
-            // 
-            simbriefToolStripMenuItem4.DropDownItems.AddRange(new ToolStripItem[] { simbrief_createToolStripMenuItem5, simbrief_GetLastFPtoolStripMenuItem6, simbrief_getBriefingToolStripMenuItem7 });
-            simbriefToolStripMenuItem4.Name = "simbriefToolStripMenuItem4";
-            simbriefToolStripMenuItem4.Size = new Size(180, 22);
-            simbriefToolStripMenuItem4.Text = "Simbrief";
-            // 
-            // simbrief_createToolStripMenuItem5
-            // 
-            simbrief_createToolStripMenuItem5.Name = "simbrief_createToolStripMenuItem5";
-            simbrief_createToolStripMenuItem5.Size = new Size(187, 22);
-            simbrief_createToolStripMenuItem5.Text = "Create new flightplan";
-            simbrief_createToolStripMenuItem5.Click += createNewFlightplanToolStripMenuItem_Click;
-            // 
-            // simbrief_GetLastFPtoolStripMenuItem6
-            // 
-            simbrief_GetLastFPtoolStripMenuItem6.Name = "simbrief_GetLastFPtoolStripMenuItem6";
-            simbrief_GetLastFPtoolStripMenuItem6.Size = new Size(187, 22);
-            simbrief_GetLastFPtoolStripMenuItem6.Text = "Get last flightplan";
-            simbrief_GetLastFPtoolStripMenuItem6.Click += getLastFlightplanToolStripMenuItem_Click;
-            // 
-            // simbrief_getBriefingToolStripMenuItem7
-            // 
-            simbrief_getBriefingToolStripMenuItem7.Enabled = false;
-            simbrief_getBriefingToolStripMenuItem7.Name = "simbrief_getBriefingToolStripMenuItem7";
-            simbrief_getBriefingToolStripMenuItem7.Size = new Size(187, 22);
-            simbrief_getBriefingToolStripMenuItem7.Text = "Get flight briefing";
-            simbrief_getBriefingToolStripMenuItem7.Click += getFlightBriefingToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator7
-            // 
-            toolStripSeparator7.Name = "toolStripSeparator7";
-            toolStripSeparator7.Size = new Size(177, 6);
-            // 
-            // restartToolStripMenuItem8
-            // 
-            restartToolStripMenuItem8.Enabled = false;
-            restartToolStripMenuItem8.Name = "restartToolStripMenuItem8";
-            restartToolStripMenuItem8.Size = new Size(180, 22);
-            restartToolStripMenuItem8.Text = "Restart";
-            restartToolStripMenuItem8.Click += restartToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator8
-            // 
-            toolStripSeparator8.Name = "toolStripSeparator8";
-            toolStripSeparator8.Size = new Size(177, 6);
-            // 
-            // settingsToolStripMenuItem9
-            // 
-            settingsToolStripMenuItem9.Name = "settingsToolStripMenuItem9";
-            settingsToolStripMenuItem9.Size = new Size(180, 22);
-            settingsToolStripMenuItem9.Text = "Settings";
-            settingsToolStripMenuItem9.Click += settingsToolStripMenuItem_Click;
             // 
             // tableLayoutPanel1
             // 
@@ -482,8 +363,6 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             contextMenuStrip1.ResumeLayout(false);
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             panel1.ResumeLayout(false);
@@ -524,20 +403,5 @@
         private ToolStripMenuItem getFlightBriefingToolStripMenuItem;
         private SplitContainer splitContainer2;
         private ToolStripMenuItem createNewFlightplanToolStripMenuItem;
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem flightplanToolStripMenuItem;
-        private ToolStripMenuItem createToolStripMenuItem1;
-        private ToolStripSeparator toolStripSeparator5;
-        private ToolStripMenuItem importToolStripMenuItem2;
-        private ToolStripMenuItem exportToolStripMenuItem3;
-        private ToolStripSeparator toolStripSeparator6;
-        private ToolStripMenuItem simbriefToolStripMenuItem4;
-        private ToolStripMenuItem simbrief_createToolStripMenuItem5;
-        private ToolStripMenuItem simbrief_GetLastFPtoolStripMenuItem6;
-        private ToolStripMenuItem simbrief_getBriefingToolStripMenuItem7;
-        private ToolStripSeparator toolStripSeparator7;
-        private ToolStripMenuItem restartToolStripMenuItem8;
-        private ToolStripSeparator toolStripSeparator8;
-        private ToolStripMenuItem settingsToolStripMenuItem9;
     }
 }
