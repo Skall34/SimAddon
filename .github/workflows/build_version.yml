@@ -76,6 +76,9 @@ jobs:
 
     - name: publish Comm plugin
       run: dotnet publish plugins/CommPlugin/CommPlugin.csproj --configuration Release --output publish_output\plugins\6_Comm
+
+    - name: publish Converter plugin
+      run: dotnet publish plugins/ConverterPlugin/ConverterPlugin.csproj --configuration Release --output publish_output\plugins\7_Converter
       
     - name: Upload archive
       uses: actions/upload-artifact@v4.4.3
