@@ -61,6 +61,9 @@ jobs:
     - name: publish COMM radar plugin
       run: dotnet publish plugins/CommPlugin/CommPlugin.csproj --configuration Release --output publish_output\plugins\6_Comm
 
+    - name: publish CONVERTER plugin
+      run: dotnet publish plugins/ConverterPlugin/ConverterPlugin.csproj --configuration Release --output publish_output\plugins\7_Converter
+
     #- name: Setup VS Dev Environment
     #  uses: seanmiddleditch/gha-setup-vsdevenv@v4
       
