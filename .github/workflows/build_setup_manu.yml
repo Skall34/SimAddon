@@ -79,6 +79,9 @@ jobs:
     - name: publish Comm plugin
       run: dotnet publish plugins/CommPlugin/CommPlugin.csproj --configuration Release --output publish_output\plugins\6_Comm
 
+    - name: publish Converter plugin
+      run: dotnet publish plugins/ConverterPlugin/ConverterPlugin.csproj --configuration Release --output publish_output\plugins\7_Converter
+
     - name: set version in installer
       shell: pwsh
       run: ./updateVersion.ps1 ${{ steps.previoustag.outputs.tag }}
