@@ -3,7 +3,7 @@ using SimDataManager;
 
 namespace Calculator
 {
-    public partial class CalculatorCtrl : UserControl, ISimAddonPluginCtrl
+    public partial class ConverterCtrl : UserControl, ISimAddonPluginCtrl
     {
         List<string> capacityUnits = new List<string>
         {
@@ -49,7 +49,7 @@ namespace Calculator
             "Miles/H"
         };
 
-        public CalculatorCtrl()
+        public ConverterCtrl()
         {
             InitializeComponent();
             CapaConverter.units = capacityUnits;

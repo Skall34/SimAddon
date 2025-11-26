@@ -1,6 +1,6 @@
 ﻿namespace Calculator
 {
-    partial class CalculatorCtrl
+    partial class ConverterCtrl
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CalculatorCtrl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConverterCtrl));
             groupBox1 = new GroupBox();
             CapaConverter = new Converter();
             tableLayoutPanel1 = new TableLayoutPanel();

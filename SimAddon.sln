@@ -46,7 +46,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommPlugin", "plugins\CommP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightplanPlugin", "plugins\FlightplanPlugin\FlightplanPlugin.csproj", "{8BA75391-2DAC-6E57-47F4-2EAD7A2E5BA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator", "plugins\Calculator\Calculator.csproj", "{D9E44C3F-6F60-4530-A72E-CB28A459D9DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConverterPlugin", "plugins\Calculator\ConverterPlugin.csproj", "{D9E44C3F-6F60-4530-A72E-CB28A459D9DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
