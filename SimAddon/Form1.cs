@@ -19,6 +19,7 @@ namespace SimAddon
         private bool autostart = false;
         private bool autoHide = false;
         private System.Windows.Forms.Timer timerZulu;
+        private UpdateChecker updateChecker;
 
         PluginsMgr plugsMgr;
         private PluginsSettings pluginsSettings;
@@ -97,6 +98,9 @@ namespace SimAddon
             pluginTabs = new Collection<TabPage>();
             pluginsSettings = new PluginsSettings();
             pluginsSettings.loadFromJsonFile("plugins.json");
+            
+            // Initialiser le vérificateur de mises à jour
+            updateChecker = new UpdateChecker();
 
             InitializeComponent();
 
@@ -165,6 +169,9 @@ namespace SimAddon
             {
                 Logger.WriteLine("Autostarted");
             }
+
+            // Vérifier les mises à jour de manière asynchrone sans bloquer l'UI
+            _ = CheckForUpdatesAsync();
 
             //create the object to get the dat from sim and the structure to push situation update to plugins
             _simData = new simData(Properties.Settings.Default.GSheetAPIUrl);
@@ -390,6 +397,8 @@ namespace SimAddon
             this.timerZulu.Start();
             //initialise l'object qui sert à capter les données qui viennent du simu
             Logger.WriteLine("initialize the connection to the simulator");
+
+
 
             // show splash progress while loading UI/plugins/data
             SetSplashProgress(10, "Loading plugins...");
@@ -866,6 +875,46 @@ namespace SimAddon
             {
                 Logger.WriteLine($"Error opening documentation web site: {ex.Message}");
                 Plugin_OnShowMsgbox(this, "Error", "Unable to open the documentation web site.", MessageBoxButtons.OK);
+            }
+        }
+
+        /// <summary>
+        /// Vérifie asynchronement si une nouvelle version est disponible
+        /// </summary>
+        private async Task CheckForUpdatesAsync()
+        {
+            try
+            {
+                // Donner un peu de temps à l'interface de se charger
+                await Task.Delay(2000);
+
+                UpdateChecker.ReleaseInfo releaseInfo = await updateChecker.CheckForUpdatesAsync(includePrerelease: false);
+
+                if (releaseInfo != null)
+                {
+                    // Afficher la boîte de dialogue sur le thread UI
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke((Action)(() =>
+                        {
+                            if (UpdateChecker.ShowUpdateDialog(releaseInfo, this))
+                            {
+                                UpdateChecker.OpenDownloadPage(releaseInfo);
+                            }
+                        }));
+                    }
+                    else
+                    {
+                        if (UpdateChecker.ShowUpdateDialog(releaseInfo, this))
+                        {
+                            UpdateChecker.OpenDownloadPage(releaseInfo);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine($"Error checking for updates: {ex.Message}");
             }
         }
     }
