@@ -92,9 +92,9 @@
         var flightPath = null;
         var flightPlanWaypoints = [];
 
-        // Create airplane icon - Blue arrow pointing up (for dark theme)
+        // Create airplane icon - Load from external SVG file
         var airplaneIcon = L.icon({
-            iconUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><polygon points="16,2 20,14 28,18 20,22 22,30 16,26 10,30 12,22 4,18 12,14" fill="%2300d4ff" stroke="%23ffffff" stroke-width="1.5"/><circle cx="16" cy="18" r="3" fill="white"/></svg>',
+            iconUrl: 'airplane.svg',
             iconSize: [32, 32],
             iconAnchor: [16, 16],
             popupAnchor: [0, -16]
@@ -102,10 +102,10 @@
 
         // Create waypoint icon - Cyan/Bright orange square for dark theme
         var waypointIcon = L.icon({
-            iconUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2" fill="%23ff9800" stroke="%23ffb74d" stroke-width="1.5"/></svg>',
-            iconSize: [24, 24],
-            iconAnchor: [12, 12],
-            popupAnchor: [0, -12]
+            iconUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="2" fill="%23ff9800" stroke="%23ffb74d" stroke-width="1.5"/></svg>',
+            iconSize: [12, 12],
+            iconAnchor: [6, 6],
+            popupAnchor: [0, -6]
         });
 
         // Function to update aircraft position on the map
@@ -135,7 +135,7 @@
             }
 
             // Optionally center map on aircraft
-            map.setView([latitude, longitude]);
+            map.setView([latitude, longitude], 10);
         }
 
         // Function to add waypoints to the map
@@ -171,10 +171,12 @@
         }
 
         // Function to add a waypoint to the flight plan (called from C#)
-        function addFlightPlanWaypoint(latitude, longitude) {
+        // Now accepts: latitude, longitude, and waypoint name
+        function addFlightPlanWaypoint(latitude, longitude, wpname) {
             flightPlanWaypoints.push({
                 lat: latitude,
-                lon: longitude
+                lon: longitude,
+                name: wpname
             });
         }
 
@@ -186,7 +188,7 @@
             // Draw waypoints on the map
             for (var i = 0; i < flightPlanWaypoints.length; i++) {
                 var wp = flightPlanWaypoints[i];
-                addWaypoint(i, wp.lat, wp.lon, 'WP' + i, 'Waypoint ' + i);
+                addWaypoint(i, wp.lat, wp.lon, 'WP' + i, wp.name);
             }
 
             // Draw the flight path line

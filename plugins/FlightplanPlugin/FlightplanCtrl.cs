@@ -367,9 +367,11 @@ namespace BushTripPlugin
                     for (int i = 0; i < flightPlan.Item.Waypoints.Count(); i++)
                     {
                         LittleNavmapFlightplanWaypoint? wp = flightPlan.Item.Waypoints[i];
-                        script += $"addFlightPlanWaypoint({wp.Pos.Lat.ToString(CultureInfo.InvariantCulture)}, {wp.Pos.Lon.ToString(CultureInfo.InvariantCulture)});";
+                        // Escape special characters in the waypoint name for JavaScript
+                        string escapedName = (wp.Name ?? "").Replace("\\", "\\\\").Replace("'", "\\'").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "\\r");
+                        script += $"addFlightPlanWaypoint({wp.Pos.Lat.ToString(CultureInfo.InvariantCulture)}, {wp.Pos.Lon.ToString(CultureInfo.InvariantCulture)}, '{escapedName}');";
                     }
-                    script+= "drawFlightPlan();";
+                    script += "drawFlightPlan();";
 
                     await webView21.CoreWebView2.ExecuteScriptAsync(script);
                 }

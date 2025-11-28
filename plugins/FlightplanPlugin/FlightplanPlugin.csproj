@@ -73,6 +73,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="airplane.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="carte.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
