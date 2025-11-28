@@ -38,6 +38,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3595.46" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\SimAddonControls\SimAddonControls.csproj" />
     <ProjectReference Include="..\..\SimDataManager\SimDataManager.csproj" />
     <ProjectReference Include="..\SimAddonPlugin\SimAddonPlugin.csproj" />
@@ -69,6 +73,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="carte.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -80,6 +87,9 @@
     <None Update="simbrief_old.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>simbrief_old.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="WebView2Loader.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

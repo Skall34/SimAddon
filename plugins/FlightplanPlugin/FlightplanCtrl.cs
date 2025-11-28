@@ -1,4 +1,5 @@
-﻿using flightplan;
+﻿using Microsoft.Web.WebView2.Core;
+using flightplan;
 using FlightplanPlugin;
 using FlightplanPlugin.Properties;
 //using System.Text.Json;
@@ -17,6 +18,7 @@ namespace BushTripPlugin
 {
     public partial class FlightplanCtrl : UserControl, ISimAddonPluginCtrl
     {
+        private const string appName= "Flight plan";
         private simData? data;
         private uint waypointIndex;
         private int lastWaypointIndex;
@@ -79,12 +81,43 @@ namespace BushTripPlugin
 
         public string getName()
         {
-            return ("Flight plan");
+            return appName;
         }
 
         public void init(ref simData _data)
         {
+            InitializeWebView2();
             data = _data;
+        }
+
+        private async void InitializeWebView2()
+        {
+            // Get the path to the user's AppData folder
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            // Combine the AppData path with the folder name
+            string fullPath = Path.Combine(appDataPath, appName);
+
+            CoreWebView2Environment cwv2Environment = await CoreWebView2Environment.CreateAsync(null, fullPath, new CoreWebView2EnvironmentOptions());
+            await webView21.EnsureCoreWebView2Async(cwv2Environment);
+
+            try
+            {
+                //ouvre le fichier local carte.html situé dans le dossier du plugin, dans le webview2
+                string url = "carte.html";
+                string folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins", "1_Flightplan");
+                webView21.Source = new Uri(Path.Combine(folder, url));
+
+                //string url = simData.flyingNetwork.GetRadarUrl();
+                //currentATCSettings = settings.ATCs.Where(a => a.ATCName == settings.lastATCUsed).First();
+                //webView21.Source = new Uri(url);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("Error loading ATC " + ex.Message);
+                //currentATCSettings = settings.ATCs[0];
+                //webView21.Source = new Uri(currentATCSettings.Url);
+            }
         }
 
         public void FormClosing(object sender, FormClosingEventArgs e)
@@ -181,6 +214,16 @@ namespace BushTripPlugin
                         {
                             tsGlobalStatus.Text = "Land here !";
                         }
+                    }
+                }
+
+                if (data.counter %100 == 0)
+                {
+                    //refresh the map carte.html, to show the current position
+                    if (webView21.CoreWebView2 != null)
+                    {
+                        string script = $"updateAircraftPosition({data.position.Location.Latitude.ToString(CultureInfo.InvariantCulture)}, {data.position.Location.Longitude.ToString(CultureInfo.InvariantCulture)}, {data.position.Altitude.ToString(CultureInfo.InvariantCulture)}, {data.position.HeadingDegreesTrue.ToString(CultureInfo.InvariantCulture)});";
+                        await webView21.CoreWebView2.ExecuteScriptAsync(script);
                     }
                 }
             }
@@ -316,7 +359,21 @@ namespace BushTripPlugin
                 tsGlobalStatus.Text = "Flight plan loaded";
                 restartToolStripMenuItem.Enabled = true;
                 exportToolStripMenuItem.Enabled = true;
-                
+
+                //push the flightplan waypoint to the webview map
+                if (webView21.CoreWebView2 != null)
+                {
+                    string script = "clearFlightPlan();";
+                    for (int i = 0; i < flightPlan.Item.Waypoints.Count(); i++)
+                    {
+                        LittleNavmapFlightplanWaypoint? wp = flightPlan.Item.Waypoints[i];
+                        script += $"addFlightPlanWaypoint({wp.Pos.Lat.ToString(CultureInfo.InvariantCulture)}, {wp.Pos.Lon.ToString(CultureInfo.InvariantCulture)});";
+                    }
+                    script+= "drawFlightPlan();";
+
+                    await webView21.CoreWebView2.ExecuteScriptAsync(script);
+                }
+
                 //send an event to notify that the departure is set
                 SimEventArg startEvent = new SimEventArg();
                 startEvent.reason = SimEventArg.EventType.SETDEPARTURE;

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flightplan Plugin - Map</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    
+    <!-- Leaflet Rotated Marker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-rotated-marker/0.2.3/leaflet.rotatedMarker.min.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+        
+        #infoPanel {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            min-width: 200px;
+        }
+        
+        .info-row {
+            margin: 5px 0;
+            padding: 2px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="infoPanel">
+        <div class="info-row"><span class="info-label">Position:</span> <span id="posLat">0.00</span>°, <span id="posLon">0.00</span>°</div>
+        <div class="info-row"><span class="info-label">Altitude:</span> <span id="altitude">0</span> ft</div>
+        <div class="info-row"><span class="info-label">Heading:</span> <span id="heading">0</span>°</div>
+    </div>
+    <div id="map"></div>
+    
+    <!-- Leaflet JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    
+    <!-- Leaflet Rotated Marker JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-rotated-marker/0.2.3/leaflet.rotatedMarker.min.js"></script>
+    
+    <script>
+        // Initialize the map with a default view (world center)
+        var map = L.map('map').setView([20, 0], 3);
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Variable to store aircraft marker
+        var aircraftMarker = null;
+        var waypointMarkers = [];
+        var flightPath = null;
+        var flightPlanWaypoints = [];
+
+        // Create airplane icon - Simple blue arrow pointing up
+        var airplaneIcon = L.icon({
+            iconUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><polygon points="16,2 20,14 28,18 20,22 22,30 16,26 10,30 12,22 4,18 12,14" fill="%230087FF" stroke="%23FFFFFF" stroke-width="1"/><circle cx="16" cy="18" r="3" fill="white"/></svg>',
+            iconSize: [32, 32],
+            iconAnchor: [16, 16],
+            popupAnchor: [0, -16]
+        });
+
+        // Create waypoint icon - Orange square
+        var waypointIcon = L.icon({
+            iconUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2" fill="%23FFA500" stroke="%23333333" stroke-width="1"/></svg>',
+            iconSize: [24, 24],
+            iconAnchor: [12, 12],
+            popupAnchor: [0, -12]
+        });
+
+        // Function to update aircraft position on the map
+        function updateAircraftPosition(latitude, longitude, altitude, heading) {
+            // Update info panel
+            document.getElementById('posLat').textContent = latitude.toFixed(4);
+            document.getElementById('posLon').textContent = longitude.toFixed(4);
+            document.getElementById('altitude').textContent = Math.round(altitude);
+            document.getElementById('heading').textContent = Math.round(heading);
+
+            // Create or update aircraft marker
+            if (aircraftMarker === null) {
+                aircraftMarker = L.marker([latitude, longitude], {
+                    icon: airplaneIcon,
+                    rotationAngle: heading,
+                    rotationOrigin: 'center'
+                }).addTo(map);
+                aircraftMarker.bindPopup('<b>Aircraft</b><br>Lat: ' + latitude.toFixed(4) + '<br>Lon: ' + longitude.toFixed(4) + '<br>Alt: ' + Math.round(altitude) + ' ft<br>Hdg: ' + Math.round(heading) + '°');
+
+                // Center map on aircraft on first position
+                //map.setView([latitude, longitude], 10);
+            } else {
+                // Update marker position and rotation
+                aircraftMarker.setLatLng([latitude, longitude]);
+                aircraftMarker.setRotationAngle(heading);
+                aircraftMarker.setPopupContent('<b>Aircraft</b><br>Lat: ' + latitude.toFixed(4) + '<br>Lon: ' + longitude.toFixed(4) + '<br>Alt: ' + Math.round(altitude) + ' ft<br>Hdg: ' + Math.round(heading) + '°');
+            }
+
+            // Optionally center map on aircraft
+            map.setView([latitude, longitude]);
+        }
+
+        // Function to add waypoints to the map
+        function addWaypoint(index, latitude, longitude, ident, name) {
+            var marker = L.marker([latitude, longitude], {
+                icon: waypointIcon
+            }).addTo(map);
+            var popupContent = '<b>' + ident + '</b><br>' + name + '<br>WP #' + index;
+            marker.bindPopup(popupContent);
+
+            waypointMarkers.push(marker);
+        }
+
+        // Function to clear all waypoints
+        function clearWaypoints() {
+            waypointMarkers.forEach(function (marker) {
+                map.removeLayer(marker);
+            });
+            waypointMarkers = [];
+
+            if (flightPath !== null) {
+                map.removeLayer(flightPath);
+                flightPath = null;
+            }
+        }
+
+        // ===== NEW FUNCTIONS FOR FLIGHT PLAN DISPLAY =====
+
+        // Function to clear the flight plan (called from C#)
+        function clearFlightPlan() {
+            flightPlanWaypoints = [];
+            clearWaypoints();
+        }
+
+        // Function to add a waypoint to the flight plan (called from C#)
+        function addFlightPlanWaypoint(latitude, longitude) {
+            flightPlanWaypoints.push({
+                lat: latitude,
+                lon: longitude
+            });
+        }
+
+        // Function to draw the flight plan on the map (called from C#)
+        function drawFlightPlan() {
+            // Clear existing waypoints and path
+            clearWaypoints();
+
+            // Draw waypoints on the map
+            for (var i = 0; i < flightPlanWaypoints.length; i++) {
+                var wp = flightPlanWaypoints[i];
+                addWaypoint(i, wp.lat, wp.lon, 'WP' + i, 'Waypoint ' + i);
+            }
+
+            // Draw the flight path line
+            if (flightPlanWaypoints.length > 1) {
+                var pathPoints = flightPlanWaypoints.map(function (wp) {
+                    return [wp.lat, wp.lon];
+                });
+
+                if (flightPath !== null) {
+                    map.removeLayer(flightPath);
+                }
+
+                flightPath = L.polyline(pathPoints, {
+                    color: '#0078d4',
+                    weight: 2,
+                    opacity: 0.7,
+                    dashArray: '5, 5'
+                }).addTo(map);
+
+                // Fit map to show all waypoints
+                var group = new L.featureGroup([]);
+                for (var i = 0; i < waypointMarkers.length; i++) {
+                    group.addLayer(waypointMarkers[i]);
+                }
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+        }
+
+        // Function to draw flight path between waypoints (legacy function)
+        function drawFlightPath(waypointsData) {
+            if (flightPath !== null) {
+                map.removeLayer(flightPath);
+            }
+
+            var pathPoints = waypointsData.map(function (wp) {
+                return [wp.lat, wp.lon];
+            });
+            flightPath = L.polyline(pathPoints, {
+                color: '#0078d4',
+                weight: 2,
+                opacity: 0.7,
+                dashArray: '5, 5'
+            }).addTo(map);
+        }
+
+        // Expose functions globally for C# interop
+        window.updateAircraftPosition = updateAircraftPosition;
+        window.addWaypoint = addWaypoint;
+        window.clearWaypoints = clearWaypoints;
+        window.drawFlightPath = drawFlightPath;
+        window.clearFlightPlan = clearFlightPlan;
+        window.addFlightPlanWaypoint = addFlightPlanWaypoint;
+        window.drawFlightPlan = drawFlightPlan;
+
+        // Demo: Show initial position
+        updateAircraftPosition(48.8566, 2.3522, 0, 0);
+    </script>
+</body>
+</html>
