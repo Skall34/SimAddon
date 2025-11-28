@@ -21,6 +21,7 @@
         html, body {
             height: 100%;
             width: 100%;
+            background-color: #1e1e1e;
         }
         
         #infoPanel {
@@ -28,19 +29,21 @@
             bottom: 10px;
             left: 10px;
             z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(30, 30, 30, 0.95);
             padding: 10px 15px;
             border-radius: 5px;
             font-family: Arial, sans-serif;
             font-size: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             min-width: 200px;
+            border: 1px solid #3a3a3a;
         }
         
         .info-row {
             margin: 5px 0;
             padding: 2px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #3a3a3a;
+            color: #e0e0e0;
         }
         
         .info-row:last-child {
@@ -49,20 +52,21 @@
         
         .info-label {
             font-weight: bold;
-            color: #333;
+            color: #bb86fc;
         }
         
         #map {
             width: 100%;
             height: 100%;
+            background-color: #121212;
         }
     </style>
 </head>
 <body>
     <div id="infoPanel">
-        <div class="info-row"><span class="info-label">Position:</span> <span id="posLat">0.00</span>°, <span id="posLon">0.00</span>°</div>
+        <div class="info-row"><span class="info-label">Position:</span> <span id="posLat">0.00</span>&deg;, <span id="posLon">0.00</span>&deg;</div>
         <div class="info-row"><span class="info-label">Altitude:</span> <span id="altitude">0</span> ft</div>
-        <div class="info-row"><span class="info-label">Heading:</span> <span id="heading">0</span>°</div>
+        <div class="info-row"><span class="info-label">Heading:</span> <span id="heading">0</span>&deg;</div>
     </div>
     <div id="map"></div>
     
@@ -76,9 +80,9 @@
         // Initialize the map with a default view (world center)
         var map = L.map('map').setView([20, 0], 3);
 
-        // Add OpenStreetMap tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        // Add Dark Mode OpenStreetMap tile layer
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             maxZoom: 19
         }).addTo(map);
 
@@ -88,17 +92,17 @@
         var flightPath = null;
         var flightPlanWaypoints = [];
 
-        // Create airplane icon - Simple blue arrow pointing up
+        // Create airplane icon - Blue arrow pointing up (for dark theme)
         var airplaneIcon = L.icon({
-            iconUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><polygon points="16,2 20,14 28,18 20,22 22,30 16,26 10,30 12,22 4,18 12,14" fill="%230087FF" stroke="%23FFFFFF" stroke-width="1"/><circle cx="16" cy="18" r="3" fill="white"/></svg>',
+            iconUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><polygon points="16,2 20,14 28,18 20,22 22,30 16,26 10,30 12,22 4,18 12,14" fill="%2300d4ff" stroke="%23ffffff" stroke-width="1.5"/><circle cx="16" cy="18" r="3" fill="white"/></svg>',
             iconSize: [32, 32],
             iconAnchor: [16, 16],
             popupAnchor: [0, -16]
         });
 
-        // Create waypoint icon - Orange square
+        // Create waypoint icon - Cyan/Bright orange square for dark theme
         var waypointIcon = L.icon({
-            iconUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2" fill="%23FFA500" stroke="%23333333" stroke-width="1"/></svg>',
+            iconUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2" fill="%23ff9800" stroke="%23ffb74d" stroke-width="1.5"/></svg>',
             iconSize: [24, 24],
             iconAnchor: [12, 12],
             popupAnchor: [0, -12]
@@ -119,7 +123,7 @@
                     rotationAngle: heading,
                     rotationOrigin: 'center'
                 }).addTo(map);
-                aircraftMarker.bindPopup('<b>Aircraft</b><br>Lat: ' + latitude.toFixed(4) + '<br>Lon: ' + longitude.toFixed(4) + '<br>Alt: ' + Math.round(altitude) + ' ft<br>Hdg: ' + Math.round(heading) + '°');
+                aircraftMarker.bindPopup('<div style="background-color: #1e1e1e; color: #e0e0e0; border: 1px solid #3a3a3a; border-radius: 4px; padding: 8px;"><b style="color: #00d4ff;">Aircraft</b><br>Lat: ' + latitude.toFixed(4) + '<br>Lon: ' + longitude.toFixed(4) + '<br>Alt: ' + Math.round(altitude) + ' ft<br>Hdg: ' + Math.round(heading) + '&deg;</div>');
 
                 // Center map on aircraft on first position
                 //map.setView([latitude, longitude], 10);
@@ -127,7 +131,7 @@
                 // Update marker position and rotation
                 aircraftMarker.setLatLng([latitude, longitude]);
                 aircraftMarker.setRotationAngle(heading);
-                aircraftMarker.setPopupContent('<b>Aircraft</b><br>Lat: ' + latitude.toFixed(4) + '<br>Lon: ' + longitude.toFixed(4) + '<br>Alt: ' + Math.round(altitude) + ' ft<br>Hdg: ' + Math.round(heading) + '°');
+                aircraftMarker.setPopupContent('<div style="background-color: #1e1e1e; color: #e0e0e0; border: 1px solid #3a3a3a; border-radius: 4px; padding: 8px;"><b style="color: #00d4ff;">Aircraft</b><br>Lat: ' + latitude.toFixed(4) + '<br>Lon: ' + longitude.toFixed(4) + '<br>Alt: ' + Math.round(altitude) + ' ft<br>Hdg: ' + Math.round(heading) + '&deg;</div>');
             }
 
             // Optionally center map on aircraft
@@ -139,7 +143,7 @@
             var marker = L.marker([latitude, longitude], {
                 icon: waypointIcon
             }).addTo(map);
-            var popupContent = '<b>' + ident + '</b><br>' + name + '<br>WP #' + index;
+            var popupContent = '<div style="background-color: #1e1e1e; color: #e0e0e0; border: 1px solid #3a3a3a; border-radius: 4px; padding: 8px;"><b style="color: #ff9800;">' + ident + '</b><br>' + name + '<br>WP #' + index + '</div>';
             marker.bindPopup(popupContent);
 
             waypointMarkers.push(marker);
@@ -196,9 +200,9 @@
                 }
 
                 flightPath = L.polyline(pathPoints, {
-                    color: '#0078d4',
-                    weight: 2,
-                    opacity: 0.7,
+                    color: '#00d4ff',
+                    weight: 2.5,
+                    opacity: 0.9,
                     dashArray: '5, 5'
                 }).addTo(map);
 
@@ -221,9 +225,9 @@
                 return [wp.lat, wp.lon];
             });
             flightPath = L.polyline(pathPoints, {
-                color: '#0078d4',
-                weight: 2,
-                opacity: 0.7,
+                color: '#00d4ff',
+                weight: 2.5,
+                opacity: 0.9,
                 dashArray: '5, 5'
             }).addTo(map);
         }
