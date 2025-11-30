@@ -17,6 +17,7 @@ namespace SimAddon
     {
         private LoadingForm splashScreen;
         private bool autostart = false;
+        private bool hasBeenConnected = false;
         private bool autoHide = false;
         private System.Windows.Forms.Timer timerZulu;
         private UpdateChecker updateChecker;
@@ -206,7 +207,7 @@ namespace SimAddon
 
                 //essaie d'ouvrir la connection. Si ça échoue, une exception sera envoyée
                 _simData.OpenConnection();
-
+                hasBeenConnected = true;
                 Logger.WriteLine("Connected to simulator");
                 //si on arrive ici, la connection est bien ouverte, arrete le timer de connection.
                 this.timerConnection.Stop();
@@ -224,8 +225,9 @@ namespace SimAddon
             catch
             {
                 // No connection found. Don't need to do anything, just keep trying
-                if (autostart)
+                if (autostart && hasBeenConnected)
                 {
+                    Logger.WriteLine("Simulator not found, exiting...");
                     //if flight recorder was started automatically by the simulator, then exit when simulator is not there anymore.
                     System.Windows.Forms.Application.Exit();
                 }
@@ -343,6 +345,7 @@ namespace SimAddon
             FormClosingEventArgs e2;
             if (autostart)
             {
+                Logger.WriteLine("Autostarted, closing without confirmation.");
                 //this can't be canceled
                 e2 = new FormClosingEventArgs(CloseReason.ApplicationExitCall, false);
             }
