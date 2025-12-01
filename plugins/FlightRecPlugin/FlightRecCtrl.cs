@@ -277,51 +277,40 @@ namespace FlightRecPlugin
         {
             //need to ask for save before close
             string message = "Confirm close ACARS ?";
+            DialogResult res = DialogResult.OK;
             if (e.CloseReason == CloseReason.UserClosing)
             {
-
-                if (e.CloseReason == CloseReason.UserClosing)
+                res = ShowMsgBox(message, "Closing", MessageBoxButtons.OKCancel);
+            }
+            if (res == DialogResult.OK)
+            {
+                if (atLeastOneEngineFiring)
                 {
-                    DialogResult res = ShowMsgBox(message, "Closing", MessageBoxButtons.OKCancel);
-                    if (res == DialogResult.OK)
-                    {
-                        if (atLeastOneEngineFiring)
-                        {
-                            this.Cursor = Cursors.WaitCursor;
-                            // Libère l'avion sur le fichier en cas de fermeture de l'acars avant la fin du vol
-                            // on ne le fait que si un moteur tourne encore ==> vol interrompu avant la fin
+                    this.Cursor = Cursors.WaitCursor;
+                    // Libère l'avion sur le fichier en cas de fermeture de l'acars avant la fin du vol
+                    // on ne le fait que si un moteur tourne encore ==> vol interrompu avant la fin
 
-                            //stop the timer
-                            updatePlaneStatusTimer.Stop();
+                    //stop the timer
+                    updatePlaneStatusTimer.Stop();
 
-                            UpdatePlaneStatus(0);
+                    UpdatePlaneStatus(0);
 
-                            System.Threading.Thread.Sleep(2000);
-                            this.Cursor = Cursors.Default;
-                        }
-
-                        //if the reservation is ongoing, we need to free the reservation
-                        if (reservationStatus == ReservationMgr.ReservationStatus.Accepted)
-                        {
-                            data.CompleteReservation(Settings.Default.callsign, reservation);
-                        }
-
-                    }
-                    else
-                    {
-                        // Si l'utilisateur clique sur Annuler, annule la fermeture de la fenêtre.
-                        Logger.WriteLine("close canceled by user");
-                        e.Cancel = true;
-                    }
+                    System.Threading.Thread.Sleep(2000);
+                    this.Cursor = Cursors.Default;
                 }
+
+                //if the reservation is ongoing, we need to free the reservation
+                if (reservationStatus == ReservationMgr.ReservationStatus.Accepted)
+                {
+                    data.CompleteReservation(Settings.Default.callsign, reservation);
+                }
+
             }
             else
             {
-                //close forced. (probably autostart of application by the simulator)
-                if (btnSubmit.Enabled)
-                {
-
-                }
+                // Si l'utilisateur clique sur Annuler, annule la fermeture de la fenêtre.
+                Logger.WriteLine("close canceled by user");
+                e.Cancel = true;
             }
         }
 
