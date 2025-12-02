@@ -18,10 +18,30 @@ namespace SimDataManager
 
         public static async Task<List<Mission>> FetchMissionsFromSheet(HttpClient client, string BASEURL)
         {
+            bool success = false;
+            int nbRetry = 0;
             int result = 0;
             string url = BASEURL + "/api/api_getMissions.php";
+            List<Mission> missions = null;
             UrlDeserializer dataReader = new UrlDeserializer(client, url);
-            List<Mission> missions = await dataReader.FetchMissionsDataAsync();
+            while ((!success)&&(nbRetry<3))
+            {
+                try
+                {
+                    missions = await dataReader.FetchMissionsDataAsync();
+                    if ((missions == null)||(missions.Count==0))
+                    {
+                        throw new System.Exception("Missions data is null");
+                    }
+                    success = true;
+                }
+                catch{
+                    success = false;
+                    //wait and retry
+                    System.Threading.Thread.Sleep(1000);
+                    nbRetry++;
+                }
+            }
             return missions;
         }
 

@@ -79,9 +79,29 @@ namespace SimDataManager
 
         public static async Task<List<Avion>> FetchAvionsFromSheet(HttpClient client, string BASEURL)
         {
+            bool success = false;
+            int nbRetry = 0;
             string url = BASEURL + "/api/api_getFlotte.php";
-            UrlDeserializer dataReader = new UrlDeserializer(client,url);
-            List<Avion> avions = await dataReader.FetchAvionsDataAsync();
+            List<Avion> avions = null;
+            // Retry logic to handle transient errors
+            UrlDeserializer dataReader = new UrlDeserializer(client, url);
+            while ((!success)&&(nbRetry<3)) { 
+                try
+                {
+                    avions = await dataReader.FetchAvionsDataAsync();
+                    if ((avions == null)||(avions.Count==0))
+                    {
+                        throw new Exception("Planes list is empty");
+                    }
+                    success = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Erreur lors de la récupération des avions : " + ex.Message);
+                    await Task.Delay(1000); // Attendre 2 secondes avant de réessayer
+                    nbRetry++;
+                }
+            }
 
             foreach(Avion avion in avions)
             {
