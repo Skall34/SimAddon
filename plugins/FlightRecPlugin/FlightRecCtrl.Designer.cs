@@ -115,6 +115,7 @@ namespace FlightRecPlugin
             timerUpdateStaticValues = new Timer(components);
             splitContainer1 = new SplitContainer();
             updatePlaneStatusTimer = new Timer(components);
+            timerUpdateFleetStatus = new Timer(components);
             gbDynamicData.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             gbEndInfos.SuspendLayout();
@@ -989,6 +990,11 @@ namespace FlightRecPlugin
             updatePlaneStatusTimer.Interval = 30000;
             updatePlaneStatusTimer.Tick += updatePlaneStatusTimer_Tick;
             // 
+            // timerUpdateFleetStatus
+            // 
+            timerUpdateFleetStatus.Interval = 300000;
+            timerUpdateFleetStatus.Tick += timerUpdateFleetStatus_Tick;
+            // 
             // FlightRecCtrl
             // 
             AutoScaleDimensions = new SizeF(9F, 18F);
@@ -1101,5 +1107,6 @@ namespace FlightRecPlugin
         private ToolStripMenuItem checkSessionToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripSeparator toolStripSeparator2;
+        private Timer timerUpdateFleetStatus;
     }
 }

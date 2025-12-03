@@ -241,7 +241,7 @@ namespace FlightRecPlugin
             //check connection to data server
             Task.Run(async () =>
             {
-                if ((Settings.Default.SessionToken == "")||(!await data.checkSession(Settings.Default.SessionToken)))
+                if ((Settings.Default.SessionToken == "") || (!await data.checkSession(Settings.Default.SessionToken)))
                 {
                     UpdateStatus("Logging in to data server...");
                     string sessionToken = await data.loginToSite();
@@ -266,6 +266,7 @@ namespace FlightRecPlugin
             });
 
             timerUpdateStaticValues.Start();
+            timerUpdateFleetStatus.Start();
 
             this.Enabled = true;
 
@@ -804,7 +805,7 @@ namespace FlightRecPlugin
                                             measureLandingPerfs(currentFlightStatus);
                                             //we just landed, so we are taxiing
                                             Logger.WriteLine("State change INFLIGHT -> TAXIING");
-                                            if(_noEngineFlight)
+                                            if (_noEngineFlight)
                                             {
                                                 getEndOfFlightData();
                                                 currentState = STATE.ENDED;
@@ -835,7 +836,7 @@ namespace FlightRecPlugin
                                         ; break;
                                 }
                             }
-                            ;  break;
+                            ; break;
                         case STATE.ENDED:
                             {
                                 //we are ended, so we need to wait for a reset (engine start)
@@ -1077,7 +1078,7 @@ namespace FlightRecPlugin
                     try
                     {
                         Avion selected = data.avions.Where(a => a.Immat == lastImmat).First();
-                        if (selected != null) 
+                        if (selected != null)
                         {
                             cbImmat.SelectedItem = selected;
                             //send the SETAIRCRAFT event
@@ -1358,7 +1359,7 @@ namespace FlightRecPlugin
 
                     }
                     //si tout va bien...
-                    ShowMsgBox("Flight saved. "+returnMessage, "Flight Recorder", MessageBoxButtons.OK);
+                    ShowMsgBox("Flight saved. " + returnMessage, "Flight Recorder", MessageBoxButtons.OK);
 
                     //reset le vol sans demande de confirmation
                     resetFlight(true);
@@ -1871,10 +1872,6 @@ namespace FlightRecPlugin
         {
             try
             {
-                if (data.avions.Count > 0)
-                {
-                    data.UpdatePlaneFromSheet();
-                }
 
                 if (data.isConnectedToSim && data.GetReadyToFly())
                 {
@@ -2244,6 +2241,18 @@ namespace FlightRecPlugin
             else
             {
                 MessageBox.Show("Session is still valid.", "Flight Recorder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void timerUpdateFleetStatus_Tick(object sender, EventArgs e)
+        {
+            //si on est au sol, et moteur arretés, alors on continue de rafraichir les données statiques.
+            if (onGround && !atLeastOneEngineFiring)
+            {
+                if (data.avions.Count > 0)
+                {
+                    data.UpdatePlaneFromSheet();
+                }
             }
         }
     }
