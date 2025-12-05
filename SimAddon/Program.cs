@@ -20,7 +20,7 @@ namespace SimAddon
             
             if (!createdNew)
             {
-                MessageBox.Show("Une autre instance de SimAddon est déjà lancée.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Another instance is already running", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return; // Sortie propre de l'application
             }
 
