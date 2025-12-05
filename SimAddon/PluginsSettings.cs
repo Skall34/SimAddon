@@ -41,13 +41,13 @@ namespace SimAddon
                 string settingsFile = Path.Combine(fullPath, filePath);
 
                 // Ensure the file exists before attempting to read it
-                if (!File.Exists(filePath))
+                if (!File.Exists(settingsFile))
                 {
-                    Logger.WriteLine($"Plugins settings file not found: {filePath}");
+                    Logger.WriteLine($"Plugins settings file not found: {settingsFile}");
                     return;
                 }
                 // Read the JSON file content
-                string jsonContent = File.ReadAllText(filePath);
+                string jsonContent = File.ReadAllText(settingsFile);
                 // Deserialize the JSON content into a C# object
                 Plugins = System.Text.Json.JsonSerializer.Deserialize<Dictionary<String, PluginSettings>>(jsonContent);
             }
