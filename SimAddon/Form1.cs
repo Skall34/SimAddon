@@ -95,7 +95,6 @@ namespace SimAddon
         //private bool modifiedFuel;
         public Form1()
         {
-
             pluginTabs = new Collection<TabPage>();
             pluginsSettings = new PluginsSettings();
             pluginsSettings.loadFromJsonFile("plugins.json");
