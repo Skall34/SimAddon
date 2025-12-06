@@ -238,7 +238,6 @@ namespace FlightRecPlugin
             eventArg.value = tbCallsign.Text;
             SimEvent(eventArg);
 
-
             timerUpdateStaticValues.Start();
             timerUpdateFleetStatus.Start();
 

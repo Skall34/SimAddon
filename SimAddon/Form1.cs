@@ -487,13 +487,11 @@ namespace SimAddon
             SetSplashProgress(30, "Connecting to site...");
             //connect to the web site to check session token, or get a new one if needed
             Logger.WriteLine("Connecting to data server...");
-            await connectToSite();
-
+            bool loggedin = await connectToSite();
             SetSplashProgress(40, "Loading data from server...");
             Plugin_OnStatusUpdate(this, "Loading data from server...");
             Logger.WriteLine("Loading data from server...");
             await _simData.loadDataFromSheet();
-
             //met à jour l'etat de connection au simu dans la barre de statut
             Plugin_OnStatusUpdate(this, "Data loaded.");
             Logger.WriteLine("Data loaded from server.");
@@ -960,6 +958,8 @@ namespace SimAddon
         private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _simData.logoutFromSite();
+            Settings.Default.SessionToken = "";
+            Settings.Default.Save();
         }
 
         private void checkSessionToolStripMenuItem_Click(object sender, EventArgs e)
