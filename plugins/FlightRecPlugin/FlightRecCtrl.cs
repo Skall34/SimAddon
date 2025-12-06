@@ -238,32 +238,6 @@ namespace FlightRecPlugin
             eventArg.value = tbCallsign.Text;
             SimEvent(eventArg);
 
-            //check connection to data server
-            Task.Run(async () =>
-            {
-                if ((Settings.Default.SessionToken == "") || (!await data.checkSession(Settings.Default.SessionToken)))
-                {
-                    UpdateStatus("Logging in to data server...");
-                    string sessionToken = await data.loginToSite();
-                    if (sessionToken == "")
-                    {
-                        Logger.WriteLine("Login failed");
-                        UpdateStatus("Logged in to data server failed");
-                    }
-                    else
-                    {
-                        Logger.WriteLine("Login OK");
-                        Settings.Default.SessionToken = sessionToken;
-                        Settings.Default.Save();
-                        UpdateStatus("Logged in to data server");
-                    }
-                }
-                else
-                {
-                    UpdateStatus("Logged in to data server");
-                    Logger.WriteLine("Already logged in to data server");
-                }
-            });
 
             timerUpdateStaticValues.Start();
             timerUpdateFleetStatus.Start();
@@ -2217,30 +2191,6 @@ namespace FlightRecPlugin
                     myBrush = Brushes.LightGray;
                 }
                 e.Graphics.DrawString(item.Libelle, e.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
-            }
-        }
-
-        private async void loginToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string sessionToken = await data.loginToSite();
-            Settings.Default.SessionToken = sessionToken;
-            Settings.Default.Save();
-        }
-
-        private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            data.logoutFromSite();
-        }
-
-        private async void checkSessionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!await data.checkSession(Settings.Default.SessionToken))
-            {
-                MessageBox.Show("Session expired, please log in again.", "Flight Recorder", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
-            {
-                MessageBox.Show("Session is still valid.", "Flight Recorder", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 

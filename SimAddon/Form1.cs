@@ -1,15 +1,16 @@
-﻿using SimAddonLogger;
+﻿using SimAddon.Properties;
+using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
 using System.Collections.ObjectModel;
 using System.Drawing.Imaging;
-using System.Reflection;
-using System.Net.Http;
-using System.Text.Json;
 using System.Linq;
+using System.Net.Http;
+using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SimAddon.Properties;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SimAddon
 {
@@ -98,7 +99,7 @@ namespace SimAddon
             pluginTabs = new Collection<TabPage>();
             pluginsSettings = new PluginsSettings();
             pluginsSettings.loadFromJsonFile("plugins.json");
-            
+
             // Initialiser le vérificateur de mises à jour
             updateChecker = new UpdateChecker();
 
@@ -394,13 +395,40 @@ namespace SimAddon
             toolStripHeureZulu.Text = DateTime.UtcNow.ToString("HH:mm:ss 'Z'");
 
         }
+
+
+        private async Task<bool> connectToSite()
+        {
+            bool result = false;
+            //check connection to data server
+            if ((Settings.Default.SessionToken == "") || (!await _simData.checkSession(Settings.Default.SessionToken)))
+            {
+                string sessionToken = await _simData.loginToSite();
+                if (sessionToken == "")
+                {
+                    Logger.WriteLine("Login failed");
+                }
+                else
+                {
+                    Logger.WriteLine("Login OK");
+                    Settings.Default.SessionToken = sessionToken;
+                    Settings.Default.Save();
+                    result = true;
+                }
+            }
+            else
+            {
+                Logger.WriteLine("Already logged in to data server");
+                result = true;
+            }
+            return result;
+        }
+
         private async void Form1_Load(object sender, EventArgs e)
         {
             this.timerZulu.Start();
             //initialise l'object qui sert à capter les données qui viennent du simu
             Logger.WriteLine("initialize the connection to the simulator");
-
-
 
             // show splash progress while loading UI/plugins/data
             SetSplashProgress(10, "Loading plugins...");
@@ -456,10 +484,14 @@ namespace SimAddon
             //save the plugins settings to the file
             pluginsSettings.saveToJsonFile("plugins.json");
 
+            SetSplashProgress(30, "Connecting to site...");
+            //connect to the web site to check session token, or get a new one if needed
+            Logger.WriteLine("Connecting to data server...");
+            await connectToSite();
+
             SetSplashProgress(40, "Loading data from server...");
             Plugin_OnStatusUpdate(this, "Loading data from server...");
             Logger.WriteLine("Loading data from server...");
-
             await _simData.loadDataFromSheet();
 
             //met à jour l'etat de connection au simu dans la barre de statut
@@ -918,6 +950,21 @@ namespace SimAddon
             {
                 Logger.WriteLine($"Error checking for updates: {ex.Message}");
             }
+        }
+
+        private async void loginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            connectToSite();
+        }
+
+        private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _simData.logoutFromSite();
+        }
+
+        private void checkSessionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _simData.checkSession(Settings.Default.SessionToken);
         }
     }
 }

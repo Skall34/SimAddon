@@ -298,7 +298,7 @@ namespace SimDataManager
             int result = 0;
 
             //load the airports.
-            this.aeroports.AddRange(await Aeroport.fetchAirports(BASERURL, DateTime.MinValue));
+            this.aeroports.AddRange(await Aeroport.fetchAirports(BASERURL, DateTime.MinValue,sessionToken));
             //just in case, reload the statc values
             Logger.WriteLine("done loading airports database");
             //this.Cursor = Cursors.Default;
@@ -307,7 +307,7 @@ namespace SimDataManager
 
         public Reservation CheckReservation(string callsign)
         {
-            Task<Reservation> result = ReservationMgr.CheckReservation(callsign, BASERURL);
+            Task<Reservation> result = ReservationMgr.CheckReservation(callsign, BASERURL,sessionToken);
             return result.Result;
         }
 
@@ -331,8 +331,8 @@ namespace SimDataManager
         private async Task<int> LoadDataFromSheet()
         {
             int result = 0;
-            List<Mission> missions = await Mission.FetchMissionsFromSheet(httpClient, BASERURL);           
-            List<Avion> avions = await Avion.FetchAvionsFromSheet(httpClient, BASERURL);
+            List<Mission> missions = await Mission.FetchMissionsFromSheet(httpClient, BASERURL,sessionToken);           
+            List<Avion> avions = await Avion.FetchAvionsFromSheet(httpClient, BASERURL,sessionToken);
 
             this.avions.Clear();
             this.missions.Clear();
@@ -368,7 +368,7 @@ namespace SimDataManager
                 Logger.WriteLine("planes database is empty, cannot update planes status !");
                 return;
             }
-            Avion.UpdateAvionsStatus(httpClient, avions, BASERURL);
+            Avion.UpdateAvionsStatus(httpClient, avions, BASERURL,sessionToken);
             updateInProgress = false;
         }
 
@@ -478,9 +478,9 @@ namespace SimDataManager
         public async Task<float> GetFretOnAirport(string airportIdent)
         {
             string url = BASERURL + "/api/api_getFretByIcao.php?ICAO=" + airportIdent;
+            url+= "&session_token=" + sessionToken;
             UrlDeserializer dataReader = new UrlDeserializer(httpClient,url);
             float fret = await dataReader.FetchFreightDataAsync();
-
             return fret;
         }
 

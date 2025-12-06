@@ -224,7 +224,7 @@ namespace SimDataManager
         }
 
 
-        public static async Task<List<Aeroport>> fetchAirports(string baseUrl, DateTime lastUpdateFileTime)
+        public static async Task<List<Aeroport>> fetchAirports(string baseUrl, DateTime lastUpdateFileTime,string token)
         {
             initPath();
             //long epoch = 0; // lastUpdateFileTime.ToFileTime();
@@ -236,6 +236,8 @@ namespace SimDataManager
                 //epoch = (long)(creationTime - new DateTime(1970, 1, 1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
             }
             string url = baseUrl + "api/api_getLastAirportUpdate.php";
+            url += "?session_token=" + Uri.EscapeDataString(token);
+
             UrlDeserializer dataReader = new UrlDeserializer(url);
             DateTime lastUpdate = await dataReader.FetchLastUpdateAsync();
 
@@ -247,6 +249,8 @@ namespace SimDataManager
                 //fetch the airports from the server.               
                 
                 url = baseUrl + "api/api_getAirports.php";
+                url += "?session_token=" + Uri.EscapeDataString(token);
+
                 dataReader = new UrlDeserializer(url);
                 Logger.WriteLine("Fechting airport informations from server");
                 result = await dataReader.FetchAirportsDataAsync(DBFILEPATH);
@@ -277,10 +281,12 @@ namespace SimDataManager
             return result;
         }
 
-        public static async Task<float> fetchFreight(string baseUrl, string airportID)
+        public static async Task<float> fetchFreight(string baseUrl, string airportID, string token)
         {
 
             string url = baseUrl + "api/api_getFretByIcao.php?ICAO=" + airportID;
+            url += "&session_token=" + Uri.EscapeDataString(token);
+
             UrlDeserializer dataReader = new UrlDeserializer(url);
             float result;
             result = await dataReader.FetchFreightDataAsync();

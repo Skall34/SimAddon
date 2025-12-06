@@ -77,11 +77,11 @@ namespace SimDataManager
             return name1.CompareTo(name2);
         }
 
-        public static async Task<List<Avion>> FetchAvionsFromSheet(HttpClient client, string BASEURL)
+        public static async Task<List<Avion>> FetchAvionsFromSheet(HttpClient client, string BASEURL,string token)
         {
             bool success = false;
             int nbRetry = 0;
-            string url = BASEURL + "/api/api_getFlotte.php";
+            string url = BASEURL + "/api/api_getFlotte.php?session_token=" + Uri.EscapeDataString(token);
             List<Avion> avions = null;
             // Retry logic to handle transient errors
             UrlDeserializer dataReader = new UrlDeserializer(client, url);
@@ -124,10 +124,10 @@ namespace SimDataManager
         }
 
         //update the list of avions with their status (reserved, in flight, maintenance, available)
-        public static async void UpdateAvionsStatus(HttpClient client, List<Avion> avions, string BASEURL)
+        public static async void UpdateAvionsStatus(HttpClient client, List<Avion> avions, string BASEURL, string token)
         {
             //fecth the list of planes from the database
-            string url = BASEURL + "/api/api_getFlotte.php";
+            string url = BASEURL + "/api/api_getFlotte.php?session_token=" + Uri.EscapeDataString(token);
             UrlDeserializer dataReader = new UrlDeserializer(client, url);
             List<Avion> planesInDB = await dataReader.FetchAvionsDataAsync();
 

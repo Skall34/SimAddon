@@ -32,7 +32,7 @@ namespace SimDataManager
         /// <summary>
         /// Call the reservation API using Settings.Default.callsign and show a popup if a reservation exists.
         /// </summary>
-        internal static async Task<Reservation> CheckReservation(string callsign, string baseUrl, CancellationToken cancellationToken = default)
+        internal static async Task<Reservation> CheckReservation(string callsign, string baseUrl,string token, CancellationToken cancellationToken = default)
         {
             var reservation = new Reservation { Reserved = false };
             reservation.Reserved = false;
@@ -47,6 +47,7 @@ namespace SimDataManager
                 }
 
                 string apiUrl = baseUrl.TrimEnd('/') + "/api/api_check_reservation.php?callsign=" + Uri.EscapeDataString(callsign);
+                apiUrl += "&session_token=" + Uri.EscapeDataString(token);
 
                 HttpResponseMessage resp = await httpClient.GetAsync(apiUrl, cancellationToken).ConfigureAwait(false);
                 if (!resp.IsSuccessStatusCode)
@@ -130,10 +131,12 @@ namespace SimDataManager
                     { "callsign", callsign },
                     { "immat", reservation.Immat },
                     { "departureIcao", reservation.DepartureIcao },
-                    { "arrivalIcao", reservation.ArrivalIcao }
+                    { "arrivalIcao", reservation.ArrivalIcao },
+                    { "session_token", sessionToken   }
                 };
 
                 var content = new FormUrlEncodedContent(values);
+                string URL = BASEURL + "/api/api_complete_reservation.php";
                 var response = await httpClient.PostAsync(BASEURL + "/api/api_complete_reservation.php", content, CancellationToken.None).ConfigureAwait(false);
                 var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 Logger.WriteLine($"api_complete_reservation.php response: {responseString}");
@@ -159,7 +162,8 @@ namespace SimDataManager
                     { "callsign", callsign },
                     { "immat", reservation.Immat },
                     { "departureIcao", reservation.DepartureIcao },
-                    { "arrivalIcao", reservation.ArrivalIcao }
+                    { "arrivalIcao", reservation.ArrivalIcao },
+                    { "session_token", sessionToken }
                 };
                 var content = new FormUrlEncodedContent(values);
                 var response = await httpClient.PostAsync(BASEURL + "/api/api_consume_reservation.php", content).ConfigureAwait(false);

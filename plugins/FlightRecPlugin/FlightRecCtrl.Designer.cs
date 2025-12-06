@@ -104,10 +104,6 @@ namespace FlightRecPlugin
             submitFlightToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             debugToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator2 = new ToolStripSeparator();
-            loginToolStripMenuItem = new ToolStripMenuItem();
-            logoutToolStripMenuItem = new ToolStripMenuItem();
-            checkSessionToolStripMenuItem = new ToolStripMenuItem();
             engineStopTimer = new Timer(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox5 = new GroupBox();
@@ -860,14 +856,14 @@ namespace FlightRecPlugin
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { resetFlightToolStripMenuItem, submitFlightToolStripMenuItem, toolStripSeparator1, debugToolStripMenuItem, toolStripSeparator2, loginToolStripMenuItem, logoutToolStripMenuItem, checkSessionToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { resetFlightToolStripMenuItem, submitFlightToolStripMenuItem, toolStripSeparator1, debugToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(147, 148);
+            contextMenuStrip1.Size = new Size(134, 76);
             // 
             // resetFlightToolStripMenuItem
             // 
             resetFlightToolStripMenuItem.Name = "resetFlightToolStripMenuItem";
-            resetFlightToolStripMenuItem.Size = new Size(146, 22);
+            resetFlightToolStripMenuItem.Size = new Size(133, 22);
             resetFlightToolStripMenuItem.Text = "Reset flight";
             resetFlightToolStripMenuItem.Click += resetFlightToolStripMenuItem_Click;
             // 
@@ -875,47 +871,21 @@ namespace FlightRecPlugin
             // 
             submitFlightToolStripMenuItem.Enabled = false;
             submitFlightToolStripMenuItem.Name = "submitFlightToolStripMenuItem";
-            submitFlightToolStripMenuItem.Size = new Size(146, 22);
+            submitFlightToolStripMenuItem.Size = new Size(133, 22);
             submitFlightToolStripMenuItem.Text = "Save Flight";
             submitFlightToolStripMenuItem.Click += submitFlightToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(143, 6);
+            toolStripSeparator1.Size = new Size(130, 6);
             // 
             // debugToolStripMenuItem
             // 
             debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            debugToolStripMenuItem.Size = new Size(146, 22);
+            debugToolStripMenuItem.Size = new Size(133, 22);
             debugToolStripMenuItem.Text = "Debug";
             debugToolStripMenuItem.Click += debugToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator2
-            // 
-            toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(143, 6);
-            // 
-            // loginToolStripMenuItem
-            // 
-            loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            loginToolStripMenuItem.Size = new Size(146, 22);
-            loginToolStripMenuItem.Text = "Login";
-            loginToolStripMenuItem.Click += loginToolStripMenuItem_Click;
-            // 
-            // logoutToolStripMenuItem
-            // 
-            logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            logoutToolStripMenuItem.Size = new Size(146, 22);
-            logoutToolStripMenuItem.Text = "Logout";
-            logoutToolStripMenuItem.Click += logoutToolStripMenuItem_Click;
-            // 
-            // checkSessionToolStripMenuItem
-            // 
-            checkSessionToolStripMenuItem.Name = "checkSessionToolStripMenuItem";
-            checkSessionToolStripMenuItem.Size = new Size(146, 22);
-            checkSessionToolStripMenuItem.Text = "CheckSession";
-            checkSessionToolStripMenuItem.Click += checkSessionToolStripMenuItem_Click;
             // 
             // engineStopTimer
             // 
@@ -1102,11 +1072,7 @@ namespace FlightRecPlugin
         private ToolStripMenuItem debugToolStripMenuItem;
         private Button btnFlightbook;
         private Timer updatePlaneStatusTimer;
-        private ToolStripMenuItem loginToolStripMenuItem;
-        private ToolStripMenuItem logoutToolStripMenuItem;
-        private ToolStripMenuItem checkSessionToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
-        private ToolStripSeparator toolStripSeparator2;
         private Timer timerUpdateFleetStatus;
     }
 }
