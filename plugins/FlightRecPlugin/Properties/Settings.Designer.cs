@@ -70,5 +70,29 @@ namespace FlightRecPlugin.Properties {
                 this["LocalFlightbookFile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int GPSRecordingInterval {
+            get {
+                return ((int)(this["GPSRecordingInterval"]));
+            }
+            set {
+                this["GPSRecordingInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("flightRecord")]
+        public string FlightParamsRecord {
+            get {
+                return ((string)(this["FlightParamsRecord"]));
+            }
+            set {
+                this["FlightParamsRecord"] = value;
+            }
+        }
     }
 }

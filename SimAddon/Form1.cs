@@ -252,6 +252,7 @@ namespace SimAddon
                 }
 
                 //remplis la structure currentStatus avec les données venant du simu
+                currentStatus.timestamp = DateTime.UtcNow;
                 currentStatus.magVariation = _simData.GetMagVariation();
                 currentStatus.readyToFly = _simData.GetReadyToFly();
                 currentStatus.airSpeed = _simData.GetAirSpeed();
@@ -262,7 +263,8 @@ namespace SimAddon
                 currentStatus.gearIsUp = _simData.GetIsGearUp();
                 currentStatus.gearRetractableFlag = _simData.GetGearRetractableFlag();
                 currentStatus.isAtLeastOneEngineFiring = _simData.IsAtLeastOneEngineFiring();
-                currentStatus.landingVerticalSpeed = _simData.GetLandingVerticalSpeed();
+                currentStatus.averageFuelFlow = _simData.GetAverageFuelFlow();
+                currentStatus.verticalSpeed = _simData.GetLandingVerticalSpeed();
                 currentStatus.offRunwayCrashed = _simData.GetOffRunwayCrashed();
                 currentStatus.onGround = _simData.GetOnground();
                 currentStatus.overSpeedWarning = _simData.GetOverspeedWarning();

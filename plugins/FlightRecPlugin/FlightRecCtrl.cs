@@ -25,8 +25,6 @@ namespace FlightRecPlugin
         const string name = "FlightRecorder";
         Version? version;
 
-        int updateCounter = 0;
-
         DebugForm dbg;
         bool simReady;
         bool isPaused;
@@ -67,6 +65,7 @@ namespace FlightRecPlugin
         private bool _noEngineFlight;
 
         private GPSRecorder GPSRecorder;
+        private FlightParamsRecorder flightParamsRecorder;
 
         private readonly FlightPerfs flightPerfs;
 
@@ -205,6 +204,7 @@ namespace FlightRecPlugin
 
             flightPerfs = new FlightPerfs();
             GPSRecorder = new GPSRecorder();
+            flightParamsRecorder = new FlightParamsRecorder();
         }
 
 
@@ -414,7 +414,7 @@ namespace FlightRecPlugin
         {
             //only update the touchDownVSpeed if we've been airborn once
             flightPerfs.landingSpeed = currentFlightStatus.airSpeed;
-            flightPerfs.landingVSpeed = currentFlightStatus.landingVerticalSpeed;
+            flightPerfs.landingVSpeed = currentFlightStatus.verticalSpeed;
             flightPerfs.landingWeight = currentFlightStatus.planeWeight;
 
             _notAirborn = DateTime.Now;
@@ -577,12 +577,7 @@ namespace FlightRecPlugin
 
         public void updateSituation(situation currentFlightStatus)
         {
-            updateCounter += 1;
-            if (updateCounter >= 1000)
-            {
-                //every 1000th update, refresh the static values
-                updateCounter = 0;
-            }
+
             try
             {
                 if (isRecording)
@@ -686,7 +681,7 @@ namespace FlightRecPlugin
                                 if (localAirport != null)
                                 {
                                     //only check reservation every 50 updates
-                                    if (updateCounter % 50 == 0)
+                                    if (currentFlightStatus.counter % 50 == 0)
                                     {
                                         checkReservation();
                                     }
@@ -967,11 +962,19 @@ namespace FlightRecPlugin
                     //enregistre la position GPS si un moteur tourne, ou si on est pas au sol.
                     if (atLeastOneEngineFiring || !onGround)
                     {
-                        GPSRecorder.AddPoint(
+                        if (currentFlightStatus.counter % Properties.Settings.Default.GPSRecordingInterval == 0)
+                        {
+                            GPSRecorder.AddPoint(
                             _currentPosition.Location.Latitude,
                             _currentPosition.Location.Longitude,
                             _currentPosition.Altitude,
                             DateTime.Now);
+                        }
+                    }
+
+                    if (currentFlightStatus.counter % 100 == 0)
+                    {
+                        flightParamsRecorder.RecordFlightParams(currentFlightStatus);
                     }
                 }
                 else
@@ -1214,6 +1217,11 @@ namespace FlightRecPlugin
 
             localFlightBook.AddFlight(newFlight);
             localFlightBook.saveToJson(localFlightBookFile);
+            string flightParamsFilename = Properties.Settings.Default.FlightParamsRecord;
+            flightParamsFilename+="_"+lbStartIata.Text+"-"+lbEndIata.Text+"_"+_startTime.ToString("yyyyMMdd_HHmmss");
+
+            flightParamsRecorder.saveToCSV(flightParamsFilename);
+            flightParamsRecorder.ClearRecordedFlightParams();
 
             //GPSRecorder.OptimizeTrace();
             GPSRecorder.OptimizeTraceRamerDouglasPeucker(0.0001);

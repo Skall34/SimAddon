@@ -67,6 +67,21 @@ namespace SimDataManager
             Location = new LatLonPoint();
         }
 
+        public PositionSnapshot(PositionSnapshot position)
+        {
+            Location = new LatLonPoint()
+            {
+                Latitude = position.Location.Latitude,
+                Longitude = position.Location.Longitude
+            };
+            Altitude = position.Altitude;
+            HeadingDegreesTrue = position.HeadingDegreesTrue;
+            PitchDegrees = position.PitchDegrees;
+            BankDegrees = position.BankDegrees;
+            IndicatedAirspeedKnots = position.IndicatedAirspeedKnots;
+            IsOnGround = position.IsOnGround;
+        }
+
         public override string ToString()
         {
             return Location.ToString();
@@ -117,12 +132,16 @@ namespace SimDataManager
         private readonly Offset<short> engine3Firing = new Offset<short>(0x09C4);
         private readonly Offset<short> engine4Firing = new Offset<short>(0x0A5C);
 
+        //fuel flows pounds / hour
+        private readonly Offset<double> engine1FuelFlow = new Offset<double>(0x0918);
+        private readonly Offset<double> engine2FuelFlow = new Offset<double>(0x09B0);
+        private readonly Offset<double> engine3FuelFlow = new Offset<double>(0x0A48);
+        private readonly Offset<double> engine4FuelFlow = new Offset<double>(0x0AE0);
+
         private readonly Offset<short> engineNumber = new Offset<short>(0x0AEC);
 
         private readonly Offset<uint> flapsPosition      = new Offset<uint>(0x0BE0);
         private readonly Offset<uint> gearPosition       = new Offset<uint>(0x0BF0);
-
-
 
         private readonly Offset<short> verticalAcceleration = new Offset<short>(0x11BA);
 
@@ -140,44 +159,6 @@ namespace SimDataManager
 
         private readonly Offset<byte> viewMode = new Offset<byte>(0x8320);
 
-        //private Offset<byte> navLights = new Offset<byte>(0x0280);
-        //private Offset<byte> beaconStrobe = new Offset<byte>(0x0281);
-        //private Offset<byte> landingLights = new Offset<byte>(0x02BC);
-
-        //30C Vertical speed, copy of offset 02C8 whilst airborne, not updated
-        //whilst the “on ground” flag(0366) is set.Can be used to check
-        //hardness of touchdown(but watch out for bounces which may
-        //change this). 
-
-
-
-
-
-
-        //private Offset<long> altitude = new Offset<long>(0x0570);
-        //private Offset<uint> pitch = new Offset<uint>(0x0578);
-        //private Offset<uint> bank = new Offset<uint>(0x057C);
-        //private Offset<uint> heading = new Offset<uint>(0x0580);
-
-
-
-
-        //private readonly Offset<short> fuelWheight = new Offset<short>(0x0AF4); //pounds per gallons * 256
-
-        //private readonly Offset<uint> centerTankLevelPercent = new Offset<uint>(0x0B74); // % * 128 * 65536
-        //private readonly Offset<uint> centerTankGallonsCapacity = new Offset<uint>(0x0B78);
-
-        //private readonly Offset<uint> leftTankLevelPercent = new Offset<uint>(0x0B7C); // % * 128 * 65536
-        //private readonly Offset<uint> leftTankGallonsCapacity = new Offset<uint>(0x0B80);
-
-        //private readonly Offset<uint> rightTankLevelPercent = new Offset<uint>(0x0B94); // % * 128 * 65536
-        //private readonly Offset<uint> rightTankGallonsCapacity = new Offset<uint>(0x0B98);
-
-        //private readonly Offset<uint> payloadNumber = new Offset<uint>(0x13FC);
-        //private Offset<FsPayloadStation> payloads = new Offset<FsPayloadStation>(0x1400, 48);
-
-
-        //private readonly Offset<string> airlineName = new Offset<string>(0x3148, 24);
 
         private PayloadServices payloadServices;
         //private readonly PlayerLocationInfo locationInfos = new PlayerLocationInfo();
@@ -728,6 +709,39 @@ namespace SimDataManager
                     }; break;
             }
             return result;
+        }
+
+        public double GetAverageFuelFlow()
+        {
+            double totalFuelFlow = 0;
+            int engineCount = this.engineNumber.Value;
+            switch (engineCount)
+            {
+                case (1):
+                    {
+                        totalFuelFlow = engine1FuelFlow.Value;
+                    }; break;
+                case (2):
+                    {
+                        totalFuelFlow = engine1FuelFlow.Value + engine2FuelFlow.Value;
+                    }; break;
+                case (3):
+                    {
+                        totalFuelFlow = engine1FuelFlow.Value + engine2FuelFlow.Value + engine3FuelFlow.Value;
+                    }; break;
+                case (4):
+                    {
+                        totalFuelFlow = engine1FuelFlow.Value + engine2FuelFlow.Value + engine3FuelFlow.Value + engine4FuelFlow.Value;
+                    }; break;
+            }
+            if (engineCount > 0)
+            {
+                return totalFuelFlow / engineCount;
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public PositionSnapshot GetPosition()

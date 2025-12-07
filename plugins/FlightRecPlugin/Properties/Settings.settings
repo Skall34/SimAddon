@@ -14,5 +14,11 @@
     <Setting Name="LocalFlightbookFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">localFlightbook.json</Value>
     </Setting>
+    <Setting Name="GPSRecordingInterval" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="FlightParamsRecord" Type="System.String" Scope="User">
+      <Value Profile="(Default)">flightRecord</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

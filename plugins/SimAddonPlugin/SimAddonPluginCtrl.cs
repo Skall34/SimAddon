@@ -1,4 +1,5 @@
 ﻿using SimDataManager;
+using System;
 using System.Windows.Forms;
 
 
@@ -73,6 +74,7 @@ namespace SimAddonPlugin
     public class situation
     {
         //a counter from 0 to 999 incremented at each update
+        public DateTime timestamp { get; set; }
         public int counter { get; set; }
         public bool readyToFly { get; set; }
         public double airSpeed { get; set; }
@@ -83,7 +85,8 @@ namespace SimAddonPlugin
         public bool gearIsUp { get; set; }
         public uint gearRetractableFlag { get; set; }
         public bool isAtLeastOneEngineFiring { get; set; }
-        public double landingVerticalSpeed { get; set; }
+        public double averageFuelFlow { get; set; }
+        public double verticalSpeed { get; set; }
         public short offRunwayCrashed { get; set; }
         public short onGround { get; set; }
         public byte overSpeedWarning { get; set; }
@@ -108,5 +111,41 @@ namespace SimAddonPlugin
 
         public byte squawkMode { get; set; } // 0 = off, 1 = standby, 2 = on, test=3
 
+        public situation()
+        {
+            timestamp = DateTime.Now;
+        }
+
+        public situation(situation data)
+        {
+            timestamp = data.timestamp;
+            counter = data.counter;
+            readyToFly = data.readyToFly;
+            airSpeed = data.airSpeed;
+            crashedFlag = data.crashedFlag;
+            currentFuel = data.currentFuel;
+            flapsAvailableFlag = data.flapsAvailableFlag;
+            flapsPosition = data.flapsPosition;
+            gearIsUp = data.gearIsUp;
+            gearRetractableFlag = data.gearRetractableFlag;
+            isAtLeastOneEngineFiring = data.isAtLeastOneEngineFiring;
+            averageFuelFlow = data.averageFuelFlow;
+            verticalSpeed = data.verticalSpeed;
+            offRunwayCrashed = data.offRunwayCrashed;
+            onGround = data.onGround;
+            overSpeedWarning = data.overSpeedWarning;
+            payload = data.payload;
+            planeWeight = data.planeWeight;
+            stallWarning = data.stallWarning;
+            MasterAvionicsOn = data.MasterAvionicsOn;
+            MasterBatteryOn = data.MasterBatteryOn;
+            verticalAcceleration = data.verticalAcceleration;
+            magVariation = data.magVariation;
+            position = new PositionSnapshot(data.position);
+            COM1Frequency = data.COM1Frequency;
+            COM1StdbyFrequency = data.COM1StdbyFrequency;
+            squawkCode = data.squawkCode;
+            squawkMode = data.squawkMode;
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace BushTripPlugin
 {
     public partial class FlightplanCtrl : UserControl, ISimAddonPluginCtrl
     {
-        private const string appName= "Flight plan";
+        private const string appName = "Flight plan";
         private simData? data;
         private uint waypointIndex;
         private int lastWaypointIndex;
@@ -153,6 +153,30 @@ namespace BushTripPlugin
             }
         }
 
+        private void updateFlightParams(situation data)
+        {
+            //not used here
+            //compute the expected range from the data using fluelflow, airspeed, current fuel
+            double airSpeed = data.airSpeed; //in knots
+            double currentFuelKgs = data.currentFuel ; //in Kgs needs to be in pounds
+            double currentFuel = currentFuelKgs * 2.20462; //in pounds
+            double averageFuelFlow = data.averageFuelFlow; //in pounds per hour
+            double expectedRange = 0;
+            if (averageFuelFlow > 0)
+            {
+
+                double enduranceHours = currentFuel / averageFuelFlow;
+                expectedRange = airSpeed * enduranceHours; //in nautical miles
+            }
+
+            //update the text in the textbox 
+            tbFlightParams.Text = "Airspeed: " + airSpeed.ToString("F0") + " kt" + Environment.NewLine +
+                                       "Av.  Fuel: " + currentFuel.ToString("F0") + " lbs" + Environment.NewLine +
+                                       "Fuel Flow: " + averageFuelFlow.ToString("F0") + " lbs/hr" + Environment.NewLine +
+                                       "Exp. Rnge: " + expectedRange.ToString("F0") + " nm";
+
+        }
+
         public async void updateSituation(situation data)
         {
             try
@@ -217,7 +241,7 @@ namespace BushTripPlugin
                     }
                 }
 
-                if (data.counter %100 == 0)
+                if (data.counter % 100 == 0)
                 {
                     //refresh the map carte.html, to show the current position
                     if (webView21.CoreWebView2 != null)
@@ -225,6 +249,11 @@ namespace BushTripPlugin
                         string script = $"updateAircraftPosition({data.position.Location.Latitude.ToString(CultureInfo.InvariantCulture)}, {data.position.Location.Longitude.ToString(CultureInfo.InvariantCulture)}, {data.position.Altitude.ToString(CultureInfo.InvariantCulture)}, {data.position.HeadingDegreesTrue.ToString(CultureInfo.InvariantCulture)});";
                         await webView21.CoreWebView2.ExecuteScriptAsync(script);
                     }
+                }
+
+                if (data.counter % 10 == 0)
+                {
+                    updateFlightParams(data);
                 }
             }
             catch (Exception ex)
@@ -926,9 +955,5 @@ namespace BushTripPlugin
             }
         }
 
-        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
     }
 }

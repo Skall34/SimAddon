@@ -56,8 +56,10 @@
             imageList1 = new ImageList(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             panel1 = new Panel();
-            splitContainer2 = new SplitContainer();
+            tableLayoutPanel2 = new TableLayoutPanel();
             compas1 = new SimAddonControls.Compas();
+            panel2 = new Panel();
+            tbFlightParams = new TextBox();
             splitContainer3 = new SplitContainer();
             tbComment = new TextBox();
             webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
@@ -69,9 +71,7 @@
             contextMenuStrip1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
-            splitContainer2.Panel1.SuspendLayout();
-            splitContainer2.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer3).BeginInit();
             splitContainer3.Panel1.SuspendLayout();
             splitContainer3.Panel2.SuspendLayout();
@@ -292,31 +292,29 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(64, 64, 64);
-            panel1.Controls.Add(splitContainer2);
+            panel1.Controls.Add(tableLayoutPanel2);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(392, 3);
             panel1.Name = "panel1";
             panel1.Size = new Size(126, 411);
             panel1.TabIndex = 2;
             // 
-            // splitContainer2
+            // tableLayoutPanel2
             // 
-            splitContainer2.Dock = DockStyle.Fill;
-            splitContainer2.Location = new Point(0, 0);
-            splitContainer2.Name = "splitContainer2";
-            splitContainer2.Orientation = Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            splitContainer2.Panel1.Controls.Add(compas1);
-            // 
-            // splitContainer2.Panel2
-            // 
-            splitContainer2.Panel2.BackgroundImage = (Image)resources.GetObject("splitContainer2.Panel2.BackgroundImage");
-            splitContainer2.Panel2.BackgroundImageLayout = ImageLayout.Zoom;
-            splitContainer2.Size = new Size(126, 411);
-            splitContainer2.SplitterDistance = 203;
-            splitContainer2.TabIndex = 2;
+            tableLayoutPanel2.ColumnCount = 1;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Controls.Add(compas1, 0, 0);
+            tableLayoutPanel2.Controls.Add(panel2, 0, 2);
+            tableLayoutPanel2.Controls.Add(tbFlightParams, 0, 1);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(0, 0);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 3;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
+            tableLayoutPanel2.Size = new Size(126, 411);
+            tableLayoutPanel2.TabIndex = 3;
             // 
             // compas1
             // 
@@ -336,9 +334,30 @@
     };
             compas1.NumericValue = 0D;
             compas1.RectangleSize = new Size(80, 20);
-            compas1.Size = new Size(117, 186);
+            compas1.Size = new Size(120, 167);
             compas1.TabIndex = 1;
             compas1.Unit = "NM";
+            // 
+            // panel2
+            // 
+            panel2.BackgroundImage = (Image)resources.GetObject("panel2.BackgroundImage");
+            panel2.BackgroundImageLayout = ImageLayout.Zoom;
+            panel2.Location = new Point(3, 349);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(120, 59);
+            panel2.TabIndex = 2;
+            // 
+            // tbFlightParams
+            // 
+            tbFlightParams.BackColor = Color.Black;
+            tbFlightParams.Dock = DockStyle.Fill;
+            tbFlightParams.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbFlightParams.ForeColor = Color.White;
+            tbFlightParams.Location = new Point(3, 176);
+            tbFlightParams.Multiline = true;
+            tbFlightParams.Name = "tbFlightParams";
+            tbFlightParams.Size = new Size(120, 167);
+            tbFlightParams.TabIndex = 3;
             // 
             // splitContainer3
             // 
@@ -402,9 +421,8 @@
             contextMenuStrip1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             panel1.ResumeLayout(false);
-            splitContainer2.Panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
-            splitContainer2.ResumeLayout(false);
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
             splitContainer3.Panel1.ResumeLayout(false);
             splitContainer3.Panel1.PerformLayout();
             splitContainer3.Panel2.ResumeLayout(false);
@@ -443,9 +461,11 @@
         private ToolStripMenuItem simbriefToolStripMenuItem;
         private ToolStripMenuItem getLastFlightplanToolStripMenuItem;
         private ToolStripMenuItem getFlightBriefingToolStripMenuItem;
-        private SplitContainer splitContainer2;
         private ToolStripMenuItem createNewFlightplanToolStripMenuItem;
         private SplitContainer splitContainer3;
         private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Panel panel2;
+        private TextBox tbFlightParams;
     }
 }
