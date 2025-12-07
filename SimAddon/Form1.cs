@@ -264,7 +264,10 @@ namespace SimAddon
                 currentStatus.gearRetractableFlag = _simData.GetGearRetractableFlag();
                 currentStatus.isAtLeastOneEngineFiring = _simData.IsAtLeastOneEngineFiring();
                 currentStatus.averageFuelFlow = _simData.GetAverageFuelFlow();
-                currentStatus.verticalSpeed = _simData.GetLandingVerticalSpeed();
+
+                currentStatus.verticalSpeed = _simData.GetVerticalSpeed();
+                currentStatus.verticalAcceleration = _simData.GetVerticalAcceleration();
+
                 currentStatus.offRunwayCrashed = _simData.GetOffRunwayCrashed();
                 currentStatus.onGround = _simData.GetOnground();
                 currentStatus.overSpeedWarning = _simData.GetOverspeedWarning();

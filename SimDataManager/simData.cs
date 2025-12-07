@@ -143,7 +143,7 @@ namespace SimDataManager
         private readonly Offset<uint> flapsPosition      = new Offset<uint>(0x0BE0);
         private readonly Offset<uint> gearPosition       = new Offset<uint>(0x0BF0);
 
-        private readonly Offset<short> verticalAcceleration = new Offset<short>(0x11BA);
+        private readonly Offset<double> verticalAcceleration = new Offset<double>(0x3068);
 
         private readonly Offset<uint> avionicsMaster = new Offset<uint>(0x2E80);
         private readonly Offset<uint> batteryMaster  = new Offset<uint>(0x281C);
@@ -652,7 +652,7 @@ namespace SimDataManager
 
         public double GetVerticalSpeed() => ((double)verticalSpeed.Value/256 ) * 60 * 3.28084;
         
-        public double GetVerticalAcceleration() => ((double)verticalAcceleration.Value / 625);
+        public double GetVerticalAcceleration() => verticalAcceleration.Value;
 
         public double GetLandingVerticalSpeed() => ((double)landingVerticalSpeed.Value/256) * 60 * 3.28084;
 
