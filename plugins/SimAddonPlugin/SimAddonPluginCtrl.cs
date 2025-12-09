@@ -86,6 +86,8 @@ namespace SimAddonPlugin
         public uint gearRetractableFlag { get; set; }
         public bool isAtLeastOneEngineFiring { get; set; }
         public double averageFuelFlow { get; set; }
+        public int engine1ManifoldPressure { get; set; }
+        public int engine1RPM { get; set; }
         public double verticalSpeed { get; set; }
         public short offRunwayCrashed { get; set; }
         public short onGround { get; set; }
@@ -146,6 +148,8 @@ namespace SimAddonPlugin
             COM1StdbyFrequency = data.COM1StdbyFrequency;
             squawkCode = data.squawkCode;
             squawkMode = data.squawkMode;
+            engine1ManifoldPressure = data.engine1ManifoldPressure;
+            engine1RPM = data.engine1RPM;
         }
     }
 }

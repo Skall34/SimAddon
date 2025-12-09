@@ -45,6 +45,7 @@
             tbFlightDetails = new System.Windows.Forms.TextBox();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
             lblLocalFlightbookSize = new System.Windows.Forms.Label();
+            extractFlightDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -96,26 +97,26 @@
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { pushToServerToolStripMenuItem, toolStripSeparator1, deleteToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { extractFlightDataToolStripMenuItem, pushToServerToolStripMenuItem, toolStripSeparator1, deleteToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new System.Drawing.Size(149, 54);
+            contextMenuStrip1.Size = new System.Drawing.Size(181, 98);
             // 
             // pushToServerToolStripMenuItem
             // 
             pushToServerToolStripMenuItem.Name = "pushToServerToolStripMenuItem";
-            pushToServerToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            pushToServerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             pushToServerToolStripMenuItem.Text = "Push to server";
             pushToServerToolStripMenuItem.Click += pushToServerToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new System.Drawing.Size(145, 6);
+            toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // deleteToolStripMenuItem
             // 
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            deleteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             deleteToolStripMenuItem.Text = "Delete";
             deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
@@ -178,6 +179,13 @@
             lblLocalFlightbookSize.TabIndex = 5;
             lblLocalFlightbookSize.Text = "Local flightbook size";
             // 
+            // extractFlightDataToolStripMenuItem
+            // 
+            extractFlightDataToolStripMenuItem.Name = "extractFlightDataToolStripMenuItem";
+            extractFlightDataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            extractFlightDataToolStripMenuItem.Text = "Extract flight data";
+            extractFlightDataToolStripMenuItem.Click += extractFlightDataToolStripMenuItem_Click;
+            // 
             // LocalFlightbookForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -218,5 +226,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.Label lblLocalFlightbookSize;
+        private System.Windows.Forms.ToolStripMenuItem extractFlightDataToolStripMenuItem;
     }
 }

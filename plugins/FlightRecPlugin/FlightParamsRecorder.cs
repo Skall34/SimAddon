@@ -46,6 +46,31 @@ namespace FlightRecPlugin
             FlightParams.Clear();
         }
 
+        public StringBuilder getCSVText()
+        {
+            StringBuilder csvContent = new StringBuilder();
+            // Header
+            csvContent.AppendLine("Timestamp;Latitude;Longitude;Altitude;PlaneWeight;AirSpeed;VSpeed;Heading;Bank;Pitch;Fuelflow;Manifold;RPMs");
+            foreach (situation param in FlightParams)
+            {
+                string sLat = param.position.Location.Latitude.ToString();
+                string sLon = param.position.Location.Longitude.ToString();
+                //only 2 decimals 
+                string sPlaneWeight = param.planeWeight.ToString("F2");
+                string sAlt = param.position.Altitude.ToString("F2");
+                string sSpeed = param.airSpeed.ToString("F2");
+                string sVSpeed = param.verticalSpeed.ToString("F2");
+                string sHeading = param.position.HeadingDegreesTrue.ToString("F2");
+                string sBank = param.position.BankDegrees.ToString("F2");
+                string sPitch = param.position.PitchDegrees.ToString("F2");
+                string sFuelFlow = param.averageFuelFlow.ToString("F2");
+                string sManifold = param.engine1ManifoldPressure.ToString();
+                string sRPMs = param.engine1RPM.ToString();
+                csvContent.AppendLine($"{param.timestamp};{sLat};{sLon};{sAlt};{sPlaneWeight};{sSpeed};{sVSpeed};{sHeading};{sBank};{sPitch};{sFuelFlow};{sManifold};{sRPMs}");
+            }
+            return csvContent;
+        }
+
         public void saveToCSV(string filename)
         {
             string fullFileName = filename+".csv";
@@ -56,24 +81,8 @@ namespace FlightRecPlugin
 
             try
             {
-                StringBuilder csvContent = new StringBuilder();
-                // Header
-                csvContent.AppendLine("Timestamp;Latitude;Longitude;Altitude;AirSpeed;VSpeed;Heading;Bank;Pitch;Fuelflow");
-                foreach (situation param in FlightParams)
-                {
-                    string sLat = param.position.Location.Latitude.ToString();
-                    string sLon = param.position.Location.Longitude.ToString();
-                    //only 2 decimals 
-                    string sAlt = param.position.Altitude.ToString("F2");
-                    string sSpeed = param.airSpeed.ToString("F2");
-                    string sVSpeed = param.verticalSpeed.ToString("F2");
-                    string sHeading = param.position.HeadingDegreesTrue.ToString("F2");
-                    string sBank = param.position.BankDegrees.ToString("F2");
-                    string sPitch = param.position.PitchDegrees.ToString("F2");
-                    string sFuelFlow = param.averageFuelFlow.ToString("F2");
-
-                    csvContent.AppendLine($"{param.timestamp};{sLat};{sLon};{sAlt};{sSpeed};{sVSpeed};{sHeading};{sBank};{sPitch};{sFuelFlow}");
-                }
+                //use GetCSVText to get the content
+                StringBuilder csvContent = getCSVText();
                 System.IO.File.WriteAllText(fullFileName, csvContent.ToString());
             }
             catch (Exception ex)

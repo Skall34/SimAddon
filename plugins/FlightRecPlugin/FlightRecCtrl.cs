@@ -1189,8 +1189,13 @@ namespace FlightRecPlugin
             //Update the google sheet database indicating that this plane is no more used
             UpdatePlaneStatus(0);
 
+            //save optimized GPS trace
+            GPSRecorder.OptimizeTraceRamerDouglasPeucker(0.0001);
+
             string gpsTrace = GPSRecorder.GetTraceJSON();
             string localFlightBookFile = Properties.Settings.Default.LocalFlightbookFile;
+            string flightData = flightParamsRecorder.getCSVText().ToString();
+
             if (localFlightBookFile == string.Empty)
             {
                 localFlightBookFile = "local_flightbook.json";
@@ -1212,6 +1217,7 @@ namespace FlightRecPlugin
                 commentaire = tbCommentaires.Text,
                 payload = _endPayload,
                 GPSData = gpsTrace,
+                FlightParamsData = flightData,
                 SimPlane = lbLibelleAvion.Text
             };
 
@@ -1220,11 +1226,9 @@ namespace FlightRecPlugin
             string flightParamsFilename = Properties.Settings.Default.FlightParamsRecord;
             flightParamsFilename+="_"+lbStartIata.Text+"-"+lbEndIata.Text+"_"+_startTime.ToString("yyyyMMdd_HHmmss");
 
-            flightParamsRecorder.saveToCSV(flightParamsFilename);
             flightParamsRecorder.ClearRecordedFlightParams();
 
             //GPSRecorder.OptimizeTrace();
-            GPSRecorder.OptimizeTraceRamerDouglasPeucker(0.0001);
 
             Logger.WriteLine("End of flight data updated");
         }

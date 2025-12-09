@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace FlightRecPlugin
 {
-   
+
     public partial class LocalFlightbookForm : Form
     {
         private simData data;
@@ -176,6 +176,35 @@ namespace FlightRecPlugin
             {
                 pluginCtrl.ShowMsgBox("Please select a flight to delete.", "Error", MessageBoxButtons.OK);
             }
+        }
+
+        private void extractFlightDataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //open a save file dialog to save the selected flight data as CSV.
+            if (listView1.SelectedItems.Count > 0)
+            {
+                //get the index of the selected flight
+                int selectedIndex = listView1.SelectedItems[0].Index;
+                //get the flight from the local flightbook
+                var flight = LocalFlightBook.Flights[selectedIndex];
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+                saveFileDialog.Title = "Save Flight Data as CSV";
+                saveFileDialog.FileName = $"Flight_{flight.immatriculation}_{flight.departureTime:yyyyMMdd}.csv";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Logic to extract flight data and save as CSV
+                    string csvData = flight.FlightParamsData;
+                    System.IO.File.WriteAllText(saveFileDialog.FileName, csvData);
+                    pluginCtrl.ShowMsgBox("Flight data extracted and saved as CSV successfully!", "Success", MessageBoxButtons.OK);
+                }
+            }
+            else
+            {
+                pluginCtrl.ShowMsgBox("Please select a flight to extract data.", "Error", MessageBoxButtons.OK);
+            }
+
+
         }
     }
 }

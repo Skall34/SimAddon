@@ -138,6 +138,12 @@ namespace SimDataManager
         private readonly Offset<double> engine3FuelFlow = new Offset<double>(0x0A48);
         private readonly Offset<double> engine4FuelFlow = new Offset<double>(0x0AE0);
 
+        //manifold pressure in inches of mercury
+        private readonly Offset<ushort> engine1ManifoldPressure = new Offset<ushort>(0x08C0);
+        //RPM
+        private readonly Offset<short> engine1RPM = new Offset<short>(0x0898);
+        private readonly Offset<short> engine1RPMScaler = new Offset<short>(0x08C8);
+
         private readonly Offset<short> engineNumber = new Offset<short>(0x0AEC);
 
         private readonly Offset<uint> flapsPosition      = new Offset<uint>(0x0BE0);
@@ -742,6 +748,21 @@ namespace SimDataManager
             {
                 return 0;
             }
+        }
+
+        public int GetEngine1RPM()
+        {
+            int rpmScaler = engine1RPMScaler.Value;
+            if (rpmScaler == 0)
+            {
+                rpmScaler = 1;
+            }
+            return (engine1RPM.Value * rpmScaler) / 65536;
+        }
+
+        public int GetEngine1ManifoldPressure()
+        {
+            return (int)(engine1ManifoldPressure.Value / 1024);
         }
 
         public PositionSnapshot GetPosition()
