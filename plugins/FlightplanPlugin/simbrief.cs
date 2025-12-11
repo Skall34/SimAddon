@@ -1179,7 +1179,7 @@ namespace simbrief {
         
         private OFPSigmet[] sigmetsField;
         
-        private string tracksField;
+        private object tracksField;
         
         private OFPVatsim_prefile vatsim_prefileField;
         
@@ -1225,9 +1225,9 @@ namespace simbrief {
         
         private OFPNotams[] notamsField;
         
-        private OFPWeather[] weatherField;
+        private OFPWeather weatherField;
         
-        private OFPText[] textField;
+        private OFPText textField;
         
         private OFPDatabase_updates[] database_updatesField;
         
@@ -1290,7 +1290,7 @@ namespace simbrief {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string tracks {
+        public object tracks {
             get {
                 return this.tracksField;
             }
@@ -1545,8 +1545,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("weather", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPWeather[] weather {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPWeather weather {
             get {
                 return this.weatherField;
             }
@@ -1556,8 +1556,8 @@ namespace simbrief {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("text", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public OFPText[] text {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public OFPText text {
             get {
                 return this.textField;
             }

@@ -159,7 +159,8 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tracks" type="xs:string" minOccurs="0" />
+        <xs:element name="tracks"  minOccurs="0" >
+        </xs:element>
         <xs:element name="vatsim_prefile" minOccurs="0" >
           <xs:complexType>
             <xs:sequence>
@@ -775,7 +776,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="weather" minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="weather" minOccurs="0" maxOccurs="1">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="orig_metar" type="xs:string" minOccurs="0" />
@@ -793,7 +794,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="text" minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="text" minOccurs="0" maxOccurs="1">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="nat_tracks" type="xs:string" minOccurs="0" />
