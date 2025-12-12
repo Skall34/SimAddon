@@ -983,10 +983,9 @@ namespace MeteoPlugin
                         try
                         {
                             //windshear is particular, there is a space between WS and the windshear definition. ex :WS RWY36
-                            if (parts[index] == "WS")
+                            if ((index<parts.Length) && (parts[index] == "WS"))
                             {
                                 index++; //go to next part for windshear definition
-
                                 WindShear = new METARWindShear("Windshear", parts[index]);
                                 items.Add(WindShear);
                                 index++;
@@ -1008,11 +1007,11 @@ namespace MeteoPlugin
                         }
 
                         string nextpart = "";
-                        if (parts[index] == CST_TEMPO)
+                        if ((index < parts.Length) && (parts[index] == CST_TEMPO))
                         {
                             nextpart = "Temporary";
                         }
-                        if (parts[index] == CST_BECOMING)
+                        if ((index < parts.Length) && (parts[index] == CST_BECOMING))
                         {
                             nextpart = "Becoming";
                         }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -210,6 +211,9 @@ namespace SimDataManager
 
             //flightPerfs = new FlightPerfs();
             SiteConnection = new SiteConnection(BASERURL);
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.DefaultConnectionLimit = 10;
+            ServicePointManager.MaxServicePointIdleTime = 15000; //15s
             httpClient = new HttpClient();
         }
 
