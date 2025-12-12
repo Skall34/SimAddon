@@ -377,10 +377,10 @@ namespace SimDataManager
             try
             {
                 var response = await httpClient.PostAsync(phpUrl, content);
-                string responseContent = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
+                    string responseContent = await response.Content.ReadAsStringAsync();
                     Logger.WriteLine("Erreur lors de l'envoi des données de vol : " + response.StatusCode);
                     // Affiche tout, même si c'est vide
                     string message = $"api_update_status return code: {response.StatusCode}\nRéponse brute:\n{responseContent}";

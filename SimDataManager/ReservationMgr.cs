@@ -116,6 +116,10 @@ namespace SimDataManager
             catch (Exception ex)
             {
                 Logger.WriteLine("CheckReservation exception: " + ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Logger.WriteLine(" CheckReservation inner exception: " + ex.InnerException.Message);
+                }
             }
             return reservation;
         }

@@ -1617,8 +1617,7 @@ namespace FlightRecPlugin
                     else
                     {
                         //si tout va mal ...
-                        _planeReserved = false;
-                        plane.EnVol = 0;
+                        Logger.WriteLine("Error updating plane status on the database");
                     }
                 }
                 else
