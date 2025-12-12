@@ -1069,14 +1069,18 @@ namespace MeteoPlugin
                             }
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         Logger.WriteLine("Error while decoding metar " + rawMETAR);
+                        Logger.WriteLine("Exception : " + ex.Message);
+                        Logger.WriteLine("Decoded items so far : ");
+                        Logger.WriteLine(toString());
+                        Logger.WriteLine("End of decoded items.");
                     }
                 }
                 else
                 {
-                    Logger.WriteLine("Error while decoding metar METAR is NULL");
+                    Logger.WriteLine("Error while decoding, METAR is NULL");
                 }
             }
 
