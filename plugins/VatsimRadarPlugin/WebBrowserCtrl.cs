@@ -195,16 +195,16 @@ namespace ATCPlugin
 
         public void ManageSimEvent(object sender, SimEventArg eventArg)
         {
-            if (eventArg.reason == SimEventArg.EventType.SETDESTINATION)
+            if (eventArg.reason == SimEventArg.EventType.SETDEPARTURE)
             {
-                if (eventArg.value is string destination)
+                if (eventArg.value is string departure)
                 {
                     try
                     {
-                        // Assuming the destination is a URL
-                        //string destinationUrl = currentATCSettings.DestUrl.Replace("<destICAO>", destination);
-                        string destinationUrl = simData.flyingNetwork.GetRadarSearchUrl(destination);
-                        Uri uri = new Uri(destinationUrl);
+                        // Assuming the departure is a URL
+                        //string departureUrl = currentATCSettings.DestUrl.Replace("<depICAO>", departure);
+                        string departureUrl = simData.flyingNetwork.GetRadarSearchUrl(departure);
+                        Uri uri = new Uri(departureUrl);
                         webView21.Source = uri;
                     }
                     catch (UriFormatException ex)
@@ -214,7 +214,7 @@ namespace ATCPlugin
                 }
                 else
                 {
-                    Logger.WriteLine("Destination data is not a string.");
+                    Logger.WriteLine("Departure data is not a string.");
                 }
             }
 
