@@ -65,6 +65,7 @@
             // btnOK
             // 
             btnOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnOK.Enabled = false;
             btnOK.Location = new Point(564, 527);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(75, 23);
@@ -372,7 +373,7 @@
             // 
             // BushtripCreator
             // 
-            AcceptButton = btnOK;
+            AcceptButton = btnSearchFlights;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(128, 64, 0);

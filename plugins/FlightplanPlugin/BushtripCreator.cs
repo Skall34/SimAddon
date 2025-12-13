@@ -68,6 +68,7 @@ namespace BushTripPlugin
                     this.Close();
                 }
             }
+            this.AcceptButton = btnSearchFlights;
         }
 
         private void groupBox2_Enter(object sender, EventArgs e)
@@ -106,6 +107,7 @@ namespace BushTripPlugin
                     comboBox1.Items.Clear();
                     comboBox1.Items.Add(a);
                     comboBox1.SelectedIndex = 0;
+                    this.AcceptButton = btnSearchFlights;
                 }
                 else
                 {
@@ -251,45 +253,8 @@ namespace BushTripPlugin
 
             }
             Cursor = Cursors.Default;
+            this.AcceptButton = btnSearchFlights;
             btnSearchFlights.Enabled = true;
-        }
-
-        private void btnSearchFlights_Click(object sender, EventArgs e)
-        {
-            lbArrivals.Items.Clear();
-            DateTime flightTime = dateTimePicker1.Value;
-            double speed = trackBar1.Value;
-
-            double hours = flightTime.Hour + (double)flightTime.Minute / 60;
-            double miles = hours * speed;
-            Aeroport start = (Aeroport)comboBox1.SelectedItem;
-            Aeroport end = (Aeroport)comboBox2.SelectedItem;
-
-
-            if (checkMultiHop.Checked)
-            {
-                buildMultiHopBushTrip(start, end, miles);
-            }
-            else
-            {
-
-                if (start != null)
-                {
-                    foreach (Aeroport a in data.aeroports)
-                    {
-
-                        double distance = a.DistanceTo(start.latitude_deg, start.longitude_deg);
-                        if ((distance < miles * 1.1) && (distance > miles * 0.9))
-                        {
-                            lbArrivals.Items.Add(a);
-                        }
-                    }
-                }
-                else
-                {
-                    pluginCtrl.ShowMsgBox("Please select a departure", "No departure", MessageBoxButtons.OK);
-                }
-            }
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -309,6 +274,7 @@ namespace BushTripPlugin
                     comboBox2.Items.Clear();
                     comboBox2.Items.Add(a);
                     comboBox2.SelectedIndex = 0;
+                    this.AcceptButton = btnSearchFlights;
                 }
                 else
                 {
@@ -379,7 +345,6 @@ namespace BushTripPlugin
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-
             cancel = false;
             lbArrivals.Items.Clear();
             DateTime flightTime = dateTimePicker1.Value;
@@ -392,6 +357,8 @@ namespace BushTripPlugin
             if (checkMultiHop.Checked)
             {
                 buildMultiHopBushTrip(start, end, miles);
+                btnOK.Enabled = true;
+                this.AcceptButton = btnOK;
             }
             else
             {
@@ -428,6 +395,8 @@ namespace BushTripPlugin
                             }
                         }
                     }
+                    btnOK.Enabled = true;
+                    this.AcceptButton = btnOK;
                 }
                 else
                 {
@@ -438,6 +407,7 @@ namespace BushTripPlugin
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            this.AcceptButton = btnSearchFlights;
             cancel = true;
         }
     }
