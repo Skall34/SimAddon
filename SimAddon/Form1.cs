@@ -1118,6 +1118,11 @@ namespace SimAddon
                     sw.WriteLine();
                     foreach (string screenshot in screenshots)
                     {
+                        //make sure that file still exist
+                        if (!File.Exists(screenshot))
+                        {
+                            continue;
+                        }
                         string screenshotFile = Path.GetFileName(screenshot);
                         sw.WriteLine($"![{screenshotFile}]({screenshotFile})");
                         sw.WriteLine();
