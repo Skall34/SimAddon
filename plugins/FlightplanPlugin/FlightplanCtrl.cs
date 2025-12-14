@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Xml.Serialization;
 using static SimDataManager.SiteConnection;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Text;
 
 namespace BushTripPlugin
 {
@@ -957,7 +958,24 @@ namespace BushTripPlugin
 
         public string getFlightReport()
         {
-            throw new NotImplementedException();
-        }
+            //generate markdown report of the current flightplan
+            if (flightPlan != null)
+            {
+                StringBuilder report = new StringBuilder();
+                report.AppendLine($"# Flight Report for flight plan");
+                report.AppendLine();
+                report.AppendLine(">## Waypoints");
+                report.AppendLine();
+                for (int i = 0; i < flightPlan.Item.Waypoints.Count(); i++)
+                {
+                    LittleNavmapFlightplanWaypoint? wp = flightPlan.Item.Waypoints[i];
+                    report.AppendLine($">- {wp.Ident} , {wp.Name} , Lat: {wp.Pos.Lat} , Lon: {wp.Pos.Lon}");
+                }
+                return report.ToString();
+            }
+            else
+            {
+                return "No flight plan loaded";
+            }
     }
 }

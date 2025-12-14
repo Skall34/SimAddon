@@ -1029,9 +1029,17 @@ namespace SimAddon
             Settings.Default.Save();
         }
 
-        private void checkSessionToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void checkSessionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _simData.checkSession(Settings.Default.SessionToken);
+            bool sessionValid = await _simData.checkSession(Settings.Default.SessionToken);
+            if (sessionValid)
+            {
+                Plugin_OnShowMsgbox(this, "Session is valid.", "Session Check", MessageBoxButtons.OK);
+            }
+            else
+            {
+                Plugin_OnShowMsgbox(this, "Session is not valid.", "Session Check", MessageBoxButtons.OK);
+            }
         }
 
         private void generateFlightReportToolStripMenuItem_Click(object sender, EventArgs e)

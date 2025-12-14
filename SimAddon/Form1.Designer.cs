@@ -48,6 +48,7 @@ namespace SimAddon
             autoHideToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             screenshotToolStripMenuItem = new ToolStripMenuItem();
+            generateFlightReportToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             loginToolStripMenuItem = new ToolStripMenuItem();
             logoutToolStripMenuItem = new ToolStripMenuItem();
@@ -60,7 +61,6 @@ namespace SimAddon
             iVAOToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator4 = new ToolStripSeparator();
             tabControl1 = new TabControl();
-            generateFlightReportToolStripMenuItem = new ToolStripMenuItem();
             statusStrip.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
@@ -107,7 +107,7 @@ namespace SimAddon
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { documentationToolStripMenuItem, toolStripSeparator5, alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1, screenshotToolStripMenuItem, generateFlightReportToolStripMenuItem, toolStripSeparator2, loginToolStripMenuItem, logoutToolStripMenuItem, checkSessionToolStripMenuItem, openWebSiteToolStripMenuItem, traceFolderToolStripMenuItem, toolStripSeparator3, networkToolStripMenuItem, toolStripSeparator4 });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { openWebSiteToolStripMenuItem, documentationToolStripMenuItem, traceFolderToolStripMenuItem, toolStripSeparator5, screenshotToolStripMenuItem, generateFlightReportToolStripMenuItem, toolStripSeparator2, loginToolStripMenuItem, logoutToolStripMenuItem, checkSessionToolStripMenuItem, toolStripSeparator3, networkToolStripMenuItem, toolStripSeparator4, alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1 });
             contextMenuStrip1.Name = "contextMenuStrip1";
             contextMenuStrip1.Size = new Size(188, 298);
             contextMenuStrip1.Opening += contextMenuStrip1_Opening;
@@ -149,6 +149,13 @@ namespace SimAddon
             screenshotToolStripMenuItem.Size = new Size(187, 22);
             screenshotToolStripMenuItem.Text = "Screenshot";
             screenshotToolStripMenuItem.Click += screenshotToolStripMenuItem_Click;
+            // 
+            // generateFlightReportToolStripMenuItem
+            // 
+            generateFlightReportToolStripMenuItem.Name = "generateFlightReportToolStripMenuItem";
+            generateFlightReportToolStripMenuItem.Size = new Size(187, 22);
+            generateFlightReportToolStripMenuItem.Text = "Generate flight report";
+            generateFlightReportToolStripMenuItem.Click += generateFlightReportToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
@@ -232,13 +239,6 @@ namespace SimAddon
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(574, 807);
             tabControl1.TabIndex = 7;
-            // 
-            // generateFlightReportToolStripMenuItem
-            // 
-            generateFlightReportToolStripMenuItem.Name = "generateFlightReportToolStripMenuItem";
-            generateFlightReportToolStripMenuItem.Size = new Size(187, 22);
-            generateFlightReportToolStripMenuItem.Text = "Generate flight report";
-            generateFlightReportToolStripMenuItem.Click += generateFlightReportToolStripMenuItem_Click;
             // 
             // Form1
             // 
