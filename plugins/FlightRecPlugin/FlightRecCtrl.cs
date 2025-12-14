@@ -1173,6 +1173,12 @@ namespace FlightRecPlugin
                 string endAirportname = localAirport.name;
                 lbEndPosition.Text = endAirportname;
                 lbEndIata.Text = localAirport.ident;
+
+                //send the SETDEPARTURE event so that METAR can load local weather
+                SimEventArg startEvent = new SimEventArg();
+                startEvent.reason = SimEventArg.EventType.SETDESTINATION;
+                startEvent.value = localAirport.ident;
+                SimEvent(startEvent);
             }
 
             //store the end of flight fuel value
@@ -1229,9 +1235,6 @@ namespace FlightRecPlugin
             localFlightBook.saveToJson(localFlightBookFile);
             string flightParamsFilename = Properties.Settings.Default.FlightParamsRecord;
             flightParamsFilename+="_"+lbStartIata.Text+"-"+lbEndIata.Text+"_"+_startTime.ToString("yyyyMMdd_HHmmss");
-
-            flightParamsRecorder.ClearRecordedFlightParams();
-
             //GPSRecorder.OptimizeTrace();
 
             Logger.WriteLine("End of flight data updated");
@@ -1337,7 +1340,7 @@ namespace FlightRecPlugin
                     //send the ENDOFFLIGHT event
                     SimEventArg endEvent = new SimEventArg();
                     endEvent.reason = SimEventArg.EventType.ENDOFFLIGHT;
-                    endEvent.value = returnMessage;
+                    endEvent.value = lbEndIata.Text;
                     SimEvent(endEvent);
 
                     //si tout va bien...
@@ -1415,6 +1418,8 @@ namespace FlightRecPlugin
                 flightPerfs.reset();
                 //reset the GPS recorder
                 GPSRecorder.reset();
+                //reset the flight params recorder
+                flightParamsRecorder.ClearRecordedFlightParams();
 
                 atLeastOneEngineFiring = false;
                 stopEngineConfirmed = false;
@@ -2230,11 +2235,13 @@ namespace FlightRecPlugin
 
         public string getFlightReport()
         {
+            string report = "";
             Flight lastFlight = localFlightBook.GetLastFLight();
             if (lastFlight != null)
             {
                 //create a flight report in markdown format
-                return lastFlight.GenerateMarkdownReport();
+                report = lastFlight.GenerateMarkdownReport();
+                return report;
             }
             else
             {

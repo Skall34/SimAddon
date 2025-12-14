@@ -222,15 +222,15 @@ namespace FlightRecPlugin
                 //get the flight from the local flightbook
                 var flight = LocalFlightBook.Flights[selectedIndex];
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
-                saveFileDialog.Title = "Save Flight Data as CSV";
-                saveFileDialog.FileName = $"Flight_{flight.immatriculation}_{flight.departureTime:yyyyMMdd}.csv";
+                saveFileDialog.Filter = "Markdown files (*.md)|*.md|All files (*.*)|*.*";
+                saveFileDialog.Title = "Save Flight Data as Markdown";
+                saveFileDialog.FileName = $"Flight_{flight.immatriculation}_{flight.departureTime:yyyyMMdd}.md";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     // Logic to create a flight report in markdown format
                     string mdReport = flight.GenerateMarkdownReport();
                     System.IO.File.WriteAllText(saveFileDialog.FileName, mdReport);
-                    pluginCtrl.ShowMsgBox("Flight data extracted and saved as CSV successfully!", "Success", MessageBoxButtons.OK);
+                    pluginCtrl.ShowMsgBox("Flight data extracted and saved as markdown document successfully!", "Success", MessageBoxButtons.OK);
                 }
             }
             else

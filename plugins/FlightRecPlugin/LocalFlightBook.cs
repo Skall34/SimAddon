@@ -41,13 +41,16 @@ namespace FlightRecPlugin
 
             // Departure and Arrival
             report.AppendLine($"**Departure:** {departureAirportName} ({departureICAO}) at {departureTime.ToString("g", CultureInfo.InvariantCulture)}");
+            report.AppendLine();
             report.AppendLine($"**Arrival:** {arrivalAirportName} ({arrivalICAO}) at {arrivalTime.ToString("g", CultureInfo.InvariantCulture)}");
-            report.AppendLine($"**Departure Fuel:** {departureFuel} units");
-            report.AppendLine($"**Arrival Fuel:** {arrivalFuel} units");
+            report.AppendLine();
+            report.AppendLine($"**Departure Fuel:** {departureFuel} Kg");
+            report.AppendLine();
+            report.AppendLine($"**Arrival Fuel:** {arrivalFuel} Kg");
             report.AppendLine();
 
             // Payload & Mission
-            report.AppendLine($"**Payload:** {payload} units");
+            report.AppendLine($"**Payload:** {payload} Kg");
             report.AppendLine();
             report.AppendLine($"**Mission:** {mission}");
             report.AppendLine();
@@ -55,6 +58,12 @@ namespace FlightRecPlugin
             report.AppendLine();
             report.AppendLine("## Comments");
             report.AppendLine(commentaire);
+            report.AppendLine();
+            if (FlightParamsData != null && FlightParamsData.Count > 0)
+            {
+                report.AppendLine(FlightParamsRecorder.toMDString(FlightParamsData));
+            }
+
             return report.ToString();
         }
     }

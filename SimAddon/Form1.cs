@@ -697,6 +697,7 @@ namespace SimAddon
 
         private void SetEndOfFlight(ISimAddonPluginCtrl sender, string value)
         {
+            arrivalAirport = value;
         }
 
         private void SetDeparture(ISimAddonPluginCtrl sender, string value)
@@ -1035,7 +1036,7 @@ namespace SimAddon
 
         private void generateFlightReportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (flightRecords==null || flightRecords.Count==0)
+            if (flightRecords==null)
             {
                 //show a message box saying there is no flight data to save
                 Plugin_OnShowMsgbox(this, "No flight data", "There is no flight data to save.", MessageBoxButtons.OK);
@@ -1058,7 +1059,7 @@ namespace SimAddon
             }
 
             //create a filename from the departure and arrival airport, and the current date/time
-            string filename = $"FlightRecord_{departureAirport}_{arrivalAirport}_{DateTime.UtcNow.ToString("yyyyMMdd_HHmmss")}.md";
+            string filename = $"FlightRecord_{departureAirport}_{arrivalAirport}_{DateTime.UtcNow.ToString("yyyyMMdd_HHmm")}.md";
 
             //the file is saved in the users documents folder
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -1123,7 +1124,7 @@ namespace SimAddon
                     }
                 }
                 Logger.WriteLine("Flight report updated with screenshots.");
-                Plugin_OnShowMsgbox(this, "Flight Report Saved", $"Flight report and screenshots saved to {documentsPath}", MessageBoxButtons.OK);
+                Plugin_OnShowMsgbox(this, $"Flight report and screenshots saved to {documentsPath}", "Flight Report Saved", MessageBoxButtons.OK);
             }
             else
             {

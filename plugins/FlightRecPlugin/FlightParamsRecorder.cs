@@ -14,41 +14,59 @@ namespace FlightRecPlugin
     {
         
         public DateTime sampleTime;
-         string sLat ;
-         string sLon;
+        public double Lat { get; set; }
+        public double Lon { get; set; }
         //only 2 decimals 
-         string sPlaneWeight;
-        string sAlt ;
-        string sSpeed ;
-        string sVSpeed ;
-        string sHeading ;
-        string sBank ;
-        string sPitch ;
-        string sFuelFlow ;
-        string sManifold ;
-        string sRPMs ;
+        public double PlaneWeight { get; set; }
+        public double Alt { get; set; }
+        public double Speed { get; set; }
+        public double VSpeed { get; set; }
+        public double Heading { get; set; }
+        public double Bank { get; set; }
+        public double Pitch { get; set; }
+        public double FuelFlow { get; set; }
+        public double Manifold { get; set; }
+        public double RPMs { get; set; }
+
+        // Constructeur sans paramètres pour la désérialisation JSON
+        public FLightParamsSample()
+        {
+        }
 
         public FLightParamsSample(situation param)
         {
-             sLat = param.position.Location.Latitude.ToString();
-             sLon = param.position.Location.Longitude.ToString();
+             Lat = param.position.Location.Latitude;
+             Lon = param.position.Location.Longitude;
             //only 2 decimals 
-             sPlaneWeight = param.planeWeight.ToString("F2");
-             sAlt = param.position.Altitude.ToString("F2");
-             sSpeed = param.airSpeed.ToString("F2");
-             sVSpeed = param.verticalSpeed.ToString("F2");
-             sHeading = param.position.HeadingDegreesTrue.ToString("F2");
-             sBank = param.position.BankDegrees.ToString("F2");
-             sPitch = param.position.PitchDegrees.ToString("F2");
-             sFuelFlow = param.averageFuelFlow.ToString("F2");
-             sManifold = param.engine1ManifoldPressure.ToString();
-             sRPMs = param.engine1RPM.ToString();
+             PlaneWeight = param.planeWeight;
+             Alt = param.position.Altitude;
+             Speed = param.airSpeed;
+             VSpeed = param.verticalSpeed;
+             Heading = param.position.HeadingDegreesTrue;
+             Bank = param.position.BankDegrees;
+             Pitch = param.position.PitchDegrees;
+             FuelFlow = param.averageFuelFlow;
+             Manifold = param.engine1ManifoldPressure;
+             RPMs = param.engine1RPM;
             
             sampleTime = DateTime.Now;
         }
 
         public string toCSVString()
         {
+            string sLat = Lat.ToString("F6", System.Globalization.CultureInfo.InvariantCulture);
+            string sLon = Lon.ToString("F6", System.Globalization.CultureInfo.InvariantCulture);
+            string sAlt = Alt.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+            string sPlaneWeight = PlaneWeight.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+            string sSpeed = Speed.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+            string sVSpeed = VSpeed.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+            string sHeading = Heading.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+            string sBank = Bank.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+            string sPitch = Pitch.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+            string sFuelFlow = FuelFlow.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+            string sManifold = Manifold.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+            string sRPMs = RPMs.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+
             return $"{sampleTime};{sLat};{sLon};{sAlt};{sPlaneWeight};{sSpeed};{sVSpeed};{sHeading};{sBank};{sPitch};{sFuelFlow};{sManifold};{sRPMs}";
         }
 
@@ -160,6 +178,34 @@ namespace FlightRecPlugin
             {
                 Logger.WriteLine($"An error occurred while saving flight parameters to JSON: {ex.Message}");
             }
+        }
+
+        public static string toMDString(List<FLightParamsSample> samples)
+        {
+            //compute some max values
+            double maxAlt = samples.Max(f => f.Alt);
+            double maxSpeed = samples.Max(f => f.Speed);
+            double maxRPMs = samples.Max(f => f.RPMs);
+            double averadgeFuelFlow = samples.Average(f => f.FuelFlow);
+            double averageManifold = samples.Average(f => f.Manifold);
+
+            StringBuilder mdContent = new StringBuilder();
+            mdContent.AppendLine("# Flight Parameters Recording");
+            mdContent.AppendLine();
+            mdContent.AppendLine("## Summary Statistics");
+            mdContent.AppendLine();
+            mdContent.AppendLine($"- Maximum Altitude: {maxAlt:F2} ft");
+            mdContent.AppendLine();
+            mdContent.AppendLine($"- Maximum Speed: {maxSpeed:F2} knots");
+            mdContent.AppendLine();
+            mdContent.AppendLine($"- Maximum RPMs: {maxRPMs:F2} RPM");
+            mdContent.AppendLine();
+            mdContent.AppendLine($"- Average Fuel Flow: {averadgeFuelFlow:F2} gallons/hour");
+            mdContent.AppendLine();
+            mdContent.AppendLine($"- Average Manifold Pressure: {averageManifold:F2} inHg");
+            mdContent.AppendLine();
+
+            return mdContent.ToString();
         }
     }
 }
