@@ -977,5 +977,6 @@ namespace BushTripPlugin
             {
                 return "No flight plan loaded";
             }
+        }
     }
 }
