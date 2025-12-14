@@ -721,7 +721,7 @@ namespace SimDataManager
             return result;
         }
 
-        public double GetAverageFuelFlow()
+        public double GetFuelFlow()
         {
             double totalFuelFlow = 0;
             int engineCount = this.engineNumber.Value;
@@ -744,14 +744,7 @@ namespace SimDataManager
                         totalFuelFlow = engine1FuelFlow.Value + engine2FuelFlow.Value + engine3FuelFlow.Value + engine4FuelFlow.Value;
                     }; break;
             }
-            if (engineCount > 0)
-            {
-                return totalFuelFlow / engineCount;
-            }
-            else
-            {
-                return 0;
-            }
+            return totalFuelFlow;
         }
 
         public int GetEngine1RPM()

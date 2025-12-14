@@ -538,5 +538,10 @@ namespace ATISPlugin
                 _ = RunWithProgress(RefreshATISData());
             }
         }
+
+        public string getFlightReport()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

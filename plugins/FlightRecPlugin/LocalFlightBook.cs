@@ -14,23 +14,56 @@ namespace FlightRecPlugin
     {
         public string immatriculation { get; set; }
         public string departureICAO { get; set; }
+        public string departureAirportName { get; set; }
         public double departureFuel { get; set; }
         public DateTime departureTime { get; set; }
         public string arrivalICAO { get; set; }
+        public string arrivalAirportName { get; set; }
         public double arrivalFuel { get; set; }
         public DateTime arrivalTime { get; set; }
         public short noteDuVol { get; set; }
         public string mission { get; set; }
         public string commentaire { get; set; }
         public double payload { get; set; }
-        public string GPSData { get; set; } = string.Empty;
-        public string FlightParamsData { get; set; } = string.Empty;
+        public List<GPSPoint> GPSData { get; set; }
+        public List<FLightParamsSample> FlightParamsData { get; set; }
         public string SimPlane { get; set; }
+
+        public string GenerateMarkdownReport()
+        {
+            StringBuilder report = new StringBuilder();
+            report.AppendLine($"# Flight Report for {immatriculation}");
+            report.AppendLine();
+            
+            // Sim Plane
+            report.AppendLine($"**Aircraft:** {SimPlane}");
+            report.AppendLine();
+
+            // Departure and Arrival
+            report.AppendLine($"**Departure:** {departureAirportName} ({departureICAO}) at {departureTime.ToString("g", CultureInfo.InvariantCulture)}");
+            report.AppendLine($"**Arrival:** {arrivalAirportName} ({arrivalICAO}) at {arrivalTime.ToString("g", CultureInfo.InvariantCulture)}");
+            report.AppendLine($"**Departure Fuel:** {departureFuel} units");
+            report.AppendLine($"**Arrival Fuel:** {arrivalFuel} units");
+            report.AppendLine();
+
+            // Payload & Mission
+            report.AppendLine($"**Payload:** {payload} units");
+            report.AppendLine();
+            report.AppendLine($"**Mission:** {mission}");
+            report.AppendLine();
+            report.AppendLine($"**Flight Rating:** {noteDuVol}/10");
+            report.AppendLine();
+            report.AppendLine("## Comments");
+            report.AppendLine(commentaire);
+            return report.ToString();
+        }
     }
 
     public class LocalFlightBook
     {
         public List<Flight> Flights { get; set; } = new List<Flight>();
+        private string storageFolder;
+
         public void AddFlight(Flight flight)
         {
             Flights.Add(flight);
@@ -48,7 +81,17 @@ namespace FlightRecPlugin
             Flights.Clear();
         }
 
-        private string storageFolder;
+        public Flight GetLastFLight()
+        {
+            if (Flights.Count > 0)
+            {
+                return Flights[Flights.Count - 1];
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         public LocalFlightBook()
         {

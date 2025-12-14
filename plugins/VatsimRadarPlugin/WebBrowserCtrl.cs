@@ -231,5 +231,10 @@ namespace ATCPlugin
                 }
             }
         }
+
+        public string getFlightReport()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

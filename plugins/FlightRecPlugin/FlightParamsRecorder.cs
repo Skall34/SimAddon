@@ -10,14 +10,62 @@ using System.Threading.Tasks;
 
 namespace FlightRecPlugin
 {
+    public class FLightParamsSample
+    {
+        
+        public DateTime sampleTime;
+         string sLat ;
+         string sLon;
+        //only 2 decimals 
+         string sPlaneWeight;
+        string sAlt ;
+        string sSpeed ;
+        string sVSpeed ;
+        string sHeading ;
+        string sBank ;
+        string sPitch ;
+        string sFuelFlow ;
+        string sManifold ;
+        string sRPMs ;
+
+        public FLightParamsSample(situation param)
+        {
+             sLat = param.position.Location.Latitude.ToString();
+             sLon = param.position.Location.Longitude.ToString();
+            //only 2 decimals 
+             sPlaneWeight = param.planeWeight.ToString("F2");
+             sAlt = param.position.Altitude.ToString("F2");
+             sSpeed = param.airSpeed.ToString("F2");
+             sVSpeed = param.verticalSpeed.ToString("F2");
+             sHeading = param.position.HeadingDegreesTrue.ToString("F2");
+             sBank = param.position.BankDegrees.ToString("F2");
+             sPitch = param.position.PitchDegrees.ToString("F2");
+             sFuelFlow = param.averageFuelFlow.ToString("F2");
+             sManifold = param.engine1ManifoldPressure.ToString();
+             sRPMs = param.engine1RPM.ToString();
+            
+            sampleTime = DateTime.Now;
+        }
+
+        public string toCSVString()
+        {
+            return $"{sampleTime};{sLat};{sLon};{sAlt};{sPlaneWeight};{sSpeed};{sVSpeed};{sHeading};{sBank};{sPitch};{sFuelFlow};{sManifold};{sRPMs}";
+        }
+
+        public static string getCSVHeader()
+        {
+            return "Timestamp;Latitude;Longitude;Altitude;PlaneWeight;AirSpeed;VSpeed;Heading;Bank;Pitch;Fuelflow;Manifold;RPMs";
+        }
+    }
+
     public class FlightParamsRecorder
     {
         private string storageFolder;
 
-        private List<situation> FlightParams;
+        private List<FLightParamsSample> FlightParams;
         public FlightParamsRecorder()
         {
-            FlightParams = new List<situation>();
+            FlightParams = new List<FLightParamsSample>();
             // Get the application name
             string appName = Assembly.GetEntryAssembly().GetName().Name;
 
@@ -32,11 +80,11 @@ namespace FlightRecPlugin
         }
         public void RecordFlightParams(situation data)
         {
-            situation newSituation = new situation(data);
+            FLightParamsSample newSituation = new FLightParamsSample(data);
             FlightParams.Add(newSituation);
         }
 
-        public List<situation> GetRecordedFlightParams()
+        public List<FLightParamsSample> GetRecordedFlightParams()
         {
             return FlightParams;
         }
@@ -50,25 +98,24 @@ namespace FlightRecPlugin
         {
             StringBuilder csvContent = new StringBuilder();
             // Header
-            csvContent.AppendLine("Timestamp;Latitude;Longitude;Altitude;PlaneWeight;AirSpeed;VSpeed;Heading;Bank;Pitch;Fuelflow;Manifold;RPMs");
-            foreach (situation param in FlightParams)
+            csvContent.AppendLine(FLightParamsSample.getCSVHeader());
+            foreach (FLightParamsSample param in FlightParams)
             {
-                string sLat = param.position.Location.Latitude.ToString();
-                string sLon = param.position.Location.Longitude.ToString();
-                //only 2 decimals 
-                string sPlaneWeight = param.planeWeight.ToString("F2");
-                string sAlt = param.position.Altitude.ToString("F2");
-                string sSpeed = param.airSpeed.ToString("F2");
-                string sVSpeed = param.verticalSpeed.ToString("F2");
-                string sHeading = param.position.HeadingDegreesTrue.ToString("F2");
-                string sBank = param.position.BankDegrees.ToString("F2");
-                string sPitch = param.position.PitchDegrees.ToString("F2");
-                string sFuelFlow = param.averageFuelFlow.ToString("F2");
-                string sManifold = param.engine1ManifoldPressure.ToString();
-                string sRPMs = param.engine1RPM.ToString();
-                csvContent.AppendLine($"{param.timestamp};{sLat};{sLon};{sAlt};{sPlaneWeight};{sSpeed};{sVSpeed};{sHeading};{sBank};{sPitch};{sFuelFlow};{sManifold};{sRPMs}");
+                csvContent.AppendLine(param.toCSVString());
             }
             return csvContent;
+        }
+
+        public static string getCSVText(List<FLightParamsSample> flightParams)
+        {
+            StringBuilder csvContent = new StringBuilder();
+            // Header
+            csvContent.AppendLine(FLightParamsSample.getCSVHeader());
+            foreach (FLightParamsSample param in flightParams)
+            {
+                csvContent.AppendLine(param.toCSVString());
+            }
+            return csvContent.ToString();
         }
 
         public void saveToCSV(string filename)

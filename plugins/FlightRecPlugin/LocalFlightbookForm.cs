@@ -129,7 +129,7 @@ namespace FlightRecPlugin
                 saveFlightDialog.Cargo = flight.payload;
                 saveFlightDialog.Mission = flight.mission;
                 saveFlightDialog.Note = flight.noteDuVol;
-                saveFlightDialog.GPSTrace = flight.GPSData;
+                saveFlightDialog.GPSTrace = System.Text.Json.JsonSerializer.Serialize(flight.GPSData);
                 saveFlightDialog.SimPlane = flight.SimPlane;
 
                 saveFlightDialog.ShowDialog();
@@ -180,6 +180,13 @@ namespace FlightRecPlugin
 
         private void extractFlightDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
+
+
+        }
+
+        private void asCSVFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             //open a save file dialog to save the selected flight data as CSV.
             if (listView1.SelectedItems.Count > 0)
             {
@@ -194,7 +201,7 @@ namespace FlightRecPlugin
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     // Logic to extract flight data and save as CSV
-                    string csvData = flight.FlightParamsData;
+                    string csvData = FlightParamsRecorder.getCSVText(flight.FlightParamsData);
                     System.IO.File.WriteAllText(saveFileDialog.FileName, csvData);
                     pluginCtrl.ShowMsgBox("Flight data extracted and saved as CSV successfully!", "Success", MessageBoxButtons.OK);
                 }
@@ -203,8 +210,33 @@ namespace FlightRecPlugin
             {
                 pluginCtrl.ShowMsgBox("Please select a flight to extract data.", "Error", MessageBoxButtons.OK);
             }
+        }
 
-
+        private void asMDFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //open a save file dialog to save the selected flight data as CSV.
+            if (listView1.SelectedItems.Count > 0)
+            {
+                //get the index of the selected flight
+                int selectedIndex = listView1.SelectedItems[0].Index;
+                //get the flight from the local flightbook
+                var flight = LocalFlightBook.Flights[selectedIndex];
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+                saveFileDialog.Title = "Save Flight Data as CSV";
+                saveFileDialog.FileName = $"Flight_{flight.immatriculation}_{flight.departureTime:yyyyMMdd}.csv";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Logic to create a flight report in markdown format
+                    string mdReport = flight.GenerateMarkdownReport();
+                    System.IO.File.WriteAllText(saveFileDialog.FileName, mdReport);
+                    pluginCtrl.ShowMsgBox("Flight data extracted and saved as CSV successfully!", "Success", MessageBoxButtons.OK);
+                }
+            }
+            else
+            {
+                pluginCtrl.ShowMsgBox("Please select a flight to extract data.", "Error", MessageBoxButtons.OK);
+            }
         }
     }
 }

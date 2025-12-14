@@ -17,6 +17,7 @@ using System.Text;
 using FSUIPC;
 using System.Net.Http;
 using System.Globalization;
+using Newtonsoft.Json;
 
 namespace FlightRecPlugin
 {
@@ -64,6 +65,7 @@ namespace FlightRecPlugin
         private bool _refuelDetected;
         private bool _noEngineFlight;
 
+        LocalFlightBook localFlightBook;
         private GPSRecorder GPSRecorder;
         private FlightParamsRecorder flightParamsRecorder;
 
@@ -202,6 +204,7 @@ namespace FlightRecPlugin
             //desactive le bouton de maj du setting. Il sera reactivé si le callsign est modifié.
             btnSaveSettings.Enabled = false;
 
+            localFlightBook = new LocalFlightBook();
             flightPerfs = new FlightPerfs();
             GPSRecorder = new GPSRecorder();
             flightParamsRecorder = new FlightParamsRecorder();
@@ -1192,24 +1195,25 @@ namespace FlightRecPlugin
             //save optimized GPS trace
             GPSRecorder.OptimizeTraceRamerDouglasPeucker(0.0001);
 
-            string gpsTrace = GPSRecorder.GetTraceJSON();
+            List<GPSPoint> gpsTrace = GPSRecorder.GPSPoints;
             string localFlightBookFile = Properties.Settings.Default.LocalFlightbookFile;
-            string flightData = flightParamsRecorder.getCSVText().ToString();
+            List<FLightParamsSample> flightData = flightParamsRecorder.GetRecordedFlightParams();
 
             if (localFlightBookFile == string.Empty)
             {
                 localFlightBookFile = "local_flightbook.json";
             }
             //save the flight to the local flightbook
-            LocalFlightBook localFlightBook = new LocalFlightBook();
             localFlightBook.loadFromJson(localFlightBookFile);
             Flight newFlight = new Flight
             {
                 immatriculation = cbImmat.Text,
                 departureICAO = lbStartIata.Text,
+                departureAirportName = lbStartPosition.Text,
                 departureFuel = _startFuel,
                 departureTime = _startTime,
                 arrivalICAO = lbEndIata.Text,
+                arrivalAirportName = lbEndPosition.Text,
                 arrivalFuel = _endFuel,
                 arrivalTime = _endTime,
                 noteDuVol = _note,
@@ -1317,6 +1321,9 @@ namespace FlightRecPlugin
 
                 if (saveFlightDialog.ShowDialog() == DialogResult.OK)
                 {
+                    // On grise le bouton save flight pour éviter les doubles envois
+                    submitFlightToolStripMenuItem.Enabled = false;
+
                     string returnMessage = saveFlightDialog.returnMessage;
                     //store last plane used
                     string SimPlane = lbLibelleAvion.Text;
@@ -1327,6 +1334,16 @@ namespace FlightRecPlugin
                     Settings.Default.lastImmat = saveFlightDialog.Immat;
                     Settings.Default.Save();
 
+                    //send the ENDOFFLIGHT event
+                    SimEventArg endEvent = new SimEventArg();
+                    endEvent.reason = SimEventArg.EventType.ENDOFFLIGHT;
+                    endEvent.value = returnMessage;
+                    SimEvent(endEvent);
+
+                    //si tout va bien...
+                    ShowMsgBox("Flight saved. " + returnMessage, "Flight Recorder", MessageBoxButtons.OK);
+
+                    //cleanup after save
                     if (reservationStatus == ReservationMgr.ReservationStatus.Accepted)
                     {
                         Logger.WriteLine("Saving reservation as completed");
@@ -1343,17 +1360,12 @@ namespace FlightRecPlugin
                         cbMission.Refresh();
 
                     }
-                    //si tout va bien...
-                    ShowMsgBox("Flight saved. " + returnMessage, "Flight Recorder", MessageBoxButtons.OK);
 
                     //reset le vol sans demande de confirmation
                     resetFlight(true);
                     currentState = STATE.WAITING;
                     UpdateStatus("Waiting for engine start");
 
-                    // On grise le bouton save flight pour éviter les doubles envois
-                    //btnSubmit.Enabled = false;
-                    submitFlightToolStripMenuItem.Enabled = false;
                     saveOK = true;
                 }
                 else
@@ -2213,6 +2225,21 @@ namespace FlightRecPlugin
                 {
                     data.UpdatePlaneFromSheet();
                 }
+            }
+        }
+
+        public string getFlightReport()
+        {
+            Flight lastFlight = localFlightBook.GetLastFLight();
+            if (lastFlight != null)
+            {
+                //create a flight report in markdown format
+                return lastFlight.GenerateMarkdownReport();
+            }
+            else
+            {
+                //return a basic json structure with an error message
+                return JsonConvert.SerializeObject(new { error = "No flight found" }, Formatting.Indented);
             }
         }
     }

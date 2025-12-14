@@ -225,5 +225,10 @@ namespace CommPlugin
         {
 
         }
+
+        public string getFlightReport()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -29,7 +29,6 @@ namespace SimAddon
 
             // Ensure the directory exists, if not, create it
             Directory.CreateDirectory(fullPath);
-
         }
 
         public Dictionary<String, PluginSettings> Plugins { get; set; } = new Dictionary<string, PluginSettings>();

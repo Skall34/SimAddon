@@ -1169,7 +1169,7 @@ namespace MeteoPlugin
             catch (Exception ex)
             {
                 Logger.WriteLine($"Erreur lors de la récupération du METAR : {ex.Message}");
-                return null;
+                return string.Empty;
             }
         }
 

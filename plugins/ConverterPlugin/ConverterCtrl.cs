@@ -253,5 +253,10 @@ namespace Calculator
         public void updateSituation(situation data)
         {
         }
+
+        public string getFlightReport()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

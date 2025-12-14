@@ -36,6 +36,7 @@
             Immat = new System.Windows.Forms.ColumnHeader();
             comments = new System.Windows.Forms.ColumnHeader();
             contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(components);
+            extractFlightDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             pushToServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,7 +46,8 @@
             tbFlightDetails = new System.Windows.Forms.TextBox();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
             lblLocalFlightbookSize = new System.Windows.Forms.Label();
-            extractFlightDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            asCSVFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            asMDFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -100,6 +102,14 @@
             contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { extractFlightDataToolStripMenuItem, pushToServerToolStripMenuItem, toolStripSeparator1, deleteToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
             contextMenuStrip1.Size = new System.Drawing.Size(181, 98);
+            // 
+            // extractFlightDataToolStripMenuItem
+            // 
+            extractFlightDataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { asCSVFileToolStripMenuItem, asMDFileToolStripMenuItem });
+            extractFlightDataToolStripMenuItem.Name = "extractFlightDataToolStripMenuItem";
+            extractFlightDataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            extractFlightDataToolStripMenuItem.Text = "Extract flight data";
+            extractFlightDataToolStripMenuItem.Click += extractFlightDataToolStripMenuItem_Click;
             // 
             // pushToServerToolStripMenuItem
             // 
@@ -179,12 +189,19 @@
             lblLocalFlightbookSize.TabIndex = 5;
             lblLocalFlightbookSize.Text = "Local flightbook size";
             // 
-            // extractFlightDataToolStripMenuItem
+            // asCSVFileToolStripMenuItem
             // 
-            extractFlightDataToolStripMenuItem.Name = "extractFlightDataToolStripMenuItem";
-            extractFlightDataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            extractFlightDataToolStripMenuItem.Text = "Extract flight data";
-            extractFlightDataToolStripMenuItem.Click += extractFlightDataToolStripMenuItem_Click;
+            asCSVFileToolStripMenuItem.Name = "asCSVFileToolStripMenuItem";
+            asCSVFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            asCSVFileToolStripMenuItem.Text = "as CSV File";
+            asCSVFileToolStripMenuItem.Click += asCSVFileToolStripMenuItem_Click;
+            // 
+            // asMDFileToolStripMenuItem
+            // 
+            asMDFileToolStripMenuItem.Name = "asMDFileToolStripMenuItem";
+            asMDFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            asMDFileToolStripMenuItem.Text = "as MD File";
+            asMDFileToolStripMenuItem.Click += asMDFileToolStripMenuItem_Click;
             // 
             // LocalFlightbookForm
             // 
@@ -227,5 +244,7 @@
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.Label lblLocalFlightbookSize;
         private System.Windows.Forms.ToolStripMenuItem extractFlightDataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem asCSVFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem asMDFileToolStripMenuItem;
     }
 }

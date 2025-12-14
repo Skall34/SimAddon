@@ -18,7 +18,8 @@ namespace SimAddonPlugin
             SETDESTINATION,
             SETAIRCRAFT,
             CRASHING,
-            CHANGENETWORK
+            CHANGENETWORK,
+            ENDOFFLIGHT
         }
 
         public EventType reason { get; set; }
@@ -52,6 +53,9 @@ namespace SimAddonPlugin
         //must return true, if terminate can be done OK,
         //or false if termination should be canceled
         void FormClosing(object sender, FormClosingEventArgs e);
+
+        //each plugin may provide a flight report string, in json format
+        string getFlightReport();
 
         //events
         public delegate void UpdateStatusHandler(object sender, string statusMessage);

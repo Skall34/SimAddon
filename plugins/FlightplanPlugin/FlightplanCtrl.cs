@@ -955,5 +955,9 @@ namespace BushTripPlugin
             }
         }
 
+        public string getFlightReport()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

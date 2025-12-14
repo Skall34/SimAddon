@@ -5,6 +5,7 @@ using SimDataManager;
 using System.Collections.ObjectModel;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Http;
 using System.Reflection;
 using System.Text.Json;
@@ -33,7 +34,12 @@ namespace SimAddon
         Version version;
         Collection<TabPage> pluginTabs;
 
+        Dictionary<string, string> flightRecords;
+        string departureAirport = "";
+        string arrivalAirport = "";
+        List<string> screenshots;
 
+        // Méthode pour vérifier la présence de l'argument "-auto"
         public static bool isAutoStart()
         {
             // Récupérer les paramètres de la ligne de commande
@@ -193,6 +199,8 @@ namespace SimAddon
 
             this.Cursor = Cursors.WaitCursor;
 
+            //this will hold the list of screenshots taken during the flight
+            screenshots = new List<string>();
             LastWindowState = WindowState;
         }
 
@@ -263,7 +271,7 @@ namespace SimAddon
                 currentStatus.gearIsUp = _simData.GetIsGearUp();
                 currentStatus.gearRetractableFlag = _simData.GetGearRetractableFlag();
                 currentStatus.isAtLeastOneEngineFiring = _simData.IsAtLeastOneEngineFiring();
-                currentStatus.averageFuelFlow = _simData.GetAverageFuelFlow();
+                currentStatus.averageFuelFlow = _simData.GetFuelFlow();
                 currentStatus.engine1ManifoldPressure = _simData.GetEngine1ManifoldPressure();
                 currentStatus.engine1RPM = _simData.GetEngine1RPM();
 
@@ -621,30 +629,6 @@ namespace SimAddon
         private void Plugin_OnSimEvent(SimAddonPlugin.ISimAddonPluginCtrl sender, SimEventArg eventArg)
         {
             Logger.WriteLine("Event received from plugin : " + sender.getName() + " " + eventArg.reason.ToString() + " value=" + eventArg.value);
-            switch (eventArg.reason)
-            {
-                case SimEventArg.EventType.ENGINESTART:
-                    SetEngineStart();
-                    break;
-                case SimEventArg.EventType.ENGINESTOP:
-                    SetEngineStop();
-                    break;
-                case SimEventArg.EventType.TAKEOFF:
-                    SetTakeoff();
-                    break;
-                case SimEventArg.EventType.LANDING:
-                    SetLanding();
-                    break;
-                case SimEventArg.EventType.SETCALLSIGN:
-                    SetCallsign(sender, eventArg.value);
-                    break;
-                case SimEventArg.EventType.SETDESTINATION:
-                    SetDestination(sender, eventArg.value);
-                    break;
-                default:
-                    break;
-            }
-
             //push the event to all the plugins
             foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
             {
@@ -661,6 +645,71 @@ namespace SimAddon
                     Logger.WriteLine(plugin.getName() + " : " + ex.Message);
                 }
             }
+
+            try
+            {
+                switch (eventArg.reason)
+                {
+                    case SimEventArg.EventType.ENGINESTART:
+                        SetEngineStart();
+                        break;
+                    case SimEventArg.EventType.ENGINESTOP:
+                        SetEngineStop();
+                        break;
+                    case SimEventArg.EventType.TAKEOFF:
+                        SetTakeoff();
+                        break;
+                    case SimEventArg.EventType.LANDING:
+                        SetLanding();
+                        break;
+                    case SimEventArg.EventType.SETCALLSIGN:
+                        SetCallsign(sender, eventArg.value);
+                        break;
+                    case SimEventArg.EventType.SETDESTINATION:
+                        SetDestination(sender, eventArg.value);
+                        break;
+                    case SimEventArg.EventType.CRASHING:
+                        //what to do in application if flight recorder detected a crash ?
+                        SetCrash(sender, eventArg.value);
+                        break;
+                    case SimEventArg.EventType.SETAIRCRAFT:
+                        //what to do in application if flight recorder detected a change of aircraft ?
+                        SetAircraft(sender, eventArg.value);
+                        break;
+                    case SimEventArg.EventType.SETDEPARTURE:
+                        //what to do in application if flight recorder detected a change of departure ?
+                        SetDeparture(sender, eventArg.value);
+                        break;
+                    case SimEventArg.EventType.ENDOFFLIGHT:
+                        //what to do in application if flight recorder detected end of flight ?
+                        SetEndOfFlight(sender, eventArg.value);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("Error handling event from plugin " + sender.getName() + " : " + ex.Message);
+            }
+
+        }
+
+        private void SetEndOfFlight(ISimAddonPluginCtrl sender, string value)
+        {
+        }
+
+        private void SetDeparture(ISimAddonPluginCtrl sender, string value)
+        {
+            departureAirport = value;
+        }
+
+        private void SetAircraft(ISimAddonPluginCtrl sender, string value)
+        {
+        }
+
+        private void SetCrash(ISimAddonPluginCtrl sender, string value)
+        {
         }
 
         public void SetEngineStart()
@@ -671,6 +720,7 @@ namespace SimAddon
                 LastWindowState = this.WindowState;
                 this.WindowState = FormWindowState.Minimized;
             }
+            flightRecords = new Dictionary<string, string>();
         }
 
         public void SetEngineStop()
@@ -680,6 +730,8 @@ namespace SimAddon
             {
                 this.WindowState = LastWindowState;
             }
+
+
         }
 
         public void SetTakeoff()
@@ -708,6 +760,7 @@ namespace SimAddon
 
         public void SetDestination(object sender, string destination)
         {
+            arrivalAirport = destination;
         }
 
         //write the message the status bar
@@ -768,16 +821,22 @@ namespace SimAddon
                     g.CopyFromScreen(bounds.Location, Point.Empty, bounds.Size);
                 }
 
-                // Save the screenshot (e.g., as a PNG file)
-                string filePath = "screenshot.png";
+                // Save the screenshot as a png file with the date and time as filename
+
+                string fileName = $"Screenshot_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.png";
+                string documentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SimAddon");
+                if (!Directory.Exists(documentsPath))
+                {
+                    Directory.CreateDirectory(documentsPath);
+                }
+                string filePath = Path.Combine(documentsPath, fileName);
                 bitmap.Save(filePath, ImageFormat.Png);
+                screenshots.Add(filePath);
 
                 // Load the screenshot into the clipboard
                 Clipboard.SetImage(bitmap);
-
                 Logger.WriteLine($"Screenshot saved to {filePath}");
-                Console.WriteLine($"Screenshot saved to {filePath}");
-                Plugin_OnShowMsgbox(this, $"Screenshot copied to clipboard", "Screenshort copied", MessageBoxButtons.OK);
+                
             }
         }
 
@@ -972,6 +1031,105 @@ namespace SimAddon
         private void checkSessionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _simData.checkSession(Settings.Default.SessionToken);
+        }
+
+        private void generateFlightReportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (flightRecords==null || flightRecords.Count==0)
+            {
+                //show a message box saying there is no flight data to save
+                Plugin_OnShowMsgbox(this, "No flight data", "There is no flight data to save.", MessageBoxButtons.OK);
+
+                Logger.WriteLine("No flight data to save.");
+                return;
+            }
+            //loop through all plugins and send them a request to save their data
+            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+            {
+                try
+                {
+                    string report = plugin.getFlightReport();
+                    flightRecords[plugin.getName()] = report;
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
+                }
+            }
+
+            //create a filename from the departure and arrival airport, and the current date/time
+            string filename = $"FlightRecord_{departureAirport}_{arrivalAirport}_{DateTime.UtcNow.ToString("yyyyMMdd_HHmmss")}.md";
+
+            //the file is saved in the users documents folder
+            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //create a simaddon folder in the documents folder if it doesn't exist
+            documentsPath = Path.Combine(documentsPath, "SimAddon");
+            if (!Directory.Exists(documentsPath))
+            {
+                Directory.CreateDirectory(documentsPath);
+            }
+            //create a subfolder with the departure and arrival airport and current date
+            string subfolder = $"{departureAirport}_{arrivalAirport}_{DateTime.UtcNow.ToString("yyyyMMdd")}";
+            documentsPath = Path.Combine(documentsPath, subfolder);
+            if (!Directory.Exists(documentsPath))
+            {
+                Directory.CreateDirectory(documentsPath);
+            }
+            filename = Path.Combine(documentsPath, filename);
+            //save the flight record to the file
+            using (StreamWriter sw = new StreamWriter(filename))
+            {
+                sw.WriteLine($"# Flight Record");
+                sw.WriteLine($"**Date:** {DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss 'UTC'")}");
+                sw.WriteLine();
+                foreach (var record in flightRecords)
+                {
+                    sw.WriteLine($"## Data from : {record.Key}");
+                    sw.WriteLine();
+                    sw.WriteLine(record.Value);
+                    sw.WriteLine();
+                }
+            }
+
+            Logger.WriteLine("Flight record saved to " + filename);
+
+            //also save the list of screenshots taken during the flight
+            if (screenshots.Count > 0)
+            {
+                //move the screenshots to the same folder as the flight record
+                foreach (string screenshot in screenshots)
+                {
+                    try
+                    {
+                        string destFile = Path.Combine(documentsPath, Path.GetFileName(screenshot));
+                        File.Move(screenshot, destFile);
+                        Logger.WriteLine("Screenshot moved to " + destFile);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteLine("Error moving screenshot " + screenshot + " : " + ex.Message);
+                    }
+                }
+                //add the screenshots in the md file
+                using (StreamWriter sw = new StreamWriter(filename, true))
+                {
+                    sw.WriteLine($"## Photos taken during the flight");
+                    sw.WriteLine();
+                    foreach (string screenshot in screenshots)
+                    {
+                        string screenshotFile = Path.GetFileName(screenshot);
+                        sw.WriteLine($"![{screenshotFile}]({screenshotFile})");
+                        sw.WriteLine();
+                    }
+                }
+                Logger.WriteLine("Flight report updated with screenshots.");
+                Plugin_OnShowMsgbox(this, "Flight Report Saved", $"Flight report and screenshots saved to {documentsPath}", MessageBoxButtons.OK);
+            }
+            else
+            {
+                Logger.WriteLine("No screenshots taken during the flight.");
+            }
+
         }
     }
 }

@@ -14,6 +14,11 @@ namespace MeteoPlugin
         simData simdata;
         METARData metarData;
 
+        string departureICAO;
+        string arrivalICAO;
+        string departureRawMETAR;
+        string arrivalRawMETAR;
+
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
         public event ISimAddonPluginCtrl.OnSimEventHandler OnSimEvent;
 
@@ -153,31 +158,110 @@ namespace MeteoPlugin
 
         }
 
-        private async void requestForMetar()
+        private async Task<string> getRawMetarText(string searchItem)
         {
-            //create a request to https://aviationweather.gov/cgi-bin/data/metar.php?ids=LFMT
-            //https://vfrmap.com/?type_aeroport=osm&lat=62.321&lon=-150.093&zoom=12&api_key=763xxE1MJHyhr48DlAP2qQ
-
             UpdateStatus("Requesting METAR informations");
             Logger.WriteLine("Requesting METAR informations");
 
-            string searchItem = "";
-            if (cbICAO.SelectedItem != null)
-            {
-                searchItem = ((Aeroport)cbICAO.SelectedItem).ident;
-            }
-            else
-            {
-                searchItem = cbICAO.Text.ToUpper();
-                cbICAO.Text = searchItem;
-            }
-            //clear airport infos.
-            lbAirportInfo.Items.Clear();
-            lblDecodedMETAR.Text = string.Empty;
             string url = simdata.flyingNetwork.GetMETARUrl(searchItem);
             Logger.WriteLine("METAR request URL : " + url);
             string serverData = await Meteo.getMetar(url);
             string rawMetarText = simdata.flyingNetwork.GetRawMETARText(serverData);
+            Logger.WriteLine("Raw METAR text : " + rawMetarText);
+            return rawMetarText;
+        }
+
+        private void displayAirportInfo(string searchItem)
+        {
+            lbAirportInfo.Items.Clear();
+            //show airport information in panel
+            if ((simdata != null) && (simdata.aeroports != null))
+            {
+                Aeroport airport = simdata.aeroports.FirstOrDefault(a => a.ident == searchItem);
+                if (airport != null)
+                {
+                    //update the name of the airport in the metar data if there any
+                    if ((metarData != null) && (metarData.icao != null))
+                    {
+                        metarData.icao.name = airport.name;
+                    }
+                    string[] runways = airport.Piste.Split('/');
+                    lbAirportInfo.Items.Add(airport.name);
+                    lbAirportInfo.Items.Add($"Runways : {airport.Piste.Replace('/', ' ')}");
+                    lbAirportInfo.Items.Add($"Type : {airport.Type_de_piste.Replace('/', ' ')}");
+                    lbAirportInfo.Items.Add($"Length (ft) :{airport.Longueur_de_piste.Replace('/', ' ')}");
+                    if ((airport.Piste != "?-?") && (airport.Piste != string.Empty))
+                    {
+                        compas1.LabelText = runways[0];
+                        string[] pistes = airport.Piste.Split('-');
+                        if (pistes.Length > 0)
+                        {
+                            //petite expression reguliere pour nettoyer l'ax de piste (enlever le L, ou R s'il y en a)
+                            Regex r = new Regex("^([0-9]+)([A-Z]?)");
+                            Match result = r.Match(runways[0]);
+                            if (result.Success)
+                            {
+                                int axePiste1 = 10 * int.Parse(result.Groups[1].Value);
+                                compas1.Headings[0] = axePiste1;
+                                //if we have some meteo data, show it !
+                                if ((metarData != null) && (metarData.Wind != null))
+                                {
+                                    if (metarData.Wind.Direction == "VRB")
+                                    {
+                                        VariableWindTimer.Start();
+                                        VariableWindAnimation.Start();
+                                    }
+                                    else
+                                    {
+                                        if (metarData.WindVariation != null)
+                                        {
+                                            VariableWindTimer.Start();
+                                            VariableWindAnimation.Start();
+                                        }
+                                        else
+                                        {
+                                            VariableWindTimer.Stop();
+                                            VariableWindAnimation.Stop();
+                                        }
+                                        displayedWindDirection = int.Parse(metarData.Wind.Direction);
+                                        compas1.Headings[1] = displayedWindDirection;
+                                    }
+                                    compas1.NumericValue = int.Parse(metarData.Wind.Speed);
+                                    compas1.Unit = "Knts";
+                                }
+                                else
+                                {
+                                    VariableWindTimer.Start();
+                                    VariableWindAnimation.Start();
+                                }
+                            }
+                            else
+                            {
+
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        compas1.Headings[0] = 0;
+                        compas1.Headings[1] = 0;
+                        compas1.NumericValue = double.NaN;
+                        compas1.Unit = "???";
+                    }
+                }
+                compas1.Invalidate();
+
+            }
+            else
+            {
+                lbAirportInfo.Items.Add("Still loading airports database");
+            }
+        }
+
+        private void decodeAndDisplayMetar(string rawMetarText)
+        {
+            lblDecodedMETAR.Text = string.Empty;
             tbMETAR.Text = rawMetarText;
             try
             {
@@ -196,89 +280,6 @@ namespace MeteoPlugin
                         lblDecodedMETAR.Text = "No data available";
                     }
 
-                    //show airport information in panel
-                    if ((simdata != null) && (simdata.aeroports != null))
-                    {
-                        Aeroport airport = simdata.aeroports.FirstOrDefault(a => a.ident == searchItem);
-                        if (airport != null)
-                        {
-                            //update the name of the airport in the metar data if there any
-                            if ((metarData != null) && (metarData.icao != null))
-                            {
-                                metarData.icao.name = airport.name;
-                            }
-                            string[] runways = airport.Piste.Split('/');
-                            lbAirportInfo.Items.Add(airport.name);
-                            lbAirportInfo.Items.Add($"Runways : {airport.Piste.Replace('/', ' ')}");
-                            lbAirportInfo.Items.Add($"Type : {airport.Type_de_piste.Replace('/', ' ')}");
-                            lbAirportInfo.Items.Add($"Length (ft) :{airport.Longueur_de_piste.Replace('/', ' ')}");
-                            if ((airport.Piste != "?-?") && (airport.Piste != string.Empty))
-                            {
-                                compas1.LabelText = runways[0];
-                                string[] pistes = airport.Piste.Split('-');
-                                if (pistes.Length > 0)
-                                {
-                                    //petite expression reguliere pour nettoyer l'ax de piste (enlever le L, ou R s'il y en a)
-                                    Regex r = new Regex("^([0-9]+)([A-Z]?)");
-                                    Match result = r.Match(runways[0]);
-                                    if (result.Success)
-                                    {
-                                        int axePiste1 = 10 * int.Parse(result.Groups[1].Value);
-                                        compas1.Headings[0] = axePiste1;
-                                        //if we have some meteo data, show it !
-                                        if ((metarData != null) && (metarData.Wind != null))
-                                        {
-                                            if (metarData.Wind.Direction == "VRB")
-                                            {
-                                                VariableWindTimer.Start();
-                                                VariableWindAnimation.Start();
-                                            }
-                                            else
-                                            {
-                                                if (metarData.WindVariation != null)
-                                                {
-                                                    VariableWindTimer.Start();
-                                                    VariableWindAnimation.Start();
-                                                }
-                                                else
-                                                {
-                                                    VariableWindTimer.Stop();
-                                                    VariableWindAnimation.Stop();
-                                                }
-                                                displayedWindDirection = int.Parse(metarData.Wind.Direction);
-                                                compas1.Headings[1] = displayedWindDirection;
-                                            }
-                                            compas1.NumericValue = int.Parse(metarData.Wind.Speed);
-                                            compas1.Unit = "Knts";
-                                        }
-                                        else
-                                        {
-                                            VariableWindTimer.Start();
-                                            VariableWindAnimation.Start();
-                                        }
-                                    }
-                                    else
-                                    {
-
-                                    }
-
-                                }
-                            }
-                            else
-                            {
-                                compas1.Headings[0] = 0;
-                                compas1.Headings[1] = 0;
-                                compas1.NumericValue = double.NaN;
-                                compas1.Unit = "???";
-                            }
-                        }
-                        compas1.Invalidate();
-
-                    }
-                    else
-                    {
-                        lbAirportInfo.Items.Add("Still loading airports database");
-                    }
                     //envoyer le text au speaker
                     if (metarData != null)
                     {
@@ -295,6 +296,28 @@ namespace MeteoPlugin
             {
                 Logger.WriteLine(ex.Message);
             }
+        }
+
+        private async void requestForMetar()
+        {
+            //create a request to https://aviationweather.gov/cgi-bin/data/metar.php?ids=LFMT
+            //https://vfrmap.com/?type_aeroport=osm&lat=62.321&lon=-150.093&zoom=12&api_key=763xxE1MJHyhr48DlAP2qQ
+
+
+            string searchItem = "";
+            if (cbICAO.SelectedItem != null)
+            {
+                searchItem = ((Aeroport)cbICAO.SelectedItem).ident;
+            }
+            else
+            {
+                searchItem = cbICAO.Text.ToUpper();
+                cbICAO.Text = searchItem;
+            }
+            //clear airport infos.
+            string rawMetarText = await getRawMetarText(searchItem);
+            decodeAndDisplayMetar(rawMetarText);
+            displayAirportInfo(searchItem);
 
             if (OnStyleChanged != null)
             {
@@ -406,7 +429,7 @@ namespace MeteoPlugin
             throw new NotImplementedException();
         }
 
-        public void ManageSimEvent(object sender, SimEventArg eventArg)
+        public async void ManageSimEvent(object sender, SimEventArg eventArg)
         {
             if (eventArg.reason == SimEventArg.EventType.SETDEPARTURE)
             {
@@ -417,8 +440,12 @@ namespace MeteoPlugin
                     Aeroport a = simdata.aeroports.FirstOrDefault(x => x.ident == icao);
                     if (a != null)
                     {
-                        cbICAO.Text = a.ident;
-                        requestForMetar();
+                        departureICAO = icao;
+                        cbICAO.Text = icao;
+                        string rawMetarText = await getRawMetarText(cbICAO.Text);
+                        decodeAndDisplayMetar(rawMetarText);
+                        displayAirportInfo(cbICAO.Text);
+                        departureRawMETAR = rawMetarText;
                     }
                     else
                     {
@@ -433,6 +460,75 @@ namespace MeteoPlugin
                 }
 
             }
+
+            if (eventArg.reason == SimEventArg.EventType.SETDESTINATION)
+            {
+                string icao = eventArg.value;
+                if (Regex.IsMatch(icao, @"^[A-Z0-9]{4}$"))
+                {
+                    //check if the airport is in the list
+                    Aeroport a = simdata.aeroports.FirstOrDefault(x => x.ident == icao);
+                    if (a != null)
+                    {
+                        arrivalICAO = icao;
+                        cbICAO.Text = icao;
+                        string rawMetarText = await getRawMetarText(cbICAO.Text);
+                        arrivalRawMETAR = rawMetarText;
+                    }
+                    else
+                    {
+                        UpdateStatus($"Airport {icao} not found in database");
+                        Logger.WriteLine($"Airport {icao} not found in database");
+                    }
+                }
+                else
+                {
+                    UpdateStatus($"Invalid ICAO code {icao}");
+                    Logger.WriteLine($"Invalid ICAO code {icao}");
+                }
+            }
+        }
+
+        public string getFlightReport()
+        {
+            //build a meteo report in markdown format
+            string report = "# METAR Report\n\n";
+            report += "## Departure Airport: " + departureICAO + "\n\n";
+            report += "### Raw METAR:\n";
+            report += "```\n" + departureRawMETAR + "\n```\n\n";
+            METARData departureMetarData = decodeMetar(departureRawMETAR);
+            if (departureMetarData != null)
+            {
+                try
+                {
+                    string decodedDepartureMETAR = decodeMetar(departureRawMETAR).toString();
+                    report += "### Decoded METAR:\n";
+                    report += "```\n" + decodedDepartureMETAR + "\n```\n\n";
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("Error decoding departure METAR for report " + ex.Message);
+                }
+            }
+
+            report += "## Arrival Airport: " + arrivalICAO + "\n\n";
+            report += "### Raw METAR:\n";
+            report += "```\n" + arrivalRawMETAR + "\n```\n\n";
+            METARData arrivalMetarData = decodeMetar(arrivalRawMETAR);
+            if (arrivalMetarData != null)
+            {
+                try
+                {
+                    string decodedArrivalMETAR = decodeMetar(arrivalRawMETAR).toString();
+                    report += "### Decoded METAR:\n";
+                    report += "```\n" + decodedArrivalMETAR + "\n```\n\n";
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("Error decoding arrival METAR for report " + ex.Message);
+                }
+            }
+            return report;
         }
     }
 }

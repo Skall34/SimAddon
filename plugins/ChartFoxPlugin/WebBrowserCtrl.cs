@@ -159,5 +159,10 @@ namespace ChartFoxPlugin
                 }
             }
         }
+
+        public string getFlightReport()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
