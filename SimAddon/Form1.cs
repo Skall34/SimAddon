@@ -39,6 +39,10 @@ namespace SimAddon
         string arrivalAirport = "";
         List<string> screenshots;
 
+        DateTime flightStartTime;
+        DateTime flightEndTime;
+
+
         // Méthode pour vérifier la présence de l'argument "-auto"
         public static bool isAutoStart()
         {
@@ -685,7 +689,7 @@ namespace SimAddon
         private void SetEndOfFlight(ISimAddonPluginCtrl sender, string value)
         {
             arrivalAirport = value;
-            generateFlightReportToolStripMenuItem1.Enabled = false;
+            flightEndTime = DateTime.Now;
         }
 
         private void SetDeparture(ISimAddonPluginCtrl sender, string value)
@@ -710,6 +714,8 @@ namespace SimAddon
                 this.WindowState = FormWindowState.Minimized;
             }
             flightRecords = new Dictionary<string, string>();
+            flightStartTime = DateTime.Now;
+
             generateFlightReportToolStripMenuItem1.Enabled = true;
         }
 
@@ -720,7 +726,7 @@ namespace SimAddon
             {
                 this.WindowState = LastWindowState;
             }
-
+            flightEndTime = DateTime.Now;
 
         }
 
@@ -977,6 +983,76 @@ namespace SimAddon
             else
             {
                 Logger.WriteLine("No screenshots taken during the flight.");
+            }
+
+            //if there is a setting for screenshots folder, then copy the flight record there too
+            string screenshotsFolder = Properties.Settings.Default.ScreenshotsFolder;
+            if (!string.IsNullOrEmpty(screenshotsFolder))
+            {
+                try
+                {
+                    //make sure the folder exist
+                    if (Directory.Exists(screenshotsFolder))
+                    {
+                        //find all the files in the screenshots folder
+                        var files = Directory.EnumerateFiles(screenshotsFolder).ToList();
+                        //for each file, check if file was created during the flight
+                        foreach (string file in files)
+                        {
+                            try
+                            {
+                                DateTime creationTime = File.GetCreationTime(file);
+                                if (creationTime >= flightStartTime && creationTime <= flightEndTime)
+                                {
+                                    //copy the file to the destination folder with retry logic
+                                    string destFile = Path.Combine(documentsPath, Path.GetFileName(file));
+                                    bool copySuccess = false;
+                                    int maxRetries = 3;
+                                    
+                                    for (int retry = 0; retry < maxRetries && !copySuccess; retry++)
+                                    {
+                                        try
+                                        {
+                                            if (retry > 0)
+                                            {
+                                                // Wait a bit before retrying
+                                                System.Threading.Thread.Sleep(500);
+                                            }
+                                            
+                                            File.Copy(file, destFile, true);
+                                            copySuccess = true;
+                                            Logger.WriteLine($"Screenshot copied from Steam folder : {destFile}");
+                                            
+                                            //and add a line in the md file
+                                            using (StreamWriter sw = new StreamWriter(filename, true))
+                                            {
+                                                sw.WriteLine($"![{Path.GetFileName(destFile)}]({Path.GetFileName(destFile)})");
+                                                sw.WriteLine();
+                                            }
+                                        }
+                                        catch (IOException ioEx) when (retry < maxRetries - 1)
+                                        {
+                                            Logger.WriteLine($"Retry {retry + 1}/{maxRetries} for file {file}: {ioEx.Message}");
+                                        }
+                                    }
+                                    
+                                    if (!copySuccess)
+                                    {
+                                        Logger.WriteLine($"Failed to copy screenshot after {maxRetries} attempts: {file}");
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.WriteLine($"Error processing screenshot file {file}: {ex.Message}");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("Error copying screenshots from Steam folder : " + ex.Message);
+                }
             }
         }
 
