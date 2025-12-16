@@ -1203,7 +1203,7 @@ namespace FlightRecPlugin
 
             List<GPSPoint> gpsTrace = GPSRecorder.GPSPoints;
             string localFlightBookFile = Properties.Settings.Default.LocalFlightbookFile;
-            List<FLightParamsSample> flightData = flightParamsRecorder.GetRecordedFlightParams();
+            List<FLightParamsSample> flightData = new List<FLightParamsSample>(flightParamsRecorder.GetRecordedFlightParams());
 
             if (localFlightBookFile == string.Empty)
             {
@@ -1235,7 +1235,6 @@ namespace FlightRecPlugin
             localFlightBook.saveToJson(localFlightBookFile);
             string flightParamsFilename = Properties.Settings.Default.FlightParamsRecord;
             flightParamsFilename+="_"+lbStartIata.Text+"-"+lbEndIata.Text+"_"+_startTime.ToString("yyyyMMdd_HHmmss");
-            //GPSRecorder.OptimizeTrace();
 
             Logger.WriteLine("End of flight data updated");
         }

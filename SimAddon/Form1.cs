@@ -156,10 +156,8 @@ namespace SimAddon
             this.Location = startlocation;
 
             this.TopMost = Properties.Settings.Default.AlwaysOnTop;
-            alwaysOnTopToolStripMenuItem.Checked = Properties.Settings.Default.AlwaysOnTop;
 
             autoHide = Properties.Settings.Default.AutoHide;
-            autoHideToolStripMenuItem.Checked = autoHide;
 
             SetSplashProgress(10, "Searching for plugins...");
             plugsMgr = new PluginsMgr();
@@ -185,11 +183,11 @@ namespace SimAddon
             _simData.useFlyingNetwork(Properties.Settings.Default.FlyingNetwork);
             if (Settings.Default.FlyingNetwork == FlyingNetwork.VATSIM.ToString())
             {
-                vATSIMToolStripMenuItem.Checked = true;
+                vATSIMToolStripMenuItem1.Checked = true;
             }
             else if (Settings.Default.FlyingNetwork == FlyingNetwork.IVAO.ToString())
             {
-                iVAOToolStripMenuItem.Checked = true;
+                iVAOToolStripMenuItem1.Checked = true;
             }
 
             WriteWindowTitle();
@@ -395,15 +393,6 @@ namespace SimAddon
             }
         }
 
-        private void Form1_Activated(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-        {
-
-        }
         private void timerZulu_Tick(object sender, EventArgs e)
         {
             // Format HH:mm:ss 'Z' pour l'heure Zulu
@@ -481,14 +470,6 @@ namespace SimAddon
                         pluginsSettings.Plugins[plugin.getName()] = pluginSetting;
                         tabControl1.TabPages.Add(pluginpage);
                     }
-
-                    //add a checkable menu item to the context menu of the tab control
-                    ToolStripMenuItem menuItem = new ToolStripMenuItem(plugin.getName(), null, (o, v) => { showHideTab(plugin.getName()); });
-                    menuItem.CheckOnClick = true;
-                    menuItem.Checked = pluginSetting.Visible; // by default, the plugin is enabled
-                    menuItem.Enabled = true;
-                    //add the menu item to the context menu of the tab control
-                    contextMenuStrip1.Items.Add(menuItem);
                 }
                 catch (Exception ex)
                 {
@@ -549,15 +530,43 @@ namespace SimAddon
 
         }
 
-
-        private void showHideTab(string v)
+        private void showTab(string v)
         {
-            bool found = false;
+            //verify if the tab is already shown
             foreach (TabPage tab in tabControl1.TabPages)
             {
                 if (tab.Text == v)
                 {
-                    //toggle the visibility of the tab
+                    return;
+                }
+            }
+            //find the plugin with the name v
+            foreach (TabPage plugin in pluginTabs)
+            {
+                if (plugin.Text == v)
+                {
+                    tabControl1.TabPages.Add(plugin);
+                    //update the plugin settings to show the tab
+                    if (pluginsSettings.Plugins.ContainsKey(v))
+                    {
+                        pluginsSettings.Plugins[v].Visible = true;
+                    }
+                    else
+                    {
+                        pluginsSettings.Plugins.Add(v, new PluginSettings { Visible = true });
+                    }
+                }
+            }
+            //save the plugins settings to the file
+            pluginsSettings.saveToJsonFile("plugins.json");
+        }
+
+        private void hideTab(string v)
+        {
+            foreach (TabPage tab in tabControl1.TabPages)
+            {
+                if (tab.Text == v)
+                {
                     tabControl1.TabPages.Remove(tab);
                     //update the plugin settings to hide the tab
                     if (pluginsSettings.Plugins.ContainsKey(v))
@@ -567,28 +576,6 @@ namespace SimAddon
                     else
                     {
                         pluginsSettings.Plugins.Add(v, new PluginSettings { Visible = false });
-                    }
-                    found = true;
-                }
-            }
-            //if not found, then add the tab
-            if (!found)
-            {
-                //find the plugin with the name v
-                foreach (TabPage plugin in pluginTabs)
-                {
-                    if (plugin.Text == v)
-                    {
-                        tabControl1.TabPages.Add(plugin);
-                        //update the plugin settings to show the tab
-                        if (pluginsSettings.Plugins.ContainsKey(v))
-                        {
-                            pluginsSettings.Plugins[v].Visible = true;
-                        }
-                        else
-                        {
-                            pluginsSettings.Plugins.Add(v, new PluginSettings { Visible = true });
-                        }
                     }
                 }
             }
@@ -698,6 +685,7 @@ namespace SimAddon
         private void SetEndOfFlight(ISimAddonPluginCtrl sender, string value)
         {
             arrivalAirport = value;
+            generateFlightReportToolStripMenuItem1.Enabled = false;
         }
 
         private void SetDeparture(ISimAddonPluginCtrl sender, string value)
@@ -722,6 +710,7 @@ namespace SimAddon
                 this.WindowState = FormWindowState.Minimized;
             }
             flightRecords = new Dictionary<string, string>();
+            generateFlightReportToolStripMenuItem1.Enabled = true;
         }
 
         public void SetEngineStop()
@@ -771,74 +760,9 @@ namespace SimAddon
             this.lblPluginStatus.ForeColor = Color.Green;
         }
 
-        private void submitBugToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void Form1_Resize(object sender, EventArgs e)
         {
 
-        }
-
-        private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (this.TopMost == false)
-            {
-                this.TopMost = alwaysOnTopToolStripMenuItem.Checked = true;
-                this.TopMost = true;
-            }
-            else
-            {
-                this.TopMost = alwaysOnTopToolStripMenuItem.Checked = false;
-                this.TopMost = false;
-            }
-            Properties.Settings.Default.AlwaysOnTop = this.TopMost;
-            Properties.Settings.Default.Save();
-        }
-
-        private void autoHideToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            autoHide = !autoHide;
-            autoHideToolStripMenuItem.Checked = autoHide;
-            Properties.Settings.Default.AutoHide = autoHide;
-            Properties.Settings.Default.Save();
-        }
-
-        private void screenshotToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Get the primary screen
-            var primaryScreen = Screen.PrimaryScreen;
-
-            // Get the bounds of the primary screen
-            var bounds = primaryScreen.Bounds;
-
-            // Create a bitmap with the size of the primary screen
-            using (var bitmap = new Bitmap(bounds.Width, bounds.Height))
-            {
-                // Draw the screen into the bitmap
-                using (var g = Graphics.FromImage(bitmap))
-                {
-                    g.CopyFromScreen(bounds.Location, Point.Empty, bounds.Size);
-                }
-
-                // Save the screenshot as a png file with the date and time as filename
-
-                string fileName = $"Screenshot_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.png";
-                string documentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SimAddon");
-                if (!Directory.Exists(documentsPath))
-                {
-                    Directory.CreateDirectory(documentsPath);
-                }
-                string filePath = Path.Combine(documentsPath, fileName);
-                bitmap.Save(filePath, ImageFormat.Png);
-                screenshots.Add(filePath);
-
-                // Load the screenshot into the clipboard
-                Clipboard.SetImage(bitmap);
-                Logger.WriteLine($"Screenshot saved to {filePath}");
-                
-            }
         }
 
         private void Form1_LocationChanged(object sender, EventArgs e)
@@ -849,131 +773,6 @@ namespace SimAddon
                 Properties.Settings.Default.xpos = this.Location.X;
                 Properties.Settings.Default.ypos = this.Location.Y;
                 Properties.Settings.Default.Save();
-            }
-        }
-
-        private void openWebSiteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //open the web site starting the default browser
-            try
-            {
-                //start the default web browser to view the url stored in Properties.Settings.Default.GSheetAPIUrl
-                string url = Properties.Settings.Default.GSheetAPIUrl;
-                if (string.IsNullOrEmpty(url))
-                {
-                    Logger.WriteLine("No URL configured in settings. Please set the URL in the settings.");
-                    Plugin_OnShowMsgbox(this, "Error", "No URL configured in settings. Please set the URL in the settings.", MessageBoxButtons.OK);
-                    return;
-                }
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true // This is necessary to open the URL in the default browser
-                });
-            }
-            catch (Exception ex)
-            {
-                Logger.WriteLine($"Error opening web site: {ex.Message}");
-                Plugin_OnShowMsgbox(this, "Error", "Unable to open the web site. Please check the URL.", MessageBoxButtons.OK);
-            }
-        }
-
-        private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
-
-        private void traceFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Get the application name
-            string appName = Assembly.GetEntryAssembly().GetName().Name;
-
-            // Get the path to the user's AppData folder
-            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
-            // Combine the AppData path with the folder name
-            string fullPath = Path.Combine(appDataPath, appName);
-
-            //open fullPath in the file explorer
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-            {
-                FileName = fullPath,
-                UseShellExecute = true, // This is necessary to open the URL in the default browser
-                Verb = "open" // This is necessary to open the folder in the file explorer
-            });
-        }
-
-        private void vATSIMToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (vATSIMToolStripMenuItem.Checked)
-            {
-                iVAOToolStripMenuItem.Checked = false;
-                _simData.useFlyingNetwork(FlyingNetwork.VATSIM);
-                Settings.Default.FlyingNetwork = FlyingNetwork.VATSIM.ToString();
-                Settings.Default.Save();
-            }
-            WriteWindowTitle();
-
-            SimEventArg eventArg = new SimEventArg();
-            eventArg.reason = SimEventArg.EventType.CHANGENETWORK;
-            //push the event to all the plugins
-            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
-            {
-                try
-                {
-                    plugin.ManageSimEvent(this, eventArg);
-                }
-                catch (Exception ex)
-                {
-                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
-                }
-            }
-        }
-
-        private void iVAOToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (iVAOToolStripMenuItem.Checked)
-            {
-                vATSIMToolStripMenuItem.Checked = false;
-                _simData.useFlyingNetwork(FlyingNetwork.IVAO);
-                Settings.Default.FlyingNetwork = FlyingNetwork.IVAO.ToString();
-                Settings.Default.Save();
-            }
-            WriteWindowTitle();
-            SimEventArg eventArg = new SimEventArg();
-            eventArg.reason = SimEventArg.EventType.CHANGENETWORK;
-            //push the event to all the plugins
-            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
-            {
-                try
-                {
-                    plugin.ManageSimEvent(this, eventArg);
-                }
-                catch (Exception ex)
-                {
-                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
-                }
-            }
-
-        }
-
-        private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //open the documentation web page starting the default browser
-            try
-            {
-                string url = "https://github.com/Skall34/SimAddon/wiki";
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true // This is necessary to open the URL in the default browser
-                });
-
-            }
-            catch (Exception ex)
-            {
-                Logger.WriteLine($"Error opening documentation web site: {ex.Message}");
-                Plugin_OnShowMsgbox(this, "Error", "Unable to open the documentation web site.", MessageBoxButtons.OK);
             }
         }
 
@@ -1017,19 +816,19 @@ namespace SimAddon
             }
         }
 
-        private async void loginToolStripMenuItem_Click(object sender, EventArgs e)
+        private void loginToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             connectToSite();
         }
 
-        private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void logoutToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             _simData.logoutFromSite();
             Settings.Default.SessionToken = "";
             Settings.Default.Save();
         }
 
-        private async void checkSessionToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void checkSessionToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             bool sessionValid = await _simData.checkSession(Settings.Default.SessionToken);
             if (sessionValid)
@@ -1042,9 +841,45 @@ namespace SimAddon
             }
         }
 
-        private void generateFlightReportToolStripMenuItem_Click(object sender, EventArgs e)
+        private void screenshotToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (flightRecords==null)
+            // Get the primary screen
+            var primaryScreen = Screen.PrimaryScreen;
+
+            // Get the bounds of the primary screen
+            var bounds = primaryScreen.Bounds;
+
+            // Create a bitmap with the size of the primary screen
+            using (var bitmap = new Bitmap(bounds.Width, bounds.Height))
+            {
+                // Draw the screen into the bitmap
+                using (var g = Graphics.FromImage(bitmap))
+                {
+                    g.CopyFromScreen(bounds.Location, Point.Empty, bounds.Size);
+                }
+
+                // Save the screenshot as a png file with the date and time as filename
+
+                string fileName = $"Screenshot_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.png";
+                string documentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SimAddon");
+                if (!Directory.Exists(documentsPath))
+                {
+                    Directory.CreateDirectory(documentsPath);
+                }
+                string filePath = Path.Combine(documentsPath, fileName);
+                bitmap.Save(filePath, ImageFormat.Png);
+                screenshots.Add(filePath);
+
+                // Load the screenshot into the clipboard
+                Clipboard.SetImage(bitmap);
+                Logger.WriteLine($"Screenshot saved to {filePath}");
+
+            }
+        }
+
+        private void generateFlightReportToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (flightRecords == null)
             {
                 //show a message box saying there is no flight data to save
                 Plugin_OnShowMsgbox(this, "No flight data", "There is no flight data to save.", MessageBoxButtons.OK);
@@ -1143,7 +978,176 @@ namespace SimAddon
             {
                 Logger.WriteLine("No screenshots taken during the flight.");
             }
+        }
 
+        private void settingsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //show the settings form
+            using (SimaddonSettingsForm settingsForm = new SimaddonSettingsForm())
+            {
+                //set the current settings
+                settingsForm.AlwaysOnTop = this.TopMost;
+                settingsForm.AutoHide = this.autoHide;
+                settingsForm.screenshotFolder = Properties.Settings.Default.ScreenshotsFolder;
+                settingsForm.SiteUrl = Properties.Settings.Default.GSheetAPIUrl;
+
+                //set the visible plugins
+                Dictionary<string, bool> visiblePlugins = new Dictionary<string, bool>();
+                foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+                {
+                    bool isVisible = false;
+                    foreach (TabPage tab in tabControl1.TabPages)
+                    {
+                        if (tab.Text == plugin.getName())
+                        {
+                            isVisible = true;
+                        }
+                    }
+                    visiblePlugins[plugin.getName()] = isVisible;
+                }
+                settingsForm.VisiblePlugins = visiblePlugins;
+                if (settingsForm.ShowDialog() == DialogResult.OK)
+                {
+                    //apply the new settings
+                    this.TopMost = settingsForm.TopMost;
+                    this.autoHide = settingsForm.AutoHide;
+                    Properties.Settings.Default.ScreenshotsFolder = settingsForm.screenshotFolder;
+                    Properties.Settings.Default.Save();
+                    //update the visible plugins
+                    foreach (var pluginVisibility in settingsForm.VisiblePlugins)
+                    {
+                        if (pluginVisibility.Value)
+                        {
+                            //show the tab
+                            showTab(pluginVisibility.Key);
+                        }
+                        else
+                        {
+                            //hide the tab
+                            hideTab(pluginVisibility.Key);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void tracesFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Get the application name
+            string appName = Assembly.GetEntryAssembly().GetName().Name;
+
+            // Get the path to the user's AppData folder
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            // Combine the AppData path with the folder name
+            string fullPath = Path.Combine(appDataPath, appName);
+
+            //open fullPath in the file explorer
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = fullPath,
+                UseShellExecute = true, // This is necessary to open the URL in the default browser
+                Verb = "open" // This is necessary to open the folder in the file explorer
+            });
+        }
+
+        private void vATSIMToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (vATSIMToolStripMenuItem1.Checked)
+            {
+                iVAOToolStripMenuItem1.Checked = false;
+                _simData.useFlyingNetwork(FlyingNetwork.VATSIM);
+                Settings.Default.FlyingNetwork = FlyingNetwork.VATSIM.ToString();
+                Settings.Default.Save();
+            }
+            WriteWindowTitle();
+
+            SimEventArg eventArg = new SimEventArg();
+            eventArg.reason = SimEventArg.EventType.CHANGENETWORK;
+            //push the event to all the plugins
+            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+            {
+                try
+                {
+                    plugin.ManageSimEvent(this, eventArg);
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
+                }
+            }
+        }
+
+        private void iVAOToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (iVAOToolStripMenuItem1.Checked)
+            {
+                vATSIMToolStripMenuItem1.Checked = false;
+                _simData.useFlyingNetwork(FlyingNetwork.IVAO);
+                Settings.Default.FlyingNetwork = FlyingNetwork.IVAO.ToString();
+                Settings.Default.Save();
+            }
+            WriteWindowTitle();
+            SimEventArg eventArg = new SimEventArg();
+            eventArg.reason = SimEventArg.EventType.CHANGENETWORK;
+            //push the event to all the plugins
+            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
+            {
+                try
+                {
+                    plugin.ManageSimEvent(this, eventArg);
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
+                }
+            }
+        }
+
+        private void openWebSiteToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //open the web site starting the default browser
+            try
+            {
+                //start the default web browser to view the url stored in Properties.Settings.Default.GSheetAPIUrl
+                string url = Properties.Settings.Default.GSheetAPIUrl;
+                if (string.IsNullOrEmpty(url))
+                {
+                    Logger.WriteLine("No URL configured in settings. Please set the URL in the settings.");
+                    Plugin_OnShowMsgbox(this, "Error", "No URL configured in settings. Please set the URL in the settings.", MessageBoxButtons.OK);
+                    return;
+                }
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true // This is necessary to open the URL in the default browser
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine($"Error opening web site: {ex.Message}");
+                Plugin_OnShowMsgbox(this, "Error", "Unable to open the web site. Please check the URL.", MessageBoxButtons.OK);
+            }
+        }
+
+        private void documentationToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //open the documentation web page starting the default browser
+            try
+            {
+                string url = "https://github.com/Skall34/SimAddon/wiki";
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true // This is necessary to open the URL in the default browser
+                });
+
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine($"Error opening documentation web site: {ex.Message}");
+                Plugin_OnShowMsgbox(this, "Error", "Unable to open the documentation web site.", MessageBoxButtons.OK);
+            }
         }
     }
 }

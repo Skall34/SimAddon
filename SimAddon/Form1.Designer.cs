@@ -41,28 +41,26 @@ namespace SimAddon
             toolStripHeureZulu = new ToolStripStatusLabel();
             timerMain = new System.Windows.Forms.Timer(components);
             timerConnection = new System.Windows.Forms.Timer(components);
-            contextMenuStrip1 = new ContextMenuStrip(components);
-            documentationToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator5 = new ToolStripSeparator();
-            alwaysOnTopToolStripMenuItem = new ToolStripMenuItem();
-            autoHideToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator1 = new ToolStripSeparator();
-            screenshotToolStripMenuItem = new ToolStripMenuItem();
-            generateFlightReportToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator2 = new ToolStripSeparator();
-            loginToolStripMenuItem = new ToolStripMenuItem();
-            logoutToolStripMenuItem = new ToolStripMenuItem();
-            checkSessionToolStripMenuItem = new ToolStripMenuItem();
-            openWebSiteToolStripMenuItem = new ToolStripMenuItem();
-            traceFolderToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator3 = new ToolStripSeparator();
-            networkToolStripMenuItem = new ToolStripMenuItem();
-            vATSIMToolStripMenuItem = new ToolStripMenuItem();
-            iVAOToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator4 = new ToolStripSeparator();
             tabControl1 = new TabControl();
+            menuStrip1 = new MenuStrip();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            loginToolStripMenuItem1 = new ToolStripMenuItem();
+            logoutToolStripMenuItem1 = new ToolStripMenuItem();
+            checkSessionToolStripMenuItem1 = new ToolStripMenuItem();
+            toolStripSeparator6 = new ToolStripSeparator();
+            screenshotToolStripMenuItem1 = new ToolStripMenuItem();
+            generateFlightReportToolStripMenuItem1 = new ToolStripMenuItem();
+            toolStripSeparator7 = new ToolStripSeparator();
+            settingsToolStripMenuItem1 = new ToolStripMenuItem();
+            tracesFolderToolStripMenuItem = new ToolStripMenuItem();
+            networkToolStripMenuItem1 = new ToolStripMenuItem();
+            vATSIMToolStripMenuItem1 = new ToolStripMenuItem();
+            iVAOToolStripMenuItem1 = new ToolStripMenuItem();
+            linksToolStripMenuItem = new ToolStripMenuItem();
+            openWebSiteToolStripMenuItem1 = new ToolStripMenuItem();
+            documentationToolStripMenuItem1 = new ToolStripMenuItem();
             statusStrip.SuspendLayout();
-            contextMenuStrip1.SuspendLayout();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip
@@ -105,140 +103,143 @@ namespace SimAddon
             timerConnection.Interval = 1000;
             timerConnection.Tick += TimerConnection_Tick;
             // 
-            // contextMenuStrip1
-            // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { openWebSiteToolStripMenuItem, documentationToolStripMenuItem, traceFolderToolStripMenuItem, toolStripSeparator5, screenshotToolStripMenuItem, generateFlightReportToolStripMenuItem, toolStripSeparator2, loginToolStripMenuItem, logoutToolStripMenuItem, checkSessionToolStripMenuItem, toolStripSeparator3, networkToolStripMenuItem, toolStripSeparator4, alwaysOnTopToolStripMenuItem, autoHideToolStripMenuItem, toolStripSeparator1 });
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(188, 298);
-            contextMenuStrip1.Opening += contextMenuStrip1_Opening;
-            // 
-            // documentationToolStripMenuItem
-            // 
-            documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
-            documentationToolStripMenuItem.Size = new Size(187, 22);
-            documentationToolStripMenuItem.Text = "Documentation";
-            documentationToolStripMenuItem.Click += documentationToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator5
-            // 
-            toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new Size(184, 6);
-            // 
-            // alwaysOnTopToolStripMenuItem
-            // 
-            alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            alwaysOnTopToolStripMenuItem.Size = new Size(187, 22);
-            alwaysOnTopToolStripMenuItem.Text = "Always On Top";
-            alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
-            // 
-            // autoHideToolStripMenuItem
-            // 
-            autoHideToolStripMenuItem.Name = "autoHideToolStripMenuItem";
-            autoHideToolStripMenuItem.Size = new Size(187, 22);
-            autoHideToolStripMenuItem.Text = "Auto hide";
-            autoHideToolStripMenuItem.Click += autoHideToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator1
-            // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(184, 6);
-            // 
-            // screenshotToolStripMenuItem
-            // 
-            screenshotToolStripMenuItem.Name = "screenshotToolStripMenuItem";
-            screenshotToolStripMenuItem.Size = new Size(187, 22);
-            screenshotToolStripMenuItem.Text = "Screenshot";
-            screenshotToolStripMenuItem.Click += screenshotToolStripMenuItem_Click;
-            // 
-            // generateFlightReportToolStripMenuItem
-            // 
-            generateFlightReportToolStripMenuItem.Name = "generateFlightReportToolStripMenuItem";
-            generateFlightReportToolStripMenuItem.Size = new Size(187, 22);
-            generateFlightReportToolStripMenuItem.Text = "Generate flight report";
-            generateFlightReportToolStripMenuItem.Click += generateFlightReportToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator2
-            // 
-            toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(184, 6);
-            // 
-            // loginToolStripMenuItem
-            // 
-            loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            loginToolStripMenuItem.Size = new Size(187, 22);
-            loginToolStripMenuItem.Text = "Login";
-            loginToolStripMenuItem.Click += loginToolStripMenuItem_Click;
-            // 
-            // logoutToolStripMenuItem
-            // 
-            logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            logoutToolStripMenuItem.Size = new Size(187, 22);
-            logoutToolStripMenuItem.Text = "Logout";
-            logoutToolStripMenuItem.Click += logoutToolStripMenuItem_Click;
-            // 
-            // checkSessionToolStripMenuItem
-            // 
-            checkSessionToolStripMenuItem.Name = "checkSessionToolStripMenuItem";
-            checkSessionToolStripMenuItem.Size = new Size(187, 22);
-            checkSessionToolStripMenuItem.Text = "Check session";
-            checkSessionToolStripMenuItem.Click += checkSessionToolStripMenuItem_Click;
-            // 
-            // openWebSiteToolStripMenuItem
-            // 
-            openWebSiteToolStripMenuItem.Name = "openWebSiteToolStripMenuItem";
-            openWebSiteToolStripMenuItem.Size = new Size(187, 22);
-            openWebSiteToolStripMenuItem.Text = "Open web site";
-            openWebSiteToolStripMenuItem.Click += openWebSiteToolStripMenuItem_Click;
-            // 
-            // traceFolderToolStripMenuItem
-            // 
-            traceFolderToolStripMenuItem.Name = "traceFolderToolStripMenuItem";
-            traceFolderToolStripMenuItem.Size = new Size(187, 22);
-            traceFolderToolStripMenuItem.Text = "Open trace folder";
-            traceFolderToolStripMenuItem.Click += traceFolderToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator3
-            // 
-            toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(184, 6);
-            // 
-            // networkToolStripMenuItem
-            // 
-            networkToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { vATSIMToolStripMenuItem, iVAOToolStripMenuItem });
-            networkToolStripMenuItem.Name = "networkToolStripMenuItem";
-            networkToolStripMenuItem.Size = new Size(187, 22);
-            networkToolStripMenuItem.Text = "Network";
-            // 
-            // vATSIMToolStripMenuItem
-            // 
-            vATSIMToolStripMenuItem.CheckOnClick = true;
-            vATSIMToolStripMenuItem.Name = "vATSIMToolStripMenuItem";
-            vATSIMToolStripMenuItem.Size = new Size(113, 22);
-            vATSIMToolStripMenuItem.Text = "VATSIM";
-            vATSIMToolStripMenuItem.Click += vATSIMToolStripMenuItem_Click;
-            // 
-            // iVAOToolStripMenuItem
-            // 
-            iVAOToolStripMenuItem.CheckOnClick = true;
-            iVAOToolStripMenuItem.Name = "iVAOToolStripMenuItem";
-            iVAOToolStripMenuItem.Size = new Size(113, 22);
-            iVAOToolStripMenuItem.Text = "IVAO";
-            iVAOToolStripMenuItem.Click += iVAOToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator4
-            // 
-            toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new Size(184, 6);
-            // 
             // tabControl1
             // 
             tabControl1.Dock = DockStyle.Fill;
-            tabControl1.Location = new Point(0, 0);
+            tabControl1.Location = new Point(0, 24);
             tabControl1.Margin = new Padding(0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(574, 807);
+            tabControl1.Size = new Size(574, 783);
             tabControl1.TabIndex = 7;
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, networkToolStripMenuItem1, linksToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(574, 24);
+            menuStrip1.TabIndex = 8;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { loginToolStripMenuItem1, logoutToolStripMenuItem1, checkSessionToolStripMenuItem1, toolStripSeparator6, screenshotToolStripMenuItem1, generateFlightReportToolStripMenuItem1, toolStripSeparator7, settingsToolStripMenuItem1, tracesFolderToolStripMenuItem });
+            fileToolStripMenuItem.ForeColor = Color.Black;
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.F;
+            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Text = "File";
+            // 
+            // loginToolStripMenuItem1
+            // 
+            loginToolStripMenuItem1.Name = "loginToolStripMenuItem1";
+            loginToolStripMenuItem1.Size = new Size(187, 22);
+            loginToolStripMenuItem1.Text = "Login";
+            loginToolStripMenuItem1.Click += loginToolStripMenuItem1_Click;
+            // 
+            // logoutToolStripMenuItem1
+            // 
+            logoutToolStripMenuItem1.Name = "logoutToolStripMenuItem1";
+            logoutToolStripMenuItem1.Size = new Size(187, 22);
+            logoutToolStripMenuItem1.Text = "Logout";
+            logoutToolStripMenuItem1.Click += logoutToolStripMenuItem1_Click;
+            // 
+            // checkSessionToolStripMenuItem1
+            // 
+            checkSessionToolStripMenuItem1.Name = "checkSessionToolStripMenuItem1";
+            checkSessionToolStripMenuItem1.Size = new Size(187, 22);
+            checkSessionToolStripMenuItem1.Text = "Check Session";
+            checkSessionToolStripMenuItem1.Click += checkSessionToolStripMenuItem1_Click;
+            // 
+            // toolStripSeparator6
+            // 
+            toolStripSeparator6.Name = "toolStripSeparator6";
+            toolStripSeparator6.Size = new Size(184, 6);
+            // 
+            // screenshotToolStripMenuItem1
+            // 
+            screenshotToolStripMenuItem1.Name = "screenshotToolStripMenuItem1";
+            screenshotToolStripMenuItem1.ShortcutKeys = Keys.F12;
+            screenshotToolStripMenuItem1.Size = new Size(187, 22);
+            screenshotToolStripMenuItem1.Text = "Screenshot";
+            screenshotToolStripMenuItem1.Click += screenshotToolStripMenuItem1_Click;
+            // 
+            // generateFlightReportToolStripMenuItem1
+            // 
+            generateFlightReportToolStripMenuItem1.Name = "generateFlightReportToolStripMenuItem1";
+            generateFlightReportToolStripMenuItem1.Size = new Size(187, 22);
+            generateFlightReportToolStripMenuItem1.Text = "Generate flight report";
+            generateFlightReportToolStripMenuItem1.Click += generateFlightReportToolStripMenuItem1_Click;
+            // 
+            // toolStripSeparator7
+            // 
+            toolStripSeparator7.Name = "toolStripSeparator7";
+            toolStripSeparator7.Size = new Size(184, 6);
+            // 
+            // settingsToolStripMenuItem1
+            // 
+            settingsToolStripMenuItem1.Name = "settingsToolStripMenuItem1";
+            settingsToolStripMenuItem1.Size = new Size(187, 22);
+            settingsToolStripMenuItem1.Text = "Settings";
+            settingsToolStripMenuItem1.Click += settingsToolStripMenuItem1_Click;
+            // 
+            // tracesFolderToolStripMenuItem
+            // 
+            tracesFolderToolStripMenuItem.Name = "tracesFolderToolStripMenuItem";
+            tracesFolderToolStripMenuItem.Size = new Size(187, 22);
+            tracesFolderToolStripMenuItem.Text = "Open traces folder";
+            tracesFolderToolStripMenuItem.Click += tracesFolderToolStripMenuItem_Click;
+            // 
+            // networkToolStripMenuItem1
+            // 
+            networkToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { vATSIMToolStripMenuItem1, iVAOToolStripMenuItem1 });
+            networkToolStripMenuItem1.ForeColor = Color.Black;
+            networkToolStripMenuItem1.Name = "networkToolStripMenuItem1";
+            networkToolStripMenuItem1.ShortcutKeys = Keys.Alt | Keys.N;
+            networkToolStripMenuItem1.Size = new Size(64, 20);
+            networkToolStripMenuItem1.Text = "Network";
+            // 
+            // vATSIMToolStripMenuItem1
+            // 
+            vATSIMToolStripMenuItem1.Checked = true;
+            vATSIMToolStripMenuItem1.CheckOnClick = true;
+            vATSIMToolStripMenuItem1.CheckState = CheckState.Checked;
+            vATSIMToolStripMenuItem1.Name = "vATSIMToolStripMenuItem1";
+            vATSIMToolStripMenuItem1.Size = new Size(113, 22);
+            vATSIMToolStripMenuItem1.Text = "VATSIM";
+            vATSIMToolStripMenuItem1.Click += vATSIMToolStripMenuItem1_Click;
+            // 
+            // iVAOToolStripMenuItem1
+            // 
+            iVAOToolStripMenuItem1.CheckOnClick = true;
+            iVAOToolStripMenuItem1.Name = "iVAOToolStripMenuItem1";
+            iVAOToolStripMenuItem1.Size = new Size(113, 22);
+            iVAOToolStripMenuItem1.Text = "IVAO";
+            iVAOToolStripMenuItem1.Click += iVAOToolStripMenuItem1_Click;
+            // 
+            // linksToolStripMenuItem
+            // 
+            linksToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openWebSiteToolStripMenuItem1, documentationToolStripMenuItem1 });
+            linksToolStripMenuItem.ForeColor = Color.Black;
+            linksToolStripMenuItem.Name = "linksToolStripMenuItem";
+            linksToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
+            linksToolStripMenuItem.Size = new Size(46, 20);
+            linksToolStripMenuItem.Text = "Links";
+            // 
+            // openWebSiteToolStripMenuItem1
+            // 
+            openWebSiteToolStripMenuItem1.Name = "openWebSiteToolStripMenuItem1";
+            openWebSiteToolStripMenuItem1.Size = new Size(157, 22);
+            openWebSiteToolStripMenuItem1.Text = "Open web site";
+            openWebSiteToolStripMenuItem1.Click += openWebSiteToolStripMenuItem1_Click;
+            // 
+            // documentationToolStripMenuItem1
+            // 
+            documentationToolStripMenuItem1.Name = "documentationToolStripMenuItem1";
+            documentationToolStripMenuItem1.Size = new Size(157, 22);
+            documentationToolStripMenuItem1.Text = "Documentation";
+            documentationToolStripMenuItem1.Click += documentationToolStripMenuItem1_Click;
             // 
             // Form1
             // 
@@ -246,12 +247,13 @@ namespace SimAddon
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
             ClientSize = new Size(574, 831);
-            ContextMenuStrip = contextMenuStrip1;
             Controls.Add(tabControl1);
             Controls.Add(statusStrip);
+            Controls.Add(menuStrip1);
             Font = new Font("Arial", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             ForeColor = Color.White;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MainMenuStrip = menuStrip1;
             Margin = new Padding(4, 5, 4, 5);
             MinimumSize = new Size(590, 870);
             Name = "Form1";
@@ -262,7 +264,8 @@ namespace SimAddon
             Resize += Form1_Resize;
             statusStrip.ResumeLayout(false);
             statusStrip.PerformLayout();
-            contextMenuStrip1.ResumeLayout(false);
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -273,28 +276,26 @@ namespace SimAddon
         private System.Windows.Forms.ToolStripStatusLabel lblConnectionStatus;
         private System.Windows.Forms.Timer timerMain;
         private System.Windows.Forms.Timer timerConnection;
-        private ContextMenuStrip contextMenuStrip1;
         private TabControl tabControl1;
         private ToolStripStatusLabel lblPluginStatus;
-        private ToolStripMenuItem alwaysOnTopToolStripMenuItem;
-        private ToolStripMenuItem autoHideToolStripMenuItem;
-        private ToolStripSeparator toolStripSeparator1;
-        private ToolStripMenuItem screenshotToolStripMenuItem;
-        private ToolStripSeparator toolStripSeparator2;
-        private ToolStripMenuItem openWebSiteToolStripMenuItem;
-        private ToolStripSeparator toolStripSeparator3;
         private ToolStripStatusLabel toolStripHeureZulu;
-        private ToolStripMenuItem traceFolderToolStripMenuItem;
-        private ToolStripMenuItem networkToolStripMenuItem;
-        private ToolStripMenuItem vATSIMToolStripMenuItem;
-        private ToolStripMenuItem iVAOToolStripMenuItem;
-        private ToolStripSeparator toolStripSeparator4;
-        private ToolStripMenuItem documentationToolStripMenuItem;
-        private ToolStripSeparator toolStripSeparator5;
-        private ToolStripMenuItem loginToolStripMenuItem;
-        private ToolStripMenuItem logoutToolStripMenuItem;
-        private ToolStripMenuItem checkSessionToolStripMenuItem;
-        private ToolStripMenuItem generateFlightReportToolStripMenuItem;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem loginToolStripMenuItem1;
+        private ToolStripMenuItem logoutToolStripMenuItem1;
+        private ToolStripMenuItem checkSessionToolStripMenuItem1;
+        private ToolStripMenuItem networkToolStripMenuItem1;
+        private ToolStripMenuItem linksToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator6;
+        private ToolStripMenuItem screenshotToolStripMenuItem1;
+        private ToolStripMenuItem generateFlightReportToolStripMenuItem1;
+        private ToolStripSeparator toolStripSeparator7;
+        private ToolStripMenuItem settingsToolStripMenuItem1;
+        private ToolStripMenuItem tracesFolderToolStripMenuItem;
+        private ToolStripMenuItem vATSIMToolStripMenuItem1;
+        private ToolStripMenuItem iVAOToolStripMenuItem1;
+        private ToolStripMenuItem openWebSiteToolStripMenuItem1;
+        private ToolStripMenuItem documentationToolStripMenuItem1;
     }
 }
 

@@ -120,7 +120,7 @@
             MinimizeBox = false;
             Name = "SettingsForm";
             SizeGripStyle = SizeGripStyle.Hide;
-            Text = "SettingsForm";
+            Text = "Simbrief settings";
             Load += SettingsForm_Load;
             ResumeLayout(false);
             PerformLayout();

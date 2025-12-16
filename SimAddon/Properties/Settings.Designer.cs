@@ -106,5 +106,17 @@ namespace SimAddon.Properties {
                 this["SessionToken"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ScreenshotsFolder {
+            get {
+                return ((string)(this["ScreenshotsFolder"]));
+            }
+            set {
+                this["ScreenshotsFolder"] = value;
+            }
+        }
     }
 }
