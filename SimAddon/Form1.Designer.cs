@@ -59,6 +59,7 @@ namespace SimAddon
             linksToolStripMenuItem = new ToolStripMenuItem();
             openWebSiteToolStripMenuItem1 = new ToolStripMenuItem();
             documentationToolStripMenuItem1 = new ToolStripMenuItem();
+            skyboundsAIToolStripMenuItem = new ToolStripMenuItem();
             statusStrip.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -220,7 +221,7 @@ namespace SimAddon
             // 
             // linksToolStripMenuItem
             // 
-            linksToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openWebSiteToolStripMenuItem1, documentationToolStripMenuItem1 });
+            linksToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openWebSiteToolStripMenuItem1, documentationToolStripMenuItem1, skyboundsAIToolStripMenuItem });
             linksToolStripMenuItem.ForeColor = Color.Black;
             linksToolStripMenuItem.Name = "linksToolStripMenuItem";
             linksToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
@@ -240,6 +241,13 @@ namespace SimAddon
             documentationToolStripMenuItem1.Size = new Size(157, 22);
             documentationToolStripMenuItem1.Text = "Documentation";
             documentationToolStripMenuItem1.Click += documentationToolStripMenuItem1_Click;
+            // 
+            // skyboundsAIToolStripMenuItem
+            // 
+            skyboundsAIToolStripMenuItem.Name = "skyboundsAIToolStripMenuItem";
+            skyboundsAIToolStripMenuItem.Size = new Size(157, 22);
+            skyboundsAIToolStripMenuItem.Text = "Skybounds AI";
+            skyboundsAIToolStripMenuItem.Click += skyboundsAIToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -296,6 +304,7 @@ namespace SimAddon
         private ToolStripMenuItem iVAOToolStripMenuItem1;
         private ToolStripMenuItem openWebSiteToolStripMenuItem1;
         private ToolStripMenuItem documentationToolStripMenuItem1;
+        private ToolStripMenuItem skyboundsAIToolStripMenuItem;
     }
 }
 

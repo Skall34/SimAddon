@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static SimAddonPlugin.ISimAddonPluginCtrl;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SimAddon
@@ -883,8 +884,9 @@ namespace SimAddon
             }
         }
 
-        private void generateFlightReportToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void GenerateReport(REPORTFORMAT format)
         {
+
             if (flightRecords == null)
             {
                 //show a message box saying there is no flight data to save
@@ -893,22 +895,24 @@ namespace SimAddon
                 Logger.WriteLine("No flight data to save.");
                 return;
             }
-            //loop through all plugins and send them a request to save their data
-            foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
-            {
-                try
-                {
-                    string report = plugin.getFlightReport();
-                    flightRecords[plugin.getName()] = report;
-                }
-                catch (Exception ex)
-                {
-                    Logger.WriteLine(plugin.getName() + " : " + ex.Message);
-                }
-            }
 
             //create a filename from the departure and arrival airport, and the current date/time
-            string filename = $"FlightRecord_{departureAirport}_{arrivalAirport}_{DateTime.UtcNow.ToString("yyyyMMdd_HHmm")}.md";
+            string filename = $"FlightRecord_{departureAirport}_{arrivalAirport}_{DateTime.UtcNow.ToString("yyyyMMdd_HHmm")}";
+            switch (format)
+            {
+                case REPORTFORMAT.MD:
+                    filename += ".md";
+                    break;
+                case REPORTFORMAT.HTML:
+                    filename += ".html";
+                    break;
+                case REPORTFORMAT.JSON:
+                    filename += ".json";
+                    break;
+                default:
+                    filename += ".html";
+                    break;
+            }
 
             //the file is saved in the users documents folder
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -941,40 +945,35 @@ namespace SimAddon
                 //save the flight record to the file
                 using (StreamWriter sw = new StreamWriter(filename))
                 {
-                    sw.WriteLine($"# Flight Record");
-                    sw.WriteLine($"**Date:** {DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss 'UTC'")}");
-                    sw.WriteLine();
-                    foreach (var record in flightRecords)
-                    {
-                        sw.WriteLine($"## Data from : {record.Key}");
-                        sw.WriteLine();
-                        sw.WriteLine(record.Value);
-                        sw.WriteLine();
-                    }
-                }
+                    //create a string title for the report
+                    string title = $"Flight Record from {departureAirport} to {arrivalAirport}";
 
-                Logger.WriteLine("Flight record saved to " + filename);
+                    //write the report header
+                    sw.WriteLine(ReportBuilder.GenerateReportHeader(title, format));
+                    //write each flight record
+                    sw.WriteLine(ReportBuilder.GenerateReport(plugsMgr.plugins, format));
 
-                //also save the list of screenshots taken during the flight
-                if (screenshots.Count > 0)
-                {
-                    //move the screenshots to the same folder as the flight record
-                    foreach (string screenshot in screenshots)
+
+                    Logger.WriteLine("Flight record saved to " + filename);
+
+                    //also save the list of screenshots taken during the flight
+                    if (screenshots.Count > 0)
                     {
-                        try
+                        //move the screenshots to the same folder as the flight record
+                        foreach (string screenshot in screenshots)
                         {
-                            string destFile = Path.Combine(documentsPath, Path.GetFileName(screenshot));
-                            File.Move(screenshot, destFile);
-                            Logger.WriteLine("Screenshot moved to " + destFile);
+                            try
+                            {
+                                string destFile = Path.Combine(documentsPath, Path.GetFileName(screenshot));
+                                File.Move(screenshot, destFile);
+                                Logger.WriteLine("Screenshot moved to " + destFile);
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.WriteLine("Error moving screenshot " + screenshot + " : " + ex.Message);
+                            }
                         }
-                        catch (Exception ex)
-                        {
-                            Logger.WriteLine("Error moving screenshot " + screenshot + " : " + ex.Message);
-                        }
-                    }
-                    //add the screenshots in the md file
-                    using (StreamWriter sw = new StreamWriter(filename, true))
-                    {
+                        //add the screenshots in the md file
                         sw.WriteLine($"## Photos taken during the flight");
                         sw.WriteLine();
                         foreach (string screenshot in screenshots)
@@ -988,86 +987,107 @@ namespace SimAddon
                             sw.WriteLine($"![{screenshotFile}]({screenshotFile})");
                             sw.WriteLine();
                         }
+                        Logger.WriteLine("Flight report updated with screenshots.");
+                        Plugin_OnShowMsgbox(this, $"Flight report and screenshots saved to {documentsPath}", "Flight Report Saved", MessageBoxButtons.OK);
                     }
-                    Logger.WriteLine("Flight report updated with screenshots.");
-                    Plugin_OnShowMsgbox(this, $"Flight report and screenshots saved to {documentsPath}", "Flight Report Saved", MessageBoxButtons.OK);
-                }
-                else
-                {
-                    Logger.WriteLine("No screenshots taken during the flight.");
-                }
-
-                //if there is a setting for screenshots folder, then copy the flight record there too
-                string screenshotsFolder = Properties.Settings.Default.ScreenshotsFolder;
-                if (!string.IsNullOrEmpty(screenshotsFolder))
-                {
-                    try
+                    else
                     {
-                        //make sure the folder exist
-                        if (Directory.Exists(screenshotsFolder))
+                        Logger.WriteLine("No screenshots taken during the flight.");
+                    }
+
+                    //if there is a setting for screenshots folder, then copy the flight record there too
+                    string screenshotsFolder = Properties.Settings.Default.ScreenshotsFolder;
+                    if (!string.IsNullOrEmpty(screenshotsFolder))
+                    {
+                        try
                         {
-                            //find all the files in the screenshots folder
-                            var files = Directory.EnumerateFiles(screenshotsFolder).ToList();
-                            //for each file, check if file was created during the flight
-                            foreach (string file in files)
+                            //make sure the folder exist
+                            if (Directory.Exists(screenshotsFolder))
                             {
-                                try
+                                //find all the files in the screenshots folder
+                                var files = Directory.EnumerateFiles(screenshotsFolder).ToList();
+                                //for each file, check if file was created during the flight
+                                foreach (string file in files)
                                 {
-                                    DateTime creationTime = File.GetCreationTime(file);
-                                    //if (creationTime >= flightStartTime && creationTime <= flightEndTime)
-                                    if (creationTime >= flightStartTime)
+                                    try
                                     {
-                                        //copy the file to the destination folder with retry logic
-                                        string destFile = Path.Combine(documentsPath, Path.GetFileName(file));
-                                        bool copySuccess = false;
-                                        int maxRetries = 3;
-
-                                        for (int retry = 0; retry < maxRetries && !copySuccess; retry++)
+                                        DateTime creationTime = File.GetCreationTime(file);
+                                        //if (creationTime >= flightStartTime && creationTime <= flightEndTime)
+                                        if (creationTime >= flightStartTime)
                                         {
-                                            try
+                                            //copy the file to the destination folder with retry logic
+                                            string destFile = Path.Combine(documentsPath, Path.GetFileName(file));
+                                            bool copySuccess = false;
+                                            int maxRetries = 3;
+
+                                            for (int retry = 0; retry < maxRetries && !copySuccess; retry++)
                                             {
-                                                if (retry > 0)
+                                                try
                                                 {
-                                                    // Wait a bit before retrying
-                                                    System.Threading.Thread.Sleep(500);
+                                                    if (retry > 0)
+                                                    {
+                                                        // Wait a bit before retrying
+                                                        System.Threading.Thread.Sleep(500);
+                                                    }
+
+                                                    File.Copy(file, destFile, true);
+                                                    copySuccess = true;
+                                                    Logger.WriteLine($"Screenshot copied from Steam folder : {destFile}");
+
+                                                    //and add a line in the md file
+                                                    try
+                                                    {
+                                                        string imeTag = ReportBuilder.GetImageTag(Path.GetFileName(destFile), format);
+                                                        sw.WriteLine(imeTag);
+                                                    }
+                                                    catch (Exception ex)
+                                                    {
+                                                        Logger.WriteLine($"Error adding screenshot to report: {ex.Message}");
+                                                    }
                                                 }
-
-                                                File.Copy(file, destFile, true);
-                                                copySuccess = true;
-                                                Logger.WriteLine($"Screenshot copied from Steam folder : {destFile}");
-
-                                                //and add a line in the md file
-                                                using (StreamWriter sw = new StreamWriter(filename, true))
+                                                catch (IOException ioEx) when (retry < maxRetries - 1)
                                                 {
-                                                    sw.WriteLine($"![{Path.GetFileName(destFile)}]({Path.GetFileName(destFile)})");
-                                                    sw.WriteLine();
+                                                    Logger.WriteLine($"Retry {retry + 1}/{maxRetries} for file {file}: {ioEx.Message}");
                                                 }
                                             }
-                                            catch (IOException ioEx) when (retry < maxRetries - 1)
-                                            {
-                                                Logger.WriteLine($"Retry {retry + 1}/{maxRetries} for file {file}: {ioEx.Message}");
-                                            }
-                                        }
 
-                                        if (!copySuccess)
-                                        {
-                                            Logger.WriteLine($"Failed to copy screenshot after {maxRetries} attempts: {file}");
+                                            if (!copySuccess)
+                                            {
+                                                Logger.WriteLine($"Failed to copy screenshot after {maxRetries} attempts: {file}");
+                                            }
                                         }
                                     }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Logger.WriteLine($"Error processing screenshot file {file}: {ex.Message}");
+                                    catch (Exception ex)
+                                    {
+                                        Logger.WriteLine($"Error processing screenshot file {file}: {ex.Message}");
+                                    }
                                 }
                             }
                         }
+                        catch (Exception ex)
+                        {
+                            Logger.WriteLine("Error copying screenshots from Steam folder : " + ex.Message);
+                        }
+
                     }
-                    catch (Exception ex)
+                    //write the report footer
+                    sw.WriteLine(ReportBuilder.GenerateReportFooter(format));
+
+                    //opne the destination folder in file explorer
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                     {
-                        Logger.WriteLine("Error copying screenshots from Steam folder : " + ex.Message);
-                    }
-                }              
+                        FileName = documentsPath,
+                        UseShellExecute = true, // This is necessary to open the URL in the default browser
+                        Verb = "open" // This is necessary to open the folder in the file explorer
+                    });
+                }
             }
+
+        }
+
+        private void generateFlightReportToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            GenerateReport(REPORTFORMAT.HTML);
         }
 
         private void settingsToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -1237,6 +1257,25 @@ namespace SimAddon
             {
                 Logger.WriteLine($"Error opening documentation web site: {ex.Message}");
                 Plugin_OnShowMsgbox(this, "Error", "Unable to open the documentation web site.", MessageBoxButtons.OK);
+            }
+        }
+
+        private void skyboundsAIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //https://skybound-chronicles-226172438126.us-west1.run.app/
+            try
+            {
+                string url = "https://skybound-chronicles-226172438126.us-west1.run.app/";
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true // This is necessary to open the URL in the default browser
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine($"Error opening Skybounds AI web site: {ex.Message}");
+                Plugin_OnShowMsgbox(this, "Error", "Unable to open the Skybounds AI web site.", MessageBoxButtons.OK);
             }
         }
     }

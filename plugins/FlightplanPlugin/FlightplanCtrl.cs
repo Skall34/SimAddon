@@ -1,7 +1,7 @@
-﻿using Microsoft.Web.WebView2.Core;
-using flightplan;
+﻿using flightplan;
 using FlightplanPlugin;
 using FlightplanPlugin.Properties;
+using Microsoft.Web.WebView2.Core;
 //using System.Text.Json;
 using Newtonsoft.Json;
 using SimAddonLogger;
@@ -10,10 +10,11 @@ using simbrief;
 using SimDataManager;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 using System.Xml.Serialization;
+using static SimAddonPlugin.ISimAddonPluginCtrl;
 using static SimDataManager.SiteConnection;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Text;
 
 namespace BushTripPlugin
 {
@@ -159,7 +160,7 @@ namespace BushTripPlugin
             //not used here
             //compute the expected range from the data using fluelflow, airspeed, current fuel
             double airSpeed = data.airSpeed; //in knots
-            double currentFuelKgs = data.currentFuel ; //in Kgs needs to be in pounds
+            double currentFuelKgs = data.currentFuel; //in Kgs needs to be in pounds
             double currentFuel = currentFuelKgs * 2.20462; //in pounds
             double averageFuelFlow = data.averageFuelFlow; //in pounds per hour
             double expectedRange = 0;
@@ -956,7 +957,7 @@ namespace BushTripPlugin
             }
         }
 
-        public string getFlightReport()
+        public string createMarkdownReport()
         {
             //generate markdown report of the current flightplan
             if (flightPlan != null)
@@ -977,6 +978,62 @@ namespace BushTripPlugin
             {
                 return "No flight plan loaded";
             }
+        }
+
+        public string createHTMLReport()
+        {
+            //generate HTML report of the current flightplan
+            if (flightPlan != null)
+            {
+                StringBuilder report = new StringBuilder();
+                report.AppendLine($"<h2>Flight Report for flight plan</h2>");
+                report.AppendLine($"<h3>Waypoints</h3>");
+                report.AppendLine("<ul>");
+                for (int i = 0; i < flightPlan.Item.Waypoints.Count(); i++)
+                {
+                    LittleNavmapFlightplanWaypoint? wp = flightPlan.Item.Waypoints[i];
+                    report.AppendLine($"<li>{wp.Ident} , {wp.Name} , Lat: {wp.Pos.Lat} , Lon: {wp.Pos.Lon}</li>");
+                }
+                report.AppendLine("</ul>");
+                return report.ToString();
+            }
+            else
+            {
+                return "<h2>No flight plan loaded</h2>";
+            }
+        }
+
+        public string createJSONReport()
+        {
+            if (flightPlan != null)
+            {
+                return JsonConvert.SerializeObject(flightPlan, Formatting.Indented);
+            }
+            else
+            {
+                return "{}";
+            }
+        }
+
+        public string getFlightReport(REPORTFORMAT format)
+        {
+            string report = string.Empty;
+            switch (format)
+            {
+                case REPORTFORMAT.MD:
+                    report = createMarkdownReport();
+                    break;
+                case REPORTFORMAT.HTML:
+                    report = createHTMLReport();
+                    break;
+                case REPORTFORMAT.JSON:
+                    report = createJSONReport();
+                    break;
+                default:
+                    report = "Unsupported report format";
+                    break;
+            }
+            return report;
         }
     }
 }

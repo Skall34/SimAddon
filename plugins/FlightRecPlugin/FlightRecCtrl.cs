@@ -18,6 +18,7 @@ using FSUIPC;
 using System.Net.Http;
 using System.Globalization;
 using Newtonsoft.Json;
+using static SimAddonPlugin.ISimAddonPluginCtrl;
 
 namespace FlightRecPlugin
 {
@@ -2232,20 +2233,35 @@ namespace FlightRecPlugin
             }
         }
 
-        public string getFlightReport()
+        public string getFlightReport(REPORTFORMAT format)
         {
-            string report = "";
+            string report = string.Empty;
             Flight lastFlight = localFlightBook.GetLastFLight();
             if (lastFlight != null)
             {
                 //create a flight report in markdown format
-                report = lastFlight.GenerateMarkdownReport();
+                switch(format)
+                {
+                    case REPORTFORMAT.MD:
+                        report = lastFlight.GenerateMarkdownReport();
+                        break;
+                    case REPORTFORMAT.JSON:
+                        //return a json structure
+                        report = lastFlight.GenerateJSONReport();
+                        break;
+                    case REPORTFORMAT.HTML:
+                        report = lastFlight.GenerateHTMLReport();
+                        break;
+                    default:
+                        report = "{ \"error\": \"Unknown format requested\" }";
+                        break;
+                }
                 return report;
             }
             else
             {
                 //return a basic json structure with an error message
-                return JsonConvert.SerializeObject(new { error = "No flight found" }, Formatting.Indented);
+                return "<H2>No flight found !</H2>";
             }
         }
     }

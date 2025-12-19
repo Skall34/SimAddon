@@ -37,6 +37,13 @@ namespace SimAddonPlugin
             COMPACT
         }
 
+        enum REPORTFORMAT
+        {
+            MD,
+            HTML,
+            JSON
+        }
+
         void SetExecutionFolder(string path);
 
         void SetWindowMode(WindowMode mode);
@@ -55,7 +62,7 @@ namespace SimAddonPlugin
         void FormClosing(object sender, FormClosingEventArgs e);
 
         //each plugin may provide a flight report string, in json format
-        string getFlightReport();
+        string getFlightReport(REPORTFORMAT format);
 
         //events
         public delegate void UpdateStatusHandler(object sender, string statusMessage);

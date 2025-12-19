@@ -3,6 +3,7 @@ using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
 using System.Text.Json;
+using static SimAddonPlugin.ISimAddonPluginCtrl;
 
 namespace ChartFoxPlugin
 {
@@ -160,7 +161,7 @@ namespace ChartFoxPlugin
             }
         }
 
-        public string getFlightReport()
+        public string getFlightReport(REPORTFORMAT format)
         {
             throw new NotImplementedException();
         }

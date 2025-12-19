@@ -2,6 +2,7 @@
 using SimDataManager;
 using System.Drawing.Text;
 using System.Reflection;
+using static SimAddonPlugin.ISimAddonPluginCtrl;
 
 namespace CommPlugin
 {
@@ -226,7 +227,7 @@ namespace CommPlugin
 
         }
 
-        public string getFlightReport()
+        public string getFlightReport(REPORTFORMAT format)
         {
             throw new NotImplementedException();
         }

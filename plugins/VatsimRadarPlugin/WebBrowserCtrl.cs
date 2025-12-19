@@ -3,6 +3,7 @@ using SimAddonLogger;
 using SimAddonPlugin;
 using SimDataManager;
 using System.Text.Json;
+using static SimAddonPlugin.ISimAddonPluginCtrl;
 
 namespace ATCPlugin
 {
@@ -232,7 +233,7 @@ namespace ATCPlugin
             }
         }
 
-        public string getFlightReport()
+        public string getFlightReport(REPORTFORMAT format)
         {
             throw new NotImplementedException();
         }

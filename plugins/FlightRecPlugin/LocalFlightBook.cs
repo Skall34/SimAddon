@@ -29,6 +29,31 @@ namespace FlightRecPlugin
         public List<FLightParamsSample> FlightParamsData { get; set; }
         public string SimPlane { get; set; }
 
+        public string GenerateHTMLReport()
+        {
+            StringBuilder report = new StringBuilder();
+            report.AppendLine($"<h2>Flight Report for {immatriculation}</h2>");
+            report.AppendLine("<br>");
+            
+            // Sim Plane
+            report.AppendLine($"<strong>Aircraft:</strong> {SimPlane}<br><br>");
+            // Departure and Arrival
+            report.AppendLine($"<strong>Departure:</strong> {departureAirportName} ({departureICAO}) at {departureTime.ToString("g", CultureInfo.InvariantCulture)}<br><br>");
+            report.AppendLine($"<strong>Arrival:</strong> {arrivalAirportName} ({arrivalICAO}) at {arrivalTime.ToString("g", CultureInfo.InvariantCulture)}<br><br>");
+            report.AppendLine($"<strong>Departure Fuel:</strong> {departureFuel} Kg<br><br>");
+            report.AppendLine($"<strong>Arrival Fuel:</strong> {arrivalFuel} Kg<br><br>");
+            // Payload & Mission
+            report.AppendLine($"<strong>Payload:</strong> {payload} Kg<br><br>");
+            report.AppendLine($"<strong>Mission:</strong> {mission}<br><br>");
+            report.AppendLine($"<strong>Flight Rating:</strong> {noteDuVol}/10<br><br>");
+            report.AppendLine("<h3>Comments</h3>");
+            report.AppendLine($"{commentaire}<br><br>");
+            if (FlightParamsData != null && FlightParamsData.Count > 0)
+            {
+                report.AppendLine(FlightParamsRecorder.toHTMLString(FlightParamsData));
+            }
+            return report.ToString();
+        }
         public string GenerateMarkdownReport()
         {
             StringBuilder report = new StringBuilder();
@@ -65,6 +90,11 @@ namespace FlightRecPlugin
             }
 
             return report.ToString();
+        }
+
+        public string GenerateJSONReport()
+        {
+            return System.Text.Json.JsonSerializer.Serialize(this, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
         }
     }
 

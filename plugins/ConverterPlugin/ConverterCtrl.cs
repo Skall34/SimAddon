@@ -1,5 +1,6 @@
 ﻿using SimAddonPlugin;
 using SimDataManager;
+using static SimAddonPlugin.ISimAddonPluginCtrl;
 
 namespace Calculator
 {
@@ -254,7 +255,7 @@ namespace Calculator
         {
         }
 
-        public string getFlightReport()
+        public string getFlightReport(REPORTFORMAT format)
         {
             throw new NotImplementedException();
         }

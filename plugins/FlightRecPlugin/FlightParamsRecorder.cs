@@ -207,5 +207,26 @@ namespace FlightRecPlugin
 
             return mdContent.ToString();
         }
+
+        internal static string toHTMLString(List<FLightParamsSample> flightParamsData)
+        {
+            //compute some max values
+            double maxAlt = flightParamsData.Max(f => f.Alt);
+            double maxSpeed = flightParamsData.Max(f => f.Speed);
+            double maxRPMs = flightParamsData.Max(f => f.RPMs);
+            double averadgeFuelFlow = flightParamsData.Average(f => f.FuelFlow);
+            double averageManifold = flightParamsData.Average(f => f.Manifold);
+            StringBuilder htmlContent = new StringBuilder();
+            htmlContent.AppendLine("<h3>Flight Parameters Recording</h3>");
+            htmlContent.AppendLine("<h4>Summary Statistics</h4>");
+            htmlContent.AppendLine("<ul>");
+            htmlContent.AppendLine($"<li><strong>Maximum Altitude:</strong> {maxAlt:F2} ft</li>");
+            htmlContent.AppendLine($"<li><strong>Maximum Speed:</strong> {maxSpeed:F2} knots</li>");
+            htmlContent.AppendLine($"<li><strong>Maximum RPMs:</strong> {maxRPMs:F2} RPM</li>");
+            htmlContent.AppendLine($"<li><strong>Average Fuel Flow:</strong> {averadgeFuelFlow:F2} gallons/hour</li>");
+            htmlContent.AppendLine($"<li><strong>Average Manifold Pressure:</strong> {averageManifold:F2} inHg</li>");
+            htmlContent.AppendLine("</ul>");
+            return htmlContent.ToString();
+        }
     }
 }

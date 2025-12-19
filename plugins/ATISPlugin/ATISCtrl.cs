@@ -4,6 +4,7 @@ using SimAddonPlugin;
 using SimDataManager;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using static SimAddonPlugin.ISimAddonPluginCtrl;
 
 namespace ATISPlugin
 {
@@ -539,7 +540,7 @@ namespace ATISPlugin
             }
         }
 
-        public string getFlightReport()
+        public string getFlightReport(REPORTFORMAT format)
         {
             throw new NotImplementedException();
         }

@@ -2,8 +2,10 @@
 using SimAddonPlugin;
 using SimDataManager;
 using System.Drawing.Text;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using static MeteoPlugin.Meteo;
+using static SimAddonPlugin.ISimAddonPluginCtrl;
 
 namespace MeteoPlugin
 {
@@ -489,7 +491,7 @@ namespace MeteoPlugin
             }
         }
 
-        public string getFlightReport()
+        public string createMArkdownReport()
         {
             //build a meteo report in markdown format
             string report = "# METAR Report\n\n";
@@ -527,6 +529,82 @@ namespace MeteoPlugin
                 {
                     Logger.WriteLine("Error decoding arrival METAR for report " + ex.Message);
                 }
+            }
+            return report;
+        }
+
+        public string createHTMLReport()
+        {
+            //build a meteo report in HTML format
+            string report = "<h2>METAR Report</h2>\n";
+            report += "<h3>Departure Airport: " + departureICAO + "</h3>\n";
+            report += "<h4>Raw METAR:</h4>\n";
+            report += "<pre>" + departureRawMETAR + "</pre>\n";
+            METARData departureMetarData = decodeMetar(departureRawMETAR);
+            if (departureMetarData != null)
+            {
+                try
+                {
+                    string decodedDepartureMETAR = decodeMetar(departureRawMETAR).toString();
+                    report += "<h4>Decoded METAR:</h4>\n";
+                    report += "<pre>" + decodedDepartureMETAR + "</pre>\n";
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("Error decoding departure METAR for report " + ex.Message);
+                }
+            }
+            report += "<h3>Arrival Airport: " + arrivalICAO + "</h3>\n";
+            report += "<h4>Raw METAR:</h4>\n";
+            report += "<pre>" + arrivalRawMETAR + "</pre>\n";
+            METARData arrivalMetarData = decodeMetar(arrivalRawMETAR);
+            if (arrivalMetarData != null)
+            {
+                try
+                {
+                    string decodedArrivalMETAR = decodeMetar(arrivalRawMETAR).toString();
+                    report += "<h4>Decoded METAR:</h4>\n";
+                    report += "<pre>" + decodedArrivalMETAR + "</pre>\n";
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("Error decoding arrival METAR for report " + ex.Message);
+                }
+            }
+            return report;
+        }
+
+        public string createJSONReport()
+        {
+            string report = string.Empty;
+            //create a json object containing the metar data for departure and arrival
+            report = "{\n";
+
+            METARData departureMetarData = decodeMetar(departureRawMETAR);
+            METARData arrivalMetarData = decodeMetar(arrivalRawMETAR);
+            report += "\"departure\": " + System.Text.Json.JsonSerializer.Serialize(departureMetarData, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }) + ",\n";
+            report += "\"arrival\": " + System.Text.Json.JsonSerializer.Serialize(arrivalMetarData, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }) + "\n";
+            report += "}\n";
+            return report;
+        }
+
+        public string getFlightReport(REPORTFORMAT format)
+        {
+            string report = string.Empty;
+            switch (format)
+            {
+                case REPORTFORMAT.MD:
+                    report = createMArkdownReport();
+                    break;
+                case REPORTFORMAT.JSON:
+                    report = createJSONReport();
+                    break;
+                case REPORTFORMAT.HTML:
+                        report = createHTMLReport();
+                    break;
+                default:
+                    report = "{ \"error\": \"Unknown format requested\" }";
+                    break;
             }
             return report;
         }
