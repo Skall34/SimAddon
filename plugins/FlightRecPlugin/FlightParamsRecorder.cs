@@ -45,7 +45,7 @@ namespace FlightRecPlugin
              Heading = param.position.HeadingDegreesTrue;
              Bank = param.position.BankDegrees;
              Pitch = param.position.PitchDegrees;
-             FuelFlow = param.averageFuelFlow;
+             FuelFlow = param.totalFuelFlow;
              Manifold = param.engine1ManifoldPressure;
              RPMs = param.engine1RPM;
             

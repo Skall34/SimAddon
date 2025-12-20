@@ -80,7 +80,7 @@ namespace SimAddon
         private void WriteWindowTitle()
         {
             // Get the version information of your application
-            Assembly assembly = Assembly.GetEntryAssembly();
+            Assembly? assembly = Assembly.GetEntryAssembly();
             if (null != assembly)
             {
                 AssemblyName assemblyName = assembly.GetName();
@@ -263,7 +263,7 @@ namespace SimAddon
                 }
 
                 //remplis la structure currentStatus avec les données venant du simu
-                currentStatus.timestamp = DateTime.UtcNow;
+                currentStatus.timestamp = _simData.GetSimDateTimeUTC();
                 currentStatus.magVariation = _simData.GetMagVariation();
                 currentStatus.readyToFly = _simData.GetReadyToFly();
                 currentStatus.airSpeed = _simData.GetAirSpeed();
@@ -274,7 +274,7 @@ namespace SimAddon
                 currentStatus.gearIsUp = _simData.GetIsGearUp();
                 currentStatus.gearRetractableFlag = _simData.GetGearRetractableFlag();
                 currentStatus.isAtLeastOneEngineFiring = _simData.IsAtLeastOneEngineFiring();
-                currentStatus.averageFuelFlow = _simData.GetFuelFlow();
+                currentStatus.totalFuelFlow = _simData.GetFuelFlow();
                 currentStatus.engine1ManifoldPressure = _simData.GetEngine1ManifoldPressure();
                 currentStatus.engine1RPM = _simData.GetEngine1RPM();
 
@@ -1265,7 +1265,11 @@ namespace SimAddon
             //https://skybound-chronicles-226172438126.us-west1.run.app/
             try
             {
-                string url = "https://skybound-chronicles-226172438126.us-west1.run.app/";
+                //url using gemini 2.5 flash lite
+                string url = "https://skybound-chronicles-2-5-flash-lite-226172438126.us-west1.run.app/";
+                  //url using gemini 3 pro
+                  //string url = "https://skybound-chronicles-226172438126.us-west1.run.app/";
+
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = url,

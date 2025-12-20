@@ -194,8 +194,8 @@ namespace FlightRecPlugin
             data = _data;
             pluginCtrl = parent;
 
-            dtDeparture.Value = DateTime.Now;
-            dtArrival.Value = DateTime.Now;
+            dtDeparture.Value = data.GetSimDateTimeUTC();
+            dtArrival.Value = data.GetSimDateTimeUTC();
             valNote.Value = 8;
             List<string> missions = new List<string>();
 

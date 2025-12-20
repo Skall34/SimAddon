@@ -162,7 +162,7 @@ namespace BushTripPlugin
             double airSpeed = data.airSpeed; //in knots
             double currentFuelKgs = data.currentFuel; //in Kgs needs to be in pounds
             double currentFuel = currentFuelKgs * 2.20462; //in pounds
-            double averageFuelFlow = data.averageFuelFlow; //in pounds per hour
+            double averageFuelFlow = data.totalFuelFlow; //in pounds per hour
             double expectedRange = 0;
             if (averageFuelFlow > 0)
             {

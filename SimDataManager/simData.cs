@@ -97,6 +97,11 @@ namespace SimDataManager
         // DECLARE OFFSETS YOU WANT TO USE HERE
         // =====================================
         //https://www.projectmagenta.com/all-fsuipc-offsets/
+        private readonly Offset<byte> HourUTC= new Offset<byte>(0x023B);
+        private readonly Offset<byte> MinUTC = new Offset<byte>(0x023C);
+        private readonly Offset<byte> SecUTC= new Offset<byte>(0x23A);
+        private readonly Offset<byte> DayOfYear = new Offset<byte>(0x23E);
+        private readonly Offset<short> Year = new Offset<short>(0x240);
 
         private readonly Offset<string> startSituation = new Offset<string>(0x0024, 256);
         private readonly Offset<short> pauseIndicator = new Offset<short>(0x0264);
@@ -305,11 +310,12 @@ namespace SimDataManager
         public void ApplyReservation(string callsign, Reservation reservation)
         {
              ReservationMgr.ApplyReservation(callsign, reservation, BASERURL,sessionToken);
+            _ = ReservationMgr.ApplyReservation(callsign, reservation, BASERURL, sessionToken);
         }
 
         public void CompleteReservation(string callsign, Reservation reservation)
         {
-            ReservationMgr.CompleteReservation(callsign, reservation, BASERURL,sessionToken);
+            _ = ReservationMgr.CompleteReservation(callsign, reservation, BASERURL,sessionToken);
             //mark the plane as not reserved 
             Avion avion = avions.Find(a => a.Immat == reservation.Immat);
             if (avion != null)
@@ -346,7 +352,7 @@ namespace SimDataManager
         }
 
         private static bool updateInProgress = false;
-        public async void UpdatePlaneFromSheet()
+        public void UpdatePlaneFromSheet()
         {
             if (updateInProgress)
             {
@@ -501,6 +507,35 @@ namespace SimDataManager
                 _isConnectedToSim=false;
                 throw;
             }
+        }
+
+        public DateTime GetSimDateTimeUTC()
+        {
+            DateTime result;
+            if (isConnectedToSim == false)
+            {
+                result = DateTime.UtcNow;
+            }
+            else
+            {
+                //FSUIPC donne l'heure en UTC
+                int year = Year.Value;
+                int dayOfYear = DayOfYear.Value;
+                int hour = HourUTC.Value;
+                int minute = MinUTC.Value;
+                int second = SecUTC.Value;
+                try
+                {
+                    result = new DateTime(year, 1, 1, hour, minute, second, DateTimeKind.Utc);
+                    result = result.AddDays(dayOfYear - 1);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    Logger.WriteLine($"GetSimDateTimeUTC: Invalid date/time values - Year: {year}, DayOfYear: {dayOfYear}, Hour: {hour}, Minute: {minute}, Second: {second}. Exception: {ex.Message}");
+                    result = DateTime.UtcNow;
+                }
+            }
+            return result;
         }
 
         public string GetStartSituation()

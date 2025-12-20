@@ -193,7 +193,14 @@ namespace ATISPlugin
                 // Extraire la section METAR du contenu HTML (selon le format attendu)
                 string RawIVAOData = responseBody.TrimEnd();
                 ATISInfo data = JsonConvert.DeserializeObject<ATISInfo>(RawIVAOData);
-                result = data.lines.ToList();
+                if (data.lines == null)
+                {
+                    result = new List<string>();
+                }
+                else
+                {
+                    result = data.lines.ToList();
+                }
             }
             catch (Exception ex)
             {

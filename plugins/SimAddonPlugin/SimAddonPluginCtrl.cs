@@ -96,7 +96,7 @@ namespace SimAddonPlugin
         public bool gearIsUp { get; set; }
         public uint gearRetractableFlag { get; set; }
         public bool isAtLeastOneEngineFiring { get; set; }
-        public double averageFuelFlow { get; set; }
+        public double totalFuelFlow { get; set; }
         public int engine1ManifoldPressure { get; set; }
         public int engine1RPM { get; set; }
         public double verticalSpeed { get; set; }
@@ -126,7 +126,7 @@ namespace SimAddonPlugin
 
         public situation()
         {
-            timestamp = DateTime.Now;
+            timestamp = DateTime.UnixEpoch;
         }
 
         public situation(situation data)
@@ -142,7 +142,7 @@ namespace SimAddonPlugin
             gearIsUp = data.gearIsUp;
             gearRetractableFlag = data.gearRetractableFlag;
             isAtLeastOneEngineFiring = data.isAtLeastOneEngineFiring;
-            averageFuelFlow = data.averageFuelFlow;
+            totalFuelFlow = data.totalFuelFlow;
             verticalSpeed = data.verticalSpeed;
             offRunwayCrashed = data.offRunwayCrashed;
             onGround = data.onGround;

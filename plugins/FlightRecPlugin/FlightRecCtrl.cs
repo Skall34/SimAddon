@@ -370,7 +370,7 @@ namespace FlightRecPlugin
             //we just took off ! read the plane weight
             flightPerfs.takeOffWeight = currentFlightStatus.planeWeight;
             // on veut afficher la date
-            _airborn = DateTime.Now;
+            _airborn = data.GetSimDateTimeUTC();  //DateTime.Now;
             flightPerfs.takeOffTime = _airborn;
             if (lbTimeAirborn.Text == "--:--")
             {
@@ -421,7 +421,7 @@ namespace FlightRecPlugin
             flightPerfs.landingVSpeed = currentFlightStatus.verticalSpeed;
             flightPerfs.landingWeight = currentFlightStatus.planeWeight;
 
-            _notAirborn = DateTime.Now;
+            _notAirborn = data.GetSimDateTimeUTC();  //DateTime.Now;
             flightPerfs.landingTime = _notAirborn;
 
             if (lbTimeOnGround.Text == "--:--")
@@ -440,7 +440,8 @@ namespace FlightRecPlugin
                 if (!onGround)
                 {
                     //we were airborn, and now we are on ground.
-                    if (DateTime.Now - _airborn >= TimeSpan.FromSeconds(30))
+                    DateTime now = data.GetSimDateTimeUTC();  //DateTime.Now;
+                    if (now - _airborn >= TimeSpan.FromSeconds(30))
                     {
                         Logger.WriteLine("Landing detected !");
                         UpdateStatus("On ground");
@@ -968,11 +969,12 @@ namespace FlightRecPlugin
                     {
                         if (currentFlightStatus.counter % Properties.Settings.Default.GPSRecordingInterval == 0)
                         {
+                            DateTime timestamp = data.GetSimDateTimeUTC();  //DateTime.Now;
                             GPSRecorder.AddPoint(
                             _currentPosition.Location.Latitude,
                             _currentPosition.Location.Longitude,
                             _currentPosition.Altitude,
-                            DateTime.Now);
+                            timestamp);
                         }
                     }
 
@@ -1137,7 +1139,7 @@ namespace FlightRecPlugin
             }
 
             _startFuel = data.GetFuelWeight();
-            _startTime = DateTime.Now;
+            _startTime = data.GetSimDateTimeUTC();  //DateTime.Now;
             this.lbStartTime.Text = _startTime.ToShortTimeString();
             //0.00 => only keep 2 decimals for the fuel
 
@@ -1184,8 +1186,8 @@ namespace FlightRecPlugin
 
             //store the end of flight fuel value
             _endFuel = _currentFuel;
-
-            _endTime = DateTime.Now - pauseTime;
+            DateTime now = data.GetSimDateTimeUTC();  //DateTime.Now;
+            _endTime = now;
 
             this.lbEndTime.Text = _endTime.ToShortTimeString();
             //0.00 => only keep 2 decimals for the fuel
