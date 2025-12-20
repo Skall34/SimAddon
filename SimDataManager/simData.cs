@@ -309,7 +309,6 @@ namespace SimDataManager
 
         public void ApplyReservation(string callsign, Reservation reservation)
         {
-             ReservationMgr.ApplyReservation(callsign, reservation, BASERURL,sessionToken);
             _ = ReservationMgr.ApplyReservation(callsign, reservation, BASERURL, sessionToken);
         }
 
