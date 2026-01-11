@@ -1266,9 +1266,9 @@ namespace SimAddon
             try
             {
                 //url using gemini 2.5 flash lite
-                string url = "https://skybound-chronicles-2-5-flash-lite-226172438126.us-west1.run.app/";
+                //string url = "https://skybound-chronicles-2-5-flash-lite-226172438126.us-west1.run.app/";
                   //url using gemini 3 pro
-                  //string url = "https://skybound-chronicles-226172438126.us-west1.run.app/";
+                 string url = "https://skybound-chronicles-226172438126.us-west1.run.app/";
 
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                 {
