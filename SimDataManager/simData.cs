@@ -429,7 +429,12 @@ namespace SimDataManager
 
         public async Task<(bool,string)> SendFlightDataToPhpAsync(Dictionary<string, string> flightData)
         {
-            
+            if (sessionToken == string.Empty)
+            {
+                Logger.WriteLine("SendFlightDataToPhpAsync: No valid session token, cannot send flight data.");
+                return (false,"No valid session found.\n Please connect to the site (Menu file->login), and retry");
+            }
+
             string phpUrl = BASERURL + "/api/api_import_vol_direct.php";
 
             Dictionary<string, string> dataToSend = new Dictionary<string, string>(flightData);
@@ -451,7 +456,6 @@ namespace SimDataManager
 
                 if (!response.IsSuccessStatusCode)
                 {
-
                     // Affiche le détail dans le popup
                     return (false,responseData.message);
                 }

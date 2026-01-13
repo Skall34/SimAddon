@@ -362,6 +362,12 @@ namespace FlightRecPlugin
                     btnSave.Enabled = true;
                     this.Close();
                 }
+                else
+                {
+                    string message = "Error sending flight to server:\n" + returnMessage;
+                    message+= "\n\nPlease check your data, connection to site and try again.";
+                    pluginCtrl.ShowMsgBox(message, "Error", MessageBoxButtons.OK);
+                }
             }
             else
             {
