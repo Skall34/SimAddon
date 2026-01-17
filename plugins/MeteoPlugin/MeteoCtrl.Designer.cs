@@ -112,12 +112,12 @@ namespace MeteoPlugin
             // lblDecodedMETAR
             // 
             lblDecodedMETAR.AutoSize = true;
-            lblDecodedMETAR.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDecodedMETAR.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblDecodedMETAR.ForeColor = Color.Black;
             lblDecodedMETAR.Location = new Point(10, 10);
             lblDecodedMETAR.Margin = new Padding(10);
             lblDecodedMETAR.Name = "lblDecodedMETAR";
-            lblDecodedMETAR.Size = new Size(19, 21);
+            lblDecodedMETAR.Size = new Size(18, 19);
             lblDecodedMETAR.TabIndex = 12;
             lblDecodedMETAR.Text = "...";
             // 
@@ -181,7 +181,7 @@ namespace MeteoPlugin
             panel1.BorderStyle = BorderStyle.Fixed3D;
             panel1.Controls.Add(lblDecodedMETAR);
             panel1.Dock = DockStyle.Fill;
-            panel1.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            panel1.Font = new Font("Arial", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             panel1.Location = new Point(12, 156);
             panel1.Margin = new Padding(10, 3, 10, 3);
             panel1.Name = "panel1";
