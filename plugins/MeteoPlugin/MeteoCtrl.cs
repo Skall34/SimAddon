@@ -264,7 +264,7 @@ namespace MeteoPlugin
         private void decodeAndDisplayMetar(string rawMetarText)
         {
             lblDecodedMETAR.Text = string.Empty;
-            tbMETAR.Text = rawMetarText;
+            //tbMETAR.Text = rawMetarText;
             try
             {
                 //decode into a logical structure
@@ -318,6 +318,7 @@ namespace MeteoPlugin
             }
             //clear airport infos.
             string rawMetarText = await getRawMetarText(searchItem);
+            tbMETAR.Text = rawMetarText;
             decodeAndDisplayMetar(rawMetarText);
             displayAirportInfo(searchItem);
 
@@ -445,6 +446,7 @@ namespace MeteoPlugin
                         departureICAO = icao;
                         cbICAO.Text = icao;
                         string rawMetarText = await getRawMetarText(cbICAO.Text);
+                        tbMETAR.Text = rawMetarText;
                         decodeAndDisplayMetar(rawMetarText);
                         displayAirportInfo(cbICAO.Text);
                         departureRawMETAR = rawMetarText;
@@ -600,13 +602,29 @@ namespace MeteoPlugin
                     report = createJSONReport();
                     break;
                 case REPORTFORMAT.HTML:
-                        report = createHTMLReport();
+                    report = createHTMLReport();
                     break;
                 default:
                     report = "{ \"error\": \"Unknown format requested\" }";
                     break;
             }
             return report;
+        }
+
+        private void tbMETAR_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void tbMETAR_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                
+                decodeAndDisplayMetar(tbMETAR.Text);
+                //do not send the return char to the textbox
+                e.Handled = true;
+
+            }
         }
     }
 }

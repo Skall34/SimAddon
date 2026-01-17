@@ -86,14 +86,15 @@ namespace MeteoPlugin
             // tbMETAR
             // 
             tbMETAR.Dock = DockStyle.Fill;
-            tbMETAR.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbMETAR.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tbMETAR.Location = new Point(12, 104);
             tbMETAR.Margin = new Padding(10, 3, 10, 3);
             tbMETAR.Multiline = true;
             tbMETAR.Name = "tbMETAR";
-            tbMETAR.ReadOnly = true;
             tbMETAR.Size = new Size(701, 44);
             tbMETAR.TabIndex = 7;
+            tbMETAR.TextChanged += tbMETAR_TextChanged;
+            tbMETAR.KeyPress += tbMETAR_KeyPress;
             // 
             // pictureBox1
             // 
@@ -173,6 +174,7 @@ namespace MeteoPlugin
             // 
             // panel1
             // 
+            panel1.AutoScroll = true;
             panel1.AutoSize = true;
             panel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             panel1.BackColor = Color.LightGray;

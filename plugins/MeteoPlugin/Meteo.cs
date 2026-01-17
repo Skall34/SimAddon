@@ -277,23 +277,30 @@ namespace MeteoPlugin
                 {
                     _category = category;
                     string[] subparts = METARPart.Split('/');
-                    if (subparts.Length == 3)
+                    if (subparts.Length >= 2)
                     {
                         Runway = subparts[0].Substring(1);
-
+                        string visualRangePart = subparts[1];
                         Trend = TrendValue.NO_CHANGE;
-                        if (subparts[2] == "U")
+                        if (visualRangePart.EndsWith("U"))
                         {
                             Trend = TrendValue.UPWARD;
+                            //remove U for further processing
+                            visualRangePart = visualRangePart.Substring(0, visualRangePart.Length - 1);
                         }
-                        if (subparts[2] == "D")
+                        if (visualRangePart.EndsWith("D"))
                         {
                             Trend = TrendValue.DOWNWARD;
+                            //remove D for further processing
+                            visualRangePart = visualRangePart.Substring(0, visualRangePart.Length - 1);
                         }
 
-                        string[] distanceItems = subparts[1].Split("V");
-                        Regex r = new Regex("^(?<qualifier>^P?M?)(?<distance>\\d{3,4}FT)");
-                        Match result = r.Match(subparts[0]);
+                        string[] distanceItems = visualRangePart.Split("V");
+                        //the distance part may have FT at the end, or not.
+
+                        //Regex r = new Regex("^(?<qualifier>^P?M?)(?<distance>\\d{3,4}FT)");
+                        Regex r = new Regex("^(?<qualifier>^P?M?)(?<distance>\\d{3,4})(FT)?$");
+                        Match result = r.Match(visualRangePart);
                         if (result.Success)
                         {
                             DistanceQualifier = result.Groups["qualifier"].Value;
@@ -318,7 +325,7 @@ namespace MeteoPlugin
                 public override string ToString()
                 {
                     string result = _category;
-                    result += string.Format(" for {0}, distance {1}FT");
+                    result += string.Format(" for {0} : distance {1}FT",Runway,Distance);
                     if (Trend == TrendValue.UPWARD)
                     {
                         result += " upward";
@@ -579,10 +586,20 @@ namespace MeteoPlugin
                             Match result = r.Match(METARPart);
                             if (result.Success)
                             {
-                                Amount = result.Groups["amount"].Value;
-                                Level = 100 * int.Parse(result.Groups["level"].Value);
-                                cloud = result.Groups["cloud"].Value;
-
+                                //value was parsed correctly
+                                try
+                                {
+                                    Amount = result.Groups["amount"].Value;
+                                    Level = 100 * int.Parse(result.Groups["level"].Value);
+                                    cloud = result.Groups["cloud"].Value;
+                                }
+                                catch (Exception ex)
+                                {
+                                    //however, no values could be extracted
+                                    Amount = "N/A";
+                                    Level = 0;
+                                    cloud = "N/A";
+                                }
                             }
                             else
                             {
@@ -895,24 +912,34 @@ namespace MeteoPlugin
                             //can happen if there is no wind variation
                         }
 
-                        try
+                        bool VisibilityDone = false;
+                        while (!VisibilityDone)
                         {
-                            Visibility = new METARVisibility("Visibility", parts[index]);
-                            items.Add(Visibility);
-                            index++;
-                        }
-                        catch (Exception)
-                        {
+                            try
+                            {
+                                Visibility = new METARVisibility("Visibility", parts[index]);
+                                items.Add(Visibility);
+                                index++;
+                            }
+                            catch (Exception)
+                            {
+                                VisibilityDone = true;
+                            }
                         }
 
-                        try
+                        bool RVRdone = false;
+                        while (!RVRdone)
                         {
-                            RunwayVisualRange = new METARRunwayVisualRange("Runway visual range", parts[index]);
-                            items.Add(RunwayVisualRange);
-                            index++;
-                        }
-                        catch (Exception)
-                        {
+                            try
+                            {
+                                RunwayVisualRange = new METARRunwayVisualRange("Runway visual range", parts[index]);
+                                items.Add(RunwayVisualRange);
+                                index++;
+                            }
+                            catch (Exception)
+                            {
+                                RVRdone = true;
+                            }
                         }
 
                         bool weatherdone = false;
