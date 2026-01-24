@@ -973,21 +973,6 @@ namespace SimAddon
                                 Logger.WriteLine("Error moving screenshot " + screenshot + " : " + ex.Message);
                             }
                         }
-                        //add the screenshots in the md file
-                        sw.WriteLine($"## Photos taken during the flight");
-                        sw.WriteLine();
-                        foreach (string screenshot in screenshots)
-                        {
-                            //make sure that file still exist
-                            if (!File.Exists(screenshot))
-                            {
-                                continue;
-                            }
-                            string screenshotFile = Path.GetFileName(screenshot);
-                            sw.WriteLine($"![{screenshotFile}]({screenshotFile})");
-                            sw.WriteLine();
-                        }
-                        Logger.WriteLine("Flight report updated with screenshots.");
                         Plugin_OnShowMsgbox(this, $"Flight report and screenshots saved to {documentsPath}", "Flight Report Saved", MessageBoxButtons.OK);
                     }
                     else
@@ -1033,17 +1018,6 @@ namespace SimAddon
                                                     File.Copy(file, destFile, true);
                                                     copySuccess = true;
                                                     Logger.WriteLine($"Screenshot copied from Steam folder : {destFile}");
-
-                                                    //and add a line in the md file
-                                                    try
-                                                    {
-                                                        string imeTag = ReportBuilder.GetImageTag(Path.GetFileName(destFile), format);
-                                                        sw.WriteLine(imeTag);
-                                                    }
-                                                    catch (Exception ex)
-                                                    {
-                                                        Logger.WriteLine($"Error adding screenshot to report: {ex.Message}");
-                                                    }
                                                 }
                                                 catch (IOException ioEx) when (retry < maxRetries - 1)
                                                 {
