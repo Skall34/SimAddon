@@ -170,16 +170,14 @@ namespace SimAddon
             }
             this.Location = startlocation;
 
-            this.TopMost = Properties.Settings.Default.AlwaysOnTop;
-
             autoHide = Properties.Settings.Default.AutoHide;
-
             // Charger le niveau de transparence
             transparencyLevel = Properties.Settings.Default.TransparentWindow;
             if (transparencyLevel < 1.0)
             {
                 ToggleTransparency(transparencyLevel);
             }
+            this.TopMost = Properties.Settings.Default.AlwaysOnTop;
 
             SetSplashProgress(10, "Searching for plugins...");
             plugsMgr = new PluginsMgr();
@@ -692,11 +690,20 @@ namespace SimAddon
             {
                 this.TopMost = false;
             }
-            DialogResult result = MessageBox.Show(text, caption, buttons);
-
-            //restore the topmost as it was before the popup.
-            this.TopMost = wasWindowTopMost;
-            return result;
+            //show the message box above the current window
+            if (wasWindowTopMost)
+            {
+               
+                DialogResult result = MessageBox.Show(this, text, caption, buttons, MessageBoxIcon.None, MessageBoxDefaultButton.Button1);
+                //restore the topmost as it was before the popup.
+                this.TopMost = wasWindowTopMost;
+                return result;
+            }
+            else
+            {
+                DialogResult result = MessageBox.Show(this, text, caption, buttons);
+                return result;
+            }
         }
 
         private DialogResult Plugin_OnShowDialog(object sender, Form dialog)
@@ -707,6 +714,10 @@ namespace SimAddon
             {
                 this.TopMost = false;
             }
+
+            //open the dialog above the current window
+            dialog.StartPosition = FormStartPosition.CenterParent;
+
             DialogResult result = dialog.ShowDialog();
             //restore the topmost as it was before the popup.
             this.TopMost = wasWindowTopMost;
@@ -1165,7 +1176,7 @@ namespace SimAddon
             using (SimaddonSettingsForm settingsForm = new SimaddonSettingsForm())
             {
                 //set the current settings
-                settingsForm.AlwaysOnTop = this.TopMost;
+                settingsForm.AlwaysOnTop = Properties.Settings.Default.AlwaysOnTop;
                 settingsForm.AutoHide = this.autoHide;
                 settingsForm.TransparencyLevel = this.transparencyLevel;
                 settingsForm.screenshotFolder = Properties.Settings.Default.ScreenshotsFolder;
@@ -1193,7 +1204,7 @@ namespace SimAddon
                     this.autoHide = settingsForm.AutoHide;
                     ToggleTransparency(settingsForm.TransparencyLevel);
                     Properties.Settings.Default.AutoHide = settingsForm.AutoHide;
-                    Properties.Settings.Default.AlwaysOnTop = settingsForm.TopMost;
+                    Properties.Settings.Default.AlwaysOnTop = settingsForm.AlwaysOnTop;
                     Properties.Settings.Default.TransparentWindow = settingsForm.TransparencyLevel;
                     Properties.Settings.Default.ScreenshotsFolder = settingsForm.screenshotFolder;
                     Properties.Settings.Default.Save();

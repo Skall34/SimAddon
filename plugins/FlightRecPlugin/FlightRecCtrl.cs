@@ -1324,6 +1324,21 @@ namespace FlightRecPlugin
                     parentForm.TopMost = false;
                 }
 
+                // Positionner le dialogue au-dessus du contrôle appelant
+                saveFlightDialog.StartPosition = FormStartPosition.Manual;
+                
+                // Calculer la position centrée par rapport au parent
+                Point parentLocation = parentForm.PointToScreen(Point.Empty);
+                int x = parentLocation.X + (parentForm.Width - saveFlightDialog.Width) / 2;
+                int y = parentLocation.Y + (parentForm.Height - saveFlightDialog.Height) / 2;
+                
+                // S'assurer que le dialogue reste dans l'écran
+                Rectangle screenBounds = Screen.FromControl(parentForm).WorkingArea;
+                x = Math.Max(screenBounds.Left, Math.Min(x, screenBounds.Right - saveFlightDialog.Width));
+                y = Math.Max(screenBounds.Top, Math.Min(y, screenBounds.Bottom - saveFlightDialog.Height));
+                
+                saveFlightDialog.Location = new Point(x, y);
+
                 if (saveFlightDialog.ShowDialog() == DialogResult.OK)
                 {
                     // On grise le bouton save flight pour éviter les doubles envois
