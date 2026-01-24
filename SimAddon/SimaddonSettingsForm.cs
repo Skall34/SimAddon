@@ -24,6 +24,17 @@ namespace SimAddon
             set { cbAutoHide.Checked = value; }
         }
 
+        public double TransparencyLevel
+        {
+            get { return trackBarTransparency.Value / 100.0; }
+            set 
+            { 
+                int trackValue = (int)(value * 100);
+                trackBarTransparency.Value = Math.Max(trackBarTransparency.Minimum, Math.Min(trackBarTransparency.Maximum, trackValue));
+                UpdateTransparencyLabel();
+            }
+        }
+
         public string screenshotFolder
         {
             get { return tbScreenshotsFolder.Text; }
@@ -41,6 +52,43 @@ namespace SimAddon
         public SimaddonSettingsForm()
         {
             InitializeComponent();
+            
+            // Configurer le TrackBar
+            trackBarTransparency.Minimum = 20;  // 0.2 * 100
+            trackBarTransparency.Maximum = 100; // 1.0 * 100
+            trackBarTransparency.TickFrequency = 10;
+            trackBarTransparency.SmallChange = 5;
+            trackBarTransparency.LargeChange = 10;
+            trackBarTransparency.ValueChanged += TrackBarTransparency_ValueChanged;
+        }
+
+        private void TrackBarTransparency_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateTransparencyLabel();
+        }
+
+        private void UpdateTransparencyLabel()
+        {
+            double opacity = trackBarTransparency.Value / 100.0;
+            lblTransparencyValue.Text = $"{opacity:P0}";
+            
+            // Changer le texte selon le niveau
+            if (opacity == 1.0)
+            {
+                lblTransparencyValue.Text += " (Disabled)";
+            }
+            else if (opacity >= 0.8)
+            {
+                lblTransparencyValue.Text += " (Subtle)";
+            }
+            else if (opacity >= 0.5)
+            {
+                lblTransparencyValue.Text += " (Moderate)";
+            }
+            else
+            {
+                lblTransparencyValue.Text += " (Strong)";
+            }
         }
 
         private void cbAlwaysOnTop_CheckedChanged(object sender, EventArgs e)

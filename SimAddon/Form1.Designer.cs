@@ -60,6 +60,8 @@ namespace SimAddon
             openWebSiteToolStripMenuItem1 = new ToolStripMenuItem();
             documentationToolStripMenuItem1 = new ToolStripMenuItem();
             skyboundsAIToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            quitToolStripMenuItem = new ToolStripMenuItem();
             statusStrip.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -125,7 +127,7 @@ namespace SimAddon
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { loginToolStripMenuItem1, logoutToolStripMenuItem1, checkSessionToolStripMenuItem1, toolStripSeparator6, screenshotToolStripMenuItem1, generateFlightReportToolStripMenuItem1, toolStripSeparator7, settingsToolStripMenuItem1, tracesFolderToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { loginToolStripMenuItem1, logoutToolStripMenuItem1, checkSessionToolStripMenuItem1, toolStripSeparator6, screenshotToolStripMenuItem1, generateFlightReportToolStripMenuItem1, toolStripSeparator7, settingsToolStripMenuItem1, tracesFolderToolStripMenuItem, toolStripSeparator1, quitToolStripMenuItem });
             fileToolStripMenuItem.ForeColor = Color.Black;
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.F;
@@ -249,6 +251,18 @@ namespace SimAddon
             skyboundsAIToolStripMenuItem.Text = "Skybounds AI";
             skyboundsAIToolStripMenuItem.Click += skyboundsAIToolStripMenuItem_Click;
             // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(184, 6);
+            // 
+            // quitToolStripMenuItem
+            // 
+            quitToolStripMenuItem.Name = "quitToolStripMenuItem";
+            quitToolStripMenuItem.Size = new Size(187, 22);
+            quitToolStripMenuItem.Text = "Quit";
+            quitToolStripMenuItem.Click += quitToolStripMenuItem_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(9F, 18F);
@@ -305,6 +319,8 @@ namespace SimAddon
         private ToolStripMenuItem openWebSiteToolStripMenuItem1;
         private ToolStripMenuItem documentationToolStripMenuItem1;
         private ToolStripMenuItem skyboundsAIToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem quitToolStripMenuItem;
     }
 }
 

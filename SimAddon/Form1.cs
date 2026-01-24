@@ -35,6 +35,11 @@ namespace SimAddon
         Version version;
         Collection<TabPage> pluginTabs;
 
+        // Auto-hide border feature
+        private double transparencyLevel = 1.0;
+        private System.Windows.Forms.Timer mouseCheckTimer;
+        private bool isMouseOverForm = false;
+
         Dictionary<string, string> flightRecords;
         string departureAirport = "";
         string arrivalAirport = "";
@@ -148,6 +153,11 @@ namespace SimAddon
             this.timerZulu.Interval = 1000; // 1 seconde
             this.timerZulu.Tick += new System.EventHandler(this.timerZulu_Tick);
 
+            // Timer pour vérifier la position de la souris
+            this.mouseCheckTimer = new System.Windows.Forms.Timer();
+            this.mouseCheckTimer.Interval = 100; // Vérifier toutes les 100ms
+            this.mouseCheckTimer.Tick += new System.EventHandler(this.mouseCheckTimer_Tick);
+
             this.StartPosition = FormStartPosition.Manual;
             Point startlocation = new Point();
             startlocation.X = Properties.Settings.Default.xpos;
@@ -163,6 +173,13 @@ namespace SimAddon
             this.TopMost = Properties.Settings.Default.AlwaysOnTop;
 
             autoHide = Properties.Settings.Default.AutoHide;
+
+            // Charger le niveau de transparence
+            transparencyLevel = Properties.Settings.Default.TransparentWindow;
+            if (transparencyLevel < 1.0)
+            {
+                ToggleTransparency(transparencyLevel);
+            }
 
             SetSplashProgress(10, "Searching for plugins...");
             plugsMgr = new PluginsMgr();
@@ -403,6 +420,84 @@ namespace SimAddon
             // Format HH:mm:ss 'Z' pour l'heure Zulu
             toolStripHeureZulu.Text = DateTime.UtcNow.ToString("HH:mm:ss 'Z'");
 
+        }
+
+        private void mouseCheckTimer_Tick(object sender, EventArgs e)
+        {
+            if (transparencyLevel >= 1.0) return;
+
+            // Obtenir la position de la souris par rapport à l'écran
+            Point mousePos = Control.MousePosition;
+
+            // Vérifier si la souris est sur la fenêtre
+            bool mouseIsOver = this.Bounds.Contains(mousePos);
+
+            // Si l'état a changé
+            if (mouseIsOver != isMouseOverForm)
+            {
+                isMouseOverForm = mouseIsOver;
+
+                // Sauvegarder TopMost avant de changer l'opacité
+                bool wasTopMost = this.TopMost;
+
+                // Changer l'opacité de la fenêtre
+                this.Opacity = mouseIsOver ? 1.0 : transparencyLevel;
+
+                // Restaurer TopMost si nécessaire
+                if (this.TopMost != wasTopMost)
+                {
+                    this.TopMost = wasTopMost;
+                }
+            }
+        }
+
+        private void ToggleTransparency(double opacity)
+        {
+            // S'assurer que l'opacité est dans les limites valides
+            transparencyLevel = Math.Max(0.2, Math.Min(1.0, opacity));
+
+            if (transparencyLevel < 1.0)
+            {
+                // Démarrer le timer de vérification
+                mouseCheckTimer.Start();
+
+                // Vérifier immédiatement l'état de la souris
+                Point mousePos = Control.MousePosition;
+                isMouseOverForm = this.Bounds.Contains(mousePos);
+
+                // Appliquer l'opacité appropriée
+                if (!isMouseOverForm)
+                {
+                    // Sauvegarder TopMost avant de changer l'opacité
+                    bool wasTopMost = this.TopMost;
+
+                    this.Opacity = transparencyLevel;
+
+                    // Restaurer TopMost
+                    if (!this.TopMost && wasTopMost)
+                    {
+                        this.TopMost = wasTopMost;
+                    }
+                }
+            }
+            else
+            {
+                // Arrêter le timer
+                mouseCheckTimer.Stop();
+
+                // Sauvegarder TopMost avant de restaurer l'opacité
+                bool wasTopMost = this.TopMost;
+
+                // Restaurer l'opacité normale
+                this.Opacity = 1.0;
+                isMouseOverForm = false;
+
+                // Restaurer TopMost
+                if (!this.TopMost && wasTopMost)
+                {
+                    this.TopMost = wasTopMost;
+                }
+            }
         }
 
 
@@ -1072,6 +1167,7 @@ namespace SimAddon
                 //set the current settings
                 settingsForm.AlwaysOnTop = this.TopMost;
                 settingsForm.AutoHide = this.autoHide;
+                settingsForm.TransparencyLevel = this.transparencyLevel;
                 settingsForm.screenshotFolder = Properties.Settings.Default.ScreenshotsFolder;
                 settingsForm.SiteUrl = Properties.Settings.Default.GSheetAPIUrl;
 
@@ -1093,8 +1189,12 @@ namespace SimAddon
                 if (settingsForm.ShowDialog() == DialogResult.OK)
                 {
                     //apply the new settings
-                    this.TopMost = settingsForm.TopMost;
+                    this.TopMost = settingsForm.AlwaysOnTop;
                     this.autoHide = settingsForm.AutoHide;
+                    ToggleTransparency(settingsForm.TransparencyLevel);
+                    Properties.Settings.Default.AutoHide = settingsForm.AutoHide;
+                    Properties.Settings.Default.AlwaysOnTop = settingsForm.TopMost;
+                    Properties.Settings.Default.TransparentWindow = settingsForm.TransparencyLevel;
                     Properties.Settings.Default.ScreenshotsFolder = settingsForm.screenshotFolder;
                     Properties.Settings.Default.Save();
                     //update the visible plugins
@@ -1241,8 +1341,8 @@ namespace SimAddon
             {
                 //url using gemini 2.5 flash lite
                 //string url = "https://skybound-chronicles-2-5-flash-lite-226172438126.us-west1.run.app/";
-                  //url using gemini 3 pro
-                 string url = "https://skybound-chronicles-226172438126.us-west1.run.app/";
+                //url using gemini 3 pro
+                string url = "https://skybound-chronicles-226172438126.us-west1.run.app/";
 
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                 {
@@ -1255,6 +1355,12 @@ namespace SimAddon
                 Logger.WriteLine($"Error opening Skybounds AI web site: {ex.Message}");
                 Plugin_OnShowMsgbox(this, "Error", "Unable to open the Skybounds AI web site.", MessageBoxButtons.OK);
             }
+        }
+
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //close the application
+            this.Close();
         }
     }
 }

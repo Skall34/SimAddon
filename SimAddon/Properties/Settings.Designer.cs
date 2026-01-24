@@ -118,5 +118,17 @@ namespace SimAddon.Properties {
                 this["ScreenshotsFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double TransparentWindow {
+            get {
+                return ((double)(this["TransparentWindow"]));
+            }
+            set {
+                this["TransparentWindow"] = value;
+            }
+        }
     }
 }

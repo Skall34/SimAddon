@@ -30,6 +30,9 @@
         {
             cbAlwaysOnTop = new CheckBox();
             cbAutoHide = new CheckBox();
+            trackBarTransparency = new TrackBar();
+            lblTransparencyLabel = new Label();
+            lblTransparencyValue = new Label();
             btnApply = new Button();
             btnCancel = new Button();
             listView1 = new ListView();
@@ -44,6 +47,7 @@
             tabSiteURL = new TabPage();
             linkTest = new LinkLabel();
             tbSiteUrl = new TextBox();
+            ((System.ComponentModel.ISupportInitialize)trackBarTransparency).BeginInit();
             tabControl1.SuspendLayout();
             tabPageWindow.SuspendLayout();
             tabPagePlugins.SuspendLayout();
@@ -71,6 +75,35 @@
             cbAutoHide.TabIndex = 1;
             cbAutoHide.Text = "Auto hide on engine startup";
             cbAutoHide.UseVisualStyleBackColor = true;
+            // 
+            // trackBarTransparency
+            // 
+            trackBarTransparency.Location = new Point(17, 90);
+            trackBarTransparency.Maximum = 100;
+            trackBarTransparency.Minimum = 20;
+            trackBarTransparency.Name = "trackBarTransparency";
+            trackBarTransparency.Size = new Size(205, 45);
+            trackBarTransparency.TabIndex = 2;
+            trackBarTransparency.TickFrequency = 10;
+            trackBarTransparency.Value = 100;
+            // 
+            // lblTransparencyLabel
+            // 
+            lblTransparencyLabel.AutoSize = true;
+            lblTransparencyLabel.Location = new Point(17, 72);
+            lblTransparencyLabel.Name = "lblTransparencyLabel";
+            lblTransparencyLabel.Size = new Size(180, 15);
+            lblTransparencyLabel.TabIndex = 3;
+            lblTransparencyLabel.Text = "Transparency when mouse away:";
+            // 
+            // lblTransparencyValue
+            // 
+            lblTransparencyValue.AutoSize = true;
+            lblTransparencyValue.Location = new Point(228, 90);
+            lblTransparencyValue.Name = "lblTransparencyValue";
+            lblTransparencyValue.Size = new Size(35, 15);
+            lblTransparencyValue.TabIndex = 4;
+            lblTransparencyValue.Text = "100%";
             // 
             // btnApply
             // 
@@ -128,6 +161,9 @@
             // 
             // tabPageWindow
             // 
+            tabPageWindow.Controls.Add(lblTransparencyValue);
+            tabPageWindow.Controls.Add(lblTransparencyLabel);
+            tabPageWindow.Controls.Add(trackBarTransparency);
             tabPageWindow.Controls.Add(cbAutoHide);
             tabPageWindow.Controls.Add(cbAlwaysOnTop);
             tabPageWindow.Location = new Point(4, 24);
@@ -232,6 +268,7 @@
             Name = "SimaddonSettingsForm";
             Text = "SimaddonSettingsForm";
             Load += SimaddonSettingsForm_Load;
+            ((System.ComponentModel.ISupportInitialize)trackBarTransparency).EndInit();
             tabControl1.ResumeLayout(false);
             tabPageWindow.ResumeLayout(false);
             tabPageWindow.PerformLayout();
@@ -245,6 +282,9 @@
 
         #endregion
         private CheckBox cbAutoHide;
+        private TrackBar trackBarTransparency;
+        private Label lblTransparencyLabel;
+        private Label lblTransparencyValue;
         private CheckBox cbAlwaysOnTop;
         private Button btnApply;
         private Button btnCancel;
