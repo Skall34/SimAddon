@@ -575,10 +575,8 @@ namespace SimAddon
             // show splash progress while loading UI/plugins/data
             SetSplashProgress(10, "Loading plugins...");
 
-            // Configure TabControl appearance like Visual Studio
-            tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
-            tabControl1.ItemSize = new Size(80, 20);
-            tabControl1.DrawItem += TabControl1_DrawItem;
+            // Appliquer le thème Visual Studio Dark au TabControl
+            tabControl1.ApplyVisualStudioDarkTheme();
 
             tabControl1.SuspendLayout();
             foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
@@ -1417,56 +1415,6 @@ namespace SimAddon
         {
             //close the application
             this.Close();
-        }
-
-        private void TabControl1_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            TabControl tabControl = sender as TabControl;
-            if (tabControl == null) return;
-
-            Graphics g = e.Graphics;
-            TabPage tabPage = tabControl.TabPages[e.Index];
-            Rectangle tabBounds = tabControl.GetTabRect(e.Index);
-
-            // Couleurs style Visual Studio
-            Color tabBackColor = Color.DimGray;        // Fond sombre
-            Color tabSelectedBackColor = Color.MidnightBlue; // Bleu VS
-            Color tabHoverBackColor = Color.DarkGray;   // Survol
-            Color tabTextColor = Color.White;
-            Color tabSelectedTextColor = Color.White;
-
-            // Déterminer si l'onglet est sélectionné
-            bool isSelected = (e.Index == tabControl.SelectedIndex);
-
-            // Déterminer si la souris survole l'onglet
-            Point mousePos = tabControl.PointToClient(Cursor.Position);
-            bool isHovered = tabBounds.Contains(mousePos);
-
-            // Dessiner le fond de l'onglet
-            using (SolidBrush brush = new SolidBrush(isSelected ? tabSelectedBackColor : (isHovered ? tabHoverBackColor : tabBackColor)))
-            {
-                g.FillRectangle(brush, tabBounds);
-            }
-
-            // Dessiner une ligne en haut de l'onglet sélectionné (accent)
-            if (isSelected)
-            {
-                using (Pen accentPen = new Pen(Color.FromArgb(0, 122, 204), 2))
-                {
-                    g.DrawLine(accentPen, tabBounds.Left, tabBounds.Top, tabBounds.Right, tabBounds.Top);
-                }
-            }
-
-            // Dessiner le texte centré
-            using (SolidBrush textBrush = new SolidBrush(isSelected ? tabSelectedTextColor : tabTextColor))
-            {
-                StringFormat sf = new StringFormat
-                {
-                    Alignment = StringAlignment.Center,
-                    LineAlignment = StringAlignment.Center
-                };
-                g.DrawString(tabPage.Text, tabControl.Font, textBrush, tabBounds, sf);
-            }
         }
 
         private void btnMinimize_Click(object sender, EventArgs e)

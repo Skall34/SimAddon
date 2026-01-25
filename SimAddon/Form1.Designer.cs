@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System.Windows.Forms;
 using System.Drawing;
+using SimAddonControls;
 
 namespace SimAddon
 {
@@ -41,7 +42,7 @@ namespace SimAddon
             toolStripHeureZulu = new ToolStripStatusLabel();
             timerMain = new System.Windows.Forms.Timer(components);
             timerConnection = new System.Windows.Forms.Timer(components);
-            tabControl1 = new TabControl();
+            tabControl1 = new VSTabControl();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             loginToolStripMenuItem1 = new ToolStripMenuItem();
@@ -122,7 +123,6 @@ namespace SimAddon
             tabControl1.Padding = new Point(0, 0);
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(591, 822);
-            tabControl1.SizeMode = TabSizeMode.Fixed;
             tabControl1.TabIndex = 7;
             // 
             // menuStrip1
@@ -350,7 +350,7 @@ namespace SimAddon
             // 
             aboutSimAddonToolStripMenuItem.BackColor = Color.DimGray;
             aboutSimAddonToolStripMenuItem.Name = "aboutSimAddonToolStripMenuItem";
-            aboutSimAddonToolStripMenuItem.Size = new Size(180, 22);
+            aboutSimAddonToolStripMenuItem.Size = new Size(166, 22);
             aboutSimAddonToolStripMenuItem.Text = "About SimAddon";
             aboutSimAddonToolStripMenuItem.Click += aboutSimAddonToolStripMenuItem_Click;
             // 
@@ -390,7 +390,7 @@ namespace SimAddon
         private System.Windows.Forms.ToolStripStatusLabel lblConnectionStatus;
         private System.Windows.Forms.Timer timerMain;
         private System.Windows.Forms.Timer timerConnection;
-        private TabControl tabControl1;
+        private VSTabControl tabControl1;
         private ToolStripStatusLabel lblPluginStatus;
         private ToolStripStatusLabel toolStripHeureZulu;
         private MenuStrip menuStrip1;
