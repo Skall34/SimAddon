@@ -65,6 +65,8 @@ namespace SimAddon
             btnClose = new ToolStripButton();
             btnMaximize = new ToolStripButton();
             btnMinimize = new ToolStripButton();
+            helpToolStripMenuItem = new ToolStripMenuItem();
+            aboutSimAddonToolStripMenuItem = new ToolStripMenuItem();
             statusStrip.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -126,7 +128,7 @@ namespace SimAddon
             // menuStrip1
             // 
             menuStrip1.BackColor = Color.DimGray;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, networkToolStripMenuItem1, linksToolStripMenuItem, btnClose, btnMaximize, btnMinimize });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, networkToolStripMenuItem1, linksToolStripMenuItem, btnClose, btnMaximize, btnMinimize, helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(0);
@@ -278,7 +280,7 @@ namespace SimAddon
             openWebSiteToolStripMenuItem1.BackColor = Color.DimGray;
             openWebSiteToolStripMenuItem1.ForeColor = Color.White;
             openWebSiteToolStripMenuItem1.Name = "openWebSiteToolStripMenuItem1";
-            openWebSiteToolStripMenuItem1.Size = new Size(180, 22);
+            openWebSiteToolStripMenuItem1.Size = new Size(157, 22);
             openWebSiteToolStripMenuItem1.Text = "Open web site";
             openWebSiteToolStripMenuItem1.Click += openWebSiteToolStripMenuItem1_Click;
             // 
@@ -287,7 +289,7 @@ namespace SimAddon
             documentationToolStripMenuItem1.BackColor = Color.DimGray;
             documentationToolStripMenuItem1.ForeColor = Color.White;
             documentationToolStripMenuItem1.Name = "documentationToolStripMenuItem1";
-            documentationToolStripMenuItem1.Size = new Size(180, 22);
+            documentationToolStripMenuItem1.Size = new Size(157, 22);
             documentationToolStripMenuItem1.Text = "Documentation";
             documentationToolStripMenuItem1.Click += documentationToolStripMenuItem1_Click;
             // 
@@ -296,7 +298,7 @@ namespace SimAddon
             skyboundsAIToolStripMenuItem.BackColor = Color.MidnightBlue;
             skyboundsAIToolStripMenuItem.ForeColor = Color.White;
             skyboundsAIToolStripMenuItem.Name = "skyboundsAIToolStripMenuItem";
-            skyboundsAIToolStripMenuItem.Size = new Size(180, 22);
+            skyboundsAIToolStripMenuItem.Size = new Size(157, 22);
             skyboundsAIToolStripMenuItem.Text = "Skybounds AI";
             skyboundsAIToolStripMenuItem.Click += skyboundsAIToolStripMenuItem_Click;
             // 
@@ -336,6 +338,21 @@ namespace SimAddon
             btnMinimize.Size = new Size(30, 23);
             btnMinimize.Text = "0";
             btnMinimize.Click += btnMinimize_Click;
+            // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutSimAddonToolStripMenuItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(44, 26);
+            helpToolStripMenuItem.Text = "Help";
+            // 
+            // aboutSimAddonToolStripMenuItem
+            // 
+            aboutSimAddonToolStripMenuItem.BackColor = Color.DimGray;
+            aboutSimAddonToolStripMenuItem.Name = "aboutSimAddonToolStripMenuItem";
+            aboutSimAddonToolStripMenuItem.Size = new Size(180, 22);
+            aboutSimAddonToolStripMenuItem.Text = "About SimAddon";
+            aboutSimAddonToolStripMenuItem.Click += aboutSimAddonToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -399,6 +416,8 @@ namespace SimAddon
         private ToolStripButton btnMinimize;
         private ToolStripButton btnMaximize;
         private ToolStripButton btnClose;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem aboutSimAddonToolStripMenuItem;
     }
 }
 

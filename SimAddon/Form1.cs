@@ -34,7 +34,7 @@ namespace SimAddon
 
         Version version;
         Collection<TabPage> pluginTabs;
-        
+
         // Auto-hide border feature
         private double transparencyLevel = 1.0;
         private System.Windows.Forms.Timer mouseCheckTimer;
@@ -173,7 +173,7 @@ namespace SimAddon
             this.menuStrip1.MouseDown += new MouseEventHandler(this.menuStrip1_MouseDown);
             this.menuStrip1.MouseMove += new MouseEventHandler(this.menuStrip1_MouseMove);
             this.menuStrip1.MouseUp += new MouseEventHandler(this.menuStrip1_MouseUp);
-            
+
             this.StartPosition = FormStartPosition.Manual;
             Point startlocation = new Point();
             startlocation.X = Properties.Settings.Default.xpos;
@@ -442,7 +442,7 @@ namespace SimAddon
 
             // Obtenir la position de la souris par rapport à l'écran
             Point mousePos = Control.MousePosition;
-            
+
             // Vérifier si la souris est sur la fenêtre
             bool mouseIsOver = this.Bounds.Contains(mousePos);
 
@@ -450,13 +450,13 @@ namespace SimAddon
             if (mouseIsOver != isMouseOverForm)
             {
                 isMouseOverForm = mouseIsOver;
-                
+
                 // Sauvegarder TopMost avant de changer l'opacité
                 bool wasTopMost = this.TopMost;
-                
+
                 // Changer l'opacité de la fenêtre
                 this.Opacity = mouseIsOver ? 1.0 : transparencyLevel;
-                
+
                 // Restaurer TopMost si nécessaire
                 if (this.TopMost != wasTopMost)
                 {
@@ -738,7 +738,7 @@ namespace SimAddon
             //show the message box above the current window
             if (wasWindowTopMost)
             {
-               
+
                 DialogResult result = MessageBox.Show(this, text, caption, buttons, MessageBoxIcon.None, MessageBoxDefaultButton.Button1);
                 //restore the topmost as it was before the popup.
                 this.TopMost = wasWindowTopMost;
@@ -1496,6 +1496,15 @@ namespace SimAddon
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void aboutSimAddonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (AboutForm aboutForm = new AboutForm())
+            {
+                aboutForm.Icon = this.Icon;
+                Plugin_OnShowDialog(this, aboutForm);
+            }
         }
     }
 }
