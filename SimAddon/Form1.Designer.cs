@@ -53,6 +53,8 @@ namespace SimAddon
             toolStripSeparator7 = new ToolStripSeparator();
             settingsToolStripMenuItem1 = new ToolStripMenuItem();
             tracesFolderToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            quitToolStripMenuItem = new ToolStripMenuItem();
             networkToolStripMenuItem1 = new ToolStripMenuItem();
             vATSIMToolStripMenuItem1 = new ToolStripMenuItem();
             iVAOToolStripMenuItem1 = new ToolStripMenuItem();
@@ -60,19 +62,21 @@ namespace SimAddon
             openWebSiteToolStripMenuItem1 = new ToolStripMenuItem();
             documentationToolStripMenuItem1 = new ToolStripMenuItem();
             skyboundsAIToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator1 = new ToolStripSeparator();
-            quitToolStripMenuItem = new ToolStripMenuItem();
+            btnClose = new ToolStripButton();
+            btnMaximize = new ToolStripButton();
+            btnMinimize = new ToolStripButton();
             statusStrip.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip
             // 
+            statusStrip.GripStyle = ToolStripGripStyle.Visible;
             statusStrip.Items.AddRange(new ToolStripItem[] { lblConnectionStatus, lblPluginStatus, toolStripHeureZulu });
-            statusStrip.Location = new Point(0, 807);
+            statusStrip.Location = new Point(0, 846);
             statusStrip.Name = "statusStrip";
             statusStrip.Padding = new Padding(1, 0, 22, 0);
-            statusStrip.Size = new Size(574, 24);
+            statusStrip.Size = new Size(590, 24);
             statusStrip.TabIndex = 6;
             statusStrip.Text = "statusStrip1";
             // 
@@ -108,20 +112,25 @@ namespace SimAddon
             // 
             // tabControl1
             // 
-            tabControl1.Dock = DockStyle.Fill;
+            tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tabControl1.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tabControl1.Location = new Point(0, 24);
             tabControl1.Margin = new Padding(0);
             tabControl1.Name = "tabControl1";
+            tabControl1.Padding = new Point(0, 0);
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(574, 783);
+            tabControl1.Size = new Size(591, 822);
+            tabControl1.SizeMode = TabSizeMode.Fixed;
             tabControl1.TabIndex = 7;
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, networkToolStripMenuItem1, linksToolStripMenuItem });
+            menuStrip1.BackColor = Color.DimGray;
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, networkToolStripMenuItem1, linksToolStripMenuItem, btnClose, btnMaximize, btnMinimize });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(574, 24);
+            menuStrip1.Padding = new Padding(0);
+            menuStrip1.Size = new Size(590, 26);
             menuStrip1.TabIndex = 8;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -131,11 +140,13 @@ namespace SimAddon
             fileToolStripMenuItem.ForeColor = Color.Black;
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.F;
-            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Size = new Size(37, 26);
             fileToolStripMenuItem.Text = "File";
             // 
             // loginToolStripMenuItem1
             // 
+            loginToolStripMenuItem1.BackColor = Color.DimGray;
+            loginToolStripMenuItem1.ForeColor = Color.White;
             loginToolStripMenuItem1.Name = "loginToolStripMenuItem1";
             loginToolStripMenuItem1.Size = new Size(187, 22);
             loginToolStripMenuItem1.Text = "Login";
@@ -143,6 +154,8 @@ namespace SimAddon
             // 
             // logoutToolStripMenuItem1
             // 
+            logoutToolStripMenuItem1.BackColor = Color.DimGray;
+            logoutToolStripMenuItem1.ForeColor = Color.White;
             logoutToolStripMenuItem1.Name = "logoutToolStripMenuItem1";
             logoutToolStripMenuItem1.Size = new Size(187, 22);
             logoutToolStripMenuItem1.Text = "Logout";
@@ -150,6 +163,8 @@ namespace SimAddon
             // 
             // checkSessionToolStripMenuItem1
             // 
+            checkSessionToolStripMenuItem1.BackColor = Color.DimGray;
+            checkSessionToolStripMenuItem1.ForeColor = Color.White;
             checkSessionToolStripMenuItem1.Name = "checkSessionToolStripMenuItem1";
             checkSessionToolStripMenuItem1.Size = new Size(187, 22);
             checkSessionToolStripMenuItem1.Text = "Check Session";
@@ -157,11 +172,14 @@ namespace SimAddon
             // 
             // toolStripSeparator6
             // 
+            toolStripSeparator6.BackColor = Color.DimGray;
             toolStripSeparator6.Name = "toolStripSeparator6";
             toolStripSeparator6.Size = new Size(184, 6);
             // 
             // screenshotToolStripMenuItem1
             // 
+            screenshotToolStripMenuItem1.BackColor = Color.DimGray;
+            screenshotToolStripMenuItem1.ForeColor = Color.White;
             screenshotToolStripMenuItem1.Name = "screenshotToolStripMenuItem1";
             screenshotToolStripMenuItem1.ShortcutKeys = Keys.F12;
             screenshotToolStripMenuItem1.Size = new Size(187, 22);
@@ -170,6 +188,8 @@ namespace SimAddon
             // 
             // generateFlightReportToolStripMenuItem1
             // 
+            generateFlightReportToolStripMenuItem1.BackColor = Color.DimGray;
+            generateFlightReportToolStripMenuItem1.ForeColor = Color.White;
             generateFlightReportToolStripMenuItem1.Name = "generateFlightReportToolStripMenuItem1";
             generateFlightReportToolStripMenuItem1.Size = new Size(187, 22);
             generateFlightReportToolStripMenuItem1.Text = "Generate flight report";
@@ -177,11 +197,14 @@ namespace SimAddon
             // 
             // toolStripSeparator7
             // 
+            toolStripSeparator7.BackColor = Color.DimGray;
             toolStripSeparator7.Name = "toolStripSeparator7";
             toolStripSeparator7.Size = new Size(184, 6);
             // 
             // settingsToolStripMenuItem1
             // 
+            settingsToolStripMenuItem1.BackColor = Color.DimGray;
+            settingsToolStripMenuItem1.ForeColor = Color.White;
             settingsToolStripMenuItem1.Name = "settingsToolStripMenuItem1";
             settingsToolStripMenuItem1.Size = new Size(187, 22);
             settingsToolStripMenuItem1.Text = "Settings";
@@ -189,10 +212,26 @@ namespace SimAddon
             // 
             // tracesFolderToolStripMenuItem
             // 
+            tracesFolderToolStripMenuItem.BackColor = Color.DimGray;
+            tracesFolderToolStripMenuItem.ForeColor = Color.White;
             tracesFolderToolStripMenuItem.Name = "tracesFolderToolStripMenuItem";
             tracesFolderToolStripMenuItem.Size = new Size(187, 22);
             tracesFolderToolStripMenuItem.Text = "Open traces folder";
             tracesFolderToolStripMenuItem.Click += tracesFolderToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(184, 6);
+            // 
+            // quitToolStripMenuItem
+            // 
+            quitToolStripMenuItem.BackColor = Color.DimGray;
+            quitToolStripMenuItem.ForeColor = Color.White;
+            quitToolStripMenuItem.Name = "quitToolStripMenuItem";
+            quitToolStripMenuItem.Size = new Size(187, 22);
+            quitToolStripMenuItem.Text = "Quit";
+            quitToolStripMenuItem.Click += quitToolStripMenuItem_Click;
             // 
             // networkToolStripMenuItem1
             // 
@@ -200,14 +239,16 @@ namespace SimAddon
             networkToolStripMenuItem1.ForeColor = Color.Black;
             networkToolStripMenuItem1.Name = "networkToolStripMenuItem1";
             networkToolStripMenuItem1.ShortcutKeys = Keys.Alt | Keys.N;
-            networkToolStripMenuItem1.Size = new Size(64, 20);
+            networkToolStripMenuItem1.Size = new Size(64, 26);
             networkToolStripMenuItem1.Text = "Network";
             // 
             // vATSIMToolStripMenuItem1
             // 
+            vATSIMToolStripMenuItem1.BackColor = Color.DimGray;
             vATSIMToolStripMenuItem1.Checked = true;
             vATSIMToolStripMenuItem1.CheckOnClick = true;
             vATSIMToolStripMenuItem1.CheckState = CheckState.Checked;
+            vATSIMToolStripMenuItem1.ForeColor = Color.White;
             vATSIMToolStripMenuItem1.Name = "vATSIMToolStripMenuItem1";
             vATSIMToolStripMenuItem1.Size = new Size(113, 22);
             vATSIMToolStripMenuItem1.Text = "VATSIM";
@@ -215,7 +256,9 @@ namespace SimAddon
             // 
             // iVAOToolStripMenuItem1
             // 
+            iVAOToolStripMenuItem1.BackColor = Color.DimGray;
             iVAOToolStripMenuItem1.CheckOnClick = true;
+            iVAOToolStripMenuItem1.ForeColor = Color.White;
             iVAOToolStripMenuItem1.Name = "iVAOToolStripMenuItem1";
             iVAOToolStripMenuItem1.Size = new Size(113, 22);
             iVAOToolStripMenuItem1.Text = "IVAO";
@@ -227,53 +270,85 @@ namespace SimAddon
             linksToolStripMenuItem.ForeColor = Color.Black;
             linksToolStripMenuItem.Name = "linksToolStripMenuItem";
             linksToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
-            linksToolStripMenuItem.Size = new Size(46, 20);
+            linksToolStripMenuItem.Size = new Size(46, 26);
             linksToolStripMenuItem.Text = "Links";
             // 
             // openWebSiteToolStripMenuItem1
             // 
+            openWebSiteToolStripMenuItem1.BackColor = Color.DimGray;
+            openWebSiteToolStripMenuItem1.ForeColor = Color.White;
             openWebSiteToolStripMenuItem1.Name = "openWebSiteToolStripMenuItem1";
-            openWebSiteToolStripMenuItem1.Size = new Size(157, 22);
+            openWebSiteToolStripMenuItem1.Size = new Size(180, 22);
             openWebSiteToolStripMenuItem1.Text = "Open web site";
             openWebSiteToolStripMenuItem1.Click += openWebSiteToolStripMenuItem1_Click;
             // 
             // documentationToolStripMenuItem1
             // 
+            documentationToolStripMenuItem1.BackColor = Color.DimGray;
+            documentationToolStripMenuItem1.ForeColor = Color.White;
             documentationToolStripMenuItem1.Name = "documentationToolStripMenuItem1";
-            documentationToolStripMenuItem1.Size = new Size(157, 22);
+            documentationToolStripMenuItem1.Size = new Size(180, 22);
             documentationToolStripMenuItem1.Text = "Documentation";
             documentationToolStripMenuItem1.Click += documentationToolStripMenuItem1_Click;
             // 
             // skyboundsAIToolStripMenuItem
             // 
+            skyboundsAIToolStripMenuItem.BackColor = Color.MidnightBlue;
+            skyboundsAIToolStripMenuItem.ForeColor = Color.White;
             skyboundsAIToolStripMenuItem.Name = "skyboundsAIToolStripMenuItem";
-            skyboundsAIToolStripMenuItem.Size = new Size(157, 22);
+            skyboundsAIToolStripMenuItem.Size = new Size(180, 22);
             skyboundsAIToolStripMenuItem.Text = "Skybounds AI";
             skyboundsAIToolStripMenuItem.Click += skyboundsAIToolStripMenuItem_Click;
             // 
-            // toolStripSeparator1
+            // btnClose
             // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(184, 6);
+            btnClose.Alignment = ToolStripItemAlignment.Right;
+            btnClose.AutoSize = false;
+            btnClose.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            btnClose.Font = new Font("Marlett", 12F, FontStyle.Bold);
+            btnClose.ForeColor = Color.White;
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(30, 23);
+            btnClose.Text = "r";
+            btnClose.Click += btnClose_Click;
             // 
-            // quitToolStripMenuItem
+            // btnMaximize
             // 
-            quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            quitToolStripMenuItem.Size = new Size(187, 22);
-            quitToolStripMenuItem.Text = "Quit";
-            quitToolStripMenuItem.Click += quitToolStripMenuItem_Click;
+            btnMaximize.Alignment = ToolStripItemAlignment.Right;
+            btnMaximize.AutoSize = false;
+            btnMaximize.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            btnMaximize.Font = new Font("Marlett", 12F, FontStyle.Bold);
+            btnMaximize.ForeColor = Color.White;
+            btnMaximize.Name = "btnMaximize";
+            btnMaximize.Size = new Size(30, 23);
+            btnMaximize.Tag = "maximize";
+            btnMaximize.Text = "1";
+            btnMaximize.Click += btnMaximize_Click;
+            // 
+            // btnMinimize
+            // 
+            btnMinimize.Alignment = ToolStripItemAlignment.Right;
+            btnMinimize.AutoSize = false;
+            btnMinimize.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            btnMinimize.Font = new Font("Marlett", 12F, FontStyle.Bold);
+            btnMinimize.ForeColor = Color.White;
+            btnMinimize.Name = "btnMinimize";
+            btnMinimize.Size = new Size(30, 23);
+            btnMinimize.Text = "0";
+            btnMinimize.Click += btnMinimize_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(9F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Silver;
-            ClientSize = new Size(574, 831);
+            BackColor = Color.DimGray;
+            ClientSize = new Size(590, 870);
             Controls.Add(tabControl1);
             Controls.Add(statusStrip);
             Controls.Add(menuStrip1);
             Font = new Font("Arial", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             ForeColor = Color.White;
+            FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Margin = new Padding(4, 5, 4, 5);
@@ -321,6 +396,9 @@ namespace SimAddon
         private ToolStripMenuItem skyboundsAIToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem quitToolStripMenuItem;
+        private ToolStripButton btnMinimize;
+        private ToolStripButton btnMaximize;
+        private ToolStripButton btnClose;
     }
 }
 

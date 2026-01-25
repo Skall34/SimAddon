@@ -34,11 +34,22 @@ namespace SimAddon
 
         Version version;
         Collection<TabPage> pluginTabs;
-
+        
         // Auto-hide border feature
         private double transparencyLevel = 1.0;
         private System.Windows.Forms.Timer mouseCheckTimer;
         private bool isMouseOverForm = false;
+
+        // Window dragging support
+        private bool isDragging = false;
+        private Point dragCursorPoint;
+        private Point dragFormPoint;
+
+        // Window resizing support
+        private bool isResizing = false;
+        private Point resizeStartPoint;
+        private Size resizeStartSize;
+        private const int RESIZE_BORDER = 10;
 
         Dictionary<string, string> flightRecords;
         string departureAirport = "";
@@ -158,6 +169,11 @@ namespace SimAddon
             this.mouseCheckTimer.Interval = 100; // Vérifier toutes les 100ms
             this.mouseCheckTimer.Tick += new System.EventHandler(this.mouseCheckTimer_Tick);
 
+            // Activer le déplacement de la fenêtre via le MenuStrip
+            this.menuStrip1.MouseDown += new MouseEventHandler(this.menuStrip1_MouseDown);
+            this.menuStrip1.MouseMove += new MouseEventHandler(this.menuStrip1_MouseMove);
+            this.menuStrip1.MouseUp += new MouseEventHandler(this.menuStrip1_MouseUp);
+            
             this.StartPosition = FormStartPosition.Manual;
             Point startlocation = new Point();
             startlocation.X = Properties.Settings.Default.xpos;
@@ -426,7 +442,7 @@ namespace SimAddon
 
             // Obtenir la position de la souris par rapport à l'écran
             Point mousePos = Control.MousePosition;
-
+            
             // Vérifier si la souris est sur la fenêtre
             bool mouseIsOver = this.Bounds.Contains(mousePos);
 
@@ -434,19 +450,43 @@ namespace SimAddon
             if (mouseIsOver != isMouseOverForm)
             {
                 isMouseOverForm = mouseIsOver;
-
+                
                 // Sauvegarder TopMost avant de changer l'opacité
                 bool wasTopMost = this.TopMost;
-
+                
                 // Changer l'opacité de la fenêtre
                 this.Opacity = mouseIsOver ? 1.0 : transparencyLevel;
-
+                
                 // Restaurer TopMost si nécessaire
                 if (this.TopMost != wasTopMost)
                 {
                     this.TopMost = wasTopMost;
                 }
             }
+        }
+
+        private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isDragging = true;
+                dragCursorPoint = Cursor.Position;
+                dragFormPoint = this.Location;
+            }
+        }
+
+        private void menuStrip1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging)
+            {
+                Point diff = Point.Subtract(Cursor.Position, new Size(dragCursorPoint));
+                this.Location = Point.Add(dragFormPoint, new Size(diff));
+            }
+        }
+
+        private void menuStrip1_MouseUp(object sender, MouseEventArgs e)
+        {
+            isDragging = false;
         }
 
         private void ToggleTransparency(double opacity)
@@ -534,6 +574,11 @@ namespace SimAddon
 
             // show splash progress while loading UI/plugins/data
             SetSplashProgress(10, "Loading plugins...");
+
+            // Configure TabControl appearance like Visual Studio
+            tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
+            tabControl1.ItemSize = new Size(80, 20);
+            tabControl1.DrawItem += TabControl1_DrawItem;
 
             tabControl1.SuspendLayout();
             foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)
@@ -1371,6 +1416,85 @@ namespace SimAddon
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //close the application
+            this.Close();
+        }
+
+        private void TabControl1_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            TabControl tabControl = sender as TabControl;
+            if (tabControl == null) return;
+
+            Graphics g = e.Graphics;
+            TabPage tabPage = tabControl.TabPages[e.Index];
+            Rectangle tabBounds = tabControl.GetTabRect(e.Index);
+
+            // Couleurs style Visual Studio
+            Color tabBackColor = Color.DimGray;        // Fond sombre
+            Color tabSelectedBackColor = Color.MidnightBlue; // Bleu VS
+            Color tabHoverBackColor = Color.DarkGray;   // Survol
+            Color tabTextColor = Color.White;
+            Color tabSelectedTextColor = Color.White;
+
+            // Déterminer si l'onglet est sélectionné
+            bool isSelected = (e.Index == tabControl.SelectedIndex);
+
+            // Déterminer si la souris survole l'onglet
+            Point mousePos = tabControl.PointToClient(Cursor.Position);
+            bool isHovered = tabBounds.Contains(mousePos);
+
+            // Dessiner le fond de l'onglet
+            using (SolidBrush brush = new SolidBrush(isSelected ? tabSelectedBackColor : (isHovered ? tabHoverBackColor : tabBackColor)))
+            {
+                g.FillRectangle(brush, tabBounds);
+            }
+
+            // Dessiner une ligne en haut de l'onglet sélectionné (accent)
+            if (isSelected)
+            {
+                using (Pen accentPen = new Pen(Color.FromArgb(0, 122, 204), 2))
+                {
+                    g.DrawLine(accentPen, tabBounds.Left, tabBounds.Top, tabBounds.Right, tabBounds.Top);
+                }
+            }
+
+            // Dessiner le texte centré
+            using (SolidBrush textBrush = new SolidBrush(isSelected ? tabSelectedTextColor : tabTextColor))
+            {
+                StringFormat sf = new StringFormat
+                {
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Center
+                };
+                g.DrawString(tabPage.Text, tabControl.Font, textBrush, tabBounds, sf);
+            }
+        }
+
+        private void btnMinimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void btnMaximize_Click(object sender, EventArgs e)
+        {
+            if (sender is ToolStripButton btn)
+            {
+                if (this.WindowState == FormWindowState.Maximized)
+                {
+                    this.WindowState = FormWindowState.Normal;
+                    btn.Text = "1";
+                    btn.Tag = "maximize";
+                }
+                else
+                {
+                    this.WindowState = FormWindowState.Maximized;
+                    btn.Text = "2";
+                    btn.Tag = "restore";
+                }
+            }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
             this.Close();
         }
     }

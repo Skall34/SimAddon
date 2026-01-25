@@ -24,7 +24,7 @@ namespace FlightRecPlugin
 {
     public partial class FlightRecCtrl : UserControl, ISimAddonPluginCtrl
     {
-        const string name = "FlightRecorder";
+        const string name = "Recorder";
         Version? version;
 
         DebugForm dbg;
