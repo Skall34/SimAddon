@@ -68,6 +68,7 @@ namespace SimAddon
             btnClose = new ToolStripButton();
             btnMaximize = new ToolStripButton();
             btnMinimize = new ToolStripButton();
+            ledConnectionStatus = new ToolStripControlHost(new SimAddonControls.LedBulb());
             statusStrip.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
