@@ -36,7 +36,7 @@ namespace SimAddon
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            statusStrip = new SimAddonControls.VSStatusStrip();
+            statusStrip = new VSStatusStrip();
             lblConnectionStatus = new ToolStripStatusLabel();
             lblPluginStatus = new ToolStripStatusLabel();
             toolStripHeureZulu = new ToolStripStatusLabel();
@@ -68,13 +68,16 @@ namespace SimAddon
             btnClose = new ToolStripButton();
             btnMaximize = new ToolStripButton();
             btnMinimize = new ToolStripButton();
-            ledConnectionStatus = new ToolStripControlHost(new LedBulb());
             statusStrip.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip
             // 
+            statusStrip.BackColor = Color.FromArgb(0, 122, 204);
+            statusStrip.BorderColor = Color.FromArgb(0, 100, 180);
+            statusStrip.ForeColor = Color.White;
+            statusStrip.GripColor = Color.FromArgb(70, 70, 74);
             statusStrip.GripStyle = ToolStripGripStyle.Visible;
             statusStrip.Items.AddRange(new ToolStripItem[] { lblConnectionStatus, lblPluginStatus, toolStripHeureZulu });
             statusStrip.Location = new Point(0, 846);
@@ -86,20 +89,26 @@ namespace SimAddon
             // 
             // lblConnectionStatus
             // 
+            lblConnectionStatus.BackColor = Color.Transparent;
+            lblConnectionStatus.ForeColor = Color.White;
             lblConnectionStatus.Name = "lblConnectionStatus";
             lblConnectionStatus.Size = new Size(104, 19);
             lblConnectionStatus.Text = "Connection Status";
             // 
             // lblPluginStatus
             // 
+            lblPluginStatus.BackColor = Color.Transparent;
             lblPluginStatus.BorderSides = ToolStripStatusLabelBorderSides.Left;
+            lblPluginStatus.ForeColor = Color.White;
             lblPluginStatus.Name = "lblPluginStatus";
             lblPluginStatus.Size = new Size(80, 19);
             lblPluginStatus.Text = "Plugin Status";
             // 
             // toolStripHeureZulu
             // 
+            toolStripHeureZulu.BackColor = Color.Transparent;
             toolStripHeureZulu.BorderSides = ToolStripStatusLabelBorderSides.Left;
+            toolStripHeureZulu.ForeColor = Color.White;
             toolStripHeureZulu.Name = "toolStripHeureZulu";
             toolStripHeureZulu.Size = new Size(70, 19);
             toolStripHeureZulu.Text = "Heure Zulu";
@@ -117,15 +126,14 @@ namespace SimAddon
             // tabControl1
             // 
             tabControl1.AccentColor = Color.FromArgb(0, 122, 204);
-            tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
             tabControl1.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tabControl1.ItemSize = new Size(80, 25);
-            tabControl1.Location = new Point(0, 24);
+            tabControl1.Location = new Point(0, 26);
             tabControl1.Margin = new Padding(0);
             tabControl1.Name = "tabControl1";
             tabControl1.Padding = new Point(0, 0);
-            tabControl1.Size = new Size(591, 822);
+            tabControl1.Size = new Size(591, 820);
             tabControl1.SizeMode = TabSizeMode.Fixed;
             tabControl1.TabBackColor = Color.FromArgb(45, 45, 48);
             tabControl1.TabHoverBackColor = Color.DarkGray;
@@ -352,15 +360,6 @@ namespace SimAddon
             btnMaximize.Text = "1";
             btnMaximize.Click += btnMaximize_Click;
             // 
-            // ledConnectionStatus
-            // 
-            ledConnectionStatus.Alignment = ToolStripItemAlignment.Right;
-            ledConnectionStatus.AutoSize = false;
-            ledConnectionStatus.Margin = new Padding(0);
-            ledConnectionStatus.Name = "ledConnectionStatus";
-            ledConnectionStatus.Size = new Size(16, 16);
-            ledConnectionStatus.ToolTipText = "État de connexion au serveur";
-            // 
             // btnMinimize
             // 
             btnMinimize.Alignment = ToolStripItemAlignment.Right;
@@ -372,6 +371,15 @@ namespace SimAddon
             btnMinimize.Size = new Size(30, 23);
             btnMinimize.Text = "0";
             btnMinimize.Click += btnMinimize_Click;
+            // 
+            // ledConnectionStatus
+            // 
+            ledConnectionStatus.Alignment = ToolStripItemAlignment.Right;
+            ledConnectionStatus.AutoSize = false;
+            ledConnectionStatus.Margin = new Padding(0);
+            ledConnectionStatus.Name = "ledConnectionStatus";
+            ledConnectionStatus.Size = new Size(16, 16);
+            ledConnectionStatus.ToolTipText = "État de connexion au serveur";
             // 
             // Form1
             // 

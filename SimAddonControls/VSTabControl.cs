@@ -87,6 +87,12 @@ namespace SimAddonControls
             DrawMode = TabDrawMode.OwnerDrawFixed;
             ItemSize = new Size(80, 25);
             SizeMode = TabSizeMode.Fixed;
+            
+            // Supprimer tout padding pour que les TabPages utilisent tout l'espace
+            Padding = new Point(0, 0);
+            
+            // Définir la couleur de fond initiale pour éviter les bordures blanches
+            BackColor = Color.FromArgb(37, 37, 38);
         }
 
         protected override void OnControlAdded(ControlEventArgs e)
@@ -95,6 +101,9 @@ namespace SimAddonControls
             if (e.Control is TabPage tabPage)
             {
                 tabPage.BackColor = _tabPageBackColor;
+                // Supprimer tout padding de la TabPage pour maximiser l'espace
+                tabPage.Padding = new Padding(0);
+                tabPage.Margin = new Padding(0);
             }
         }
 
@@ -144,13 +153,22 @@ namespace SimAddonControls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
+            // Ne pas appeler base.OnPaint pour éviter le dessin par défaut
+            // base.OnPaint(e);
+            
+            Graphics g = e.Graphics;
+            
+            // Dessiner l'arrière-plan complet du contrôle avec la couleur de fond
+            using (SolidBrush backgroundBrush = new SolidBrush(BackColor))
+            {
+                g.FillRectangle(backgroundBrush, ClientRectangle);
+            }
             
             // Dessiner l'arrière-plan de la zone des onglets
             Rectangle tabAreaRect = new Rectangle(0, 0, Width, ItemSize.Height + 4);
             using (SolidBrush backBrush = new SolidBrush(_tabBackColor))
             {
-                e.Graphics.FillRectangle(backBrush, tabAreaRect);
+                g.FillRectangle(backBrush, tabAreaRect);
             }
 
             // Redessiner tous les onglets
@@ -158,9 +176,25 @@ namespace SimAddonControls
             {
                 Rectangle tabRect = GetTabRect(i);
                 DrawItemEventArgs args = new DrawItemEventArgs(
-                    e.Graphics, Font, tabRect, i,
+                    g, Font, tabRect, i,
                     i == SelectedIndex ? DrawItemState.Selected : DrawItemState.None);
                 OnDrawItem(args);
+            }
+            
+            // Dessiner la zone de contenu de la TabPage sélectionnée si elle existe
+            if (SelectedIndex >= 0 && SelectedIndex < TabCount)
+            {
+                Rectangle contentRect = new Rectangle(
+                    0, 
+                    ItemSize.Height + 4, 
+                    Width, 
+                    Height - ItemSize.Height - 4
+                );
+                
+                using (SolidBrush contentBrush = new SolidBrush(_tabPageBackColor))
+                {
+                    g.FillRectangle(contentBrush, contentRect);
+                }
             }
         }
 

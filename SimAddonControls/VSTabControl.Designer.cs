@@ -47,7 +47,7 @@ namespace SimAddonControls
             TabSelectedTextColor = Color.White;
             AccentColor = Color.FromArgb(0, 122, 204);
             TabPageBackColor = Color.FromArgb(37, 37, 38);
-            BackColor = Color.FromArgb(45, 45, 48);
+            BackColor = Color.FromArgb(37, 37, 38); // Même couleur que TabPageBackColor
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SimAddonControls
             TabSelectedTextColor = Color.White;
             AccentColor = Color.FromArgb(0, 122, 204);
             TabPageBackColor = Color.FromArgb(37, 37, 38);
-            BackColor = Color.FromArgb(41, 57, 85);
+            BackColor = Color.FromArgb(37, 37, 38); // Même couleur que TabPageBackColor
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace SimAddonControls
             TabSelectedTextColor = Color.Black;
             AccentColor = Color.FromArgb(0, 122, 204);
             TabPageBackColor = Color.White;
-            BackColor = Color.FromArgb(245, 245, 245);
+            BackColor = Color.White; // Même couleur que TabPageBackColor
         }
     }
 

@@ -300,6 +300,8 @@ namespace FlightRecPlugin
             pluginPage.Controls.Add(this);
             this.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             this.Dock = DockStyle.Fill;
+            this.Padding = new Padding(0);
+            this.Margin= new Padding(0);
             pluginPage.Visible = true;
             return pluginPage;
             //parent.TabPages.Add(pluginPage);

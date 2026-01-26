@@ -975,7 +975,7 @@ namespace FlightRecPlugin
             Enabled = false;
             Font = new System.Drawing.Font("Arial", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             ForeColor = Color.White;
-            Margin = new Padding(5, 4, 5, 4);
+            Margin = new Padding(0);
             Name = "FlightRecCtrl";
             Size = new Size(548, 784);
             gbDynamicData.ResumeLayout(false);

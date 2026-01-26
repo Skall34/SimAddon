@@ -598,6 +598,10 @@ namespace SimAddon
                     plugin.OnShowDialog += Plugin_OnShowDialog;
 
                     TabPage pluginpage = plugin.registerPage();
+                    
+                    // Supprimer tout padding et margin pour que le contrôle remplisse tout l'espace
+                    pluginpage.Padding = new Padding(0);
+                    pluginpage.Margin = new Padding(0);
 
                     pluginTabs.Add(pluginpage);
                     //find if there is a plugin setting for this plugin
