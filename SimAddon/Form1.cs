@@ -583,6 +583,9 @@ namespace SimAddon
 
             // Appliquer le thème Visual Studio Dark au TabControl
             tabControl1.ApplyVisualStudioDarkTheme();
+            
+            // Appliquer le thème Visual Studio Dark au StatusStrip
+            statusStrip.ApplyVisualStudioDarkTheme();
 
             tabControl1.SuspendLayout();
             foreach (ISimAddonPluginCtrl plugin in plugsMgr.plugins)

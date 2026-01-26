@@ -36,7 +36,7 @@ namespace SimAddon
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            statusStrip = new StatusStrip();
+            statusStrip = new SimAddonControls.VSStatusStrip();
             lblConnectionStatus = new ToolStripStatusLabel();
             lblPluginStatus = new ToolStripStatusLabel();
             toolStripHeureZulu = new ToolStripStatusLabel();
@@ -405,7 +405,7 @@ namespace SimAddon
 
         #endregion
 
-        private System.Windows.Forms.StatusStrip statusStrip;
+        private SimAddonControls.VSStatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel lblConnectionStatus;
         private System.Windows.Forms.Timer timerMain;
         private System.Windows.Forms.Timer timerConnection;
