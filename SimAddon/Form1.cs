@@ -236,6 +236,9 @@ namespace SimAddon
             //this will hold the list of screenshots taken during the flight
             screenshots = new List<string>();
             LastWindowState = WindowState;
+            
+            // Initialiser la LED de connexion serveur à l'état déconnecté
+            UpdateServerConnectionLed(false);
         }
 
         // appelé chaque 1s par le timer de connection
@@ -549,6 +552,7 @@ namespace SimAddon
                 if (sessionToken == "")
                 {
                     Logger.WriteLine("Login failed");
+                    UpdateServerConnectionLed(false);
                 }
                 else
                 {
@@ -556,12 +560,14 @@ namespace SimAddon
                     Settings.Default.SessionToken = sessionToken;
                     Settings.Default.Save();
                     result = true;
+                    UpdateServerConnectionLed(true);
                 }
             }
             else
             {
                 Logger.WriteLine("Already logged in to data server");
                 result = true;
+                UpdateServerConnectionLed(true);
             }
             return result;
         }
@@ -916,6 +922,24 @@ namespace SimAddon
             this.lblPluginStatus.ForeColor = Color.Green;
         }
 
+        /// <summary>
+        /// Met à jour l'état de la LED de connexion au serveur
+        /// </summary>
+        /// <param name="isConnected">True si connecté, False sinon</param>
+        private void UpdateServerConnectionLed(bool isConnected)
+        {
+            if (ledConnectionStatus?.Control is SimAddonControls.LedBulb led)
+            {
+                led.On = isConnected;
+                led.Color = isConnected ? Color.Lime : Color.Red;
+                
+                // Mettre à jour le tooltip
+                ledConnectionStatus.ToolTipText = isConnected 
+                    ? "Connecté au serveur" 
+                    : "Déconnecté du serveur";
+            }
+        }
+
         private void Form1_Resize(object sender, EventArgs e)
         {
 
@@ -974,7 +998,7 @@ namespace SimAddon
 
         private void loginToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            connectToSite();
+            _ = connectToSite();
         }
 
         private void logoutToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -982,11 +1006,14 @@ namespace SimAddon
             _simData.logoutFromSite();
             Settings.Default.SessionToken = "";
             Settings.Default.Save();
+            UpdateServerConnectionLed(false);
         }
 
         private async void checkSessionToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             bool sessionValid = await _simData.checkSession(Settings.Default.SessionToken);
+            UpdateServerConnectionLed(sessionValid);
+            
             if (sessionValid)
             {
                 Plugin_OnShowMsgbox(this, "Session is valid.", "Session Check", MessageBoxButtons.OK);
