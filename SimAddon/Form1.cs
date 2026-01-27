@@ -39,6 +39,9 @@ namespace SimAddon
         private double transparencyLevel = 1.0;
         private System.Windows.Forms.Timer mouseCheckTimer;
         private bool isMouseOverForm = false;
+        
+        // LED de connexion serveur
+        private ToolStripControlHost ledConnectionStatus;
 
         // Window dragging support
         private bool isDragging = false;
@@ -131,6 +134,25 @@ namespace SimAddon
             updateChecker = new UpdateChecker();
 
             InitializeComponent();
+            
+            // Créer et configurer la LED de connexion serveur après InitializeComponent
+            var ledBulb = new SimAddonControls.LedBulb
+            {
+                Size = new Size(16, 16),
+                On = false,
+                Color = Color.Red
+            };
+            ledConnectionStatus = new ToolStripControlHost(ledBulb)
+            {
+                Alignment = ToolStripItemAlignment.Right,
+                AutoSize = false,
+                Margin = new Padding(5, 1, 5, 2),
+                Size = new Size(20, 23),
+                ToolTipText = "État de connexion au serveur"
+            };
+
+            // Insérer en dernier (se retrouvera à guauche des autres boutons de la menustrip)
+            menuStrip1.Items.Add(ledConnectionStatus);
 
             // create and show splash as early as possible
             splashScreen = new LoadingForm();

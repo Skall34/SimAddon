@@ -68,7 +68,6 @@ namespace SimAddon
             btnClose = new ToolStripButton();
             btnMaximize = new ToolStripButton();
             btnMinimize = new ToolStripButton();
-            ledConnectionStatus = new ToolStripControlHost(new SimAddonControls.LedBulb());
             statusStrip.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -127,6 +126,7 @@ namespace SimAddon
             // tabControl1
             // 
             tabControl1.AccentColor = Color.FromArgb(0, 122, 204);
+            tabControl1.Dock = DockStyle.Fill;
             tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
             tabControl1.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tabControl1.ItemSize = new Size(80, 25);
@@ -134,7 +134,7 @@ namespace SimAddon
             tabControl1.Margin = new Padding(0);
             tabControl1.Name = "tabControl1";
             tabControl1.Padding = new Point(0, 0);
-            tabControl1.Size = new Size(591, 820);
+            tabControl1.Size = new Size(590, 820);
             tabControl1.SizeMode = TabSizeMode.Fixed;
             tabControl1.TabBackColor = Color.FromArgb(45, 45, 48);
             tabControl1.TabHoverBackColor = Color.DarkGray;
@@ -147,7 +147,7 @@ namespace SimAddon
             // menuStrip1
             // 
             menuStrip1.BackColor = Color.DimGray;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, networkToolStripMenuItem1, linksToolStripMenuItem, helpToolStripMenuItem, btnClose, btnMaximize, btnMinimize, ledConnectionStatus });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, networkToolStripMenuItem1, linksToolStripMenuItem, helpToolStripMenuItem, btnClose, btnMaximize, btnMinimize });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(0);
@@ -373,15 +373,6 @@ namespace SimAddon
             btnMinimize.Text = "0";
             btnMinimize.Click += btnMinimize_Click;
             // 
-            // ledConnectionStatus
-            // 
-            ledConnectionStatus.Alignment = ToolStripItemAlignment.Right;
-            ledConnectionStatus.AutoSize = false;
-            ledConnectionStatus.Margin = new Padding(0);
-            ledConnectionStatus.Name = "ledConnectionStatus";
-            ledConnectionStatus.Size = new Size(16, 16);
-            ledConnectionStatus.ToolTipText = "État de connexion au serveur";
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(9F, 18F);
@@ -444,7 +435,6 @@ namespace SimAddon
         private ToolStripButton btnMinimize;
         private ToolStripButton btnMaximize;
         private ToolStripButton btnClose;
-        private ToolStripControlHost ledConnectionStatus;
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem aboutSimAddonToolStripMenuItem;
     }
