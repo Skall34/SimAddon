@@ -195,6 +195,11 @@ namespace SimAddon
             this.menuStrip1.MouseDown += new MouseEventHandler(this.menuStrip1_MouseDown);
             this.menuStrip1.MouseMove += new MouseEventHandler(this.menuStrip1_MouseMove);
             this.menuStrip1.MouseUp += new MouseEventHandler(this.menuStrip1_MouseUp);
+            
+            // Activer le redimensionnement via le StatusStrip (grip)
+            this.statusStrip.MouseDown += new MouseEventHandler(this.statusStrip_MouseDown);
+            this.statusStrip.MouseMove += new MouseEventHandler(this.statusStrip_MouseMove);
+            this.statusStrip.MouseUp += new MouseEventHandler(this.statusStrip_MouseUp);
 
             this.StartPosition = FormStartPosition.Manual;
             Point startlocation = new Point();
@@ -497,6 +502,12 @@ namespace SimAddon
                 isDragging = true;
                 dragCursorPoint = Cursor.Position;
                 dragFormPoint = this.Location;
+                
+                // Capturer la souris pour éviter qu'elle ne sorte pendant le déplacement
+                menuStrip1.Capture = true;
+                
+                // Suspendre le layout pour améliorer les performances
+                this.SuspendLayout();
             }
         }
 
@@ -505,13 +516,107 @@ namespace SimAddon
             if (isDragging)
             {
                 Point diff = Point.Subtract(Cursor.Position, new Size(dragCursorPoint));
-                this.Location = Point.Add(dragFormPoint, new Size(diff));
+                Point newLocation = Point.Add(dragFormPoint, new Size(diff));
+                
+                // Utiliser SetBounds pour un déplacement plus efficace
+                this.SetBounds(newLocation.X, newLocation.Y, this.Width, this.Height);
             }
         }
 
         private void menuStrip1_MouseUp(object sender, MouseEventArgs e)
         {
-            isDragging = false;
+            if (isDragging)
+            {
+                isDragging = false;
+                
+                // Libérer la capture de la souris
+                menuStrip1.Capture = false;
+                
+                // Reprendre le layout et forcer un refresh complet
+                this.ResumeLayout(true);
+                this.Refresh();
+            }
+        }
+
+        private void statusStrip_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                // Vérifier si on clique dans la zone du grip (coin inférieur droit)
+                // Le grip fait environ 16x16 pixels dans le coin
+                int gripSize = 16;
+                Rectangle gripRect = new Rectangle(
+                    statusStrip.Width - gripSize, 
+                    0, 
+                    gripSize, 
+                    statusStrip.Height
+                );
+                
+                if (gripRect.Contains(e.Location))
+                {
+                    isResizing = true;
+                    resizeStartPoint = Control.MousePosition;
+                    resizeStartSize = this.Size;
+                    
+                    // Capturer la souris pour éviter qu'elle ne sorte pendant le redimensionnement
+                    statusStrip.Capture = true;
+                    
+                    // Suspendre le layout pour améliorer les performances
+                    this.SuspendLayout();
+                }
+            }
+        }
+
+        private void statusStrip_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isResizing)
+            {
+                Point currentMousePos = Control.MousePosition;
+                int deltaX = currentMousePos.X - resizeStartPoint.X;
+                int deltaY = currentMousePos.Y - resizeStartPoint.Y;
+                
+                // Calculer la nouvelle taille en respectant MinimumSize
+                int newWidth = Math.Max(MinimumSize.Width, resizeStartSize.Width + deltaX);
+                int newHeight = Math.Max(MinimumSize.Height, resizeStartSize.Height + deltaY);
+                
+                // Utiliser SetBounds pour un redimensionnement plus efficace
+                this.SetBounds(this.Left, this.Top, newWidth, newHeight);
+            }
+            else
+            {
+                // Changer le curseur quand on survole le grip
+                int gripSize = 16;
+                Rectangle gripRect = new Rectangle(
+                    statusStrip.Width - gripSize, 
+                    0, 
+                    gripSize, 
+                    statusStrip.Height
+                );
+                
+                if (gripRect.Contains(e.Location))
+                {
+                    statusStrip.Cursor = Cursors.SizeNWSE;
+                }
+                else
+                {
+                    statusStrip.Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        private void statusStrip_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (isResizing)
+            {
+                isResizing = false;
+                
+                // Libérer la capture de la souris
+                statusStrip.Capture = false;
+                
+                // Reprendre le layout et forcer un refresh complet
+                this.ResumeLayout(true);
+                this.Refresh();
+            }
         }
 
         private void ToggleTransparency(double opacity)
