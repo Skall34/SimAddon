@@ -294,6 +294,12 @@ namespace MeteoPlugin
                             //remove D for further processing
                             visualRangePart = visualRangePart.Substring(0, visualRangePart.Length - 1);
                         }
+                        if (visualRangePart.EndsWith("N"))
+                        {
+                            Trend = TrendValue.NO_CHANGE;
+                            //remove D for further processing
+                            visualRangePart = visualRangePart.Substring(0, visualRangePart.Length - 1);
+                        }
 
                         string[] distanceItems = visualRangePart.Split("V");
                         //the distance part may have FT at the end, or not.
