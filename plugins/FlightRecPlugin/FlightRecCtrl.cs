@@ -54,6 +54,8 @@ namespace FlightRecPlugin
 
         private DateTime _startTime;
         private DateTime _endTime;
+        private DateTime _simStartTime;
+        private DateTime _simEndTime;
 
         private DateTime _airborn;
         private DateTime _notAirborn;
@@ -169,6 +171,9 @@ namespace FlightRecPlugin
 
             _startTime = DateTime.UnixEpoch;
             _endTime = DateTime.UnixEpoch;
+            _simStartTime = DateTime.UnixEpoch;
+            _simEndTime = DateTime.UnixEpoch;
+
             _airborn = DateTime.UnixEpoch;
             _notAirborn = DateTime.UnixEpoch;
 
@@ -369,6 +374,7 @@ namespace FlightRecPlugin
             flightPerfs.takeOffWeight = currentFlightStatus.planeWeight;
             // on veut afficher la date
             _airborn = DateTime.Now; //data.GetSimDateTimeUTC();
+
             flightPerfs.takeOffTime = _airborn;
             if (lbTimeAirborn.Text == "--:--")
             {
@@ -420,6 +426,7 @@ namespace FlightRecPlugin
             flightPerfs.landingWeight = currentFlightStatus.planeWeight;
 
             _notAirborn = DateTime.Now; //data.GetSimDateTimeUTC();
+
             flightPerfs.landingTime = _notAirborn;
 
             if (lbTimeOnGround.Text == "--:--")
@@ -1024,9 +1031,13 @@ namespace FlightRecPlugin
             lbEndTime.Text = "--:--";
 
             _startTime = DateTime.UnixEpoch;
+            _simStartTime = DateTime.UnixEpoch;
+
             _airborn = DateTime.UnixEpoch;
             _notAirborn = DateTime.UnixEpoch;
+
             _endTime = DateTime.UnixEpoch;
+            _simEndTime = DateTime.UnixEpoch;
 
             lbTimeAirborn.Text = "--:--";
             lbTimeOnGround.Text = "--:--";
@@ -1138,6 +1149,8 @@ namespace FlightRecPlugin
 
             _startFuel = data.GetFuelWeight();
             _startTime = DateTime.Now; //data.GetSimDateTimeUTC();
+            _simStartTime = data.GetSimDateTimeUTC();
+
             this.lbStartTime.Text = _startTime.ToShortTimeString();
             //0.00 => only keep 2 decimals for the fuel
 
@@ -1184,8 +1197,8 @@ namespace FlightRecPlugin
 
             //store the end of flight fuel value
             _endFuel = _currentFuel;
-            DateTime now = DateTime.Now; //data.GetSimDateTimeUTC();
-            _endTime = now;
+            _endTime = DateTime.Now;
+            _simEndTime = data.GetSimDateTimeUTC();
 
             this.lbEndTime.Text = _endTime.ToShortTimeString();
             //0.00 => only keep 2 decimals for the fuel
@@ -1219,6 +1232,8 @@ namespace FlightRecPlugin
                 departureAirportName = lbStartPosition.Text,
                 departureFuel = _startFuel,
                 departureTime = _startTime,
+                simDepartureTime = _simStartTime,
+                simArrivalTime = _simEndTime,
                 arrivalICAO = lbEndIata.Text,
                 arrivalAirportName = lbEndPosition.Text,
                 arrivalFuel = _endFuel,

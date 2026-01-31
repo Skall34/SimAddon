@@ -17,10 +17,12 @@ namespace FlightRecPlugin
         public string departureAirportName { get; set; }
         public double departureFuel { get; set; }
         public DateTime departureTime { get; set; }
+        public DateTime simDepartureTime { get; set; }
         public string arrivalICAO { get; set; }
         public string arrivalAirportName { get; set; }
         public double arrivalFuel { get; set; }
         public DateTime arrivalTime { get; set; }
+        public DateTime simArrivalTime { get; set; }
         public short noteDuVol { get; set; }
         public string mission { get; set; }
         public string commentaire { get; set; }
@@ -38,8 +40,8 @@ namespace FlightRecPlugin
             // Sim Plane
             report.AppendLine($"<strong>Aircraft:</strong> {SimPlane}<br><br>");
             // Departure and Arrival
-            report.AppendLine($"<strong>Departure:</strong> {departureAirportName} ({departureICAO}) at {departureTime.ToString("g", CultureInfo.InvariantCulture)}<br><br>");
-            report.AppendLine($"<strong>Arrival:</strong> {arrivalAirportName} ({arrivalICAO}) at {arrivalTime.ToString("g", CultureInfo.InvariantCulture)}<br><br>");
+            report.AppendLine($"<strong>Departure:</strong> {departureAirportName} ({departureICAO}) at {departureTime.ToString("g", CultureInfo.InvariantCulture)} (Sim Time: {simDepartureTime.ToString("g", CultureInfo.InvariantCulture)})<br><br>");
+            report.AppendLine($"<strong>Arrival:</strong> {arrivalAirportName} ({arrivalICAO}) at {arrivalTime.ToString("g", CultureInfo.InvariantCulture)} (Sim Time: {simArrivalTime.ToString("g", CultureInfo.InvariantCulture)})<br><br>");
             report.AppendLine($"<strong>Departure Fuel:</strong> {departureFuel} Kg<br><br>");
             report.AppendLine($"<strong>Arrival Fuel:</strong> {arrivalFuel} Kg<br><br>");
             // Payload & Mission
@@ -65,9 +67,9 @@ namespace FlightRecPlugin
             report.AppendLine();
 
             // Departure and Arrival
-            report.AppendLine($"**Departure:** {departureAirportName} ({departureICAO}) at {departureTime.ToString("g", CultureInfo.InvariantCulture)}");
+            report.AppendLine($"**Departure:** {departureAirportName} ({departureICAO}) at {departureTime.ToString("g", CultureInfo.InvariantCulture)} (Sim Time: {simDepartureTime.ToString("g", CultureInfo.InvariantCulture)})");
             report.AppendLine();
-            report.AppendLine($"**Arrival:** {arrivalAirportName} ({arrivalICAO}) at {arrivalTime.ToString("g", CultureInfo.InvariantCulture)}");
+            report.AppendLine($"**Arrival:** {arrivalAirportName} ({arrivalICAO}) at {arrivalTime.ToString("g", CultureInfo.InvariantCulture)} (Sim Time: {simArrivalTime.ToString("g", CultureInfo.InvariantCulture)})");
             report.AppendLine();
             report.AppendLine($"**Departure Fuel:** {departureFuel} Kg");
             report.AppendLine();
