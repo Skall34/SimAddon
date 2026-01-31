@@ -67,9 +67,9 @@ namespace FlightRecPlugin
             report.AppendLine();
 
             // Departure and Arrival
-            report.AppendLine($"**Departure:** {departureAirportName} ({departureICAO}) at {departureTime.ToString("g", CultureInfo.InvariantCulture)} (Sim Time: {simDepartureTime.ToString("g", CultureInfo.InvariantCulture)})");
+            report.AppendLine($"**Departure:** {departureAirportName} ({departureICAO}) at {simDepartureTime.ToString("g", CultureInfo.InvariantCulture)}");
             report.AppendLine();
-            report.AppendLine($"**Arrival:** {arrivalAirportName} ({arrivalICAO}) at {arrivalTime.ToString("g", CultureInfo.InvariantCulture)} (Sim Time: {simArrivalTime.ToString("g", CultureInfo.InvariantCulture)})");
+            report.AppendLine($"**Arrival:** {arrivalAirportName} ({arrivalICAO}) at {simArrivalTime.ToString("g", CultureInfo.InvariantCulture)}");
             report.AppendLine();
             report.AppendLine($"**Departure Fuel:** {departureFuel} Kg");
             report.AppendLine();
