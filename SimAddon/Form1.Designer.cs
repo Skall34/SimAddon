@@ -79,7 +79,6 @@ namespace SimAddon
             statusStrip.ForeColor = Color.White;
             statusStrip.GripColor = Color.FromArgb(70, 70, 74);
             statusStrip.GripStyle = ToolStripGripStyle.Visible;
-            statusStrip.SizingGrip = true;
             statusStrip.Items.AddRange(new ToolStripItem[] { lblConnectionStatus, lblPluginStatus, toolStripHeureZulu });
             statusStrip.Location = new Point(0, 846);
             statusStrip.Name = "statusStrip";
@@ -152,6 +151,7 @@ namespace SimAddon
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(0);
+            menuStrip1.ShowItemToolTips = true;
             menuStrip1.Size = new Size(590, 26);
             menuStrip1.TabIndex = 8;
             menuStrip1.Text = "menuStrip1";

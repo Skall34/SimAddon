@@ -148,7 +148,7 @@ namespace SimAddon
                 AutoSize = false,
                 Margin = new Padding(5, 1, 5, 2),
                 Size = new Size(20, 23),
-                ToolTipText = "État de connexion au serveur"
+                ToolTipText = "État de connexion au serveur"               
             };
 
             // Insérer en dernier (se retrouvera à guauche des autres boutons de la menustrip)
