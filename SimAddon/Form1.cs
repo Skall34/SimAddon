@@ -1376,6 +1376,8 @@ namespace SimAddon
 
         private void settingsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            bool topMostStatus = this.TopMost;
+            this.TopMost = false;
             //show the settings form
             using (SimaddonSettingsForm settingsForm = new SimaddonSettingsForm())
             {
@@ -1428,6 +1430,7 @@ namespace SimAddon
                     }
                 }
             }
+            this.TopMost = topMostStatus;
         }
 
         private void tracesFolderToolStripMenuItem_Click(object sender, EventArgs e)
