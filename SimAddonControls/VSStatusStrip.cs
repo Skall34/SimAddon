@@ -143,6 +143,10 @@ namespace SimAddonControls
                         }
                     }
                 }
+                else
+                {
+
+                }
             }
 
             protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)

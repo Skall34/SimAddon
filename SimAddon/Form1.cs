@@ -39,7 +39,7 @@ namespace SimAddon
         private double transparencyLevel = 1.0;
         private System.Windows.Forms.Timer mouseCheckTimer;
         private bool isMouseOverForm = false;
-        
+
         // LED de connexion serveur
         private ToolStripControlHost ledConnectionStatus;
 
@@ -134,7 +134,7 @@ namespace SimAddon
             updateChecker = new UpdateChecker();
 
             InitializeComponent();
-            
+
             // Créer et configurer la LED de connexion serveur après InitializeComponent
             var ledBulb = new SimAddonControls.LedBulb
             {
@@ -148,7 +148,7 @@ namespace SimAddon
                 AutoSize = false,
                 Margin = new Padding(5, 1, 5, 2),
                 Size = new Size(20, 23),
-                ToolTipText = "État de connexion au serveur"               
+                ToolTipText = "État de connexion au serveur"
             };
 
             // Insérer en dernier (se retrouvera à guauche des autres boutons de la menustrip)
@@ -195,7 +195,7 @@ namespace SimAddon
             this.menuStrip1.MouseDown += new MouseEventHandler(this.menuStrip1_MouseDown);
             this.menuStrip1.MouseMove += new MouseEventHandler(this.menuStrip1_MouseMove);
             this.menuStrip1.MouseUp += new MouseEventHandler(this.menuStrip1_MouseUp);
-            
+
             // Activer le redimensionnement via le StatusStrip (grip)
             this.statusStrip.MouseDown += new MouseEventHandler(this.statusStrip_MouseDown);
             this.statusStrip.MouseMove += new MouseEventHandler(this.statusStrip_MouseMove);
@@ -263,7 +263,7 @@ namespace SimAddon
             //this will hold the list of screenshots taken during the flight
             screenshots = new List<string>();
             LastWindowState = WindowState;
-            
+
             // Initialiser la LED de connexion serveur à l'état déconnecté
             UpdateServerConnectionLed(false);
         }
@@ -502,10 +502,10 @@ namespace SimAddon
                 isDragging = true;
                 dragCursorPoint = Cursor.Position;
                 dragFormPoint = this.Location;
-                
+
                 // Capturer la souris pour éviter qu'elle ne sorte pendant le déplacement
                 menuStrip1.Capture = true;
-                
+
                 // Suspendre le layout pour améliorer les performances
                 this.SuspendLayout();
             }
@@ -517,7 +517,7 @@ namespace SimAddon
             {
                 Point diff = Point.Subtract(Cursor.Position, new Size(dragCursorPoint));
                 Point newLocation = Point.Add(dragFormPoint, new Size(diff));
-                
+
                 // Utiliser SetBounds pour un déplacement plus efficace
                 this.SetBounds(newLocation.X, newLocation.Y, this.Width, this.Height);
             }
@@ -528,10 +528,10 @@ namespace SimAddon
             if (isDragging)
             {
                 isDragging = false;
-                
+
                 // Libérer la capture de la souris
                 menuStrip1.Capture = false;
-                
+
                 // Reprendre le layout et forcer un refresh complet
                 this.ResumeLayout(true);
                 this.Refresh();
@@ -546,21 +546,21 @@ namespace SimAddon
                 // Le grip fait environ 16x16 pixels dans le coin
                 int gripSize = 16;
                 Rectangle gripRect = new Rectangle(
-                    statusStrip.Width - gripSize, 
-                    0, 
-                    gripSize, 
+                    statusStrip.Width - gripSize,
+                    0,
+                    gripSize,
                     statusStrip.Height
                 );
-                
+
                 if (gripRect.Contains(e.Location))
                 {
                     isResizing = true;
                     resizeStartPoint = Control.MousePosition;
                     resizeStartSize = this.Size;
-                    
+
                     // Capturer la souris pour éviter qu'elle ne sorte pendant le redimensionnement
                     statusStrip.Capture = true;
-                    
+
                     // Suspendre le layout pour améliorer les performances
                     this.SuspendLayout();
                 }
@@ -574,11 +574,11 @@ namespace SimAddon
                 Point currentMousePos = Control.MousePosition;
                 int deltaX = currentMousePos.X - resizeStartPoint.X;
                 int deltaY = currentMousePos.Y - resizeStartPoint.Y;
-                
+
                 // Calculer la nouvelle taille en respectant MinimumSize
                 int newWidth = Math.Max(MinimumSize.Width, resizeStartSize.Width + deltaX);
                 int newHeight = Math.Max(MinimumSize.Height, resizeStartSize.Height + deltaY);
-                
+
                 // Utiliser SetBounds pour un redimensionnement plus efficace
                 this.SetBounds(this.Left, this.Top, newWidth, newHeight);
             }
@@ -587,12 +587,12 @@ namespace SimAddon
                 // Changer le curseur quand on survole le grip
                 int gripSize = 16;
                 Rectangle gripRect = new Rectangle(
-                    statusStrip.Width - gripSize, 
-                    0, 
-                    gripSize, 
+                    statusStrip.Width - gripSize,
+                    0,
+                    gripSize,
                     statusStrip.Height
                 );
-                
+
                 if (gripRect.Contains(e.Location))
                 {
                     statusStrip.Cursor = Cursors.SizeNWSE;
@@ -609,10 +609,10 @@ namespace SimAddon
             if (isResizing)
             {
                 isResizing = false;
-                
+
                 // Libérer la capture de la souris
                 statusStrip.Capture = false;
-                
+
                 // Reprendre le layout et forcer un refresh complet
                 this.ResumeLayout(true);
                 this.Refresh();
@@ -710,7 +710,7 @@ namespace SimAddon
 
             // Appliquer le thème Visual Studio Dark au TabControl
             tabControl1.ApplyVisualStudioDarkTheme();
-            
+
             // Appliquer le thème Visual Studio Dark au StatusStrip
             statusStrip.ApplyVisualStudioDarkTheme();
 
@@ -725,7 +725,7 @@ namespace SimAddon
                     plugin.OnShowDialog += Plugin_OnShowDialog;
 
                     TabPage pluginpage = plugin.registerPage();
-                    
+
                     // Supprimer tout padding et margin pour que le contrôle remplisse tout l'espace
                     pluginpage.Padding = new Padding(0);
                     pluginpage.Margin = new Padding(0);
@@ -1066,10 +1066,10 @@ namespace SimAddon
             {
                 led.On = isConnected;
                 led.Color = isConnected ? Color.Lime : Color.Red;
-                
+
                 // Mettre à jour le tooltip
-                ledConnectionStatus.ToolTipText = isConnected 
-                    ? "Connecté au serveur" 
+                ledConnectionStatus.ToolTipText = isConnected
+                    ? "Connecté au serveur"
                     : "Déconnecté du serveur";
             }
         }
@@ -1147,7 +1147,7 @@ namespace SimAddon
         {
             bool sessionValid = await _simData.checkSession(Settings.Default.SessionToken);
             UpdateServerConnectionLed(sessionValid);
-            
+
             if (sessionValid)
             {
                 Plugin_OnShowMsgbox(this, "Session is valid.", "Session Check", MessageBoxButtons.OK);
@@ -1617,6 +1617,11 @@ namespace SimAddon
                 aboutForm.Icon = this.Icon;
                 Plugin_OnShowDialog(this, aboutForm);
             }
+        }
+
+        private void statusStrip_PaintGrip(object sender, PaintEventArgs e)
+        {
+           
         }
     }
 }
