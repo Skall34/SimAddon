@@ -14,6 +14,8 @@ namespace SimAddon
         [STAThread]
         static void Main()
         {
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
+
             // Vérification instance unique
             bool createdNew = false;
             singleInstanceMutex = new Mutex(true, "SimAddonSingleInstanceMutex", out createdNew);

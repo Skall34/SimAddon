@@ -120,35 +120,6 @@ namespace SimAddonControls
                 }
             }
 
-            protected override void OnRenderGrip(ToolStripGripRenderEventArgs e)
-            {
-                // Dessiner la poignée de redimensionnement personnalisée
-                if (e.GripStyle == ToolStripGripStyle.Visible)
-                {
-                    using (SolidBrush brush = new SolidBrush(_statusStrip.GripColor))
-                    {
-                        int gripWidth = 3;
-                        int gripHeight = 3;
-                        int spacing = 4;
-                        
-                        // Dessiner 3 rangées de 3 points
-                        for (int row = 0; row < 3; row++)
-                        {
-                            for (int col = 0; col < 3; col++)
-                            {
-                                int x = e.GripBounds.Left + (col * spacing) + 2;
-                                int y = e.GripBounds.Top + (row * spacing) + 2;
-                                e.Graphics.FillRectangle(brush, x, y, gripWidth, gripHeight);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-
-                }
-            }
-
             protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
             {
                 // Utiliser la couleur de texte personnalisée

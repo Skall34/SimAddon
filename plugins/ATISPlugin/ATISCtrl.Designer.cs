@@ -105,7 +105,7 @@ namespace ATISPlugin
             // 
             tbATISText.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel1.SetColumnSpan(tbATISText, 3);
-            tbATISText.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbATISText.Font = new Font("Arial", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tbATISText.Location = new Point(4, 44);
             tbATISText.Margin = new Padding(4);
             tbATISText.Multiline = true;
@@ -193,7 +193,7 @@ namespace ATISPlugin
             // 
             lvControllers.Columns.AddRange(new ColumnHeader[] { columnType, columnCallsign, columnFreq });
             lvControllers.Dock = DockStyle.Fill;
-            lvControllers.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lvControllers.Font = new Font("Arial", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lvControllers.FullRowSelect = true;
             lvControllers.GridLines = true;
             lvControllers.HeaderStyle = ColumnHeaderStyle.Nonclickable;
@@ -225,7 +225,7 @@ namespace ATISPlugin
             // tbController
             // 
             tbController.Dock = DockStyle.Fill;
-            tbController.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbController.Font = new Font("Arial", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tbController.Location = new Point(0, 0);
             tbController.Multiline = true;
             tbController.Name = "tbController";
@@ -244,7 +244,7 @@ namespace ATISPlugin
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(splitContainer1);
-            Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4);
             Name = "ATISCtrl";
             Size = new Size(534, 714);

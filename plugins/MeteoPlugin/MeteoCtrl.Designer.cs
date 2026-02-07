@@ -64,10 +64,11 @@ namespace MeteoPlugin
             // label1
             // 
             label1.AutoSize = true;
+            label1.Font = new Font("Arial", 9F);
             label1.Location = new Point(3, 0);
             label1.Name = "label1";
             label1.Padding = new Padding(5);
-            label1.Size = new Size(85, 25);
+            label1.Size = new Size(83, 25);
             label1.TabIndex = 0;
             label1.Text = "Airport ICAO";
             label1.TextAlign = ContentAlignment.MiddleCenter;
@@ -86,7 +87,7 @@ namespace MeteoPlugin
             // tbMETAR
             // 
             tbMETAR.Dock = DockStyle.Fill;
-            tbMETAR.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbMETAR.Font = new Font("Arial", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tbMETAR.Location = new Point(12, 104);
             tbMETAR.Margin = new Padding(10, 3, 10, 3);
             tbMETAR.Multiline = true;
@@ -112,7 +113,7 @@ namespace MeteoPlugin
             // lblDecodedMETAR
             // 
             lblDecodedMETAR.AutoSize = true;
-            lblDecodedMETAR.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDecodedMETAR.Font = new Font("Arial", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblDecodedMETAR.ForeColor = Color.Black;
             lblDecodedMETAR.Location = new Point(10, 10);
             lblDecodedMETAR.Margin = new Padding(10);
@@ -153,6 +154,7 @@ namespace MeteoPlugin
             tableLayoutPanel2.Controls.Add(btnRequest, 2, 0);
             tableLayoutPanel2.Controls.Add(label1, 0, 0);
             tableLayoutPanel2.Controls.Add(cbICAO, 1, 0);
+            tableLayoutPanel2.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tableLayoutPanel2.Location = new Point(5, 67);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
@@ -163,6 +165,7 @@ namespace MeteoPlugin
             // cbICAO
             // 
             cbICAO.Dock = DockStyle.Fill;
+            cbICAO.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             cbICAO.FormattingEnabled = true;
             cbICAO.Location = new Point(153, 3);
             cbICAO.MinimumSize = new Size(250, 0);

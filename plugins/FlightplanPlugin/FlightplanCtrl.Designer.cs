@@ -226,7 +226,7 @@
             lvWaypoints.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             lvWaypoints.AutoArrange = false;
             lvWaypoints.Columns.AddRange(new ColumnHeader[] { ColWaypoint, ColName, ColRoute, ColDistance });
-            lvWaypoints.Font = new Font("Segoe Script", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lvWaypoints.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lvWaypoints.FullRowSelect = true;
             lvWaypoints.GridLines = true;
             lvWaypoints.HeaderStyle = ColumnHeaderStyle.Nonclickable;
@@ -351,7 +351,7 @@
             // 
             tbFlightParams.BackColor = Color.Black;
             tbFlightParams.Dock = DockStyle.Fill;
-            tbFlightParams.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbFlightParams.Font = new Font("Arial", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tbFlightParams.ForeColor = Color.White;
             tbFlightParams.Location = new Point(3, 176);
             tbFlightParams.Multiline = true;
@@ -380,7 +380,7 @@
             // tbComment
             // 
             tbComment.Dock = DockStyle.Fill;
-            tbComment.Font = new Font("Segoe Script", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbComment.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tbComment.Location = new Point(0, 0);
             tbComment.Multiline = true;
             tbComment.Name = "tbComment";

@@ -79,15 +79,17 @@ namespace SimAddon
             statusStrip.ForeColor = Color.White;
             statusStrip.GripColor = Color.FromArgb(70, 70, 74);
             statusStrip.GripMargin = new Padding(0);
+            statusStrip.GripStyle = ToolStripGripStyle.Visible;
             statusStrip.Items.AddRange(new ToolStripItem[] { lblConnectionStatus, lblPluginStatus, toolStripHeureZulu });
             statusStrip.Location = new Point(0, 846);
             statusStrip.Name = "statusStrip";
             statusStrip.Padding = new Padding(1, 0, 22, 0);
+            statusStrip.RenderMode = ToolStripRenderMode.Professional;
             statusStrip.Size = new Size(590, 24);
             statusStrip.SizingGrip = false;
             statusStrip.TabIndex = 6;
             statusStrip.Text = "statusStrip1";
-            statusStrip.PaintGrip += statusStrip_PaintGrip;
+
             // 
             // lblConnectionStatus
             // 
@@ -130,7 +132,7 @@ namespace SimAddon
             tabControl1.AccentColor = Color.FromArgb(0, 122, 204);
             tabControl1.Dock = DockStyle.Fill;
             tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
-            tabControl1.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tabControl1.Font = new Font("Arial", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tabControl1.ItemSize = new Size(80, 25);
             tabControl1.Location = new Point(0, 26);
             tabControl1.Margin = new Padding(0);

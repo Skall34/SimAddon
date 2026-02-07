@@ -195,6 +195,9 @@ namespace SimAddon
             this.menuStrip1.MouseDown += new MouseEventHandler(this.menuStrip1_MouseDown);
             this.menuStrip1.MouseMove += new MouseEventHandler(this.menuStrip1_MouseMove);
             this.menuStrip1.MouseUp += new MouseEventHandler(this.menuStrip1_MouseUp);
+            
+            // Appliquer un renderer personnalisé au MenuStrip pour les couleurs
+            this.menuStrip1.Renderer = new DarkMenuStripRenderer();
 
             // Activer le redimensionnement via le StatusStrip (grip)
             this.statusStrip.MouseDown += new MouseEventHandler(this.statusStrip_MouseDown);
@@ -398,7 +401,7 @@ namespace SimAddon
             if (_simData.isConnectedToSim)
             {
                 statusText = "Connected";
-                this.lblConnectionStatus.ForeColor = Color.Green;
+                this.lblConnectionStatus.ForeColor = Color.LightGreen;
                 if (_simData.GetReadyToFly())
                 {
                     statusText += " / Ready to fly";
@@ -1053,7 +1056,7 @@ namespace SimAddon
         private void Plugin_OnStatusUpdate(object sender, string statusMessage)
         {
             this.lblPluginStatus.Text = statusMessage;
-            this.lblPluginStatus.ForeColor = Color.Green;
+            this.lblPluginStatus.ForeColor = Color.LightGreen;
         }
 
         /// <summary>
@@ -1619,9 +1622,94 @@ namespace SimAddon
             }
         }
 
-        private void statusStrip_PaintGrip(object sender, PaintEventArgs e)
+    }
+
+    /// <summary>
+    /// Renderer personnalisé pour le MenuStrip avec thème sombre
+    /// </summary>
+    public class DarkMenuStripRenderer : ToolStripProfessionalRenderer
+    {
+        public DarkMenuStripRenderer() : base(new DarkMenuColorTable())
         {
-           
         }
+
+        protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
+        {
+            // Dessiner un séparateur horizontal sombre
+            if (!e.Vertical)
+            {
+                Rectangle rect = new Rectangle(
+                    e.Item.ContentRectangle.Left + 25,
+                    e.Item.ContentRectangle.Height / 2,
+                    e.Item.ContentRectangle.Width - 25,
+                    1
+                );
+                
+                using (Pen pen = new Pen(Color.FromArgb(70, 70, 74)))
+                {
+                    e.Graphics.DrawLine(pen, rect.Left, rect.Top, rect.Right, rect.Top);
+                }
+            }
+            else
+            {
+                base.OnRenderSeparator(e);
+            }
+        }
+
+        protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
+        {
+            // Forcer la couleur du texte pour tous les items
+            if (e.Item is ToolStripMenuItem)
+            {
+                e.TextColor = Color.White;
+            }
+            base.OnRenderItemText(e);
+        }
+
+        protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
+        {
+            if (e.Item.Selected)
+            {
+                // Couleur de survol
+                Rectangle rect = new Rectangle(Point.Empty, e.Item.Size);
+                using (SolidBrush brush = new SolidBrush(Color.FromArgb(51, 51, 55)))
+                {
+                    e.Graphics.FillRectangle(brush, rect);
+                }
+            }
+            else if (e.Item.Pressed || (e.Item is ToolStripMenuItem menuItem && menuItem.DropDown.Visible))
+            {
+                // Couleur quand le menu est ouvert
+                Rectangle rect = new Rectangle(Point.Empty, e.Item.Size);
+                using (SolidBrush brush = new SolidBrush(Color.FromArgb(45, 45, 48)))
+                {
+                    e.Graphics.FillRectangle(brush, rect);
+                }
+            }
+            else
+            {
+                base.OnRenderMenuItemBackground(e);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Table de couleurs pour le thème sombre du menu
+    /// </summary>
+    public class DarkMenuColorTable : ProfessionalColorTable
+    {
+        public override Color MenuItemSelected => Color.FromArgb(51, 51, 55);
+        public override Color MenuItemSelectedGradientBegin => Color.FromArgb(51, 51, 55);
+        public override Color MenuItemSelectedGradientEnd => Color.FromArgb(51, 51, 55);
+        public override Color MenuItemPressedGradientBegin => Color.FromArgb(45, 45, 48);
+        public override Color MenuItemPressedGradientEnd => Color.FromArgb(45, 45, 48);
+        public override Color MenuItemBorder => Color.FromArgb(70, 70, 74);
+        public override Color MenuBorder => Color.FromArgb(70, 70, 74);
+        public override Color ImageMarginGradientBegin => Color.DimGray;
+        public override Color ImageMarginGradientMiddle => Color.DimGray;
+        public override Color ImageMarginGradientEnd => Color.DimGray;
+        public override Color ToolStripDropDownBackground => Color.DimGray;
+        public override Color SeparatorDark => Color.FromArgb(70, 70, 74);
+        public override Color SeparatorLight => Color.FromArgb(90, 90, 94);
     }
 }

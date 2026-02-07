@@ -221,7 +221,7 @@ namespace SimDataManager
                     try
                     {
                         context.Response.ContentType = "text/html; charset=utf-8";
-                        string responseHtml = "<html><head><meta charset=\"utf-8\"/><title>SimAddon</title></head><body style=\"font-family:Segoe UI,Arial,sans-serif;margin:40px;text-align:center;\">" +
+                        string responseHtml = "<html><head><meta charset=\"utf-8\"/><title>SimAddon</title></head><body style=\"font-family:Arial,Arial,sans-serif;margin:40px;text-align:center;\">" +
                                               "<h2>Connexion détectée</h2><p>Vous pouvez fermer cette fenêtre et revenir à SimAddon.</p></body></html>";
                         byte[] buffer = Encoding.UTF8.GetBytes(responseHtml);
                         context.Response.ContentLength64 = buffer.Length;

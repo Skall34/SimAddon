@@ -81,7 +81,7 @@ namespace CommPlugin
             // lblCom1
             // 
             lblCom1.BackColor = Color.FromArgb(64, 0, 0);
-            lblCom1.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblCom1.Font = new Font("Arial", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblCom1.ForeColor = Color.Red;
             lblCom1.Location = new Point(5, 25);
             lblCom1.Margin = new Padding(5, 25, 5, 5);
@@ -95,7 +95,7 @@ namespace CommPlugin
             // lblComStdby
             // 
             lblComStdby.BackColor = Color.FromArgb(64, 0, 0);
-            lblComStdby.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblComStdby.Font = new Font("Arial", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblComStdby.ForeColor = Color.Red;
             lblComStdby.Location = new Point(207, 25);
             lblComStdby.Margin = new Padding(5, 25, 5, 5);
@@ -110,7 +110,7 @@ namespace CommPlugin
             // 
             lblSquawk1.AutoSize = true;
             lblSquawk1.BackColor = Color.FromArgb(64, 0, 0);
-            lblSquawk1.Font = new Font("Segoe UI", 28F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSquawk1.Font = new Font("Arial", 28F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSquawk1.ForeColor = Color.Red;
             lblSquawk1.Location = new Point(6, 3);
             lblSquawk1.Name = "lblSquawk1";
@@ -123,7 +123,7 @@ namespace CommPlugin
             // 
             lblSquawk2.AutoSize = true;
             lblSquawk2.BackColor = Color.FromArgb(64, 0, 0);
-            lblSquawk2.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSquawk2.Font = new Font("Arial", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSquawk2.ForeColor = Color.Red;
             lblSquawk2.Location = new Point(84, 3);
             lblSquawk2.Name = "lblSquawk2";
@@ -136,7 +136,7 @@ namespace CommPlugin
             // 
             lblSquawk3.AutoSize = true;
             lblSquawk3.BackColor = Color.FromArgb(64, 0, 0);
-            lblSquawk3.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSquawk3.Font = new Font("Arial", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSquawk3.ForeColor = Color.Red;
             lblSquawk3.Location = new Point(162, 3);
             lblSquawk3.Name = "lblSquawk3";
@@ -149,7 +149,7 @@ namespace CommPlugin
             // 
             lblSquawk4.AutoSize = true;
             lblSquawk4.BackColor = Color.FromArgb(64, 0, 0);
-            lblSquawk4.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSquawk4.Font = new Font("Arial", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSquawk4.ForeColor = Color.Red;
             lblSquawk4.Location = new Point(240, 3);
             lblSquawk4.Name = "lblSquawk4";
