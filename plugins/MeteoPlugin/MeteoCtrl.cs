@@ -164,13 +164,19 @@ namespace MeteoPlugin
         {
             UpdateStatus("Requesting METAR informations");
             Logger.WriteLine("Requesting METAR informations");
-
-            string url = simdata.flyingNetwork.GetMETARUrl(searchItem);
-            Logger.WriteLine("METAR request URL : " + url);
-            string serverData = await Meteo.getMetar(url);
-            string rawMetarText = simdata.flyingNetwork.GetRawMETARText(serverData);
-            Logger.WriteLine("Raw METAR text : " + rawMetarText);
-            return rawMetarText;
+            if (simdata != null)
+            {
+                string url = simdata.flyingNetwork.GetMETARUrl(searchItem);
+                Logger.WriteLine("METAR request URL : " + url);
+                string serverData = await Meteo.getMetar(url);
+                string rawMetarText = simdata.flyingNetwork.GetRawMETARText(serverData);
+                Logger.WriteLine("Raw METAR text : " + rawMetarText);
+                return rawMetarText;
+            }
+            else
+            {
+                return "not connected";
+            }
         }
 
         private void displayAirportInfo(string searchItem)
