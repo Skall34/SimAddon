@@ -32,6 +32,10 @@ namespace BushTripPlugin
 
         private string SimBriefDirectory;
         private string SimBriefPdfFileLink;
+        private string FS2020Link;
+        private string FS2024Link;
+        private string XPlaneLink;
+
         private string tmpPDFfile;
 
         public FlightplanCtrl()
@@ -823,10 +827,16 @@ namespace BushTripPlugin
                     {
                         OFP simbriefPlan = (OFP)serializer.Deserialize(fileStream);
                         //save the simbrief files info
-                        SimBriefDirectory = simbriefPlan.files.directory;
-                        SimBriefPdfFileLink = simbriefPlan.files.pdf.link;
+                        if ((simbriefPlan != null) && (simbriefPlan.files != null))
+                        {
+                            SimBriefDirectory = simbriefPlan.files.directory;
+                            SimBriefPdfFileLink = simbriefPlan.files.pdf.link;
+                            FS2020Link = simbriefPlan.files.file.Where(f => f.name.Equals("FS2020")).Select(f => f.link).FirstOrDefault();
+                            FS2024Link = simbriefPlan.files.file.Where(f => f.name.Equals("FS2024")).Select(f => f.link).FirstOrDefault();
+                            XPlaneLink = simbriefPlan.files.file.Where(f => f.name.Equals("X-Plane 11/12")).Select(f => f.link).FirstOrDefault();
 
-                        flightPlan = converter.FlightplanFromOFP(simbriefPlan);
+                            flightPlan = converter.FlightplanFromOFP(simbriefPlan);
+                        }
                     }
                     flightPlan.CurrentStep = waypointIndex;
                     Logger.WriteLine("Fichier XML Simbrief chargé avec succès !");
@@ -878,11 +888,13 @@ namespace BushTripPlugin
             if (importOK)
             {
                 getFlightBriefingToolStripMenuItem.Enabled = true;
+                downloadToolStripMenuItem.Enabled = true;
             }
             else
             {
                 //disable the get briefing menu
                 getFlightBriefingToolStripMenuItem.Enabled = false;
+                downloadToolStripMenuItem.Enabled = false;
             }
         }
 
@@ -1034,6 +1046,142 @@ namespace BushTripPlugin
                     break;
             }
             return report;
+        }
+
+        private void patch_MSFS_PLN(string filename)
+        {
+            try
+            {
+                // Charger le fichier XML
+                System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
+                xmlDoc.Load(filename);
+
+                // Supprimer tous les éléments RunwayNumberFP
+                System.Xml.XmlNodeList runwayNodes = xmlDoc.GetElementsByTagName("RunwayNumberFP");
+                List<System.Xml.XmlNode> nodesToRemove = new List<System.Xml.XmlNode>();
+                
+                foreach (System.Xml.XmlNode node in runwayNodes)
+                {
+                    nodesToRemove.Add(node);
+                }
+                
+                foreach (System.Xml.XmlNode node in nodesToRemove)
+                {
+                    node.ParentNode.RemoveChild(node);
+                }
+
+                // Ajouter DeparturePosition avant DepartureName
+                System.Xml.XmlNodeList departureNameNodes = xmlDoc.GetElementsByTagName("DepartureName");
+                if (departureNameNodes.Count > 0)
+                {
+                    System.Xml.XmlNode departureNameNode = departureNameNodes[0];
+                    System.Xml.XmlNode parentNode = departureNameNode.ParentNode;
+                    
+                    // Créer le nouvel élément DeparturePosition
+                    System.Xml.XmlElement departurePositionElement = xmlDoc.CreateElement("DeparturePosition");
+                    departurePositionElement.InnerText = "PARKING 1 PARKING NONE";
+                    
+                    // Insérer avant DepartureName
+                    parentNode.InsertBefore(departurePositionElement, departureNameNode);
+                }
+
+                // Sauvegarder le fichier modifié
+                xmlDoc.Save(filename);
+                
+                Logger.WriteLine($"MSFS flight plan patched successfully: {filename}");
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine($"Error patching MSFS flight plan: {ex.Message}");
+                throw;
+            }
+        }
+
+        private void forMSFS2020ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //download the flightplan file for MSFS 2020 if the link is available
+            if (FS2020Link != string.Empty)
+            {
+                using (var client = new System.Net.WebClient())
+                {
+                    try
+                    {
+                        string saveFolder = Settings.Default.PdfFolder;
+                        if (saveFolder == string.Empty)
+                        {
+                            saveFolder = Path.GetTempPath();
+                        }
+                        string downloadedFile = Path.Combine(saveFolder, Path.GetFileName(FS2020Link));
+                        string fileName = Path.Combine(SimBriefDirectory, Path.GetFileName(FS2020Link));
+                        client.DownloadFile(fileName, downloadedFile);
+                        //patch the downloaded file to be compatible with MSFS 2020
+                        patch_MSFS_PLN(downloadedFile);
+
+                        ShowMsgBox("Flightplan for MSFS 2020 downloaded to " + downloadedFile, "Download complete", MessageBoxButtons.OK);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteLine("Error when downloading flightplan for MSFS 2020 from Simbrief : " + ex.Message);
+                        ShowMsgBox("Error when downloading flightplan for MSFS 2020 from Simbrief : " + ex.Message, "Error", MessageBoxButtons.OK);
+                    }
+                }
+            }
+        }
+
+        private void forMSFS2024ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //download the flightplan file for MSFS 2024 if the link is available
+            if (FS2024Link != string.Empty)
+            {
+                using (var client = new System.Net.WebClient())
+                {
+                    try
+                    {
+                        string saveFolder = Settings.Default.PdfFolder;
+                        if (saveFolder == string.Empty)
+                        {
+                            saveFolder = Path.GetTempPath();
+                        }
+                        string downloadedFile = Path.Combine(saveFolder, Path.GetFileName(FS2024Link));
+                        string fileName = Path.Combine(SimBriefDirectory, Path.GetFileName(FS2024Link));
+                        client.DownloadFile(fileName, downloadedFile);
+                        ShowMsgBox("Flightplan for MSFS 2024 downloaded to " + downloadedFile, "Download complete", MessageBoxButtons.OK);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteLine("Error when downloading flightplan for MSFS 2024 from Simbrief : " + ex.Message);
+                        ShowMsgBox("Error when downloading flightplan for MSFS 2024 from Simbrief : " + ex.Message, "Error", MessageBoxButtons.OK);
+                    }
+                }
+            }
+        }
+
+        private void forXPlaneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //download the flightplan file for XPlane if the link is available
+            if (XPlaneLink != string.Empty)
+            {
+                using (var client = new System.Net.WebClient())
+                {
+                    try
+                    {
+                        string saveFolder = Settings.Default.PdfFolder;
+                        if (saveFolder == string.Empty)
+                        {
+                            saveFolder = Path.GetTempPath();
+                        }
+                        string downloadedFile = Path.Combine(saveFolder, Path.GetFileName(XPlaneLink));
+                        string fileName = Path.Combine(SimBriefDirectory, Path.GetFileName(XPlaneLink));
+                        client.DownloadFile(fileName, downloadedFile);
+                        ShowMsgBox("Flightplan for XPlane downloaded to " + downloadedFile, "Download complete", MessageBoxButtons.OK);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteLine("Error when downloading flightplan for XPlane from Simbrief : " + ex.Message);
+                        ShowMsgBox("Error when downloading flightplan for XPlane from Simbrief : " + ex.Message, "Error", MessageBoxButtons.OK);
+                    }
+                }
+            }
         }
     }
 }

@@ -352,14 +352,15 @@ namespace FlightRecPlugin
                 if (DepartureTime == DateTime.UnixEpoch || ArrivalTime == DateTime.UnixEpoch)
                     throw new Exception("Heure de départ ou d’arrivée non détectée !");
 
-                //change mouse cursor to wait  
-                Cursor.Current = Cursors.WaitCursor;
+                // Changer le curseur en sablier et forcer le rafraîchissement
+                this.Cursor = Cursors.WaitCursor;
+                this.Update();
+                Application.DoEvents();
 
                 (result, returnMessage) = await data.SendFlightDataToPhpAsync(flightData);
-                // Fin JFK 18062025
                 
-                //change mouse cursor back to default
-                Cursor.Current = Cursors.Default;
+                // Restaurer le curseur par défaut
+                this.Cursor = Cursors.Default;
 
                 if (result)
                 {

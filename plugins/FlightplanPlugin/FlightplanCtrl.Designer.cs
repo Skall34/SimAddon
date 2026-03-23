@@ -43,6 +43,10 @@
             createNewFlightplanToolStripMenuItem = new ToolStripMenuItem();
             getLastFlightplanToolStripMenuItem = new ToolStripMenuItem();
             getFlightBriefingToolStripMenuItem = new ToolStripMenuItem();
+            downloadToolStripMenuItem = new ToolStripMenuItem();
+            forMSFS2020ToolStripMenuItem = new ToolStripMenuItem();
+            forMSFS2024ToolStripMenuItem = new ToolStripMenuItem();
+            forXPlaneToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             restartToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
@@ -159,7 +163,7 @@
             // 
             // simbriefToolStripMenuItem
             // 
-            simbriefToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createNewFlightplanToolStripMenuItem, getLastFlightplanToolStripMenuItem, getFlightBriefingToolStripMenuItem });
+            simbriefToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createNewFlightplanToolStripMenuItem, getLastFlightplanToolStripMenuItem, getFlightBriefingToolStripMenuItem, downloadToolStripMenuItem });
             simbriefToolStripMenuItem.Name = "simbriefToolStripMenuItem";
             simbriefToolStripMenuItem.Size = new Size(118, 22);
             simbriefToolStripMenuItem.Text = "Simbrief";
@@ -185,6 +189,35 @@
             getFlightBriefingToolStripMenuItem.Size = new Size(187, 22);
             getFlightBriefingToolStripMenuItem.Text = "Get flight briefing";
             getFlightBriefingToolStripMenuItem.Click += getFlightBriefingToolStripMenuItem_Click;
+            // 
+            // downloadToolStripMenuItem
+            // 
+            downloadToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { forMSFS2020ToolStripMenuItem, forMSFS2024ToolStripMenuItem, forXPlaneToolStripMenuItem });
+            downloadToolStripMenuItem.Enabled = false;
+            downloadToolStripMenuItem.Name = "downloadToolStripMenuItem";
+            downloadToolStripMenuItem.Size = new Size(187, 22);
+            downloadToolStripMenuItem.Text = "Download";
+            // 
+            // forMSFS2020ToolStripMenuItem
+            // 
+            forMSFS2020ToolStripMenuItem.Name = "forMSFS2020ToolStripMenuItem";
+            forMSFS2020ToolStripMenuItem.Size = new Size(180, 22);
+            forMSFS2020ToolStripMenuItem.Text = "For MSFS2020";
+            forMSFS2020ToolStripMenuItem.Click += forMSFS2020ToolStripMenuItem_Click;
+            // 
+            // forMSFS2024ToolStripMenuItem
+            // 
+            forMSFS2024ToolStripMenuItem.Name = "forMSFS2024ToolStripMenuItem";
+            forMSFS2024ToolStripMenuItem.Size = new Size(180, 22);
+            forMSFS2024ToolStripMenuItem.Text = "For MSFS2024";
+            forMSFS2024ToolStripMenuItem.Click += forMSFS2024ToolStripMenuItem_Click;
+            // 
+            // forXPlaneToolStripMenuItem
+            // 
+            forXPlaneToolStripMenuItem.Name = "forXPlaneToolStripMenuItem";
+            forXPlaneToolStripMenuItem.Size = new Size(180, 22);
+            forXPlaneToolStripMenuItem.Text = "For X-Plane";
+            forXPlaneToolStripMenuItem.Click += forXPlaneToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
@@ -467,5 +500,9 @@
         private TableLayoutPanel tableLayoutPanel2;
         private Panel panel2;
         private TextBox tbFlightParams;
+        private ToolStripMenuItem downloadToolStripMenuItem;
+        private ToolStripMenuItem forMSFS2020ToolStripMenuItem;
+        private ToolStripMenuItem forMSFS2024ToolStripMenuItem;
+        private ToolStripMenuItem forXPlaneToolStripMenuItem;
     }
 }
