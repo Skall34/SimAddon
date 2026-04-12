@@ -9,7 +9,9 @@ namespace MeteoPlugin
         {
             // https://meteocentre.com/doc/metar.html
 
+            public const string CST_CORRECT = "COR";
             public const string CST_AUTO = "AUTO";
+            public const string CST_NIL = "NIL";
             public const string CST_TEMPO = "TEMPO";
             public const string CST_BECOMING = "BECMG";
             public const string CST_RMK = "RMK";
@@ -23,6 +25,45 @@ namespace MeteoPlugin
                     return ToString();
                 }
             }
+
+            public class METARQualifier : METARItem
+            {
+                public string Value { get; set; } = string.Empty;
+                public METARQualifier(string category, string METARPart)
+                {
+                    if ((METARPart == CST_CORRECT) ||
+                        (METARPart == CST_AUTO) ||
+                        (METARPart == CST_NIL))
+                    {
+                        _category = category;
+                        if (METARPart == CST_CORRECT)
+                        {
+                            Value = "Correction Report";
+                        }
+                        else if (METARPart == CST_AUTO)
+                        {
+                            Value = "Automated";
+                        }
+                        else if (METARPart == CST_NIL)
+                        {
+                            Value = "No Information";
+                        }                       
+                    }
+                    else
+                    {
+                        throw new InvalidDataException("Invalid METAR qualifier format" + METARPart);
+                    }
+                }
+                public override string ToString()
+                {
+                    return _category + " : " + Value;
+                }
+                public override string ToSpeech()
+                {
+                    return _category + " : " + Value + " .";
+                }
+            }
+
 
             public class METARIcao : METARItem
             {
@@ -596,14 +637,28 @@ namespace MeteoPlugin
                                 try
                                 {
                                     Amount = result.Groups["amount"].Value;
-                                    Level = 100 * int.Parse(result.Groups["level"].Value);
-                                    cloud = result.Groups["cloud"].Value;
                                 }
                                 catch (Exception ex)
                                 {
                                     //however, no values could be extracted
                                     Amount = "N/A";
+                                }
+                                try
+                                {
+                                    Level = 100 * int.Parse(result.Groups["level"].Value);
+                                }
+                                catch (Exception ex)
+                                {
+                                    //however, no values could be extracted
                                     Level = 0;
+                                }
+                                try
+                                {
+                                    cloud = result.Groups["cloud"].Value;
+                                }
+                                catch (Exception ex)
+                                {
+                                    //however, no values could be extracted
                                     cloud = "N/A";
                                 }
                             }
@@ -858,6 +913,7 @@ namespace MeteoPlugin
             public string ICAO { get; set; }
             public METARDate Date { get; set; }
             public METARIcao icao { get; set; }
+            public METARQualifier Qualifier { get; set; }
 
             public METARWind Wind { get; set; }
             public METARWind TemporaryWind { get; set; }
@@ -897,10 +953,27 @@ namespace MeteoPlugin
                         items.Add(Date);
                         index++;
 
-                        if (parts[index] == METARData.CST_AUTO)
+                        try
                         {
+                            Qualifier = new METARQualifier("Qualifier", parts[index]);
+                            items.Add(Qualifier);
                             index++;
                         }
+                        catch (Exception)
+                        {
+                            //can happen if there is no qualifier
+                        }
+
+
+                        //    if (parts[index] == METARData.CST_AUTO)
+                        //{
+                        //    index++;
+                        //}
+
+                        //if (parts[index] == METARData.CST_CORRECT)
+                        //{
+                        //    index++;
+                        //}
 
                         Wind = new METARWind("Wind", parts[index]);
                         items.Add(Wind);
