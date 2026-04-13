@@ -539,6 +539,11 @@ namespace FlightRecPlugin
                                 if (res == DialogResult.Yes)
                                 {
                                     Logger.WriteLine("CheckReservation: user accepted to apply reservation data");
+
+                                    // Set reservation status FIRST, before selecting mission
+                                    // (so that cbMission_SelectedIndexChanged allows the selection)
+                                    reservationStatus = ReservationMgr.ReservationStatus.Accepted;
+
                                     //apply reservation data
                                     tbEndICAO.Text = reservation.ArrivalIcao;
                                     tbEndICAO.Enabled = false;
@@ -555,8 +560,6 @@ namespace FlightRecPlugin
                                     {
                                         Logger.WriteLine("CheckReservation: could not find regular line mission (Active == 2)");
                                     }
-
-                                    reservationStatus = ReservationMgr.ReservationStatus.Accepted;
 
                                     //apply the reservation in the sim data manager
                                     ApplyReservation(reservation.Immat, reservation.DepartureIcao, reservation.ArrivalIcao);
