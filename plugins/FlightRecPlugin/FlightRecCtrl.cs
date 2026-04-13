@@ -543,7 +543,19 @@ namespace FlightRecPlugin
                                     tbEndICAO.Text = reservation.ArrivalIcao;
                                     tbEndICAO.Enabled = false;
                                     cbImmat.SelectedItem = data.avions.Where(a => a.Immat == reservation.Immat).FirstOrDefault();
-                                    cbMission.SelectedItem = "";
+
+                                    // Select the "Lignes Régulières" mission (Active == 2) for regular line reservations
+                                    var regularLineMission = data.missions.Where(m => m.Active == 2).FirstOrDefault();
+                                    if (regularLineMission != null)
+                                    {
+                                        cbMission.SelectedItem = regularLineMission;
+                                        Logger.WriteLine("CheckReservation: selected mission '" + regularLineMission.Libelle + "' for regular line reservation");
+                                    }
+                                    else
+                                    {
+                                        Logger.WriteLine("CheckReservation: could not find regular line mission (Active == 2)");
+                                    }
+
                                     reservationStatus = ReservationMgr.ReservationStatus.Accepted;
 
                                     //apply the reservation in the sim data manager
@@ -2220,14 +2232,15 @@ namespace FlightRecPlugin
                 {
                     Logger.WriteLine("ApplyReservation: setting arrival ICAO failed: " + ex.Message);
                 }
-                // Sélectionne la mission "LIGNES REGULIERES" si présente
-                try
+                // Sélectionne la mission "Lignes Régulières" (Active == 2) si pas déjà sélectionnée
+                if (cbMission.SelectedItem == null)
                 {
-                    cbMission.SelectedItem = data.missions.Single(m => m.Libelle == "LIGNES REGULIERES");
-                }
-                catch (Exception)
-                {
-                    // mission non trouvée, on ignore
+                    var regularLineMission = data.missions.Where(m => m.Active == 2).FirstOrDefault();
+                    if (regularLineMission != null)
+                    {
+                        cbMission.SelectedItem = regularLineMission;
+                        Logger.WriteLine("ApplyReservation: selected mission '" + regularLineMission.Libelle + "'");
+                    }
                 }
 
                 if (tbCommentaires != null)
