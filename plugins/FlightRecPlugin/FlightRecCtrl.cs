@@ -1284,7 +1284,23 @@ namespace FlightRecPlugin
                     //unselect the mission if the arrival airport does not match the reservation
                     cbMission.SelectedItem = null;
 
-                    throw new Exception("The airport does not match the reservation arrival airport (" + reservation.ArrivalIcao + ").");
+                    // Warn the user that they are not at the expected destination, but allow them to submit anyway
+                    string currentAirport = localAirport.ident;
+                    string expectedAirport = reservation.ArrivalIcao;
+                    string message = $"Attention : vous n'êtes pas à l'aéroport de destination prévu par votre ligne régulière.\n\n" +
+                        $"Position actuelle : {currentAirport}\n" +
+                        $"Destination prévue : {expectedAirport}\n\n" +
+                        $"En cas de déroutement, crash ou autre situation imprévue, vous pouvez quand même soumettre votre vol.\n\n" +
+                        $"Voulez-vous continuer et soumettre ce vol ?";
+
+                    DialogResult result = ShowMsgBox(message, "Destination non atteinte", MessageBoxButtons.YesNo);
+                    if (result != DialogResult.Yes)
+                    {
+                        Logger.WriteLine("User canceled flight submission due to destination mismatch");
+                        throw new Exception("Soumission annulée par l'utilisateur.");
+                    }
+
+                    Logger.WriteLine($"User confirmed flight submission despite destination mismatch (expected: {expectedAirport}, actual: {currentAirport})");
                 }
             }
 
