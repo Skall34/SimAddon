@@ -1008,9 +1008,17 @@ namespace FlightRecPlugin
             Avion guessedPlane = data.avions.Where(a => a.Designation == currentSimPlane).FirstOrDefault();
             if (guessedPlane != null)
             {
-                cbImmat.SelectedItem = guessedPlane;
-                Logger.WriteLine("Guessed plane from sim: " + guessedPlane.Immat);
-                found = true;
+                // Vérifier si l'avion est sélectionnable (pas en maintenance, pas réservé par quelqu'un d'autre)
+                if (guessedPlane.IsSelectable(Settings.Default.callsign, reservationStatus))
+                {
+                    cbImmat.SelectedItem = guessedPlane;
+                    Logger.WriteLine("Guessed plane from sim: " + guessedPlane.Immat);
+                    found = true;
+                }
+                else
+                {
+                    Logger.WriteLine("Guessed plane from sim (" + guessedPlane.Immat + ") is not selectable (status: " + guessedPlane.Status + ")");
+                }
             }
             else
             {
@@ -1069,7 +1077,8 @@ namespace FlightRecPlugin
                     try
                     {
                         Avion selected = data.avions.Where(a => a.Immat == lastImmat).First();
-                        if (selected != null)
+                        // Vérifier si l'avion est sélectionnable (pas en maintenance, pas réservé par quelqu'un d'autre)
+                        if (selected != null && selected.IsSelectable(Settings.Default.callsign, reservationStatus))
                         {
                             cbImmat.SelectedItem = selected;
                             //send the SETAIRCRAFT event
@@ -1077,6 +1086,10 @@ namespace FlightRecPlugin
                             eventArg.reason = SimEventArg.EventType.SETAIRCRAFT;
                             eventArg.value = selected.Designation;
                             SimEvent(eventArg);
+                        }
+                        else if (selected != null)
+                        {
+                            Logger.WriteLine("Last used immat (" + lastImmat + ") is not selectable (status: " + selected.Status + ")");
                         }
                     }
                     catch (Exception ex)
