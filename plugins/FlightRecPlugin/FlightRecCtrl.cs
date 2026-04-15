@@ -549,10 +549,8 @@ namespace FlightRecPlugin
                                     tbEndICAO.Enabled = false;
                                     cbImmat.SelectedItem = data.avions.Where(a => a.Immat == reservation.Immat).FirstOrDefault();
 
-                                    // Select the "Lignes Régulières" mission for regular line reservations
-                                    // Try Active == 2 first, then fallback to name for backward compatibility
-                                    var regularLineMission = data.missions.Where(m => m.Active == 2).FirstOrDefault()
-                                        ?? data.missions.Where(m => m.Libelle == "LIGNES REGULIERES").FirstOrDefault();
+                                    // Select the "Lignes Régulières" mission (Active == 2) for regular line reservations
+                                    var regularLineMission = data.missions.Where(m => m.Active == 2).FirstOrDefault();
                                     if (regularLineMission != null)
                                     {
                                         cbMission.SelectedItem = regularLineMission;
@@ -560,7 +558,7 @@ namespace FlightRecPlugin
                                     }
                                     else
                                     {
-                                        Logger.WriteLine("CheckReservation: could not find regular line mission (Active == 2 or name 'LIGNES REGULIERES')");
+                                        Logger.WriteLine("CheckReservation: could not find regular line mission (Active == 2)");
                                     }
 
                                     //apply the reservation in the sim data manager
@@ -2237,12 +2235,10 @@ namespace FlightRecPlugin
                 {
                     Logger.WriteLine("ApplyReservation: setting arrival ICAO failed: " + ex.Message);
                 }
-                // Sélectionne la mission "Lignes Régulières" si pas déjà sélectionnée
-                // Try Active == 2 first, then fallback to name for backward compatibility
+                // Sélectionne la mission "Lignes Régulières" (Active == 2) si pas déjà sélectionnée
                 if (cbMission.SelectedItem == null)
                 {
-                    var regularLineMission = data.missions.Where(m => m.Active == 2).FirstOrDefault()
-                        ?? data.missions.Where(m => m.Libelle == "LIGNES REGULIERES").FirstOrDefault();
+                    var regularLineMission = data.missions.Where(m => m.Active == 2).FirstOrDefault();
                     if (regularLineMission != null)
                     {
                         cbMission.SelectedItem = regularLineMission;
