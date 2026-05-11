@@ -141,22 +141,22 @@ namespace SimDataManager
                     avion.Etat = planeInDB.Etat;
                     avion.EnVol = planeInDB.EnVol;
                     avion.Reserved = planeInDB.Reserved;
-                    //update the status - maintenance has priority over reserved
-                    if (avion.Etat == 1)
+                    //update the status
+                    if ((avion.EnVol != 0) || (avion.Reserved != 0))
                     {
-                        avion.Status = PlaneStatus.Maintenance;
+                        avion.Status = PlaneStatus.Reserved; // Indiquer que l'avion est en vol
+                    }
+                    else if (avion.Etat == 1)
+                    {
+                        avion.Status = PlaneStatus.Maintenance; // Indiquer que l'avion est en maintenance
                     }
                     else if (avion.Etat == 2)
                     {
-                        avion.Status = PlaneStatus.Maintenance2;
-                    }
-                    else if ((avion.EnVol != 0) || (avion.Reserved != 0))
-                    {
-                        avion.Status = PlaneStatus.Reserved;
+                        avion.Status = PlaneStatus.Maintenance2; // Indiquer que l'avion est en maintenance longue ?
                     }
                     else
                     {
-                        avion.Status = PlaneStatus.Disponible;
+                        avion.Status = PlaneStatus.Disponible; // Par défaut, l'avion est disponible
                     }
                 }
             }
