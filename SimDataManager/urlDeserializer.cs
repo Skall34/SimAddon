@@ -60,6 +60,8 @@ namespace SimDataManager
                                 DernierUtilisateur = item.TryGetValue("callsign", out string utilisateur) ? utilisateur : "",
                                 EnVol = int.TryParse(item.TryGetValue("en_vol", out string envol) ? envol : "", out int envolValue) ? envolValue : 0,
                                 Reserved = int.TryParse(item.TryGetValue("reservee", out string reservee) ? reservee : "0", out int reserveValue) ? reserveValue : 0,
+                                MaintenanceStatus = int.TryParse(item.TryGetValue("status", out string status) ? status : "0", out int statusValue) ? statusValue : 0,
+                                ReservedBy = item.TryGetValue("reserved_by", out string reservedBy) ? reservedBy : "",
                             };
 
                             avions.Add(avion);

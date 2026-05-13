@@ -1777,7 +1777,7 @@ namespace FlightRecPlugin
                         myBrush = Brushes.LightGray;
                         break;
                     case Avion.PlaneStatus.Reserved:
-                        if ((item.DernierUtilisateur == tbCallsign.Text) && (reservationStatus == ReservationMgr.ReservationStatus.Accepted))
+                        if ((item.ReservedBy == tbCallsign.Text) && (reservationStatus == ReservationMgr.ReservationStatus.Accepted))
                             myBrush = Brushes.Blue; // réservataire
                         else
                             myBrush = Brushes.LightGray; // réservé, non sélectionnable

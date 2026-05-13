@@ -22,9 +22,11 @@ namespace SimDataManager
         public string Hub { get; set; }
         public int CoutHoraire { get; set; }
         public int Etat { get; set; }
+        public int MaintenanceStatus { get; set; }
         public PlaneStatus Status { get; set; }
         public string Horametre { get; set; }
         public string DernierUtilisateur { get; set; }
+        public string ReservedBy { get; set; }
         public int EnVol {  get; set; }
         public int Reserved { get; set; }
 
@@ -109,15 +111,15 @@ namespace SimDataManager
 
                 if ((avion.EnVol != 0)||(avion.Reserved!=0))
                 {
-                    avion.Status = PlaneStatus.Reserved; // Indiquer que l'avion est en vol
+                    avion.Status = PlaneStatus.Reserved; // Indiquer que l'avion est en vol ou réservé
                 }
-                if (avion.Etat == 1)
+                if (avion.MaintenanceStatus == 1)
                 {
                     avion.Status = PlaneStatus.Maintenance; // Indiquer que l'avion est en maintenance
                 }
-                if (avion.Etat == 2)
+                if (avion.MaintenanceStatus == 2)
                 {
-                    avion.Status = PlaneStatus.Maintenance2; // Indiquer que l'avion est en maintenance longue ?
+                    avion.Status = PlaneStatus.Maintenance2; // Indiquer que l'avion est en maintenance longue (crash)
                 }
             }
             return avions;
@@ -139,20 +141,22 @@ namespace SimDataManager
                 {
                     //copy the plane in DB properties to the current plane
                     avion.Etat = planeInDB.Etat;
+                    avion.MaintenanceStatus = planeInDB.MaintenanceStatus;
                     avion.EnVol = planeInDB.EnVol;
                     avion.Reserved = planeInDB.Reserved;
+                    avion.ReservedBy = planeInDB.ReservedBy;
                     //update the status
                     if ((avion.EnVol != 0) || (avion.Reserved != 0))
                     {
-                        avion.Status = PlaneStatus.Reserved; // Indiquer que l'avion est en vol
+                        avion.Status = PlaneStatus.Reserved; // Indiquer que l'avion est en vol ou réservé
                     }
-                    else if (avion.Etat == 1)
+                    else if (avion.MaintenanceStatus == 1)
                     {
                         avion.Status = PlaneStatus.Maintenance; // Indiquer que l'avion est en maintenance
                     }
-                    else if (avion.Etat == 2)
+                    else if (avion.MaintenanceStatus == 2)
                     {
-                        avion.Status = PlaneStatus.Maintenance2; // Indiquer que l'avion est en maintenance longue ?
+                        avion.Status = PlaneStatus.Maintenance2; // Indiquer que l'avion est en maintenance longue (crash)
                     }
                     else
                     {
@@ -167,7 +171,7 @@ namespace SimDataManager
             // Un avion est sélectionnable s'il est disponible ou s'il est réservé par le currentCallsign avec une réservation acceptée
             if (Status == Avion.PlaneStatus.Disponible) return true;
 
-            if ((Status == Avion.PlaneStatus.Reserved) && (DernierUtilisateur == currentCallsign) &&
+            if ((Status == Avion.PlaneStatus.Reserved) && (ReservedBy == currentCallsign) &&
                 (resaStatus== ReservationMgr.ReservationStatus.Accepted)) return true;
             return false;
         }
