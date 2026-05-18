@@ -111,15 +111,10 @@ jobs:
     #  run: makensis /V4 nsis/installer.nsi   
     
     - name: Install NSIS
-      uses: repolevedavaj/install-nsis@v1.0.3
-      with:
-        # The version of NSIS to install
-        nsis-version: '3.11'
-          
+      run: choco install nsis --version=3.11 -y --no-progress
+
     - name: compile nsis setup
-      uses: joncloud/makensis-action@v4
-      with:
-        script-file: nsis/installer.nsi
+      run: makensis /V4 nsis/installer.nsi
 
     - name: upload nsis installer
       uses: actions/upload-artifact@v4
