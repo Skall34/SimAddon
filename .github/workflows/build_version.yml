@@ -12,16 +12,16 @@ jobs:
     steps:
        
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'  # Adjust the version if needed
 
     - name: Get latest tag pushed
       id: previoustag
-      uses: oprypin/find-latest-tag@v1
+      uses: oprypin/find-latest-tag@v1.1.2
       with:
         repository: Skall34/SimAddon
         releases-only: false
@@ -32,7 +32,7 @@ jobs:
 
     - name: set version in assembly
       id: update
-      uses: vers-one/dotnet-project-version-updater@v1.6
+      uses: vers-one/dotnet-project-version-updater@v1.7
       with:
         file: "SimAddon/SimAddon.csproj"
         version: ${{ steps.previoustag.outputs.tag }}
@@ -81,7 +81,7 @@ jobs:
       run: dotnet publish plugins/ConverterPlugin/ConverterPlugin.csproj --configuration Release --output publish_output\plugins\7_Converter
       
     - name: Upload archive
-      uses: actions/upload-artifact@v4.4.3
+      uses: actions/upload-artifact@v4
       with:
         name: SimAddon_zip_${{ steps.previoustag.outputs.tag }}
         path: publish_output
@@ -119,7 +119,7 @@ jobs:
         script-file: nsis/installer.nsi
 
     - name: upload nsis installer
-      uses: actions/upload-artifact@v4.4.3
+      uses: actions/upload-artifact@v4
       with:
         name: simaddon_setup_${{ steps.previoustag.outputs.tag }}
         compression-level: 0
