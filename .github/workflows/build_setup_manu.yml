@@ -34,7 +34,7 @@ jobs:
         
     - name: Get the version from tag
       id: get_version
-      run: echo ::set-output name=VERSION::${{ steps.previoustag.outputs.tag }}
+      run: echo "VERSION=${{ steps.previoustag.outputs.tag }}" >> $env:GITHUB_OUTPUT
 
     - name: set version in assembly
       id: update
@@ -112,7 +112,7 @@ jobs:
       run: choco install nsis --version=3.11 -y --no-progress
 
     - name: compile nsis setup
-      run: makensis /V4 nsis/installer.nsi
+      run: '& "C:\Program Files (x86)\NSIS\makensis.exe" /V4 nsis/installer.nsi'
         
 
     - name: Generate artifact attestation
