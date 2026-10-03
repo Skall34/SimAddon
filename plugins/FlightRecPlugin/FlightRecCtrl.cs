@@ -1802,8 +1802,8 @@ namespace FlightRecPlugin
 
             //reset the atLeastOneEngineFiring flag to force the detection of engine start for the new plane
             atLeastOneEngineFiring = false;
-
-            Avion selectedPlane = this.data.avions.Where(a => a.Immat == cbImmat.Text).FirstOrDefault();
+            Avion selectedPlane = (Avion)cbImmat.SelectedItem;
+            //Avion selectedPlane = this.data.avions.Where(a => a.Immat == cbImmat.Text).FirstOrDefault();
             if (selectedPlane != null)
             {
                 if (!selectedPlane.IsSelectable(Settings.Default.callsign, reservationStatus))
