@@ -1083,7 +1083,7 @@ namespace FlightRecPlugin
                         cbImmat.Items.Add(avion);
                     }
                 }
-                cbImmat.DisplayMember = "Immat";
+                cbImmat.DisplayMember = "visibleName";
 
                 //pre-select the last used immat (stored as setting)
                 string lastImmat = Settings.Default.lastImmat;
@@ -1357,7 +1357,7 @@ namespace FlightRecPlugin
                 saveFlightDialog.IsReservationLocked = (reservationStatus == ReservationMgr.ReservationStatus.Accepted);
 
                 saveFlightDialog.Callsign = tbCallsign.Text;
-                saveFlightDialog.Immat = cbImmat.Text;
+                saveFlightDialog.Immat = cbImmat.SelectedItem is Avion selectedAvion ? selectedAvion.Immat : string.Empty;
                 saveFlightDialog.Comment = fullComment;
                 saveFlightDialog.Cargo = _endPayload;
                 saveFlightDialog.DepartureICAO = lbStartIata.Text;
@@ -1783,7 +1783,7 @@ namespace FlightRecPlugin
                             myBrush = Brushes.LightGray; // réservé, non sélectionnable
                         break;
                 }
-                e.Graphics.DrawString(item.Immat, e.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
+                e.Graphics.DrawString(item.visibleName, e.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
             }
             e.DrawFocusRectangle();
         }
@@ -1809,11 +1809,9 @@ namespace FlightRecPlugin
                 if (!selectedPlane.IsSelectable(Settings.Default.callsign, reservationStatus))
                 {
                     cbImmat.SelectedItem = null;
-                    lbDesignationAvion.Text = "<no plane selected>";
                     return;
                 }
                 string planeDesign = selectedPlane.Designation;
-                lbDesignationAvion.Text = planeDesign;
 
                 //mettre a jour l'icone suivant le type_aeroport d'avion.
 
@@ -1929,14 +1927,12 @@ namespace FlightRecPlugin
             if (foundError)
             {
                 lbLibelleAvion.ForeColor = Color.Red;
-                lbDesignationAvion.ForeColor = Color.Red;
                 ledCheckAircraft.Color = Color.Red;
                 ledCheckImmat.Color = Color.Red;
             }
             else
             {
                 lbLibelleAvion.ForeColor = Color.White;
-                lbDesignationAvion.ForeColor = Color.White;
                 ledCheckAircraft.Color = Color.LightGreen;
                 ledCheckImmat.Color = Color.LightGreen;
             }
@@ -2185,7 +2181,6 @@ namespace FlightRecPlugin
                     // Empêche la modification par l'utilisateur
                     cbImmat.Enabled = false;
 
-                    lbDesignationAvion.Text = foundAvion.Designation;
                     // send the SETAIRCRAFT event
                     SimEventArg eventArg = new SimEventArg();
                     eventArg.reason = SimEventArg.EventType.SETAIRCRAFT;

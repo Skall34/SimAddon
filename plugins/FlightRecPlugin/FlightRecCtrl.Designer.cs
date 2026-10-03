@@ -84,7 +84,6 @@ namespace FlightRecPlugin
             groupBox3 = new GroupBox();
             tableLayoutPanel3 = new TableLayoutPanel();
             tbEndICAO = new TextBox();
-            lbDesignationAvion = new Label();
             lbPayload = new Label();
             cbImmat = new ComboBox();
             label5 = new Label();
@@ -635,7 +634,6 @@ namespace FlightRecPlugin
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel3.Controls.Add(label11, 0, 0);
             tableLayoutPanel3.Controls.Add(tbEndICAO, 3, 4);
-            tableLayoutPanel3.Controls.Add(lbDesignationAvion, 2, 1);
             tableLayoutPanel3.Controls.Add(tbCallsign, 1, 0);
             tableLayoutPanel3.Controls.Add(lbPayload, 1, 4);
             tableLayoutPanel3.Controls.Add(label9, 0, 4);
@@ -680,20 +678,6 @@ namespace FlightRecPlugin
             tbEndICAO.TextChanged += tbEndICAO_TextChanged;
             tbEndICAO.MouseHover += tbEndICAO_MouseHover;
             // 
-            // lbDesignationAvion
-            // 
-            lbDesignationAvion.AutoSize = true;
-            lbDesignationAvion.BackColor = Color.FromArgb(255, 128, 0);
-            lbDesignationAvion.Dock = DockStyle.Fill;
-            lbDesignationAvion.Location = new Point(295, 36);
-            lbDesignationAvion.Margin = new Padding(4);
-            lbDesignationAvion.Name = "lbDesignationAvion";
-            lbDesignationAvion.Size = new Size(139, 24);
-            lbDesignationAvion.TabIndex = 44;
-            lbDesignationAvion.Text = "<no plane selected>";
-            lbDesignationAvion.TextAlign = ContentAlignment.MiddleLeft;
-            lbDesignationAvion.Click += lbDesignationAvion_Click;
-            // 
             // lbPayload
             // 
             lbPayload.AutoSize = true;
@@ -709,6 +693,7 @@ namespace FlightRecPlugin
             // 
             // cbImmat
             // 
+            tableLayoutPanel3.SetColumnSpan(cbImmat, 2);
             cbImmat.Dock = DockStyle.Fill;
             cbImmat.DrawMode = DrawMode.OwnerDrawFixed;
             cbImmat.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -717,7 +702,7 @@ namespace FlightRecPlugin
             cbImmat.Location = new Point(152, 35);
             cbImmat.MaxDropDownItems = 20;
             cbImmat.Name = "cbImmat";
-            cbImmat.Size = new Size(136, 26);
+            cbImmat.Size = new Size(283, 26);
             cbImmat.TabIndex = 2;
             cbImmat.DrawItem += cbImmat_DrawItem;
             cbImmat.SelectedIndexChanged += CbImmat_SelectedIndexChanged;
@@ -1021,7 +1006,6 @@ namespace FlightRecPlugin
         private Label label15;
         private ComboBox cbMission;
         private Button btnReset;
-        private Label lbDesignationAvion;
         private Label lbPayload;
         private Label lbTimeOnGround;
         private Label lbOnGround;

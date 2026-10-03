@@ -30,6 +30,12 @@ namespace SimDataManager
         public int EnVol {  get; set; }
         public int Reserved { get; set; }
 
+        public string visibleName {             
+            get
+            {
+                return Immat + " (" + Designation + ")";
+            }
+        }
         //public const int StatusDisponible = 0;
         //public const int StatusMaintenance = 1;
         //public const int StatusMaintenance2 = 2;
