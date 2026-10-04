@@ -158,8 +158,8 @@ namespace FlightRecPlugin
             Assembly? assembly = Assembly.GetEntryAssembly();
             version = assembly.GetName().Version;
             //utilisation de la nouvelle classe de combobox item pour mettre des elements non selectionables
-            this.cbImmat.ValueMember = "Immat";
-            this.cbImmat.DisplayMember = "Immat";
+            this.cbImmat.ValueMember = "visibleName";
+            this.cbImmat.DisplayMember = "visibleName";
 
             simReady = false;
 
@@ -1669,7 +1669,7 @@ namespace FlightRecPlugin
                 }
 
                 values["callsign"] = tbCallsign.Text;
-                values["plane"] = forceImmat == null ? cbImmat.Text : forceImmat;
+                values["plane"] = forceImmat == null ? plane.Immat : forceImmat;
                 values["departure_icao"] = lbStartIata.Text;
                 values["flying"] = isFlying.ToString();
                 values["arrival_icao"] = tbEndICAO.Text;
@@ -1907,7 +1907,8 @@ namespace FlightRecPlugin
             }
 
             List<string> knownImmat = LocalPlanesDB.GetPlaneName(planeNomComplet);
-            string immat = cbImmat.Text;
+            Avion plane = cbImmat.SelectedItem as Avion;
+            string immat = plane != null ? plane.Immat : string.Empty;
 
             bool foundError = false;
 
@@ -2088,7 +2089,8 @@ namespace FlightRecPlugin
         {
             string simPlane = lbLibelleAvion.Text;
             List<string> knownImmat = LocalPlanesDB.GetPlaneName(simPlane);
-            string immat = cbImmat.Text;
+            Avion plane = cbImmat.SelectedItem as Avion;
+            string immat = plane != null ? plane.Immat : string.Empty;
             if ((knownImmat != null) && (knownImmat.Count != 0))
             {
                 if (knownImmat.Contains(immat))
