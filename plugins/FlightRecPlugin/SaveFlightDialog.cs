@@ -33,8 +33,8 @@ namespace FlightRecPlugin
         {
             get
             {
-                Avion plane = cbImmat.SelectedItem as Avion;
-                return plane != null ? plane.Immat : string.Empty;
+                string plane = (string)cbImmat.SelectedItem;
+                return plane;
             }
             set
             {
