@@ -35,6 +35,27 @@
             min-width: 200px;
             border: 1px solid #3a3a3a;
         }
+
+        #mapControls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: rgba(30, 30, 30, 0.95);
+            padding: 8px 10px;
+            border-radius: 5px;
+            border: 1px solid #3a3a3a;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        #mapControls input[type="checkbox"] {
+            accent-color: #00d4ff;
+        }
         
         .info-row {
             margin: 5px 0;
@@ -67,6 +88,11 @@
     </style>
 </head>
 <body>
+    <div id="mapControls">
+        <input type="checkbox" id="autoFollowToggle" checked />
+        <label for="autoFollowToggle">Suivi auto</label>
+    </div>
+
     <div id="infoPanel">
         <div class="info-row"><span class="info-label">Position:</span> <span id="posLat">0.00</span>&deg;, <span id="posLon">0.00</span>&deg;</div>
         <div class="info-row"><span class="info-label">Altitude:</span> <span id="altitude">0</span> ft</div>
@@ -98,6 +124,61 @@
         var currentHeading = 0;
         var smoothedZoom = 10;
         var zoomSmoothingFactor = 0.2;
+        var autoFollowEnabled = true;
+        var isProgrammaticMapUpdate = false;
+        var lastAircraftState = null;
+
+        function runProgrammaticMapUpdate(action) {
+            isProgrammaticMapUpdate = true;
+            try {
+                action();
+            } finally {
+                isProgrammaticMapUpdate = false;
+            }
+        }
+
+        function setAutoFollowEnabled(isEnabled) {
+            autoFollowEnabled = isEnabled;
+            document.getElementById('autoFollowToggle').checked = isEnabled;
+        }
+
+        function disableAutoFollowFromUserAction() {
+            if (autoFollowEnabled) {
+                setAutoFollowEnabled(false);
+            }
+        }
+
+        function applyAutoFollowToLastAircraftState() {
+            if (!lastAircraftState) {
+                return;
+            }
+
+            smoothedZoom = map.getZoom();
+            var dynamicZoom = getSmoothedZoomForSpeed(lastAircraftState.speedKnots);
+
+            runProgrammaticMapUpdate(function () {
+                map.setView([lastAircraftState.latitude, lastAircraftState.longitude], dynamicZoom, { animate: false });
+            });
+        }
+
+        map.on('dragstart', function () {
+            if (!isProgrammaticMapUpdate) {
+                disableAutoFollowFromUserAction();
+            }
+        });
+
+        map.on('zoomstart', function (e) {
+            if (!isProgrammaticMapUpdate && e && e.originalEvent) {
+                disableAutoFollowFromUserAction();
+            }
+        });
+
+        document.getElementById('autoFollowToggle').addEventListener('change', function (event) {
+            setAutoFollowEnabled(event.target.checked);
+            if (autoFollowEnabled) {
+                applyAutoFollowToLastAircraftState();
+            }
+        });
 
         // Create airplane icon - Simple arrow drawn directly
         var airplaneIcon = L.divIcon({
@@ -150,6 +231,12 @@
                 speedKnots = 0;
             }
 
+            lastAircraftState = {
+                latitude: latitude,
+                longitude: longitude,
+                speedKnots: speedKnots
+            };
+
             // Update info panel
             document.getElementById('posLat').textContent = latitude.toFixed(4);
             document.getElementById('posLon').textContent = longitude.toFixed(4);
@@ -180,8 +267,12 @@
             }
 
             // Center map on aircraft and adapt zoom based on speed (smoothed)
-            var dynamicZoom = getSmoothedZoomForSpeed(speedKnots);
-            map.setView([latitude, longitude], dynamicZoom);
+            if (autoFollowEnabled) {
+                var dynamicZoom = getSmoothedZoomForSpeed(speedKnots);
+                runProgrammaticMapUpdate(function () {
+                    map.setView([latitude, longitude], dynamicZoom, { animate: false });
+                });
+            }
         }
 
         // Function to add waypoints to the map
@@ -259,7 +350,9 @@
                     group.addLayer(waypointMarkers[i]);
                 }
                 if (group.getLayers().length > 0) {
-                    map.fitBounds(group.getBounds().pad(0.1));
+                    runProgrammaticMapUpdate(function () {
+                        map.fitBounds(group.getBounds().pad(0.1));
+                    });
                 }
             }
         }
