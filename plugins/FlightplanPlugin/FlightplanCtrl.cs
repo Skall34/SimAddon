@@ -252,7 +252,7 @@ namespace BushTripPlugin
                     //refresh the map carte.html, to show the current position
                     if (webView21.CoreWebView2 != null)
                     {
-                        string script = $"updateAircraftPosition({data.position.Location.Latitude.ToString(CultureInfo.InvariantCulture)}, {data.position.Location.Longitude.ToString(CultureInfo.InvariantCulture)}, {data.position.Altitude.ToString(CultureInfo.InvariantCulture)}, {data.position.HeadingDegreesTrue.ToString(CultureInfo.InvariantCulture)});";
+                        string script = $"updateAircraftPosition({data.position.Location.Latitude.ToString(CultureInfo.InvariantCulture)}, {data.position.Location.Longitude.ToString(CultureInfo.InvariantCulture)}, {data.position.Altitude.ToString(CultureInfo.InvariantCulture)}, {data.position.HeadingDegreesTrue.ToString(CultureInfo.InvariantCulture)}, {data.airSpeed.ToString(CultureInfo.InvariantCulture)});";
                         await webView21.CoreWebView2.ExecuteScriptAsync(script);
                     }
                 }

@@ -79,7 +79,10 @@
     
     <script>
         // Initialize the map with a default view (world center)
-        var map = L.map('map').setView([20, 0], 3);
+        var map = L.map('map', {
+            zoomControl: false,
+            zoomSnap: 0.1
+        }).setView([20, 0], 3);
 
         // Add Dark Mode OpenStreetMap tile layer
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_3p26_1_2b5e5c6fa0c3c25a614b6cf5', {
@@ -93,6 +96,8 @@
         var flightPath = null;
         var flightPlanWaypoints = [];
         var currentHeading = 0;
+        var smoothedZoom = 10;
+        var zoomSmoothingFactor = 0.2;
 
         // Create airplane icon - Simple arrow drawn directly
         var airplaneIcon = L.divIcon({
@@ -122,8 +127,29 @@
             }
         }
 
+        // Function to convert aircraft speed (kt) to target zoom level
+        function getTargetZoomForSpeed(speedKnots) {
+            if (speedKnots <= 40) return 14;
+            if (speedKnots <= 120) return 12;
+            if (speedKnots <= 220) return 10;
+            if (speedKnots <= 320) return 8;
+            if (speedKnots <= 450) return 6;
+            return 5;
+        }
+
+        // Function to smooth zoom transitions and avoid abrupt jumps
+        function getSmoothedZoomForSpeed(speedKnots) {
+            var targetZoom = getTargetZoomForSpeed(speedKnots);
+            smoothedZoom = smoothedZoom + (targetZoom - smoothedZoom) * zoomSmoothingFactor;
+            return smoothedZoom;
+        }
+
         // Function to update aircraft position on the map
-        function updateAircraftPosition(latitude, longitude, altitude, heading) {
+        function updateAircraftPosition(latitude, longitude, altitude, heading, speedKnots) {
+            if (typeof speedKnots !== 'number' || isNaN(speedKnots)) {
+                speedKnots = 0;
+            }
+
             // Update info panel
             document.getElementById('posLat').textContent = latitude.toFixed(4);
             document.getElementById('posLon').textContent = longitude.toFixed(4);
@@ -153,8 +179,9 @@
                 rotateAircraftMarker(heading);
             }
 
-            // Center map on aircraft
-            map.setView([latitude, longitude], 10);
+            // Center map on aircraft and adapt zoom based on speed (smoothed)
+            var dynamicZoom = getSmoothedZoomForSpeed(speedKnots);
+            map.setView([latitude, longitude], dynamicZoom);
         }
 
         // Function to add waypoints to the map
