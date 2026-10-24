@@ -1253,9 +1253,10 @@ namespace FlightRecPlugin
             }
             //save the flight to the local flightbook
             localFlightBook.loadFromJson(localFlightBookFile);
+
             Flight newFlight = new Flight
             {
-                immatriculation = cbImmat.Text,
+                immatriculation = ((Avion)cbImmat.SelectedItem).Immat,
                 departureICAO = lbStartIata.Text,
                 departureAirportName = lbStartPosition.Text,
                 departureFuel = _startFuel,
