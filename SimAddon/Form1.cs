@@ -338,6 +338,7 @@ namespace SimAddon
                 currentStatus.gearIsUp = _simData.GetIsGearUp();
                 currentStatus.gearRetractableFlag = _simData.GetGearRetractableFlag();
                 currentStatus.isAtLeastOneEngineFiring = _simData.IsAtLeastOneEngineFiring();
+                currentStatus.isAnyEngineCut = _simData.IsAnyEngineCut();
                 currentStatus.totalFuelFlow = _simData.GetFuelFlow();
                 currentStatus.engine1ManifoldPressure = _simData.GetEngine1ManifoldPressure();
                 currentStatus.engine1RPM = _simData.GetEngine1RPM();

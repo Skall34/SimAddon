@@ -188,6 +188,10 @@ namespace FlightRecPlugin
         public string GPSTrace { get; set; }
         public bool IsReservationLocked { get; set; } = false;
 
+        // Vol de contrôle post-maintenance : le pilote a effectué au moins une limite de décrochage / un arrêt moteur
+        public bool StallOk { get; set; } = false;
+        public bool EngineCutOk { get; set; } = false;
+
         public SaveFlightDialog(FlightRecCtrl parent, simData _data)
         {
             InitializeComponent();
@@ -340,6 +344,9 @@ namespace FlightRecPlugin
                         { "mission", Mission },
                         { "commentaire", Comment },
                         { "payload", Cargo.ToString("0.00", CultureInfo.InvariantCulture) },
+                        // champs pour le vol de contrôle post-maintenance (utilisés par le serveur si mission = contrôle)
+                        { "stall_ok", StallOk ? "1" : "0" },
+                        { "engine_cut_ok", EngineCutOk ? "1" : "0" },
                         // Add GPS data if available
                         { "tracegps", string.IsNullOrWhiteSpace(GPSTrace) ? string.Empty : GPSTrace }
                     };

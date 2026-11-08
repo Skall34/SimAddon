@@ -96,6 +96,7 @@ namespace SimAddonPlugin
         public bool gearIsUp { get; set; }
         public uint gearRetractableFlag { get; set; }
         public bool isAtLeastOneEngineFiring { get; set; }
+        public bool isAnyEngineCut { get; set; }
         public double totalFuelFlow { get; set; }
         public int engine1ManifoldPressure { get; set; }
         public int engine1RPM { get; set; }
@@ -142,6 +143,7 @@ namespace SimAddonPlugin
             gearIsUp = data.gearIsUp;
             gearRetractableFlag = data.gearRetractableFlag;
             isAtLeastOneEngineFiring = data.isAtLeastOneEngineFiring;
+            isAnyEngineCut = data.isAnyEngineCut;
             totalFuelFlow = data.totalFuelFlow;
             verticalSpeed = data.verticalSpeed;
             offRunwayCrashed = data.offRunwayCrashed;

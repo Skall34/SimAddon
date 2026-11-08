@@ -6,6 +6,9 @@ namespace SimDataManager
     {
         public bool stallWarning { get; set; }
 
+        // vrai si au moins un moteur a été arrêté en vol (exercice moteur coupé)
+        public bool engineCut { get; set; }
+
         public bool crashed { get; set; }
         public bool overRunwayCrashed { get; set; }
         public bool overspeed { get; set; }
@@ -49,6 +52,7 @@ namespace SimDataManager
             crashed = false;
             overRunwayCrashed = false;
             stallWarning = false;
+            engineCut = false;
 
             _landingVSpeed = 0;
             landingVerticalAcceleration = 0;
