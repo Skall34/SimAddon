@@ -29,6 +29,7 @@ namespace SimDataManager
         public string ReservedBy { get; set; }
         public int EnVol {  get; set; }
         public int Reserved { get; set; }
+        public int ControleAFaire { get; set; }
 
         public string visibleName {             
             get
