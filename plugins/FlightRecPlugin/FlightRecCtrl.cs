@@ -79,6 +79,8 @@ namespace FlightRecPlugin
         private static bool checkingReservation = false;
 
         private bool staticValuesReadOnce = false;
+        // vrai pendant le rechargement de la combo immat après un changement de mission (évite de re-filtrer les missions)
+        private bool updatingImmatFromMission = false;
         private simData data;
 
         public event ISimAddonPluginCtrl.OnTalkHandler OnTalk;
@@ -984,6 +986,13 @@ namespace FlightRecPlugin
                         flightPerfs.stallWarning = true;
                     }
 
+                    // détection d'un arrêt moteur en vol (utile pour le vol de contrôle post-maintenance)
+                    if (currentFlightStatus.isAnyEngineCut && !onGround && flightPerfs.takeOffTime != default(DateTime))
+                    {
+                        Logger.WriteLine("engine cut detected in flight");
+                        flightPerfs.engineCut = true;
+                    }
+
                     //enregistre la position GPS si un moteur tourne, ou si on est pas au sol.
                     if (atLeastOneEngineFiring || !onGround)
                     {
@@ -1369,6 +1378,8 @@ namespace FlightRecPlugin
                 saveFlightDialog.ArrivalFuel = _endFuel;
                 saveFlightDialog.Note = _note;
                 saveFlightDialog.Mission = cbMission.Text;
+                saveFlightDialog.StallOk = flightPerfs.stallWarning;
+                saveFlightDialog.EngineCutOk = flightPerfs.engineCut;
                 saveFlightDialog.GPSTrace = GPSRecorder.GetTraceJSON();
                 saveFlightDialog.SimPlane = lbLibelleAvion.Text;
 
@@ -1789,7 +1800,7 @@ namespace FlightRecPlugin
             e.DrawFocusRectangle();
         }
 
-        private void CbImmat_SelectedIndexChanged(object sender, EventArgs e)
+        private async void CbImmat_SelectedIndexChanged(object sender, EventArgs e)
         {
             //free the previous plane if it was marked as in flight
             if (currentPlane != null)
@@ -1853,6 +1864,25 @@ namespace FlightRecPlugin
 
                 //store last plane used
                 currentPlane = selectedPlane;
+
+                //filtrer les missions proposées selon le type de l'avion choisi
+                if (cbMission.Enabled && !updatingImmatFromMission)
+                {
+                    try
+                    {
+                        List<Mission> missionsFiltrees = await data.FetchMissionsForTypeAsync(selectedPlane.Type);
+                        if (missionsFiltrees != null && missionsFiltrees.Count > 0)
+                        {
+                            cbMission.Items.Clear();
+                            cbMission.Items.AddRange(missionsFiltrees.ToArray());
+                            cbMission.DisplayMember = "Libelle";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteLine("Erreur lors du filtre des missions par type d'avion : " + ex.Message);
+                    }
+                }
 
                 //push this event, so that other plugins are notified that the plane was selected
                 SimEventArg eventArg = new SimEventArg();
@@ -2257,7 +2287,7 @@ namespace FlightRecPlugin
             }
         }
 
-        private void cbMission_SelectedIndexChanged(object sender, EventArgs e)
+        private async void cbMission_SelectedIndexChanged(object sender, EventArgs e)
         {
             Mission selectedMission = (Mission)cbMission.SelectedItem;
             if (selectedMission != null)
@@ -2270,6 +2300,54 @@ namespace FlightRecPlugin
                     cbMission.SelectedItem = null;
                     return;
                 }
+
+                //filtrer les avions proposés selon la mission choisie (api_getFlotte.php?mission=...)
+                if (cbImmat.Enabled)
+                {
+                    await FiltrerAvionsParMissionAsync(selectedMission.Libelle);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Recharge la combo des immatriculations avec uniquement les avions habilités
+        /// pour la mission choisie (api_getFlotte.php?mission=...). La sélection courante
+        /// est conservée si l'avion est toujours habilité, sinon elle est vidée.
+        /// </summary>
+        private async Task FiltrerAvionsParMissionAsync(string missionLibelle)
+        {
+            updatingImmatFromMission = true;
+            try
+            {
+                List<Avion> avionsHabilites = await data.FetchAvionsForMissionAsync(missionLibelle);
+                if (avionsHabilites == null) return; //erreur réseau : on garde la liste courante
+                avionsHabilites.Sort();
+                Avion current = cbImmat.SelectedItem as Avion;
+                cbImmat.Items.Clear();
+                foreach (Avion avion in avionsHabilites)
+                {
+                    if (avion.Immat != null)
+                    {
+                        cbImmat.Items.Add(avion);
+                    }
+                }
+                cbImmat.DisplayMember = "visibleName";
+                if ((current != null) && (cbImmat.Items.Contains(current)))
+                {
+                    cbImmat.SelectedItem = current;
+                }
+                else
+                {
+                    cbImmat.SelectedItem = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("Erreur lors du filtre des avions par mission : " + ex.Message);
+            }
+            finally
+            {
+                updatingImmatFromMission = false;
             }
         }
 

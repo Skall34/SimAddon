@@ -324,6 +324,41 @@ namespace SimDataManager
             }
         }
 
+        /// <summary>
+        /// Récupère sur le site les missions compatibles avec le type de l'appareil choisi
+        /// (api_getMissions.php?type=...). Renvoie null en cas d'erreur.
+        /// </summary>
+        public async Task<List<Mission>> FetchMissionsForTypeAsync(string planeType)
+        {
+            try
+            {
+                return await Mission.FetchMissionsFromSheet(httpClient, BASERURL, sessionToken, planeType);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("FetchMissionsForTypeAsync: " + ex.Message);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Récupère sur le site les avions habilités pour la mission choisie
+        /// (api_getFlotte.php?mission=...). Renvoie null en cas d'erreur réseau ;
+        /// une liste vide signifie qu'aucun avion n'est habilité pour cette mission.
+        /// </summary>
+        public async Task<List<Avion>> FetchAvionsForMissionAsync(string missionLibelle)
+        {
+            try
+            {
+                return await Avion.FetchAvionsFromSheet(httpClient, BASERURL, sessionToken, missionLibelle);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("FetchAvionsForMissionAsync: " + ex.Message);
+                return null;
+            }
+        }
+
         private async Task<int> LoadDataFromSheet()
         {
             int result = 0;
@@ -705,6 +740,23 @@ namespace SimDataManager
         public double GetLandingVerticalSpeed() => ((double)landingVerticalSpeed.Value/256) * 60 * 3.28084;
 
         public byte GetStallWarning() => stallWarning.Value;
+
+        /// <summary>
+        /// Vrai si l'appareil a au moins 2 moteurs et qu'au moins un est arrêté pendant qu'au moins un autre tourne
+        /// (arrêt partiel d'un moteur, ex. exercice moteur coupé sur bimoteur).
+        /// </summary>
+        public bool IsAnyEngineCut()
+        {
+            short n = engineNumber.Value;
+            if (n < 2) return false;
+            short[] firings = { engine1Firing.Value, engine2Firing.Value, engine3Firing.Value, engine4Firing.Value };
+            bool anyRunning = false, anyCut = false;
+            for (int i = 0; i < n && i < 4; i++)
+            {
+                if (firings[i] == 1) anyRunning = true; else anyCut = true;
+            }
+            return anyCut && anyRunning;
+        }
 
         public byte GetOverspeedWarning() => overSpeedWarning.Value;
 

@@ -17,12 +17,17 @@ namespace SimDataManager
         public string Libelle { get; set; }
         public int Active { get; set; }
 
-        public static async Task<List<Mission>> FetchMissionsFromSheet(HttpClient client, string BASEURL, string token)
+        public static async Task<List<Mission>> FetchMissionsFromSheet(HttpClient client, string BASEURL, string token, string planeType = null)
         {
             bool success = false;
             int nbRetry = 0;
             int result = 0;
             string url = BASEURL + "/api/api_getMissions.php?session_token="+Uri.EscapeDataString(token);
+            // si un type d'appareil est précisé, ne récupérer que les missions compatibles
+            if (!string.IsNullOrEmpty(planeType))
+            {
+                url += "&type=" + Uri.EscapeDataString(planeType);
+            }
             List<Mission> missions = null;
             UrlDeserializer dataReader = new UrlDeserializer(client, url);
             while ((!success)&&(nbRetry<3))

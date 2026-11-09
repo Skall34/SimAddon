@@ -85,11 +85,16 @@ namespace SimDataManager
             return name1.CompareTo(name2);
         }
 
-        public static async Task<List<Avion>> FetchAvionsFromSheet(HttpClient client, string BASEURL,string token)
+        public static async Task<List<Avion>> FetchAvionsFromSheet(HttpClient client, string BASEURL,string token, string mission = null)
         {
             bool success = false;
             int nbRetry = 0;
             string url = BASEURL + "/api/api_getFlotte.php?session_token=" + Uri.EscapeDataString(token);
+            // si une mission est précisée, ne récupérer que les avions habilités pour cette mission
+            if (!string.IsNullOrEmpty(mission))
+            {
+                url += "&mission=" + Uri.EscapeDataString(mission);
+            }
             List<Avion> avions = null;
             // Retry logic to handle transient errors
             UrlDeserializer dataReader = new UrlDeserializer(client, url);
@@ -97,7 +102,8 @@ namespace SimDataManager
                 try
                 {
                     avions = await dataReader.FetchAvionsDataAsync();
-                    if ((avions == null)||(avions.Count==0))
+                    // avec un filtre mission, une liste vide est valide (aucun avion habilité pour cette mission)
+                    if ((avions == null)||((avions.Count==0)&&(string.IsNullOrEmpty(mission))))
                     {
                         throw new Exception("Planes list is empty");
                     }

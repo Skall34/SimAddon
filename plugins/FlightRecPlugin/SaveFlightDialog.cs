@@ -188,6 +188,10 @@ namespace FlightRecPlugin
         public string GPSTrace { get; set; }
         public bool IsReservationLocked { get; set; } = false;
 
+        // Vol de contrôle post-maintenance : le pilote a effectué au moins une limite de décrochage / un arrêt moteur
+        public bool StallOk { get; set; } = false;
+        public bool EngineCutOk { get; set; } = false;
+
         public SaveFlightDialog(FlightRecCtrl parent, simData _data)
         {
             InitializeComponent();
@@ -216,6 +220,37 @@ namespace FlightRecPlugin
                 }
             }
             Planes = immatriculations;
+        }
+
+        // Filtre la combo des immatriculations selon la mission choisie (api_getFlotte.php?mission=...)
+        private async void cbMission_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string mission = cbMission.Text;
+            if (string.IsNullOrEmpty(mission)) return;
+            try
+            {
+                List<Avion> avionsHabilites = await data.FetchAvionsForMissionAsync(mission);
+                if (avionsHabilites == null) return; //erreur réseau : on garde la liste courante
+                avionsHabilites.Sort();
+                List<string> immatriculations = new List<string>();
+                foreach (Avion avion in avionsHabilites)
+                {
+                    if (avion.Immat != null)
+                    {
+                        immatriculations.Add(avion.Immat);
+                    }
+                }
+                string current = Immat;
+                Planes = immatriculations;
+                if (immatriculations.Contains(current))
+                {
+                    Immat = current;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("Erreur lors du filtre des avions par mission (dialog) : " + ex.Message);
+            }
         }
 
         private async void btnSave_Click(object sender, EventArgs e)
@@ -340,6 +375,9 @@ namespace FlightRecPlugin
                         { "mission", Mission },
                         { "commentaire", Comment },
                         { "payload", Cargo.ToString("0.00", CultureInfo.InvariantCulture) },
+                        // champs pour le vol de contrôle post-maintenance (utilisés par le serveur si mission = contrôle)
+                        { "stall_ok", StallOk ? "1" : "0" },
+                        { "engine_cut_ok", EngineCutOk ? "1" : "0" },
                         // Add GPS data if available
                         { "tracegps", string.IsNullOrWhiteSpace(GPSTrace) ? string.Empty : GPSTrace }
                     };
