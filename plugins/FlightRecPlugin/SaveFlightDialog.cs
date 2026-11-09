@@ -224,10 +224,29 @@ namespace FlightRecPlugin
         }
 
         // Filtre la combo des immatriculations selon la mission choisie (api_getFlotte.php?mission=...)
+        /// <summary>
+        /// Grise les cases « vol de contrôle » (stall / arrêt moteur) quand la mission
+        /// sélectionnée n'est pas une mission de contrôle (MISSIONS.est_controle=1).
+        /// </summary>
+        private void UpdateControleCheckboxes()
+        {
+            string mission = cbMission.Text;
+            bool estControle = !string.IsNullOrEmpty(mission)
+                && data.missions.Any(m => m.Libelle == mission && m.EstControle == 1);
+            chkStall.Enabled = estControle;
+            chkEngineCut.Enabled = estControle;
+            if (!estControle)
+            {
+                chkStall.Checked = false;
+                chkEngineCut.Checked = false;
+            }
+        }
+
         private async void cbMission_SelectedIndexChanged(object sender, EventArgs e)
         {
             string mission = cbMission.Text;
             if (string.IsNullOrEmpty(mission)) return;
+            UpdateControleCheckboxes();
             try
             {
                 List<Avion> avionsHabilites = await data.FetchAvionsForMissionAsync(mission);
@@ -458,6 +477,8 @@ namespace FlightRecPlugin
 
                 // Ajoutez ici d'autres champs à griser si nécessaire
             }
+            // état initial : cases vol de contrôle grisées sauf si la mission est une mission de contrôle
+            UpdateControleCheckboxes();
         }
     }
 }
