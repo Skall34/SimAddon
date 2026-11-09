@@ -55,13 +55,21 @@ namespace SimDataManager
             if (obj == null) return false;
             Avion objAsAvion = obj as Avion;
             if (objAsAvion == null) return false;
-            else return base.Equals(obj);
+            // comparaison par immatriculation (et non par référence) :
+            // indispensable pour que ComboBox.Items.Contains() retrouve l'avion
+            // après un rechargement de la liste (nouvelles instances)
+            return this.Equals(objAsAvion);
         }
 
         public bool Equals(Avion obj)
         {
             if (obj == null) return false;
             return (this.Immat.Equals(obj.Immat));
+        }
+
+        public override int GetHashCode()
+        {
+            return Immat != null ? Immat.GetHashCode() : 0;
         }
 
         public int CompareTo(Avion other)

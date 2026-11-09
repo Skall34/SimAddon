@@ -1879,9 +1879,15 @@ namespace FlightRecPlugin
                         List<Mission> missionsFiltrees = await data.FetchMissionsForTypeAsync(selectedPlane.Type);
                         if (missionsFiltrees != null && missionsFiltrees.Count > 0)
                         {
+                            // conserve la mission courante si elle est toujours proposée pour ce type d'avion
+                            Mission currentMission = cbMission.SelectedItem as Mission;
                             cbMission.Items.Clear();
                             cbMission.Items.AddRange(missionsFiltrees.ToArray());
                             cbMission.DisplayMember = "Libelle";
+                            if (currentMission != null && cbMission.Items.Contains(currentMission))
+                            {
+                                cbMission.SelectedItem = currentMission;
+                            }
                         }
                     }
                     catch (Exception ex)

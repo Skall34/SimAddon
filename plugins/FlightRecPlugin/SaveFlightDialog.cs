@@ -188,9 +188,10 @@ namespace FlightRecPlugin
         public string GPSTrace { get; set; }
         public bool IsReservationLocked { get; set; } = false;
 
-        // Vol de contrôle post-maintenance : le pilote a effectué au moins une limite de décrochage / un arrêt moteur
-        public bool StallOk { get; set; } = false;
-        public bool EngineCutOk { get; set; } = false;
+        // Vol de contrôle post-maintenance : le pilote a effectué au moins une limite de décrochage / un arrêt moteur.
+        // Pré-rempli par la détection auto (offset stall warning), mais modifiable manuellement via les cases à cocher.
+        public bool StallOk { get => chkStall.Checked; set => chkStall.Checked = value; }
+        public bool EngineCutOk { get => chkEngineCut.Checked; set => chkEngineCut.Checked = value; }
 
         public SaveFlightDialog(FlightRecCtrl parent, simData _data)
         {

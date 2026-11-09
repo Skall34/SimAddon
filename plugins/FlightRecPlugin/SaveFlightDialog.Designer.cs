@@ -56,6 +56,9 @@
             cbMission = new System.Windows.Forms.ComboBox();
             tbComments = new System.Windows.Forms.TextBox();
             tbSimPlane = new System.Windows.Forms.TextBox();
+            groupBox5 = new System.Windows.Forms.GroupBox();
+            chkStall = new System.Windows.Forms.CheckBox();
+            chkEngineCut = new System.Windows.Forms.CheckBox();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)valDepFuel).BeginInit();
             groupBox2.SuspendLayout();
@@ -69,7 +72,7 @@
             // btnSave
             // 
             btnSave.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-            btnSave.Location = new System.Drawing.Point(464, 364);
+            btnSave.Location = new System.Drawing.Point(464, 414);
             btnSave.Name = "btnSave";
             btnSave.Size = new System.Drawing.Size(75, 23);
             btnSave.TabIndex = 11;
@@ -80,7 +83,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-            btnCancel.Location = new System.Drawing.Point(383, 364);
+            btnCancel.Location = new System.Drawing.Point(383, 414);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new System.Drawing.Size(75, 23);
             btnCancel.TabIndex = 12;
@@ -279,7 +282,7 @@
             groupBox4.Controls.Add(label9);
             groupBox4.Controls.Add(cbMission);
             groupBox4.Controls.Add(tbComments);
-            groupBox4.Location = new System.Drawing.Point(11, 217);
+            groupBox4.Location = new System.Drawing.Point(11, 267);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new System.Drawing.Size(533, 141);
             groupBox4.TabIndex = 5;
@@ -341,10 +344,45 @@
             // 
             // SaveFlightDialog
             // 
+            //
+            // groupBox5
+            //
+            groupBox5.Controls.Add(chkEngineCut);
+            groupBox5.Controls.Add(chkStall);
+            groupBox5.Location = new System.Drawing.Point(11, 217);
+            groupBox5.Name = "groupBox5";
+            groupBox5.Size = new System.Drawing.Size(533, 44);
+            groupBox5.TabIndex = 6;
+            groupBox5.TabStop = false;
+            groupBox5.Text = "Vol de contrôle post-maintenance";
+            //
+            // chkStall
+            //
+            chkStall.AutoSize = true;
+            chkStall.Location = new System.Drawing.Point(10, 20);
+            chkStall.Name = "chkStall";
+            chkStall.Size = new System.Drawing.Size(210, 19);
+            chkStall.TabIndex = 0;
+            chkStall.Text = "Limite de décrochage effectuée (stall)";
+            chkStall.UseVisualStyleBackColor = true;
+            //
+            // chkEngineCut
+            //
+            chkEngineCut.AutoSize = true;
+            chkEngineCut.Location = new System.Drawing.Point(280, 20);
+            chkEngineCut.Name = "chkEngineCut";
+            chkEngineCut.Size = new System.Drawing.Size(220, 19);
+            chkEngineCut.TabIndex = 1;
+            chkEngineCut.Text = "Arrêt moteur effectué (bimoteur)";
+            chkEngineCut.UseVisualStyleBackColor = true;
+            //
+            // SaveFlightDialog
+            //
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             CancelButton = btnCancel;
-            ClientSize = new System.Drawing.Size(551, 399);
+            ClientSize = new System.Drawing.Size(551, 449);
+            Controls.Add(groupBox5);
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
@@ -400,5 +438,8 @@
         private System.Windows.Forms.NumericUpDown valNote;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox tbSimPlane;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.CheckBox chkStall;
+        private System.Windows.Forms.CheckBox chkEngineCut;
     }
 }

@@ -18,6 +18,21 @@ namespace SimDataManager
         public int Active { get; set; }
         public int EstControle { get; set; }
 
+        // comparaison par libellé (et non par référence) : indispensable pour que
+        // ComboBox.Items.Contains() retrouve la mission après un rechargement de la liste
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            Mission objAsMission = obj as Mission;
+            if (objAsMission == null) return false;
+            return this.Libelle == objAsMission.Libelle;
+        }
+
+        public override int GetHashCode()
+        {
+            return Libelle != null ? Libelle.GetHashCode() : 0;
+        }
+
         public static async Task<List<Mission>> FetchMissionsFromSheet(HttpClient client, string BASEURL, string token, string planeType = null)
         {
             bool success = false;
