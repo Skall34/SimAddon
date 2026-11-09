@@ -16,6 +16,7 @@ namespace SimDataManager
         public int Index { get; set; }
         public string Libelle { get; set; }
         public int Active { get; set; }
+        public int EstControle { get; set; }
 
         public static async Task<List<Mission>> FetchMissionsFromSheet(HttpClient client, string BASEURL, string token, string planeType = null)
         {

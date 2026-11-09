@@ -1816,6 +1816,12 @@ namespace FlightRecPlugin
             atLeastOneEngineFiring = false;
             Avion selectedPlane = (Avion)cbImmat.SelectedItem;
             //Avion selectedPlane = this.data.avions.Where(a => a.Immat == cbImmat.Text).FirstOrDefault();
+            if (selectedPlane == null)
+            {
+                // plus d'avion sélectionné : la combo mission redevient modifiable (hors réservation)
+                if (reservationStatus != ReservationMgr.ReservationStatus.Accepted) cbMission.Enabled = true;
+                return;
+            }
             if (selectedPlane != null)
             {
                 if (!selectedPlane.IsSelectable(Settings.Default.callsign, reservationStatus))
@@ -1882,6 +1888,29 @@ namespace FlightRecPlugin
                     {
                         Logger.WriteLine("Erreur lors du filtre des missions par type d'avion : " + ex.Message);
                     }
+                }
+
+                // Vol de contrôle post-maintenance : un avion "contrôle à faire" ne peut prendre
+                // que la mission de contrôle -> on bloque la combo mission dessus
+                if (selectedPlane.ControleAFaire == 1)
+                {
+                    List<Mission> missionsControle = cbMission.Items.Cast<Mission>().Where(m => m.EstControle == 1).ToList();
+                    if (missionsControle.Count > 0)
+                    {
+                        if (missionsControle.Count < cbMission.Items.Count)
+                        {
+                            cbMission.Items.Clear();
+                            cbMission.Items.AddRange(missionsControle.ToArray());
+                            cbMission.DisplayMember = "Libelle";
+                        }
+                        cbMission.SelectedItem = missionsControle[0];
+                    }
+                    cbMission.Enabled = false;
+                }
+                else if (reservationStatus != ReservationMgr.ReservationStatus.Accepted)
+                {
+                    // avion normal : la combo mission redevient modifiable (hors réservation)
+                    cbMission.Enabled = true;
                 }
 
                 //push this event, so that other plugins are notified that the plane was selected

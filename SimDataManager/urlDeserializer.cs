@@ -61,6 +61,7 @@ namespace SimDataManager
                                 DernierUtilisateur = item.TryGetValue("callsign", out string utilisateur) ? utilisateur : "",
                                 EnVol = int.TryParse(item.TryGetValue("en_vol", out string envol) ? envol : "", out int envolValue) ? envolValue : 0,
                                 Reserved = int.TryParse(item.TryGetValue("reservee", out string reservee) ? reservee : "0", out int reserveValue) ? reserveValue : 0,
+                                ControleAFaire = int.TryParse(item.TryGetValue("controle_a_faire", out string controleAFaire) ? controleAFaire : "0", out int controleAFaireValue) ? controleAFaireValue : 0,
                                 MaintenanceStatus = int.TryParse(item.TryGetValue("status", out string status) ? status : "0", out int statusValue) ? statusValue : 0,
                                 ReservedBy = item.TryGetValue("reserved_by", out string reservedBy) ? reservedBy : "",
                             };
@@ -111,6 +112,7 @@ namespace SimDataManager
 
                                 Libelle = item.TryGetValue("libelle", out string libMission) ? libMission : "",
                                 Active = int.TryParse(item.TryGetValue("active", out string activeStr) ? activeStr : "0", out int activeValue) ? activeValue : 0,
+                                EstControle = int.TryParse(item.TryGetValue("est_controle", out string estControle) ? estControle : "0", out int estControleValue) ? estControleValue : 0,
                             };
 
                             missions.Add(mission);
