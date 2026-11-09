@@ -320,6 +320,7 @@
             cbMission.Name = "cbMission";
             cbMission.Size = new System.Drawing.Size(192, 23);
             cbMission.TabIndex = 10;
+            this.cbMission.SelectedIndexChanged += new System.EventHandler(this.cbMission_SelectedIndexChanged);
             // 
             // tbComments
             // 

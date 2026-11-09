@@ -341,6 +341,24 @@ namespace SimDataManager
             }
         }
 
+        /// <summary>
+        /// Récupère sur le site les avions habilités pour la mission choisie
+        /// (api_getFlotte.php?mission=...). Renvoie null en cas d'erreur réseau ;
+        /// une liste vide signifie qu'aucun avion n'est habilité pour cette mission.
+        /// </summary>
+        public async Task<List<Avion>> FetchAvionsForMissionAsync(string missionLibelle)
+        {
+            try
+            {
+                return await Avion.FetchAvionsFromSheet(httpClient, BASERURL, sessionToken, missionLibelle);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("FetchAvionsForMissionAsync: " + ex.Message);
+                return null;
+            }
+        }
+
         private async Task<int> LoadDataFromSheet()
         {
             int result = 0;
