@@ -693,7 +693,7 @@ namespace SimDataManager
 
         public bool GetReadyToFly()
         {
-            if (TryGetBridgeFrame(out var f)) return f.AvionicsOn == 1 && IsAtLeastOneEngineFiring();
+            if (TryGetBridgeFrame(out var f)) return f.AvionicsOn == 1; // sémantique FSUIPC 0x3364 : avion sous tension, cockpit (pas besoin du moteur)
             return ((readyToFLy.Value == 0)&&(inMenu.Value == 0)&&(viewMode.Value < 4));
         }
 
