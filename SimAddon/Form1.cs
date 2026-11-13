@@ -410,6 +410,7 @@ namespace SimAddon
             if (_simData.isConnectedToSim)
             {
                 statusText = "Connected";
+                statusText += _simData.UsingBridge ? " [SimBridge]" : " [FSUIPC/XUIPC]";
                 this.lblConnectionStatus.ForeColor = Color.LightGreen;
                 if (_simData.GetReadyToFly())
                 {
@@ -1500,7 +1501,14 @@ namespace SimAddon
             simAutoToolStripMenuItem.Checked = mode == "auto";
             simFsuipcToolStripMenuItem.Checked = mode == "fsuipc";
             simBridgeToolStripMenuItem.Checked = mode == "simbridge";
-            Logger.WriteLine("Connecteur sim : " + mode);
+            Logger.WriteLine("Connecteur sim : " + mode
+                + " | SimBridge actif: " + _simData.IsSimBridgeActive
+                + " | trames reçues: " + _simData.BridgeFramesReceived);
+            // on relance le cycle de connexion pour appliquer le nouveau connecteur
+            timerMain.Stop();
+            _simData.Reconnect();
+            timerConnection.Start();
+            UpdateLabelConnectionStatus();
         }
 
         private void simAutoToolStripMenuItem_Click(object sender, EventArgs e)

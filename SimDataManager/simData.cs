@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 //using Microsoft.VisualBasic.ApplicationServices;
@@ -263,6 +264,7 @@ namespace SimDataManager
             // PoC SimBridge : démarre le récepteur UDP (léger, inactif sans plugin X-Plane)
             try
             {
+                _bridge.FrameReceived += OnBridgeFrame;
                 _bridge.Start(SimBridgeClient.DefaultPort);
                 _bridgeStarted = true;
             }
@@ -270,6 +272,32 @@ namespace SimDataManager
             {
                 Logger.WriteLine("SimBridgeClient non démarré : " + ex.Message);
             }
+        }
+
+        private long _bridgeFrames;
+        private bool _bridgeLogged;
+
+        /// <summary>Nombre de trames SimBridge reçues depuis le démarrage.</summary>
+        public long BridgeFramesReceived => _bridgeFrames;
+
+        /// <summary>Vrai si le pont SimBridge est la source active (mode auto ou forcé).</summary>
+        public bool UsingBridge => UseBridge;
+
+        private void OnBridgeFrame(SimBridgeFrame f)
+        {
+            Interlocked.Increment(ref _bridgeFrames);
+            if (!_bridgeLogged)
+            {
+                _bridgeLogged = true;
+                Logger.WriteLine("SimBridge: première trame UDP reçue (port 49180) — pont X-Plane actif, stall_warning dispo");
+            }
+        }
+
+        /// <summary>Force la reconnexion au sim (utilisé quand on change de connecteur).</summary>
+        public void Reconnect()
+        {
+            _isConnectedToSim = false;
+            try { FSUIPCConnection.Close(); } catch { /* ignore */ }
         }
 
         public void useFlyingNetwork(string networkName)
@@ -579,6 +607,7 @@ namespace SimDataManager
                 payloadServices = FSUIPCConnection.PayloadServices;
                 FSUIPCConnection.Process();
                 payloadServices.RefreshData();
+                Logger.WriteLine("Connecté au sim via FSUIPC/XUIPC");
             }
             catch (Exception)
             {
