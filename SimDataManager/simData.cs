@@ -185,6 +185,23 @@ namespace SimDataManager
 
         private bool _isConnectedToSim;
 
+        // PoC SimBridge : pont UDP X-Plane (plugin SimBridge.xpl -> UDP 127.0.0.1:49180).
+        // Inactif tant qu'aucune trame n'arrive (MSFS/P3D continuent de passer par FSUIPC/XUIPC).
+        private readonly SimBridgeClient _bridge = new SimBridgeClient();
+        private bool _bridgeStarted;
+
+        /// <summary>Vrai si des trames SimBridge arrivent (X-Plane + plugin SimBridge.xpl installé).</summary>
+        public bool IsSimBridgeActive => _bridgeStarted && _bridge.TryGetLatest(out _);
+
+        /// <summary>Source de données courante : SimBridge (UDP) si dispo, sinon FSUIPC.</summary>
+        private bool UseBridge => IsSimBridgeActive;
+
+        private bool TryGetBridgeFrame(out SimBridgeFrame f)
+        {
+            f = null;
+            return UseBridge && _bridge.TryGetLatest(out f);
+        }
+
         private SiteConnection SiteConnection;
         private string sessionToken;
 
@@ -220,6 +237,17 @@ namespace SimDataManager
             ServicePointManager.DefaultConnectionLimit = 10;
             ServicePointManager.MaxServicePointIdleTime = 15000; //15s
             httpClient = new HttpClient();
+
+            // PoC SimBridge : démarre le récepteur UDP (léger, inactif sans plugin X-Plane)
+            try
+            {
+                _bridge.Start(SimBridgeClient.DefaultPort);
+                _bridgeStarted = true;
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("SimBridgeClient non démarré : " + ex.Message);
+            }
         }
 
         public void useFlyingNetwork(string networkName)
@@ -522,11 +550,28 @@ namespace SimDataManager
 
         public void OpenConnection()
         {
-            FSUIPCConnection.Open();
-            _isConnectedToSim = true;
-            payloadServices = FSUIPCConnection.PayloadServices;
-            FSUIPCConnection.Process();
-            payloadServices.RefreshData();
+            try
+            {
+                FSUIPCConnection.Open();
+                _isConnectedToSim = true;
+                payloadServices = FSUIPCConnection.PayloadServices;
+                FSUIPCConnection.Process();
+                payloadServices.RefreshData();
+            }
+            catch (Exception)
+            {
+                // Pas de FSUIPC/XUIPC (ex. X-Plane sans XUIPC) : si le pont SimBridge émet, on se connecte dessus.
+                if (IsSimBridgeActive)
+                {
+                    _isConnectedToSim = true;
+                    payloadServices = null;
+                    Logger.WriteLine("Connecté au sim via SimBridge (UDP X-Plane)");
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
         public void CloseConnection()
@@ -536,6 +581,8 @@ namespace SimDataManager
 
         public void Refresh()
         {
+            // En mode SimBridge, les trames UDP arrivent en continu : rien à pomper côté FSUIPC.
+            if (UseBridge) return;
             try
             {
                 FSUIPCConnection.Process();
@@ -549,6 +596,10 @@ namespace SimDataManager
 
         public DateTime GetSimDateTimeUTC()
         {
+            if (TryGetBridgeFrame(out var bf))
+            {
+                return DateTimeOffset.FromUnixTimeMilliseconds(bf.TsMs).UtcDateTime;
+            }
             DateTime result;
             if (isConnectedToSim == false)
             {
@@ -588,11 +639,13 @@ namespace SimDataManager
 
         public bool GetReadyToFly()
         {
+            if (TryGetBridgeFrame(out var f)) return f.AvionicsOn == 1 && IsAtLeastOneEngineFiring();
             return ((readyToFLy.Value == 0)&&(inMenu.Value == 0)&&(viewMode.Value < 4));
         }
 
         public double GetFuelWeight()
         {
+            if (TryGetBridgeFrame(out var f)) return Math.Floor(f.FuelTotalKg);
             double result = 0;
             if (null != payloadServices)
             {
@@ -603,6 +656,7 @@ namespace SimDataManager
 
         public double GetPlaneWeight()
         {
+            if (TryGetBridgeFrame(out var f)) return f.PlaneWeightKg;
             double result = 0;
             if (null != payloadServices)
             {
@@ -632,7 +686,11 @@ namespace SimDataManager
             }
         }
 
-        public short GetOnground() => onGround.Value;
+        public short GetOnground()
+        {
+            if (TryGetBridgeFrame(out var f)) return (short)f.OnGround;
+            return onGround.Value;
+        }
 
         public Double GetCargoWeight()
         {
@@ -646,6 +704,7 @@ namespace SimDataManager
 
         public float GetCOM1()
         {
+            if (TryGetBridgeFrame(out var f)) return (float)f.Com1Mhz;
             short bcdValue = COM1.Value;
             int thousands = (bcdValue >> 12) & 0xF;
             int hundreds = (bcdValue >> 8) & 0xF;
@@ -671,6 +730,7 @@ namespace SimDataManager
 
         public float GetCOM1Stdby()
         {
+            if (TryGetBridgeFrame(out var f)) return 0f; // pas de COM1 standby dans le pont v1
             short bcdValue = COM1Stdby.Value;
             int thousands = (bcdValue >> 12) & 0xF;
             int hundreds = (bcdValue >> 8) & 0xF;
@@ -703,6 +763,7 @@ namespace SimDataManager
 
         public int GetSquawk()
         {
+            if (TryGetBridgeFrame(out var f)) return f.Squawk;
             short bcdValue = squawk.Value;
             int thousands = (bcdValue >> 12) & 0xF;
             int hundreds = (bcdValue >> 8) & 0xF;
@@ -723,23 +784,51 @@ namespace SimDataManager
         }
 
         //transponder mode off=0,stdby=1,on=2,test=3
-        public byte GetSquawkMode() => squawkMode.Value;
+        public byte GetSquawkMode()
+        {
+            if (TryGetBridgeFrame(out var f)) return (byte)(f.Squawk > 0 ? 2 : 0); // 2 = on
+            return squawkMode.Value;
+        }
         public void SetSquawkMode(byte value) {
             squawkMode.Value = value;
         }
 
 
-        public double GetMagVariation() => ((double)this.magVariation.Value) * 360 / 65536;
+        public double GetMagVariation()
+        {
+            if (TryGetBridgeFrame(out var f)) return f.MagvarDeg;
+            return ((double)this.magVariation.Value) * 360 / 65536;
+        }
 
-        public double GetAirSpeed() => (double)this.airspeed.Value / 128d;
+        public double GetAirSpeed()
+        {
+            if (TryGetBridgeFrame(out var f)) return f.IasKt;
+            return (double)this.airspeed.Value / 128d;
+        }
 
-        public double GetVerticalSpeed() => ((double)verticalSpeed.Value/256 ) * 60 * 3.28084;
-        
-        public double GetVerticalAcceleration() => verticalAcceleration.Value;
+        public double GetVerticalSpeed()
+        {
+            if (TryGetBridgeFrame(out var f)) return f.VsFpm;
+            return ((double)verticalSpeed.Value/256 ) * 60 * 3.28084;
+        }
 
-        public double GetLandingVerticalSpeed() => ((double)landingVerticalSpeed.Value/256) * 60 * 3.28084;
+        public double GetVerticalAcceleration()
+        {
+            if (TryGetBridgeFrame(out var f)) return 0; // pas de DataRef équivalent direct dans le pont v1
+            return verticalAcceleration.Value;
+        }
 
-        public byte GetStallWarning() => stallWarning.Value;
+        public double GetLandingVerticalSpeed()
+        {
+            if (TryGetBridgeFrame(out var f)) return f.VsFpm;
+            return ((double)landingVerticalSpeed.Value/256) * 60 * 3.28084;
+        }
+
+        public byte GetStallWarning()
+        {
+            if (TryGetBridgeFrame(out var f)) return (byte)f.StallWarning;
+            return stallWarning.Value;
+        }
 
         /// <summary>
         /// Vrai si l'appareil a au moins 2 moteurs et qu'au moins un est arrêté pendant qu'au moins un autre tourne
@@ -747,6 +836,7 @@ namespace SimDataManager
         /// </summary>
         public bool IsAnyEngineCut()
         {
+            if (TryGetBridgeFrame(out var f)) return f.IsAnyEngineCut;
             short n = engineNumber.Value;
             if (n < 2) return false;
             short[] firings = { engine1Firing.Value, engine2Firing.Value, engine3Firing.Value, engine4Firing.Value };
@@ -758,30 +848,71 @@ namespace SimDataManager
             return anyCut && anyRunning;
         }
 
-        public byte GetOverspeedWarning() => overSpeedWarning.Value;
+        public byte GetOverspeedWarning()
+        {
+            if (TryGetBridgeFrame(out var f)) return (byte)f.OverspeedWarning;
+            return overSpeedWarning.Value;
+        }
 
-        public short GetCrashedFlag() => crashed.Value;
+        public short GetCrashedFlag()
+        {
+            if (TryGetBridgeFrame(out var f)) return (short)f.Crashed;
+            return crashed.Value;
+        }
 
-        public short GetOffRunwayCrashed() => offRunwayCrashed.Value;
+        public short GetOffRunwayCrashed()
+        {
+            if (TryGetBridgeFrame(out var f)) return 0; // pas de distinction off-runway dans le pont v1
+            return offRunwayCrashed.Value;
+        }
 
-        public uint GetGearRetractableFlag() => gearRetractableFlag.Value;
+        public uint GetGearRetractableFlag()
+        {
+            if (TryGetBridgeFrame(out var f)) return 1;
+            return gearRetractableFlag.Value;
+        }
 
-        public uint GetAvionicsMaster() => avionicsMaster.Value;
+        public uint GetAvionicsMaster()
+        {
+            if (TryGetBridgeFrame(out var f)) return (uint)f.AvionicsOn;
+            return avionicsMaster.Value;
+        }
 
-        public uint GetBatteryMaster()=> batteryMaster.Value;
+        public uint GetBatteryMaster()
+        {
+            if (TryGetBridgeFrame(out var f)) return (uint)f.BatteryOn;
+            return batteryMaster.Value;
+        }
 
         public byte GetViewMode() => viewMode.Value;
 
-        public bool GetIsGearUp() =>
+        public bool GetIsGearUp()
+        {
+            if (TryGetBridgeFrame(out var f)) return f.GearDeploy < 0.01; // train rentré
             // gear down = 16383
-            gearPosition.Value == 0;
+            return gearPosition.Value == 0;
+        }
 
-        public uint GetFlapsAvailableFlag() => flapsAvailable.Value;
+        public uint GetFlapsAvailableFlag()
+        {
+            if (TryGetBridgeFrame(out var f)) return 1;
+            return flapsAvailable.Value;
+        }
 
-        public uint GetFlapsPosition() => flapsPosition.Value;
+        public uint GetFlapsPosition()
+        {
+            if (TryGetBridgeFrame(out var f)) return (uint)(f.FlapsRatio * 16383); // échelle FSUIPC 0..16383
+            return flapsPosition.Value;
+        }
 
         public bool IsAtLeastOneEngineFiring()
         {
+            if (TryGetBridgeFrame(out var f))
+            {
+                for (int i = 0; i < f.NumEngines && i < f.EngRunning.Length; i++)
+                    if (f.EngRunning[i] == 1) return true;
+                return false;
+            }
             bool result = false;
             switch (this.engineNumber.Value)
             {
@@ -813,6 +944,13 @@ namespace SimDataManager
 
         public double GetFuelFlow()
         {
+            if (TryGetBridgeFrame(out var f))
+            {
+                // le pont envoie kg/s par moteur ; FSUIPC attend du kg/h
+                double sum = 0;
+                foreach (var ff in f.EngFfKgS) sum += ff;
+                return sum * 3600.0;
+            }
             double totalFuelFlow = 0;
             int engineCount = this.engineNumber.Value;
             switch (engineCount)
@@ -839,6 +977,7 @@ namespace SimDataManager
 
         public int GetEngine1RPM()
         {
+            if (TryGetBridgeFrame(out var f)) return f.EngRpm.Length > 0 ? (int)f.EngRpm[0] : 0;
             int rpmScaler = engine1RPMScaler.Value;
             if (rpmScaler == 0)
             {
@@ -849,6 +988,7 @@ namespace SimDataManager
 
         public int GetEngine1ManifoldPressure()
         {
+            if (TryGetBridgeFrame(out var f)) return 0; // pas de sonde MAP dans le pont v1
             return (int)(engine1ManifoldPressure.Value / 1024);
         }
 
@@ -879,6 +1019,11 @@ namespace SimDataManager
 
         public double GetPayload()
         {
+            if (TryGetBridgeFrame(out var f))
+            {
+                double adjusted = f.PayloadKg - 80; // retire le poids du pilote, comme payloadServices
+                return adjusted < 0 ? 0 : adjusted;
+            }
             if (payloadServices != null)
             {
                 double adujstedPayload = payloadServices.PayloadWeightKgs-80;
