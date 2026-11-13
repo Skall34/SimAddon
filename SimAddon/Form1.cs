@@ -376,6 +376,7 @@ namespace SimAddon
                         + " frames=" + _simData.BridgeFramesReceived
                         + " stall=" + currentStatus.stallWarning
                         + " stallRatio=" + (_simData.TryGetBridgeFramePublic(out var bf) ? bf.StallWarningRatio.ToString("0.00") : "-")
+                        + " alpha=" + (_simData.TryGetBridgeFramePublic(out var bf2) ? bf2.Alpha.ToString("0.0") + "/" + bf2.StallAlpha.ToString("0.0") : "-")
                         + " overspeed=" + currentStatus.overSpeedWarning
                         + " ias=" + currentStatus.airSpeed.ToString("0.0")
                         + " onGround=" + currentStatus.onGround);

@@ -880,9 +880,11 @@ namespace SimDataManager
 
         public byte GetStallWarning()
         {
-            // Pont SimBridge : le plugin envoie stall_warning=1 si annonciateur OU ratio >= 0.9 ;
-            // on re-applique le seuil côté client par sécurité.
-            if (TryGetBridgeFrame(out var f)) return (byte)((f.StallWarning != 0 || f.StallWarningRatio >= 0.9) ? 1 : 0);
+            // Pont SimBridge : le plugin envoie stall_warning=1 si annonciateur cockpit OU flag
+            // flightmodel OU ratio >= 0.9 OU AoA >= AoA d'alerte (robuste pour avions SASL/REP).
+            if (TryGetBridgeFrame(out var f))
+                return (byte)((f.StallWarning != 0 || f.StallWarningRatio >= 0.9
+                                || (f.StallAlpha > 0 && f.Alpha >= f.StallAlpha)) ? 1 : 0);
             return stallWarning.Value;
         }
 
