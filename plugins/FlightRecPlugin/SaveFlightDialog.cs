@@ -240,6 +240,9 @@ namespace FlightRecPlugin
                 chkStall.Checked = false;
                 chkEngineCut.Checked = false;
             }
+            // Vol de contrôle : immat et mission verrouillées (cohérence avion/mission exigée côté serveur)
+            cbImmat.Enabled = !estControle && !IsReservationLocked;
+            cbMission.Enabled = !estControle && !IsReservationLocked;
         }
 
         private async void cbMission_SelectedIndexChanged(object sender, EventArgs e)
