@@ -225,6 +225,9 @@ namespace SimDataManager
             return UseBridge && _bridge.TryGetLatest(out f);
         }
 
+        /// <summary>Version publique pour le debug (Form1).</summary>
+        public bool TryGetBridgeFramePublic(out SimBridgeFrame f) => TryGetBridgeFrame(out f);
+
         private SiteConnection SiteConnection;
         private string sessionToken;
 
@@ -877,7 +880,9 @@ namespace SimDataManager
 
         public byte GetStallWarning()
         {
-            if (TryGetBridgeFrame(out var f)) return (byte)f.StallWarning;
+            // Pont SimBridge : le plugin envoie stall_warning=1 si annonciateur OU ratio >= 0.9 ;
+            // on re-applique le seuil côté client par sécurité.
+            if (TryGetBridgeFrame(out var f)) return (byte)((f.StallWarning != 0 || f.StallWarningRatio >= 0.9) ? 1 : 0);
             return stallWarning.Value;
         }
 
