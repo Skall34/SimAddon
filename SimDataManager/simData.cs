@@ -977,7 +977,7 @@ namespace SimDataManager
 
         public int GetEngine1RPM()
         {
-            if (TryGetBridgeFrame(out var f)) return f.EngRpm.Length > 0 ? (int)f.EngRpm[0] : 0;
+            if (TryGetBridgeFrame(out var f)) return f.EngN1Pct.Length > 0 ? (int)f.EngN1Pct[0] : 0; // PoC : % N1 (pas de RPM direct dans XP12)
             int rpmScaler = engine1RPMScaler.Value;
             if (rpmScaler == 0)
             {
