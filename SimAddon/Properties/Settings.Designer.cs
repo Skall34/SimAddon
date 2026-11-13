@@ -94,6 +94,18 @@ namespace SimAddon.Properties {
                 this["FlyingNetwork"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("auto")]
+        public string SimConnector {
+            get {
+                return ((string)(this["SimConnector"]));
+            }
+            set {
+                this["SimConnector"] = value;
+            }
+        }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

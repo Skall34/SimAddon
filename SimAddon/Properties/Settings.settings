@@ -20,6 +20,9 @@
     <Setting Name="FlyingNetwork" Type="System.String" Scope="User">
       <Value Profile="(Default)">VATSIM</Value>
     </Setting>
+    <Setting Name="SimConnector" Type="System.String" Scope="User">
+      <Value Profile="(Default)">auto</Value>
+    </Setting>
     <Setting Name="SessionToken" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

@@ -59,6 +59,10 @@ namespace SimAddon
             networkToolStripMenuItem1 = new ToolStripMenuItem();
             vATSIMToolStripMenuItem1 = new ToolStripMenuItem();
             iVAOToolStripMenuItem1 = new ToolStripMenuItem();
+            simToolStripMenuItem = new ToolStripMenuItem();
+            simAutoToolStripMenuItem = new ToolStripMenuItem();
+            simFsuipcToolStripMenuItem = new ToolStripMenuItem();
+            simBridgeToolStripMenuItem = new ToolStripMenuItem();
             linksToolStripMenuItem = new ToolStripMenuItem();
             openWebSiteToolStripMenuItem1 = new ToolStripMenuItem();
             documentationToolStripMenuItem1 = new ToolStripMenuItem();
@@ -151,7 +155,7 @@ namespace SimAddon
             // menuStrip1
             // 
             menuStrip1.BackColor = Color.DimGray;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, networkToolStripMenuItem1, linksToolStripMenuItem, helpToolStripMenuItem, btnClose, btnMaximize, btnMinimize });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, networkToolStripMenuItem1, simToolStripMenuItem, linksToolStripMenuItem, helpToolStripMenuItem, btnClose, btnMaximize, btnMinimize });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(0);
@@ -267,7 +271,48 @@ namespace SimAddon
             networkToolStripMenuItem1.ShortcutKeys = Keys.Alt | Keys.N;
             networkToolStripMenuItem1.Size = new Size(64, 26);
             networkToolStripMenuItem1.Text = "Network";
-            // 
+            //
+            // simToolStripMenuItem
+            //
+            simToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { simAutoToolStripMenuItem, simFsuipcToolStripMenuItem, simBridgeToolStripMenuItem });
+            simToolStripMenuItem.ForeColor = Color.Black;
+            simToolStripMenuItem.Name = "simToolStripMenuItem";
+            simToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.S;
+            simToolStripMenuItem.Size = new Size(78, 26);
+            simToolStripMenuItem.Text = "Simulator";
+            //
+            // simAutoToolStripMenuItem
+            //
+            simAutoToolStripMenuItem.BackColor = Color.DimGray;
+            simAutoToolStripMenuItem.Checked = true;
+            simAutoToolStripMenuItem.CheckOnClick = true;
+            simAutoToolStripMenuItem.CheckState = CheckState.Checked;
+            simAutoToolStripMenuItem.ForeColor = Color.White;
+            simAutoToolStripMenuItem.Name = "simAutoToolStripMenuItem";
+            simAutoToolStripMenuItem.Size = new Size(210, 22);
+            simAutoToolStripMenuItem.Text = "Auto (détection)";
+            simAutoToolStripMenuItem.Click += simAutoToolStripMenuItem_Click;
+            //
+            // simFsuipcToolStripMenuItem
+            //
+            simFsuipcToolStripMenuItem.BackColor = Color.DimGray;
+            simFsuipcToolStripMenuItem.CheckOnClick = true;
+            simFsuipcToolStripMenuItem.ForeColor = Color.White;
+            simFsuipcToolStripMenuItem.Name = "simFsuipcToolStripMenuItem";
+            simFsuipcToolStripMenuItem.Size = new Size(210, 22);
+            simFsuipcToolStripMenuItem.Text = "FSUIPC / XUIPC";
+            simFsuipcToolStripMenuItem.Click += simFsuipcToolStripMenuItem_Click;
+            //
+            // simBridgeToolStripMenuItem
+            //
+            simBridgeToolStripMenuItem.BackColor = Color.DimGray;
+            simBridgeToolStripMenuItem.CheckOnClick = true;
+            simBridgeToolStripMenuItem.ForeColor = Color.White;
+            simBridgeToolStripMenuItem.Name = "simBridgeToolStripMenuItem";
+            simBridgeToolStripMenuItem.Size = new Size(210, 22);
+            simBridgeToolStripMenuItem.Text = "SimBridge UDP (X-Plane 12)";
+            simBridgeToolStripMenuItem.Click += simBridgeToolStripMenuItem_Click;
+            //
             // vATSIMToolStripMenuItem1
             // 
             vATSIMToolStripMenuItem1.BackColor = Color.DimGray;
@@ -423,6 +468,10 @@ namespace SimAddon
         private ToolStripMenuItem logoutToolStripMenuItem1;
         private ToolStripMenuItem checkSessionToolStripMenuItem1;
         private ToolStripMenuItem networkToolStripMenuItem1;
+        private ToolStripMenuItem simToolStripMenuItem;
+        private ToolStripMenuItem simAutoToolStripMenuItem;
+        private ToolStripMenuItem simFsuipcToolStripMenuItem;
+        private ToolStripMenuItem simBridgeToolStripMenuItem;
         private ToolStripMenuItem linksToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripMenuItem screenshotToolStripMenuItem1;

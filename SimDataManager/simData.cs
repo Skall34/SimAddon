@@ -193,8 +193,30 @@ namespace SimDataManager
         /// <summary>Vrai si des trames SimBridge arrivent (X-Plane + plugin SimBridge.xpl installé).</summary>
         public bool IsSimBridgeActive => _bridgeStarted && _bridge.TryGetLatest(out _);
 
+        // Connecteur sim choisi par l'utilisateur (menu "Simulator") :
+        //   "auto" (défaut) = SimBridge dès que ses trames UDP arrivent, sinon FSUIPC/XUIPC
+        //   "fsuipc"         = force FSUIPC (MSFS2020/2024, P3D) ou XUIPC (X-Plane)
+        //   "simbridge"      = force le pont UDP SimBridge (X-Plane 12 + plugin SimBridge.xpl)
+        private string _simConnector = "auto";
+
+        public string SimConnector
+        {
+            get => _simConnector;
+            set => _simConnector = string.IsNullOrEmpty(value) ? "auto" : value;
+        }
+
+        public void SetSimConnector(string mode) => SimConnector = mode;
+
         /// <summary>Source de données courante : SimBridge (UDP) si dispo, sinon FSUIPC.</summary>
-        private bool UseBridge => IsSimBridgeActive;
+        private bool UseBridge
+        {
+            get
+            {
+                if (_simConnector == "simbridge") return _bridgeStarted;
+                if (_simConnector == "fsuipc") return false;
+                return IsSimBridgeActive; // auto
+            }
+        }
 
         private bool TryGetBridgeFrame(out SimBridgeFrame f)
         {

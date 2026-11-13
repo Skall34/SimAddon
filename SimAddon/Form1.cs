@@ -256,6 +256,14 @@ namespace SimAddon
                 iVAOToolStripMenuItem1.Checked = true;
             }
 
+            // Connecteur sim (menu "Simulator") : auto / fsuipc / simbridge
+            string connector = Properties.Settings.Default.SimConnector;
+            if (string.IsNullOrEmpty(connector)) connector = "auto";
+            _simData.SetSimConnector(connector);
+            simAutoToolStripMenuItem.Checked = connector == "auto";
+            simFsuipcToolStripMenuItem.Checked = connector == "fsuipc";
+            simBridgeToolStripMenuItem.Checked = connector == "simbridge";
+
             WriteWindowTitle();
 
             currentStatus = new situation();
@@ -1482,6 +1490,35 @@ namespace SimAddon
                     Logger.WriteLine(plugin.getName() + " : " + ex.Message);
                 }
             }
+        }
+
+        private void simConnectorApply(string mode)
+        {
+            _simData.SetSimConnector(mode);
+            Settings.Default.SimConnector = mode;
+            Settings.Default.Save();
+            simAutoToolStripMenuItem.Checked = mode == "auto";
+            simFsuipcToolStripMenuItem.Checked = mode == "fsuipc";
+            simBridgeToolStripMenuItem.Checked = mode == "simbridge";
+            Logger.WriteLine("Connecteur sim : " + mode);
+        }
+
+        private void simAutoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!simAutoToolStripMenuItem.Checked) { simAutoToolStripMenuItem.Checked = true; return; } // radio : on ne décoche pas tout
+            simConnectorApply("auto");
+        }
+
+        private void simFsuipcToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!simFsuipcToolStripMenuItem.Checked) { simFsuipcToolStripMenuItem.Checked = true; return; }
+            simConnectorApply("fsuipc");
+        }
+
+        private void simBridgeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!simBridgeToolStripMenuItem.Checked) { simBridgeToolStripMenuItem.Checked = true; return; }
+            simConnectorApply("simbridge");
         }
 
         private void iVAOToolStripMenuItem1_Click(object sender, EventArgs e)
