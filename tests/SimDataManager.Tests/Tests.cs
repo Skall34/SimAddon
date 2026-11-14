@@ -1,6 +1,7 @@
 // Tests de non-regression SimAddon (branche poc/simbridge-client).
 // A lancer AVANT toute distribution : dotnet run -c Release dans ce dossier.
-// ATTENTION : fermer SimAddon pendant les tests (le port UDP 49180 doit etre libre).
+// Les tests utilisent un port UDP isole (49195 par defaut, surchargeable via
+// SIMBRIDGE_TEST_PORT) : ils passent meme si SimAddon ou X-Plane tournent encore.
 //
 // Garanties couvertes :
 //  1. LocalPlanesDB : les cles sont normalisees (Trim) -> une ancienne association
@@ -63,6 +64,15 @@ static class Tests
     }
 
     // ---------------------------------------------------------------- simData bridge
+    static int TestPort
+    {
+        get
+        {
+            var env = Environment.GetEnvironmentVariable("SIMBRIDGE_TEST_PORT");
+            return int.TryParse(env, out var p) ? p : 49195;
+        }
+    }
+
     static string Frame(int onGround, double ias, int stall, double alpha)
     {
         return "{\"type\":\"simbridge\",\"v\":2,\"ts_ms\":" + DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() +
@@ -85,14 +95,14 @@ static class Tests
     static void SimDataBridgeTests()
     {
         Console.WriteLine("== 2. simData SANS trame SimBridge : reste sur FSUIPC/XUIPC (MSFS inchange) ==");
-        var sd = new simData("https://skywings.ovh/");
+        var sd = new simData("https://skywings.ovh/", TestPort);
         Thread.Sleep(400); // laisse le récepteur UDP demarrer (aucune trame recue)
         Check(!sd.IsSimBridgeActive, "sans trame : IsSimBridgeActive == false");
         Check(!sd.UsingBridge, "sans trame : UsingBridge == false (mode auto) -> FSUIPC/XUIPC, rien ne change");
 
         Console.WriteLine("== 3. AVEC trames SimBridge : pont actif en auto, stall avec guard au sol ==");
         using var tx = new UdpClient();
-        var dest = new System.Net.IPEndPoint(System.Net.IPAddress.Loopback, SimBridgeClient.DefaultPort);
+        var dest = new System.Net.IPEndPoint(System.Net.IPAddress.Loopback, TestPort);
         bool stop = false;
         // phase 1 : au sol, faux stall (alpha wrappe, flag parasite) -> GetStallWarning doit etre 0
         var th = new Thread(() => SendLoop(tx, dest, () => Frame(1, 0.0, 1, 179.1), 100, ref stop)) { IsBackground = true };
@@ -126,7 +136,7 @@ static class Tests
 
     static int Main()
     {
-        Console.WriteLine("Tests SimAddon (poc/simbridge-client). Fermer SimAddon avant (port 49180 libre).");
+        Console.WriteLine("Tests SimAddon (poc/simbridge-client) — port UDP de test : " + TestPort);
         LocalPlanesDBTests();
         SimDataBridgeTests();
         Console.WriteLine();

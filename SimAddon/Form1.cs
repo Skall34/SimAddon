@@ -411,19 +411,6 @@ namespace SimAddon
                 currentStatus.squawkCode = _simData.GetSquawk();
                 currentStatus.squawkMode = _simData.GetSquawkMode(); // 0 = off, 1 = standby, 2 = on, test=3
 
-                // debug PoC SimBridge : 1 ligne toutes les 100 lectures (~50 s)
-                if (currentStatus.counter % 100 == 0)
-                {
-                    Logger.WriteLine("DBG sim: bridge=" + _simData.UsingBridge
-                        + " frames=" + _simData.BridgeFramesReceived
-                        + " stall=" + currentStatus.stallWarning
-                        + " stallRatio=" + (_simData.TryGetBridgeFramePublic(out var bf) ? bf.StallWarningRatio.ToString("0.00") : "-")
-                        + " alpha=" + (_simData.TryGetBridgeFramePublic(out var bf2) ? bf2.Alpha.ToString("0.0") + "/" + bf2.StallAlpha.ToString("0.0") : "-")
-                        + " overspeed=" + currentStatus.overSpeedWarning
-                        + " ias=" + currentStatus.airSpeed.ToString("0.0")
-                        + " onGround=" + currentStatus.onGround);
-                }
-
             }
             catch (Exception ex)
             {
@@ -1627,7 +1614,7 @@ namespace SimAddon
             try
             {
                 d.AircraftType = _simData.GetAircraftType();
-                if (_simData.TryGetBridgeFramePublic(out var f)) d.AircraftUiName = f.AircraftUiName;
+                d.AircraftUiName = _simData.GetAircraftUiName();
                 d.TailNumber = _simData.GetTailNumber();
                 var p = _simData.GetPosition();
                 d.Lat = p.Location.Latitude;

@@ -225,8 +225,11 @@ namespace SimDataManager
             return UseBridge && _bridge.TryGetLatest(out f);
         }
 
-        /// <summary>Version publique pour le debug (Form1).</summary>
-        public bool TryGetBridgeFramePublic(out SimBridgeFrame f) => TryGetBridgeFrame(out f);
+        /// <summary>Nom de l'avion affiché dans l'UI X-Plane (acf_ui_name), via le pont SimBridge uniquement.</summary>
+        public string GetAircraftUiName()
+        {
+            return TryGetBridgeFrame(out var f) ? f.AircraftUiName : "";
+        }
 
         private SiteConnection SiteConnection;
         private string sessionToken;
@@ -250,7 +253,9 @@ namespace SimDataManager
             get { return _flyingNetwork; }
         }
 
-        public simData(string GSheetURL)
+        /// <param name="GSheetURL">URL du site.</param>
+        /// <param name="bridgePort">Port UDP du pont SimBridge (défaut 49180 ; surchargeable pour les tests).</param>
+        public simData(string GSheetURL, int bridgePort = SimBridgeClient.DefaultPort)
         {
             _isConnectedToSim = false;
 
@@ -271,7 +276,7 @@ namespace SimDataManager
             try
             {
                 _bridge.FrameReceived += OnBridgeFrame;
-                _bridge.Start(SimBridgeClient.DefaultPort);
+                _bridge.Start(bridgePort);
                 _bridgeStarted = true;
             }
             catch (Exception ex)
@@ -295,7 +300,7 @@ namespace SimDataManager
             if (!_bridgeLogged)
             {
                 _bridgeLogged = true;
-                Logger.WriteLine("SimBridge: première trame UDP reçue (port 49180) — pont X-Plane actif, stall_warning dispo");
+                Logger.WriteLine("SimBridge: première trame UDP reçue (port " + SimBridgeClient.DefaultPort + ") — pont X-Plane actif, stall_warning dispo");
             }
         }
 
@@ -928,7 +933,7 @@ namespace SimDataManager
 
         public short GetOffRunwayCrashed()
         {
-            if (TryGetBridgeFrame(out var f)) return 0; // pas de distinction off-runway dans le pont v1
+            if (TryGetBridgeFrame(out var f)) return 0; // le pont ne distingue pas off-runway (schéma v2)
             return offRunwayCrashed.Value;
         }
 

@@ -63,7 +63,7 @@ namespace CommPlugin
 
         public void FormClosing(object sender, FormClosingEventArgs e)
         {
-            throw new NotImplementedException();
+            // rien à libérer côté Comm
         }
 
         public string getName()

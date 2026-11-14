@@ -215,7 +215,7 @@ namespace Calculator
 
         public void FormClosing(object sender, FormClosingEventArgs e)
         {
-            throw new NotImplementedException();
+            // rien à libérer côté Convert
         }
 
         public string getName()
