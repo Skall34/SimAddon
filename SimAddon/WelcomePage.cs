@@ -27,6 +27,7 @@ namespace SimAddon
             public bool OnGround;
             public double FuelKg, PayloadKg;
             public string SiteUrl = "https://skywings.ovh/";
+            public string FlightState = "waiting"; // clé : waiting/taxiing/inflight/gliding/ended (FlightRecCtrl.FlightStateKey)
             public string GeneratedAt = "";
         }
 
@@ -75,7 +76,18 @@ namespace SimAddon
         {
             string cs = Esc(d.Callsign);
             string site = d.SiteUrl.TrimEnd('/');
-            string volsUrl = site + "/pages/tableau_vols.php?callsign=" + Uri.EscapeDataString(d.Callsign ?? "");
+            // Liens publics (pas de session requise) : profil pilote skywings.ovh/CALLSIGN
+            string volsUrl = site + "/" + Uri.EscapeDataString(d.Callsign ?? "");
+            string fsKey = string.IsNullOrEmpty(d.FlightState) ? "waiting" : d.FlightState;
+            string fsLabel, fsColor;
+            switch (fsKey)
+            {
+                case "inflight": fsLabel = "En vol"; fsColor = "#2e7d32"; break;
+                case "taxiing": fsLabel = "Taxi"; fsColor = "#e65100"; break;
+                case "gliding": fsLabel = "Vol à voile"; fsColor = "#478ED4"; break;
+                case "ended": fsLabel = "Vol terminé"; fsColor = "#6b7f99"; break;
+                default: fsLabel = "Au sol / en attente"; fsColor = "#9e9e9e"; break;
+            }
             string simColor = d.SimConnected ? "#2e7d32" : "#c62828";
             string simText = d.SimConnected ? "Connecté — " + Esc(d.SimSource) : "Simulateur non détecté";
             string bridgeText = d.BridgeActive
@@ -122,6 +134,8 @@ footer{margin-top:24px;font-size:12px;color:#7a8aa0;text-align:center;}
             sb.Append("<div class='card'><h2>Simulateur</h2><div class='val'><span class='dot' style='background:").Append(simColor).Append("'></span>").Append(simText).Append("</div>");
             sb.Append("<div class='sub'>SimAddon v").Append(Esc(d.AppVersion)).Append("</div></div>");
 
+            sb.Append("<div class='card'><h2>Statut du vol</h2><div class='val'><span class='dot' style='background:").Append(fsColor).Append("'></span>").Append(Esc(fsLabel)).Append("</div></div>");
+
             sb.Append("<div class='card'><h2>Avion (SIM)</h2><div class='val'>").Append(plane).Append("</div>");
             if (!string.IsNullOrEmpty(d.AircraftUiName) && d.AircraftUiName != d.AircraftType)
                 sb.Append("<div class='sub'>UI : ").Append(Esc(d.AircraftUiName)).Append("</div>");
@@ -138,9 +152,9 @@ footer{margin-top:24px;font-size:12px;color:#7a8aa0;text-align:center;}
             sb.Append("</div>");
 
             sb.Append("<div class='links'>");
-            if (!string.IsNullOrEmpty(cs)) sb.Append("<a href='").Append(volsUrl).Append("'>Mes vols (skywings.ovh/").Append(cs).Append(")</a>");
-            sb.Append("<a href='").Append(site).Append("' class='alt'>Site SkyWings</a>");
-            sb.Append("<a href='").Append(site).Append("/pages/documentation.php' class='alt'>Documentation</a>");
+            if (!string.IsNullOrEmpty(cs)) sb.Append("<a target='_blank' rel='noopener' href='").Append(volsUrl).Append("'>Mes vols (skywings.ovh/").Append(cs).Append(")</a>");
+            sb.Append("<a target='_blank' rel='noopener' href='").Append(site).Append("' class='alt'>Site SkyWings</a>");
+            sb.Append("<a target='_blank' rel='noopener' href='").Append(site).Append("/pages/documentation.php' class='alt'>Documentation</a>");
             sb.Append("</div>");
 
             sb.Append("<footer>SimAddon · page générée à ").Append(Esc(d.GeneratedAt)).Append(" · se rafraîchit toutes les 30 s</footer>");

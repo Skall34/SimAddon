@@ -102,6 +102,9 @@ namespace FlightRecPlugin
 
         private STATE currentState = STATE.WAITING;
 
+        /// <summary>État courant du vol, clé normalisée pour l'affichage externe (page d'accueil) : waiting/taxiing/inflight/gliding/ended.</summary>
+        public string FlightStateKey => currentState.ToString().ToLowerInvariant();
+
         private enum EVENT
         {
             NONE,
