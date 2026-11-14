@@ -76,8 +76,8 @@ namespace SimAddon
         {
             string cs = Esc(d.Callsign);
             string site = d.SiteUrl.TrimEnd('/');
-            // Liens publics (pas de session requise) : profil pilote skywings.ovh/CALLSIGN
-            string volsUrl = site + "/" + Uri.EscapeDataString(d.Callsign ?? "");
+            // Page des vols du pilote : skywings.ovh/pages/flights.php?callsign=CALLSIGN
+            string volsUrl = site + "/pages/flights.php?callsign=" + Uri.EscapeDataString(d.Callsign ?? "");
             // Sans simulateur détecté : "Non connecté" (pas l'état résiduel du dernier vol)
             string fsKey = string.IsNullOrEmpty(d.FlightState) ? "waiting" : d.FlightState;
             string fsLabel, fsColor;
@@ -157,7 +157,7 @@ footer{margin-top:24px;font-size:12px;color:#7a8aa0;text-align:center;}
             sb.Append("</div>");
 
             sb.Append("<div class='links'>");
-            if (!string.IsNullOrEmpty(cs)) sb.Append("<a target='_blank' rel='noopener' href='").Append(volsUrl).Append("'>Mes vols (skywings.ovh/").Append(cs).Append(")</a>");
+            if (!string.IsNullOrEmpty(cs)) sb.Append("<a target='_blank' rel='noopener' href='").Append(volsUrl).Append("'>Mes vols · ").Append(cs).Append("</a>");
             sb.Append("<a target='_blank' rel='noopener' href='").Append(site).Append("' class='alt'>Site SkyWings</a>");
             sb.Append("<a target='_blank' rel='noopener' href='").Append(site).Append("/pages/documentation.php' class='alt'>Documentation</a>");
             sb.Append("</div>");

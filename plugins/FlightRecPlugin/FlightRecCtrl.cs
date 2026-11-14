@@ -245,6 +245,7 @@ namespace FlightRecPlugin
 
             RemplirComboImmat();
             RemplirComboMissions();
+            ForceMissionControleSiAvionControle();
 
             //send the callsign event
             SimEventArg eventArg = new SimEventArg();
@@ -1145,6 +1146,24 @@ namespace FlightRecPlugin
             //await dataReader.FillComboBoxMissionsAsync(cbMission);
             cbMission.DisplayMember = "Libelle";
             this.Cursor = Cursors.Default;
+        }
+
+        /// <summary>
+        /// Si l'avion actuellement sélectionné (ex. dernière immat restaurée au démarrage)
+        /// doit passer son vol de contrôle (ControleAFaire=1), force la combo mission sur la
+        /// mission de contrôle (EstControle=1). On pose .Text (et non SelectedItem) pour ne
+        /// pas déclencher le filtre réseau des avions au démarrage.
+        /// </summary>
+        private void ForceMissionControleSiAvionControle()
+        {
+            Avion selected = cbImmat.SelectedItem as Avion;
+            if (selected == null || selected.ControleAFaire != 1) return;
+            Mission missionControle = data.missions.FirstOrDefault(m => m.EstControle == 1);
+            if (missionControle != null)
+            {
+                cbMission.Text = missionControle.Libelle;
+                Logger.WriteLine("Avion " + selected.Immat + " en vol de contrôle : mission forcée à '" + missionControle.Libelle + "'");
+            }
         }
 
 
