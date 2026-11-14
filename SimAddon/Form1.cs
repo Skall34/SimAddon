@@ -30,6 +30,7 @@ namespace SimAddon
 
         private simData _simData;
         private bool _showWelcomePending; // page d'accueil à ouvrir dès la connexion sim
+        private ToolStripMenuItem welcomeAtStartupToolStripMenuItem;
         private situation currentStatus;
         FormWindowState LastWindowState = FormWindowState.Normal;
 
@@ -276,6 +277,21 @@ namespace SimAddon
                 catch (Exception ex) { Logger.WriteLine("WelcomePage: " + ex.Message); }
             };
             linksToolStripMenuItem.DropDownItems.Insert(0, welcomeItem);
+
+            // Option désactivable : afficher (ou non) la page d'accueil au lancement
+            welcomeAtStartupToolStripMenuItem = new ToolStripMenuItem("Afficher la page d'accueil au lancement")
+            {
+                CheckOnClick = true,
+                Checked = Properties.Settings.Default.ShowWelcomeAtStartup
+            };
+            welcomeAtStartupToolStripMenuItem.Click += (s, e) =>
+            {
+                Properties.Settings.Default.ShowWelcomeAtStartup = welcomeAtStartupToolStripMenuItem.Checked;
+                Properties.Settings.Default.Save();
+                _showWelcomePending = welcomeAtStartupToolStripMenuItem.Checked && _simData != null && _simData.isConnectedToSim;
+                Logger.WriteLine("WelcomePage: ShowWelcomeAtStartup=" + welcomeAtStartupToolStripMenuItem.Checked);
+            };
+            linksToolStripMenuItem.DropDownItems.Insert(1, welcomeAtStartupToolStripMenuItem);
 
             currentStatus = new situation();
             currentStatus.counter = 0;
