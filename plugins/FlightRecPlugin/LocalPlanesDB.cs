@@ -58,6 +58,14 @@ namespace FlightRecPlugin
             LoadDB();
         }
 
+        /// <summary>Redirige le stockage vers un dossier de test (ne pas utiliser en prod).</summary>
+        public static void SetStorageFolderForTests(string folder)
+        {
+            storageFolder = folder;
+            Directory.CreateDirectory(storageFolder);
+            planesDB = null; // force le rechargement depuis ce dossier
+        }
+
         public static List<string> GetPlaneName(string simplane)
         {
             if (planesDB == null)

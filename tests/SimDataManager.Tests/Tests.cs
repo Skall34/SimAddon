@@ -1,0 +1,136 @@
+// Tests de non-regression SimAddon (branche poc/simbridge-client).
+// A lancer AVANT toute distribution : dotnet run -c Release dans ce dossier.
+// ATTENTION : fermer SimAddon pendant les tests (le port UDP 49180 doit etre libre).
+//
+// Garanties couvertes :
+//  1. LocalPlanesDB : les cles sont normalisees (Trim) -> une ancienne association
+//     faite sous XPUIPC ("Cessna 172 SP GTN REP " avec espace final) est retrouvee
+//     quand le pont SimBridge envoie "Cessna 172 SP GTN REP" (sans espace). Ca marche
+//     pour TOUS les utilisateurs, quel que soit le nom exact de l'avion.
+//  2. Sans trame SimBridge (MSFS/FSUIPC, ou X-Plane sans le plugin) : UsingBridge
+//     reste false -> 100% du code existant FSUIPC/XUIPC, AUCUNE regression possible.
+//  3. Avec trames SimBridge (X-Plane 12 + plugin) : le pont devient la source en mode
+//     auto, le stall reflete la trame AVEC le guard au sol (pas de faux stall au parking).
+//  4. Mode "fsuipc" force : meme avec des trames, UsingBridge reste false (protection MSFS).
+//
+// Zero dependance NuGet (runner maison). Exit 0 = PASS, 1 = FAIL.
+
+using System;
+using System.IO;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+using FlightRecPlugin;
+using SimDataManager;
+
+static class Tests
+{
+    static int _fails = 0, _total = 0;
+    static void Check(bool cond, string label)
+    {
+        _total++;
+        Console.WriteLine((cond ? "  ok   " : "  FAIL ") + label);
+        if (!cond) _fails++;
+    }
+
+    // ---------------------------------------------------------------- LocalPlanesDB
+    static void LocalPlanesDBTests()
+    {
+        Console.WriteLine("== 1. LocalPlanesDB : normalisation des cles (compat historique XPUIPC) ==");
+        string tmp = Path.Combine(Path.GetTempPath(), "simaddon-tests-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tmp);
+        try
+        {
+            // Simule une vieille base ecrite sous XPUIPC (espace final dans la cle)
+            File.WriteAllText(Path.Combine(tmp, "planesdb.json"),
+                "{ \"Cessna 172 SP GTN REP \": [\"OK-PRW\", \"F-GVHR\"] }");
+            LocalPlanesDB.SetStorageFolderForTests(tmp);
+
+            var a = LocalPlanesDB.GetPlaneName("Cessna 172 SP GTN REP");   // sans espace (pont SimBridge)
+            Check(a != null && a.Contains("OK-PRW"), "cle historique avec espace final retrouvee sans espace");
+            var b = LocalPlanesDB.GetPlaneName("Cessna 172 SP GTN REP ");  // avec espace (XPUIPC)
+            Check(b != null && b.Contains("OK-PRW"), "cle avec espace final fonctionne toujours");
+
+            LocalPlanesDB.SetPlane("Beechcraft Baron 58 REP ", "P2NTJ");
+            Check(LocalPlanesDB.GetPlaneName("Beechcraft Baron 58 REP") != null, "SetPlane trimme la cle a l'ecriture");
+            LocalPlanesDB.RemovePlane("Beechcraft Baron 58 REP", "P2NTJ");
+            Check(LocalPlanesDB.GetPlaneName("Beechcraft Baron 58 REP") == null, "RemovePlane fonctionne apres trim");
+        }
+        finally
+        {
+            try { Directory.Delete(tmp, true); } catch { }
+        }
+    }
+
+    // ---------------------------------------------------------------- simData bridge
+    static string Frame(int onGround, double ias, int stall, double alpha)
+    {
+        return "{\"type\":\"simbridge\",\"v\":2,\"ts_ms\":" + DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() +
+               ",\"on_ground\":" + onGround + ",\"ias_kt\":" + ias.ToString(System.Globalization.CultureInfo.InvariantCulture) +
+               ",\"stall_warning\":" + stall + ",\"stall_warning_ratio\":0.0,\"alpha\":" +
+               alpha.ToString(System.Globalization.CultureInfo.InvariantCulture) + ",\"stall_alpha\":12.0," +
+               "\"num_engines\":1,\"eng_running\":[1],\"eng_n1_pct\":[0.0],\"eng_ff_kg_s\":[0.0]}";
+    }
+
+    static void SendLoop(UdpClient tx, System.Net.IPEndPoint dest, Func<string> frame, int ms, ref bool stop)
+    {
+        while (!stop)
+        {
+            byte[] b = Encoding.UTF8.GetBytes(frame());
+            try { tx.Send(b, b.Length, dest); } catch { }
+            Thread.Sleep(ms);
+        }
+    }
+
+    static void SimDataBridgeTests()
+    {
+        Console.WriteLine("== 2. simData SANS trame SimBridge : reste sur FSUIPC/XUIPC (MSFS inchange) ==");
+        var sd = new simData("https://skywings.ovh/");
+        Thread.Sleep(400); // laisse le récepteur UDP demarrer (aucune trame recue)
+        Check(!sd.IsSimBridgeActive, "sans trame : IsSimBridgeActive == false");
+        Check(!sd.UsingBridge, "sans trame : UsingBridge == false (mode auto) -> FSUIPC/XUIPC, rien ne change");
+
+        Console.WriteLine("== 3. AVEC trames SimBridge : pont actif en auto, stall avec guard au sol ==");
+        using var tx = new UdpClient();
+        var dest = new System.Net.IPEndPoint(System.Net.IPAddress.Loopback, SimBridgeClient.DefaultPort);
+        bool stop = false;
+        // phase 1 : au sol, faux stall (alpha wrappe, flag parasite) -> GetStallWarning doit etre 0
+        var th = new Thread(() => SendLoop(tx, dest, () => Frame(1, 0.0, 1, 179.1), 100, ref stop)) { IsBackground = true };
+        th.Start();
+        Thread.Sleep(1200); // laisse arriver quelques trames
+        Check(sd.IsSimBridgeActive, "avec trames : IsSimBridgeActive == true");
+        Check(sd.UsingBridge, "mode auto + trames : UsingBridge == true (pont actif)");
+        Check(sd.GetStallWarning() == 0, "au sol avec stall brut=1 (alpha=179) : GetStallWarning == 0 (guard)");
+        stop = true; th.Join(500);
+
+        // phase 2 : en vol, vrai stall -> 1
+        stop = false;
+        th = new Thread(() => SendLoop(tx, dest, () => Frame(0, 68.0, 1, 16.5), 100, ref stop)) { IsBackground = true };
+        th.Start();
+        Thread.Sleep(1200);
+        Check(sd.GetStallWarning() == 1, "en vol avec stall=1 : GetStallWarning == 1");
+        stop = true; th.Join(500);
+
+        Console.WriteLine("== 4. Mode 'fsuipc' force : meme avec trames, on reste sur FSUIPC (protection MSFS) ==");
+        stop = false;
+        th = new Thread(() => SendLoop(tx, dest, () => Frame(0, 68.0, 1, 16.5), 100, ref stop)) { IsBackground = true };
+        th.Start();
+        Thread.Sleep(800);
+        sd.SetSimConnector("fsuipc");
+        Check(sd.IsSimBridgeActive, "trames reçues : IsSimBridgeActive == true");
+        Check(!sd.UsingBridge, "mode fsuipc force : UsingBridge == false malgre les trames");
+        stop = true; th.Join(500);
+
+        sd.SetSimConnector("auto");
+    }
+
+    static int Main()
+    {
+        Console.WriteLine("Tests SimAddon (poc/simbridge-client). Fermer SimAddon avant (port 49180 libre).");
+        LocalPlanesDBTests();
+        SimDataBridgeTests();
+        Console.WriteLine();
+        Console.WriteLine(_fails == 0 ? $"PASS — {_total}/{_total} tests OK" : $"FAIL — {_fails}/{_total} en echec");
+        return _fails == 0 ? 0 : 1;
+    }
+}

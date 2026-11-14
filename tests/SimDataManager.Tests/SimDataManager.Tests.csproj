@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>SimDataManager.Tests</AssemblyName>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SimDataManager\SimDataManager.csproj" />
+    <ProjectReference Include="..\..\plugins\FlightRecPlugin\FlightRecPlugin.csproj" />
+  </ItemGroup>
+
+</Project>
