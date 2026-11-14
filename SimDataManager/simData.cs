@@ -688,6 +688,7 @@ namespace SimDataManager
 
         public bool IsPaused()
         {
+            if (TryGetBridgeFrame(out var f)) return f.Paused != 0;
             return (pauseIndicator.Value != 0);
         }
 
@@ -784,7 +785,7 @@ namespace SimDataManager
 
         public float GetCOM1Stdby()
         {
-            if (TryGetBridgeFrame(out var f)) return 0f; // pas de COM1 standby dans le pont v1
+            if (TryGetBridgeFrame(out var f)) return (float)f.Com1StdbyMhz;
             short bcdValue = COM1Stdby.Value;
             int thousands = (bcdValue >> 12) & 0xF;
             int hundreds = (bcdValue >> 8) & 0xF;
@@ -840,7 +841,7 @@ namespace SimDataManager
         //transponder mode off=0,stdby=1,on=2,test=3
         public byte GetSquawkMode()
         {
-            if (TryGetBridgeFrame(out var f)) return (byte)(f.Squawk > 0 ? 2 : 0); // 2 = on
+            if (TryGetBridgeFrame(out var f)) return (byte)f.SquawkMode;
             return squawkMode.Value;
         }
         public void SetSquawkMode(byte value) {
@@ -868,7 +869,7 @@ namespace SimDataManager
 
         public double GetVerticalAcceleration()
         {
-            if (TryGetBridgeFrame(out var f)) return 0; // pas de DataRef équivalent direct dans le pont v1
+            if (TryGetBridgeFrame(out var f)) return f.VertAccelMs2;
             return verticalAcceleration.Value;
         }
 
@@ -883,8 +884,9 @@ namespace SimDataManager
             // Pont SimBridge : le plugin envoie stall_warning=1 si annonciateur cockpit OU flag
             // flightmodel OU ratio >= 0.9 OU AoA >= AoA d'alerte (robuste pour avions SASL/REP).
             if (TryGetBridgeFrame(out var f))
-                return (byte)((f.StallWarning != 0 || f.StallWarningRatio >= 0.9
-                                || (f.StallAlpha > 0 && f.Alpha >= f.StallAlpha)) ? 1 : 0);
+                // Bretelles côté SimAddon : StallWarningEffective applique le guard au sol,
+                // StallByAoA couvre les avions sans REP (fallback 15 deg).
+                return (byte)((f.StallWarningEffective != 0 || f.StallByAoA) ? 1 : 0);
             return stallWarning.Value;
         }
 
@@ -926,7 +928,7 @@ namespace SimDataManager
 
         public uint GetGearRetractableFlag()
         {
-            if (TryGetBridgeFrame(out var f)) return 1;
+            if (TryGetBridgeFrame(out var f)) return (uint)f.GearRetractable;
             return gearRetractableFlag.Value;
         }
 
@@ -942,7 +944,11 @@ namespace SimDataManager
             return batteryMaster.Value;
         }
 
-        public byte GetViewMode() => viewMode.Value;
+        public byte GetViewMode()
+        {
+            if (TryGetBridgeFrame(out var f)) return (byte)f.ViewType;
+            return viewMode.Value;
+        }
 
         public bool GetIsGearUp()
         {
@@ -953,7 +959,7 @@ namespace SimDataManager
 
         public uint GetFlapsAvailableFlag()
         {
-            if (TryGetBridgeFrame(out var f)) return 1;
+            if (TryGetBridgeFrame(out var f)) return (uint)f.FlapsAvailable;
             return flapsAvailable.Value;
         }
 
@@ -1046,12 +1052,26 @@ namespace SimDataManager
 
         public int GetEngine1ManifoldPressure()
         {
-            if (TryGetBridgeFrame(out var f)) return 0; // pas de sonde MAP dans le pont v1
+            if (TryGetBridgeFrame(out var f)) return f.EngMapInHg.Length > 0 ? (int)(f.EngMapInHg[0] * 1024) : 0; // échelle FSUIPC 0x08C0
             return (int)(engine1ManifoldPressure.Value / 1024);
         }
 
         public PositionSnapshot GetPosition()
         {
+            if (TryGetBridgeFrame(out var bf))
+            {
+                // Pont SimBridge : position directement depuis la trame (sinon FSUIPC est mort en mode bridge)
+                PositionSnapshot bp = new PositionSnapshot();
+                bp.Altitude = bf.AltFt;
+                bp.Location.Latitude = bf.Lat;
+                bp.Location.Longitude = bf.Lon;
+                bp.BankDegrees = bf.Bank;
+                bp.IsOnGround = bf.OnGround == 1;
+                bp.HeadingDegreesTrue = bf.HdgTrue;
+                bp.IndicatedAirspeedKnots = bf.IasKt;
+                bp.PitchDegrees = bf.Pitch;
+                return bp;
+            }
             FsPositionSnapshot pt = FSUIPCConnection.GetPositionSnapshot();
             PositionSnapshot position = new PositionSnapshot();
             position.Altitude = pt.Altitude.Feet;
@@ -1067,13 +1087,29 @@ namespace SimDataManager
 
         }
 
-        public string GetAircraftType() => aircraftType.Value;
-        public string GetAircraftModel() => aircraftModel.Value;
+        public string GetAircraftType()
+        {
+            if (TryGetBridgeFrame(out var f)) return f.AircraftType;
+            return aircraftType.Value;
+        }
+        public string GetAircraftModel()
+        {
+            if (TryGetBridgeFrame(out var f)) return f.AircraftModel;
+            return aircraftModel.Value;
+        }
 
-        public string GetFlightNumber() => flightNumber.Value;
+        public string GetFlightNumber()
+        {
+            if (TryGetBridgeFrame(out var f)) return f.TailNumber; // pas de callsign solo dans XP12 : immat a la place
+            return flightNumber.Value;
+        }
 
 
-        public string GetTailNumber() => tailNumber.Value;
+        public string GetTailNumber()
+        {
+            if (TryGetBridgeFrame(out var f)) return f.TailNumber;
+            return tailNumber.Value;
+        }
 
         public double GetPayload()
         {

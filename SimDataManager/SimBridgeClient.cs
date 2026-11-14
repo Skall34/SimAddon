@@ -35,8 +35,35 @@ namespace SimDataManager
         public double FuelTotalKg, GearDeploy, FlapsRatio;
         public double PlaneWeightKg, PayloadKg;
         public int BatteryOn, AvionicsOn;
-        public double Com1Mhz;
-        public int Squawk;
+        public double Com1Mhz, Com1StdbyMhz;   // 0x034E / 0x311A
+        public int Squawk, SquawkMode;         // 0x0354 / 0x6D8C
+        public int Paused;                     // 0x0264 (approx 0x3365 inMenu)
+        public int GearRetractable;            // 0x060C
+        public int FlapsAvailable;             // 0x0778
+        public double VertAccelMs2;            // 0x3068
+        public int ViewType;                   // 0x8320
+        public string TailNumber = "";         // 0x313C (aussi 0x3130 flight number)
+        public string AircraftModel = "";      // 0x3500
+        public string AircraftType = "";       // 0x3D00
+        public double[] EngMapInHg = new double[0]; // 0x08C0 MPR inHg par moteur
+
+        /// <summary>Au sol sous cet IAS (kt), aucun stall n'est possible (alpha wrappe a ±180 au parking).</summary>
+        public const double StallGroundIasKt = 40.0;
+        /// <summary>Seuil AoA générique (deg) si l'avion n'expose pas acf_stall_warn_alpha (avions sans REP).</summary>
+        public const double DefaultStallAlphaDeg = 15.0;
+
+        /// <summary>AoA d'alerte effectif : celui de l'avion, sinon le seuil générique 15 deg.</summary>
+        public double StallAlphaEffective => StallAlpha > 0.0 ? StallAlpha : DefaultStallAlphaDeg;
+
+        /// <summary>
+        /// stall_warning filtré (bretelle côté récepteur) : au sol à basse vitesse, aucun stall
+        /// possible, même si le plugin émet un flag parasite. Utiliser cette propriété plutôt
+        /// que StallWarning brut dans le recorder.
+        /// </summary>
+        public int StallWarningEffective => (OnGround == 1 && IasKt < StallGroundIasKt) ? 0 : StallWarning;
+
+        /// <summary>Stall détecté par AoA seul, en vol uniquement — couvre les avions sans REP/annonciateur.</summary>
+        public bool StallByAoA => OnGround == 0 && Alpha >= StallAlphaEffective;
 
         public bool IsAnyEngineCut
         {
@@ -163,9 +190,23 @@ namespace SimDataManager
             f.GearDeploy       = GetDouble(o, "gear_deploy");
             f.FlapsRatio       = GetDouble(o, "flaps_ratio");
             f.Com1Mhz          = GetDouble(o, "com1_mhz");
+            f.Com1StdbyMhz     = GetDouble(o, "com1_stdby_mhz");
             f.Squawk           = (int)GetDouble(o, "squawk");
+            f.SquawkMode       = (int)GetDouble(o, "squawk_mode");
+            f.Paused           = (int)GetDouble(o, "paused");
+            f.GearRetractable  = (int)GetDouble(o, "gear_retractable");
+            f.FlapsAvailable   = (int)GetDouble(o, "flaps_available");
+            f.VertAccelMs2     = GetDouble(o, "vert_accel_ms2");
+            f.ViewType         = (int)GetDouble(o, "view_type");
+            f.TailNumber       = GetString(o, "tail_number");
+            f.AircraftModel    = GetString(o, "aircraft_model");
+            f.AircraftType     = GetString(o, "aircraft_type");
+            f.EngMapInHg       = GetDoubleArray(o, "eng_map_inhg");
             return f;
         }
+
+        private static string GetString(Dictionary<string, object> o, string k)
+            => o.TryGetValue(k, out var v) && v is string s ? s : "";
 
         private static double GetDouble(Dictionary<string, object> o, string k)
             => o.TryGetValue(k, out var v) && v is double d ? d : 0.0;
