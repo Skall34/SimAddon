@@ -694,7 +694,10 @@ namespace SimDataManager
 
         public bool GetReadyToFly()
         {
-            if (TryGetBridgeFrame(out var f)) return f.AvionicsOn == 1; // sémantique FSUIPC 0x3364 : avion sous tension, cockpit (pas besoin du moteur)
+            // Pont SimBridge : le plugin X-Plane n'émet que quand un vol est chargé (flight loop actif),
+            // donc "trame reçue" = avion chargé = prêt. Ne PAS tester AvionicsOn : au parking froid
+            // l'avionics est OFF et on afficherait "Not Yet Available" à tort.
+            if (TryGetBridgeFrame(out var f)) return true;
             return ((readyToFLy.Value == 0)&&(inMenu.Value == 0)&&(viewMode.Value < 4));
         }
 
