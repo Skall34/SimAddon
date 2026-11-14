@@ -22,7 +22,18 @@ namespace FlightRecPlugin
             if (File.Exists(filename))
             {
                 var json = File.ReadAllText(filename);
-                planesDB = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, List<string>> >(json);
+                var raw = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, List<string>>>(json);
+                // Normalise les cles (Trim) : XPUIPC 0x3D00 et SimBridge peuvent différer
+                // par un espace final ("Cessna 172 SP GTN REP " vs "Cessna 172 SP GTN REP").
+                planesDB = new Dictionary<string, List<string>>();
+                if (raw != null)
+                {
+                    foreach (var kv in raw)
+                    {
+                        string k = (kv.Key ?? "").Trim();
+                        if (k.Length > 0 && !planesDB.ContainsKey(k)) planesDB[k] = kv.Value;
+                    }
+                }
             }
             else
             {
@@ -53,9 +64,10 @@ namespace FlightRecPlugin
             {
                 LoadDB();
             }
-            if (planesDB.ContainsKey(simplane))
+            string key = (simplane ?? "").Trim();
+            if (planesDB.ContainsKey(key))
             {
-                return planesDB[simplane];
+                return planesDB[key];
             }
             return null;
         }
@@ -65,13 +77,15 @@ namespace FlightRecPlugin
             {
                 LoadDB();
             }
-            if (!planesDB.ContainsKey(simplane))
+            string key = (simplane ?? "").Trim();
+            if (key.Length == 0) return;
+            if (!planesDB.ContainsKey(key))
             {
-                planesDB[simplane] = new List<string>();
+                planesDB[key] = new List<string>();
             }
-            if (!planesDB[simplane].Contains(name))
+            if (!planesDB[key].Contains(name))
             {
-                planesDB[simplane].Add(name);
+                planesDB[key].Add(name);
                 var json = System.Text.Json.JsonSerializer.Serialize(planesDB, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
                 var filename = Path.Combine(storageFolder, LocalPlanesDB.dbFile);
                 File.WriteAllText(filename, json);
@@ -84,12 +98,13 @@ namespace FlightRecPlugin
             {
                 LoadDB();
             }
-            if (planesDB.ContainsKey(simplane))
+            string key = (simplane ?? "").Trim();
+            if (planesDB.ContainsKey(key))
             {
-                planesDB[simplane].Remove(name);
-                if (planesDB[simplane].Count == 0)
+                planesDB[key].Remove(name);
+                if (planesDB[key].Count == 0)
                 {
-                    planesDB.Remove(simplane);
+                    planesDB.Remove(key);
                 }
                 var json = System.Text.Json.JsonSerializer.Serialize(planesDB, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
                 var filename = Path.Combine(storageFolder, LocalPlanesDB.dbFile);

@@ -29,6 +29,7 @@ namespace SimAddon
         private PluginsSettings pluginsSettings;
 
         private simData _simData;
+        private bool _showWelcomePending; // page d'accueil à ouvrir dès la connexion sim
         private situation currentStatus;
         FormWindowState LastWindowState = FormWindowState.Normal;
 
@@ -266,6 +267,16 @@ namespace SimAddon
 
             WriteWindowTitle();
 
+            // Page d'accueil HTML : à ouvrir une fois la connexion sim établie (voir TimerMain_Tick)
+            _showWelcomePending = Properties.Settings.Default.ShowWelcomeAtStartup;
+            var welcomeItem = new ToolStripMenuItem("Page d'accueil SimAddon");
+            welcomeItem.Click += (s, e) =>
+            {
+                try { WelcomePage.Show(BuildWelcomeData()); }
+                catch (Exception ex) { Logger.WriteLine("WelcomePage: " + ex.Message); }
+            };
+            linksToolStripMenuItem.DropDownItems.Insert(0, welcomeItem);
+
             currentStatus = new situation();
             currentStatus.counter = 0;
 
@@ -325,6 +336,21 @@ namespace SimAddon
             try
             {
                 UpdateLabelConnectionStatus();
+
+                // Page d'accueil : ouverture différée jusqu'à la connexion sim, puis refresh périodique
+                if (_showWelcomePending && _simData.isConnectedToSim)
+                {
+                    _showWelcomePending = false;
+                    try { WelcomePage.Show(BuildWelcomeData()); }
+                    catch (Exception ex) { Logger.WriteLine("WelcomePage: " + ex.Message); }
+                }
+                else if (Properties.Settings.Default.ShowWelcomeAtStartup
+                         && currentStatus.counter % 10 == 0
+                         && File.Exists(WelcomePage.FilePath))
+                {
+                    try { WelcomePage.Refresh(BuildWelcomeData()); } catch { /* ignore */ }
+                }
+
                 //rafraichis les données venant du simu
                 _simData.Refresh();
                 currentStatus.counter++;
@@ -1566,6 +1592,38 @@ namespace SimAddon
                     Logger.WriteLine(plugin.getName() + " : " + ex.Message);
                 }
             }
+        }
+
+        /// <summary>Données courantes pour la page d'accueil HTML.</summary>
+        private WelcomePage.Data BuildWelcomeData()
+        {
+            var d = new WelcomePage.Data
+            {
+                Callsign = _simData.Callsign,
+                AppVersion = Application.ProductVersion,
+                SimConnected = _simData.isConnectedToSim,
+                SimSource = _simData.UsingBridge ? "SimBridge (UDP X-Plane)" : "FSUIPC/XUIPC",
+                BridgeActive = _simData.IsSimBridgeActive,
+                BridgeFrames = _simData.BridgeFramesReceived,
+                SiteUrl = Properties.Settings.Default.GSheetAPIUrl,
+                GeneratedAt = DateTime.Now.ToString("HH:mm:ss")
+            };
+            try
+            {
+                d.AircraftType = _simData.GetAircraftType();
+                if (_simData.TryGetBridgeFramePublic(out var f)) d.AircraftUiName = f.AircraftUiName;
+                d.TailNumber = _simData.GetTailNumber();
+                var p = _simData.GetPosition();
+                d.Lat = p.Location.Latitude;
+                d.Lon = p.Location.Longitude;
+                d.AltFt = p.Altitude;
+                d.IasKt = p.IndicatedAirspeedKnots;
+                d.OnGround = p.IsOnGround;
+                d.FuelKg = _simData.GetFuelWeight();
+                d.PayloadKg = _simData.GetPayload();
+            }
+            catch { /* la page s'ouvre même si le sim ne répond pas encore */ }
+            return d;
         }
 
         private void openWebSiteToolStripMenuItem1_Click(object sender, EventArgs e)

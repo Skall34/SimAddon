@@ -25,6 +25,18 @@ namespace SimAddon.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowWelcomeAtStartup {
+            get {
+                return ((bool)(this["ShowWelcomeAtStartup"]));
+            }
+            set {
+                this["ShowWelcomeAtStartup"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool AutoHide {
             get {

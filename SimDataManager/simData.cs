@@ -239,6 +239,9 @@ namespace SimDataManager
             //}
         }
 
+        /// <summary>Callsign de l'utilisateur authentifié sur le site (ex SKY0707).</summary>
+        public string Callsign => SiteConnection.UserCallsign;
+
         private static HttpClient httpClient;
 
         private FlyingNetwork _flyingNetwork;
