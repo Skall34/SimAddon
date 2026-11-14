@@ -555,17 +555,8 @@ namespace FlightRecPlugin
                                     tbEndICAO.Enabled = false;
                                     cbImmat.SelectedItem = data.avions.Where(a => a.Immat == reservation.Immat).FirstOrDefault();
 
-                                    // Select the "Lignes Régulières" mission (Active == 2) for regular line reservations
-                                    var regularLineMission = data.missions.Where(m => m.Active == 2).FirstOrDefault();
-                                    if (regularLineMission != null)
-                                    {
-                                        cbMission.SelectedItem = regularLineMission;
-                                        Logger.WriteLine("CheckReservation: selected mission '" + regularLineMission.Libelle + "' for regular line reservation");
-                                    }
-                                    else
-                                    {
-                                        Logger.WriteLine("CheckReservation: could not find regular line mission (Active == 2)");
-                                    }
+                                    // Sélectionne la mission "Lignes Régulières" pour une réservation de ligne
+                                    SelectMissionLignesRegulieres("CheckReservation");
 
                                     //apply the reservation in the sim data manager
                                     ApplyReservation(reservation.Immat, reservation.DepartureIcao, reservation.ArrivalIcao);
@@ -1146,6 +1137,33 @@ namespace FlightRecPlugin
             //await dataReader.FillComboBoxMissionsAsync(cbMission);
             cbMission.DisplayMember = "Libelle";
             this.Cursor = Cursors.Default;
+        }
+
+        /// <summary>
+        /// Sélectionne la mission "Lignes régulières" dans la combo mission (réservation de ligne
+        /// acceptée). Recherche d'abord Active == 2, puis par libellé ; si la mission est absente
+        /// de la liste serveur, on pose le texte brut pour qu'elle soit affichée et verrouillée.
+        /// </summary>
+        private void SelectMissionLignesRegulieres(string caller)
+        {
+            Mission m = data.missions.FirstOrDefault(x => x.Active == 2);
+            if (m == null)
+            {
+                m = data.missions.FirstOrDefault(x =>
+                    x.Libelle != null &&
+                    x.Libelle.Trim().ToLowerInvariant().Replace("é", "e").Replace("è", "e").Replace(" ", "")
+                        .Contains("lignesregulieres"));
+            }
+            if (m != null)
+            {
+                cbMission.SelectedItem = m;
+                Logger.WriteLine(caller + ": selected mission '" + m.Libelle + "' for regular line reservation");
+            }
+            else
+            {
+                cbMission.Text = "Lignes régulières";
+                Logger.WriteLine(caller + ": mission 'Lignes régulières' absente de la liste serveur, affichée en texte libre");
+            }
         }
 
         /// <summary>
@@ -2320,15 +2338,10 @@ namespace FlightRecPlugin
                 {
                     Logger.WriteLine("ApplyReservation: setting arrival ICAO failed: " + ex.Message);
                 }
-                // Sélectionne la mission "Lignes Régulières" (Active == 2) si pas déjà sélectionnée
+                // Sélectionne la mission "Lignes Régulières" si pas déjà sélectionnée
                 if (cbMission.SelectedItem == null)
                 {
-                    var regularLineMission = data.missions.Where(m => m.Active == 2).FirstOrDefault();
-                    if (regularLineMission != null)
-                    {
-                        cbMission.SelectedItem = regularLineMission;
-                        Logger.WriteLine("ApplyReservation: selected mission '" + regularLineMission.Libelle + "'");
-                    }
+                    SelectMissionLignesRegulieres("ApplyReservation");
                 }
 
                 if (tbCommentaires != null)
