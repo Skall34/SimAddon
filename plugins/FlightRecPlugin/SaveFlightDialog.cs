@@ -163,8 +163,22 @@ namespace FlightRecPlugin
             }
             set
             {
+                // Avion de mission de contrôle déjà sélectionné et aucune mission présélectionnée :
+                // on force la mission de contrôle (cohérence avion/mission exigée côté serveur).
+                if (string.IsNullOrEmpty(value) && IsAvionControle(Immat))
+                {
+                    Mission missionControle = data.missions.FirstOrDefault(m => m.EstControle == 1);
+                    if (missionControle != null) value = missionControle.Libelle;
+                }
                 cbMission.Text = value;
+                UpdateControleCheckboxes();
             }
+        }
+
+        private bool IsAvionControle(string immat)
+        {
+            if (string.IsNullOrEmpty(immat)) return false;
+            return data.avions.Any(a => a.Immat == immat && a.ControleAFaire == 1);
         }
 
         public List<string> Missions
