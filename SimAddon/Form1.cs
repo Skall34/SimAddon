@@ -1612,7 +1612,7 @@ namespace SimAddon
                 GeneratedAt = DateTime.Now.ToString("HH:mm:ss")
             };
             var rec = plugsMgr.plugins.OfType<FlightRecPlugin.FlightRecCtrl>().FirstOrDefault();
-            if (rec != null) d.FlightState = rec.FlightStateKey;
+            if (rec != null) d.FlightState = _simData.isConnectedToSim ? rec.FlightStateKey : "waiting";
             try
             {
                 d.AircraftType = _simData.GetAircraftType();

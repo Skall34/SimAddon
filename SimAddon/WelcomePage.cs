@@ -78,15 +78,16 @@ namespace SimAddon
             string site = d.SiteUrl.TrimEnd('/');
             // Liens publics (pas de session requise) : profil pilote skywings.ovh/CALLSIGN
             string volsUrl = site + "/" + Uri.EscapeDataString(d.Callsign ?? "");
-            string fsKey = string.IsNullOrEmpty(d.FlightState) ? "waiting" : d.FlightState;
+            // Sans simulateur détecté, on affiche "Au parking" (pas l'état du dernier vol)
+            string fsKey = !d.SimConnected || string.IsNullOrEmpty(d.FlightState) ? "waiting" : d.FlightState;
             string fsLabel, fsColor;
             switch (fsKey)
             {
                 case "inflight": fsLabel = "En vol"; fsColor = "#2e7d32"; break;
-                case "taxiing": fsLabel = "Taxi"; fsColor = "#e65100"; break;
+                case "taxiing": fsLabel = "Roulage"; fsColor = "#f9a825"; break;
                 case "gliding": fsLabel = "Vol à voile"; fsColor = "#478ED4"; break;
                 case "ended": fsLabel = "Vol terminé"; fsColor = "#6b7f99"; break;
-                default: fsLabel = "Au sol / en attente"; fsColor = "#9e9e9e"; break;
+                default: fsLabel = "Au parking"; fsColor = "#9e9e9e"; break;
             }
             string simColor = d.SimConnected ? "#2e7d32" : "#c62828";
             string simText = d.SimConnected ? "Connecté — " + Esc(d.SimSource) : "Simulateur non détecté";
