@@ -231,6 +231,12 @@ namespace SimDataManager
             return TryGetBridgeFrame(out var f) ? f.AircraftUiName : "";
         }
 
+        /// <summary>Moteurs en marche (1) / coupés (0), via le pont SimBridge uniquement ; null sinon (FSUIPC/XUIPC).</summary>
+        public int[] GetEnginesRunning()
+        {
+            return TryGetBridgeFrame(out var f) ? f.EngRunning : null;
+        }
+
         private SiteConnection SiteConnection;
         private string sessionToken;
 

@@ -1612,7 +1612,11 @@ namespace SimAddon
                 GeneratedAt = DateTime.Now.ToString("HH:mm:ss")
             };
             var rec = plugsMgr.plugins.OfType<FlightRecPlugin.FlightRecCtrl>().FirstOrDefault();
-            if (rec != null) d.FlightState = rec.FlightStateKey;
+            if (rec != null)
+            {
+                d.FlightState = rec.FlightStateKey;
+                d.FlightEvents = rec.EventsLog.Events.Select(e => e.ToDisplayString()).ToList();
+            }
             try
             {
                 d.AircraftType = _simData.GetAircraftType();
@@ -1626,6 +1630,10 @@ namespace SimAddon
                 d.OnGround = p.IsOnGround;
                 d.FuelKg = _simData.GetFuelWeight();
                 d.PayloadKg = _simData.GetPayload();
+                // alertes en cours
+                if (_simData.GetStallWarning() != 0) d.ActiveAlerts.Add("STALL");
+                if (_simData.GetOverspeedWarning() != 0) d.ActiveAlerts.Add("OVERSPEED");
+                if (_simData.IsAnyEngineCut()) d.ActiveAlerts.Add("COUPURE MOTEUR");
             }
             catch { /* la page s'ouvre même si le sim ne répond pas encore */ }
             return d;

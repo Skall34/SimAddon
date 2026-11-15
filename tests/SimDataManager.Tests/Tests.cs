@@ -18,6 +18,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -134,11 +135,65 @@ static class Tests
         sd.SetSimConnector("auto");
     }
 
+    // ---------------------------------------------------------------- FlightEventsLog
+    static SimAddonPlugin.situation Sit(int onGround, byte stall, byte over, double ias, uint flaps, bool anyFiring, bool anyCut)
+    {
+        var s = new SimAddonPlugin.situation();
+        s.timestamp = new DateTime(2026, 11, 14, 15, 19, 52);
+        s.onGround = (short)onGround;
+        s.stallWarning = stall;
+        s.overSpeedWarning = over;
+        s.airSpeed = ias;
+        s.flapsPosition = flaps;
+        s.isAtLeastOneEngineFiring = anyFiring;
+        s.isAnyEngineCut = anyCut;
+        return s;
+    }
+
+    static void FlightEventsTests()
+    {
+        Console.WriteLine("== 5. FlightEventsLog : transitions moteurs / stall / overspeed ==");
+        var log = new FlightEventsLog();
+        log.Update(Sit(1, 0, 0, 0, 0, false, false), new[] { 0 });
+        log.Update(Sit(1, 0, 0, 0, 0, true, false), new[] { 1 });
+        Check(log.Events.Count == 1 && log.Events[0].Text.Contains("Démarrage"), "démarrage moteurs détecté");
+        log.Update(Sit(0, 0, 0, 120, 0, true, false), new[] { 1 });
+        log.Update(Sit(0, 0, 0, 110, 0, false, true), new[] { 0 });
+        Check(log.Events.Any(e => e.Text.Contains("Coupure moteur 1")), "coupure moteur 1 en vol détectée");
+        log.Update(Sit(0, 0, 0, 115, 0, true, false), new[] { 1 });
+        Check(log.Events.Any(e => e.Text.Contains("Redémarrage moteur 1")), "redémarrage moteur 1 détecté");
+        log.Update(Sit(0, 1, 0, 48, 0, true, false), new[] { 1 });
+        Check(log.Events.Any(e => e.Text.Contains("Décrochage") && e.Text.Contains("48") && e.Text.Contains("lisse")), "stall lisse Vs=48 kt détecté");
+        log.Update(Sit(0, 0, 0, 60, 0, true, false), new[] { 1 });
+        log.Update(Sit(0, 1, 0, 42, 16383, true, false), new[] { 1 });
+        Check(log.Events.Any(e => e.Text.Contains("volets sortis") && e.Text.Contains("42")), "stall volets sortis Vs=42 kt détecté");
+        log.Update(Sit(0, 0, 1, 210, 0, true, false), new[] { 1 });
+        Check(log.Events.Any(e => e.Text.Contains("Overspeed")), "overspeed détecté en vol");
+        Check(log.Events[0].ToDisplayString().Contains("14/11/2026 15:19"), "timestamp au format JJ/MM/AAAA HH:mm");
+
+        var log2 = new FlightEventsLog();
+        log2.Update(Sit(1, 0, 0, 0, 0, true, false), new[] { 1 });
+        log2.Update(Sit(1, 1, 0, 0, 0, true, false), new[] { 1 });
+        Check(!log2.Events.Any(e => e.Text.Contains("Décrochage")), "pas de stall enregistré au sol");
+
+        var alerts = log.GetActiveAlerts(Sit(0, 1, 1, 200, 0, true, true));
+        Check(alerts.Contains("STALL") && alerts.Contains("OVERSPEED") && alerts.Contains("COUPURE MOTEUR"), "alertes en cours STALL+OVERSPEED+COUPURE MOTEUR");
+
+        // fallback FSUIPC (engRunning == null) via agrégats
+        var log3 = new FlightEventsLog();
+        log3.Update(Sit(1, 0, 0, 0, 0, false, false), null);
+        log3.Update(Sit(1, 0, 0, 0, 0, true, false), null);
+        log3.Update(Sit(0, 0, 0, 120, 0, true, false), null);
+        log3.Update(Sit(0, 0, 0, 110, 0, true, true), null);
+        Check(log3.Events.Any(e => e.Text == "Démarrage moteurs") && log3.Events.Any(e => e.Text == "Coupure moteur"), "fallback FSUIPC : démarrage + coupure via agrégats");
+    }
+
     static int Main()
     {
         Console.WriteLine("Tests SimAddon (poc/simbridge-client) — port UDP de test : " + TestPort);
         LocalPlanesDBTests();
         SimDataBridgeTests();
+        FlightEventsTests();
         Console.WriteLine();
         Console.WriteLine(_fails == 0 ? $"PASS — {_total}/{_total} tests OK" : $"FAIL — {_fails}/{_total} en echec");
         return _fails == 0 ? 0 : 1;

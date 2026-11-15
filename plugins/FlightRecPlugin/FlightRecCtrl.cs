@@ -74,6 +74,9 @@ namespace FlightRecPlugin
 
         private readonly FlightPerfs flightPerfs;
 
+        /// <summary>Historique des événements du vol (décrochage, coupure/redémarrage moteur, ...) pour la page web.</summary>
+        public readonly FlightEventsLog EventsLog = new FlightEventsLog();
+
         private ReservationMgr.ReservationStatus reservationStatus = ReservationMgr.ReservationStatus.Unknown;
         private Reservation reservation;
         private static bool checkingReservation = false;
@@ -988,6 +991,9 @@ namespace FlightRecPlugin
                         flightPerfs.engineCut = true;
                     }
 
+                    // historique des événements du vol (page web) : transitions moteurs / stall / overspeed
+                    EventsLog.Update(currentFlightStatus, data.GetEnginesRunning());
+
                     //enregistre la position GPS si un moteur tourne, ou si on est pas au sol.
                     if (atLeastOneEngineFiring || !onGround)
                     {
@@ -1544,6 +1550,8 @@ namespace FlightRecPlugin
                 flightPerfs.reset();
                 //reset the GPS recorder
                 GPSRecorder.reset();
+                //reset l'historique des événements du vol (page web)
+                EventsLog.Reset();
                 //reset the flight params recorder
                 flightParamsRecorder.ClearRecordedFlightParams();
 

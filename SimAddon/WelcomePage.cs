@@ -28,6 +28,8 @@ namespace SimAddon
             public double FuelKg, PayloadKg;
             public string SiteUrl = "https://skywings.ovh/";
             public string FlightState = "waiting"; // clé : waiting/taxiing/inflight/gliding/ended (FlightRecCtrl.FlightStateKey)
+            public System.Collections.Generic.List<string> ActiveAlerts = new System.Collections.Generic.List<string>(); // STALL / OVERSPEED / COUPURE MOTEUR
+            public System.Collections.Generic.List<string> FlightEvents = new System.Collections.Generic.List<string>(); // historique "JJ/MM/AAAA HH:mm — ..."
             public string GeneratedAt = "";
         }
 
@@ -154,6 +156,34 @@ footer{margin-top:24px;font-size:12px;color:#7a8aa0;text-align:center;}
 
             sb.Append("<div class='card'><h2>Pont SimBridge (X-Plane 12)</h2><div class='val' style='font-size:14px'>")
               .Append(Esc(bridgeText)).Append("</div></div>");
+
+            // Alertes en cours (stall / overspeed / coupure moteur)
+            sb.Append("<div class='card'><h2>Alertes en cours</h2><div class='val' style='font-size:14px'>");
+            if (d.ActiveAlerts.Count == 0)
+            {
+                sb.Append("<span class='dot' style='background:#2e7d32'></span>Aucune");
+            }
+            else
+            {
+                foreach (var a in d.ActiveAlerts)
+                    sb.Append("<span class='dot' style='background:#c62828'></span>").Append(Esc(a)).Append(" &nbsp; ");
+            }
+            sb.Append("</div></div>");
+
+            // Historique des événements du vol (restent affichés même une fois l'alerte retombée)
+            sb.Append("<div class='card'><h2>Événements du vol</h2><div class='val' style='font-size:13px'>");
+            if (d.FlightEvents.Count == 0)
+            {
+                sb.Append("<span class='sub'>Aucun événement pour le moment</span>");
+            }
+            else
+            {
+                sb.Append("<ul style='margin:0;padding-left:16px'>");
+                foreach (var ev in d.FlightEvents)
+                    sb.Append("<li>").Append(Esc(ev)).Append("</li>");
+                sb.Append("</ul>");
+            }
+            sb.Append("</div></div>");
             sb.Append("</div>");
 
             sb.Append("<div class='links'>");
