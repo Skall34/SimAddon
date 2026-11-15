@@ -109,7 +109,7 @@ namespace SimAddon
             var sb = new StringBuilder();
             sb.Append("<!DOCTYPE html><html lang='fr'><head><meta charset='utf-8'>");
             sb.Append("<meta name='viewport' content='width=device-width, initial-scale=1'>");
-            sb.Append("<meta http-equiv='refresh' content='30'>");
+            sb.Append("<meta http-equiv='refresh' content='5'>");
             sb.Append("<title>SkyWings · SimAddon · ").Append(cs).Append("</title><style>");
             sb.Append(@"
 :root{--blue:#004080;--blue2:#478ED4;--bg:#f4f6f8;--card:#ffffff;--hover:#e6f0ff;--green:#2e7d32;--red:#c62828;}
@@ -192,7 +192,7 @@ footer{margin-top:24px;font-size:12px;color:#7a8aa0;text-align:center;}
             sb.Append("<a target='_blank' rel='noopener' href='").Append(site).Append("/pages/documentation.php' class='alt'>Documentation</a>");
             sb.Append("</div>");
 
-            sb.Append("<footer>SimAddon · page générée à ").Append(Esc(d.GeneratedAt)).Append(" · se rafraîchit toutes les 30 s</footer>");
+            sb.Append("<footer>SimAddon · page générée à ").Append(Esc(d.GeneratedAt)).Append(" · se rafraîchit toutes les 5 s</footer>");
             sb.Append("</body></html>");
             return sb.ToString();
         }
