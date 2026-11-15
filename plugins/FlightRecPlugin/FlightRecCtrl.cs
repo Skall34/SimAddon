@@ -1988,6 +1988,19 @@ namespace FlightRecPlugin
                 {
                     // avion normal : la combo mission redevient modifiable (hors réservation)
                     cbMission.Enabled = true;
+                    // Si la mission de contrôle était sélectionnée (posée automatiquement pour
+                    // l'ancien avion en attente de contrôle), la liste avait été réduite à cette
+                    // seule mission : on la restaure complète et on retombe sur la mission par défaut.
+                    Mission courante = cbMission.SelectedItem as Mission;
+                    Mission nouvelle = Mission.ApresChangementAvion(courante, selectedPlane, data.missions);
+                    if (!Mission.Equals(nouvelle, courante))
+                    {
+                        cbMission.Items.Clear();
+                        cbMission.Items.AddRange(data.missions.Where(m => !string.IsNullOrEmpty(m.Libelle)).ToArray());
+                        cbMission.DisplayMember = "Libelle";
+                        cbMission.SelectedItem = nouvelle;
+                        Logger.WriteLine("Avion " + selectedPlane.Immat + " sans vol de contrôle : mission remise à '" + (nouvelle != null ? nouvelle.Libelle : "") + "'");
+                    }
                 }
 
                 //push this event, so that other plugins are notified that the plane was selected

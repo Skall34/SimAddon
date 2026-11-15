@@ -249,6 +249,31 @@ static class Tests
         Check(System.Text.Json.JsonSerializer.Deserialize<List<GPSPoint>>(rec.GetTraceJSON()).Count == rec.GPSPoints.Count, "GetTraceJSON serialise la trace filtree");
     }
 
+    // ---------------------------------------------------------------- Mission après changement d'avion
+    static void MissionChangementAvionTests()
+    {
+        Console.WriteLine("== 9. Mission.ApresChangementAvion : reset de la mission de contrôle quand l'immat change pour un avion normal ==");
+        var missions = new List<Mission>
+        {
+            new Mission { Libelle = "Op Liner", Active = 1, EstControle = 0, TypesAutorises = "Liner" },
+            new Mission { Libelle = "Mission De Contrôle", Active = 1, EstControle = 1, TypesAutorises = "*" },
+            new Mission { Libelle = "Loisir", Active = 1, EstControle = 0, TypesAutorises = "*" },
+        };
+        var controle = missions[1];
+        var avionControle = new Avion { Immat = "OK-PRW", ControleAFaire = 1 };
+        var avionNormal = new Avion { Immat = "F-GRHU", ControleAFaire = 0 };
+
+        var r1 = Mission.ApresChangementAvion(controle, avionNormal, missions);
+        Check(r1 != null && r1.Libelle == "Loisir", "mission contrôle + nouvel avion normal -> mission par défaut ('Loisir')");
+        var r2 = Mission.ApresChangementAvion(controle, avionControle, missions);
+        Check(r2 != null && r2.EstControle == 1, "mission contrôle + avion encore en attente de contrôle -> inchangée");
+        var r3 = Mission.ApresChangementAvion(missions[0], avionNormal, missions);
+        Check(r3 != null && r3.Libelle == "Op Liner", "mission normale + avion normal -> inchangée");
+        Check(Mission.ApresChangementAvion(null, avionNormal, missions) == null, "aucune mission courante -> null (rien ne change)");
+        var r5 = Mission.ApresChangementAvion(controle, null, missions);
+        Check(r5 != null && r5.Libelle == "Loisir", "mission contrôle + avion null -> mission par défaut");
+    }
+
     static int Main()
     {
         Console.WriteLine("Tests SimAddon (poc/simbridge-client) — port UDP de test : " + TestPort);
@@ -258,6 +283,7 @@ static class Tests
         FlightNoteTests();
         MissionDefautTests();
         GPSRecorderTests();
+        MissionChangementAvionTests();
         Console.WriteLine();
         Console.WriteLine(_fails == 0 ? $"PASS — {_total}/{_total} tests OK" : $"FAIL — {_fails}/{_total} en echec");
         return _fails == 0 ? 0 : 1;

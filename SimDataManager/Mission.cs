@@ -34,6 +34,22 @@ namespace SimDataManager
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// Mission à conserver après un changement d'immatriculation : la mission de contrôle
+        /// n'est posée automatiquement que pour un avion en attente de contrôle (ControleAFaire=1).
+        /// Si l'utilisateur change d'avion pour un appareil qui n'est PAS en attente de contrôle,
+        /// on retombe sur la mission par défaut ; dans tous les autres cas la mission est inchangée.
+        /// </summary>
+        public static Mission ApresChangementAvion(Mission courante, Avion nouvelAvion, IEnumerable<Mission> toutes)
+        {
+            if (courante != null && courante.EstControle == 1
+                && (nouvelAvion == null || nouvelAvion.ControleAFaire != 1))
+            {
+                return ParDefaut(toutes);
+            }
+            return courante;
+        }
+
         // comparaison par libellé (et non par référence) : indispensable pour que
         // ComboBox.Items.Contains() retrouve la mission après un rechargement de la liste
         public override bool Equals(object obj)
