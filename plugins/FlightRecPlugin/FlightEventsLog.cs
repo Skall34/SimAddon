@@ -63,7 +63,8 @@ namespace FlightRecPlugin
         {
             if (s == null) return;
             bool inFlight = s.onGround == 0;
-            DateTime when = s.timestamp == default ? DateTime.Now : s.timestamp;
+            // heure réelle locale (le timestamp sim peut être invalide selon les sims)
+            DateTime when = DateTime.Now;
 
             if (engRunning != null)
             {

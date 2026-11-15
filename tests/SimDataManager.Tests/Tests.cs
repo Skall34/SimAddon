@@ -170,7 +170,7 @@ static class Tests
         Check(log.Events.Any(e => e.Text.Contains("volets sortis") && e.Text.Contains("42")), "stall volets sortis Vs=42 kt détecté");
         log.Update(Sit(0, 0, 1, 210, 0, true, false), new[] { 1 });
         Check(log.Events.Any(e => e.Text.Contains("Overspeed")), "overspeed détecté en vol");
-        Check(log.Events[0].ToDisplayString().Contains("14/11/2026 15:19"), "timestamp au format JJ/MM/AAAA HH:mm");
+        Check(System.Text.RegularExpressions.Regex.IsMatch(log.Events[0].ToDisplayString(), @"^\d{2}/\d{2}/\d{4} \d{2}:\d{2} — "), "timestamp au format JJ/MM/AAAA HH:mm (heure locale réelle)");
 
         var log2 = new FlightEventsLog();
         log2.Update(Sit(1, 0, 0, 0, 0, true, false), new[] { 1 });
