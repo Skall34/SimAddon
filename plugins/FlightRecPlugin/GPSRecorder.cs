@@ -48,6 +48,17 @@ namespace FlightRecPlugin
         private double maxAltitude = double.MinValue;
         public void AddPoint(double latitude, double longitude, double altitude, DateTime timestamp)
         {
+            // Ignore les positions invalides : hors limites, NaN, ou dans le carre
+            // 1°x1° autour de (0°N, 0°E) — zone d'ocean sans aucun aeroport.
+            // Le pont SimBridge envoie lat/lon ~ 0 quand X-Plane est encore au menu
+            // (avion non charge) : sans ce garde-fou, ce point partirait en ligne
+            // droite vers le golfe de Guinee sur la carte du site.
+            if (double.IsNaN(latitude) || double.IsNaN(longitude)
+                || Math.Abs(latitude) > 90.0 || Math.Abs(longitude) > 180.0
+                || (Math.Abs(latitude) < 1.0 && Math.Abs(longitude) < 1.0))
+            {
+                return;
+            }
             GPSPoints.Add(new GPSPoint
             {
                 Lat = latitude,

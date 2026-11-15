@@ -222,6 +222,33 @@ static class Tests
         Check(Mission.ParDefaut(sansDefaut) == null, "aucune mission tous-types -> null (mission laissée vide)");
     }
 
+    // ---------------------------------------------------------------- GPSRecorder
+    static void GPSRecorderTests()
+    {
+        Console.WriteLine("== 8. GPSRecorder : rejet des positions invalides (regression trace GPS en ligne droite) ==");
+        var rec = new GPSRecorder();
+        // Point quasi (0,0) envoye par le pont quand X-Plane est au menu (vol 39332, 15/11/2026)
+        rec.AddPoint(0.0004074437048703452, 0.013974497317858605, 3.83, DateTime.Now);
+        Check(rec.GPSPoints.Count == 0, "point quasi (0,0) rejete (pont SimBridge au menu X-Plane, vol 39332)");
+        rec.AddPoint(0.0, 0.0, 0.0, DateTime.Now);
+        Check(rec.GPSPoints.Count == 0, "point exactement (0,0) rejete");
+        rec.AddPoint(0.5, 0.5, 100.0, DateTime.Now);
+        Check(rec.GPSPoints.Count == 0, "point dans le carre 1°x1° autour de (0,0) rejete (ocean, aucun aeroport)");
+        rec.AddPoint(91.0, 10.0, 0.0, DateTime.Now);
+        rec.AddPoint(10.0, 181.0, 0.0, DateTime.Now);
+        rec.AddPoint(double.NaN, 10.0, 0.0, DateTime.Now);
+        Check(rec.GPSPoints.Count == 0, "lat>90, lon>180 et NaN rejetes");
+        // points valides acceptes, y compris proches de l'equateur / meridien de Greenwich
+        rec.AddPoint(43.579725641469494, 3.959425440653446, 24.5, DateTime.Now);
+        rec.AddPoint(0.5, 5.0, 100.0, DateTime.Now);   // golfe de Guinee cote ouest-africaine : hors du carre
+        rec.AddPoint(-2.0, 0.03, 200.0, DateTime.Now); // traverse l'equateur pres de Greenwich : OK
+        Check(rec.GPSPoints.Count == 3, "points valides acceptes (y compris proches de 0°N/0°E mais hors carre)");
+        // la trace optimisee ne recree pas de point invalide
+        rec.OptimizeTraceRamerDouglasPeucker(0.0001);
+        Check(rec.GPSPoints.All(p => !(Math.Abs(p.Lat) < 1.0 && Math.Abs(p.Long) < 1.0)), "apres RDP : aucun point du carre (0,0) dans la trace");
+        Check(System.Text.Json.JsonSerializer.Deserialize<List<GPSPoint>>(rec.GetTraceJSON()).Count == rec.GPSPoints.Count, "GetTraceJSON serialise la trace filtree");
+    }
+
     static int Main()
     {
         Console.WriteLine("Tests SimAddon (poc/simbridge-client) — port UDP de test : " + TestPort);
@@ -230,6 +257,7 @@ static class Tests
         FlightEventsTests();
         FlightNoteTests();
         MissionDefautTests();
+        GPSRecorderTests();
         Console.WriteLine();
         Console.WriteLine(_fails == 0 ? $"PASS — {_total}/{_total} tests OK" : $"FAIL — {_fails}/{_total} en echec");
         return _fails == 0 ? 0 : 1;
