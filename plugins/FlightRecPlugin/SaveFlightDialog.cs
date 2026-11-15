@@ -219,9 +219,10 @@ namespace FlightRecPlugin
             valNote.Value = 8;
             List<string> missions = new List<string>();
 
-            // La mission de contrôle (EstControle=1) n'est pas proposée dans la liste :
-            // elle est forcée automatiquement si l'avion choisi doit faire son vol de contrôle.
-            missions.AddRange(data.missions.Where(m => m.EstControle != 1).Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
+            // La mission de contrôle reste dans la liste (sinon .Text ne s'affiche pas en
+            // DropDownList) ; la sélection manuelle est bloquée dans cbMission_SelectedIndexChanged
+            // si l'avion choisi n'a pas ControleAFaire=1.
+            missions.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
             Missions = missions;
 
             data.avions.Sort();
@@ -265,6 +266,15 @@ namespace FlightRecPlugin
         {
             string mission = cbMission.Text;
             if (string.IsNullOrEmpty(mission)) return;
+            // La mission de contrôle n'est sélectionnable à la main que si l'avion choisi
+            // doit la faire (ControleAFaire=1) ; elle est forcée automatiquement sinon.
+            if (data.missions.Any(m => m.Libelle == mission && m.EstControle == 1) && !IsAvionControle(Immat))
+            {
+                pluginCtrl.ShowMsgBox("La mission de contrôle est attribuée automatiquement à un avion qui doit la faire.", "Mission de contrôle", MessageBoxButtons.OK);
+                cbMission.Text = string.Empty;
+                UpdateControleCheckboxes();
+                return;
+            }
             UpdateControleCheckboxes();
             try
             {

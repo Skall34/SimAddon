@@ -1143,10 +1143,10 @@ namespace FlightRecPlugin
             if ((data.missions != null) && (data.missions.Count > 0))
             {
                 //cbMission.Items.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
-                // La mission de contrôle (EstControle=1) n'est PAS listée : elle ne doit pas être
-                // sélectionnable manuellement, elle est posée automatiquement quand l'immat choisie
-                // doit faire son vol de contrôle (voir ForceMissionControleSiAvionControle).
-                cbMission.Items.AddRange(data.missions.Where(m => m.EstControle != 1).ToArray());
+                // La mission de contrôle (EstControle=1) reste dans la liste (sinon .Text ne
+                // s'affiche pas en DropDownList) mais la sélection manuelle est bloquée dans
+                // cbMission_SelectedIndexChanged tant que l'avion choisi n'a pas ControleAFaire=1.
+                cbMission.Items.AddRange(data.missions.ToArray());
             }
             //await dataReader.FillComboBoxMissionsAsync(cbMission);
             cbMission.DisplayMember = "Libelle";
@@ -1197,7 +1197,7 @@ namespace FlightRecPlugin
                 Mission missionControle = data.missions.FirstOrDefault(m => m.EstControle == 1);
                 if (missionControle != null)
                 {
-                    cbMission.Text = missionControle.Libelle;
+                    cbMission.SelectedItem = missionControle;
                     Logger.WriteLine("Avion " + selected.Immat + " en vol de contrôle : mission forcée à '" + missionControle.Libelle + "'");
                     return;
                 }
@@ -2393,6 +2393,20 @@ namespace FlightRecPlugin
             Mission selectedMission = (Mission)cbMission.SelectedItem;
             if (selectedMission != null)
             {
+                // La mission de contrôle n'est sélectionnable à la main que si l'avion choisi
+                // doit la faire (ControleAFaire=1) ; elle est posée automatiquement sinon.
+                if (selectedMission.EstControle == 1)
+                {
+                    Avion selAvion = cbImmat.SelectedItem as Avion;
+                    if (selAvion == null || selAvion.ControleAFaire != 1)
+                    {
+                        ShowMsgBox("La mission de contrôle est attribuée automatiquement à un avion qui doit la faire.", "Flight Recorder", MessageBoxButtons.OK);
+                        cbMission.SelectedItem = null;
+                        return;
+                    }
+                    // mission de contrôle valide : pas de filtre des avions (accepte tous les types)
+                    return;
+                }
                 if (!selectedMission.IsSelectable(reservationStatus == ReservationMgr.ReservationStatus.Accepted))
                 {
                     string message = "No reservation found for this mission\n";
