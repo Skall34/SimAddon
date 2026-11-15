@@ -253,7 +253,7 @@ namespace FlightRecPlugin
 
             RemplirComboImmat();
             RemplirComboMissions();
-            ForceMissionControleSiAvionControle();
+            ApplyMissionInitiale();
 
             //send the callsign event
             SimEventArg eventArg = new SimEventArg();
@@ -1181,20 +1181,35 @@ namespace FlightRecPlugin
         }
 
         /// <summary>
-        /// Si l'avion actuellement sélectionné (ex. dernière immat restaurée au démarrage)
-        /// doit passer son vol de contrôle (ControleAFaire=1), force la combo mission sur la
-        /// mission de contrôle (EstControle=1). On pose .Text (et non SelectedItem) pour ne
-        /// pas déclencher le filtre réseau des avions au démarrage.
+        /// Mission initiale au démarrage (dernière immat restaurée) :
+        /// 1. si l'avion sélectionné doit passer son vol de contrôle (ControleAFaire=1),
+        ///    on force la mission de contrôle (EstControle=1) ;
+        /// 2. sinon, si aucune mission n'est sélectionnée, on prend la mission par défaut
+        ///    (active, accepte tous les types d'avion).
+        /// On pose .Text (et non SelectedItem) pour ne pas déclencher le filtre réseau des
+        /// avions au démarrage.
         /// </summary>
-        private void ForceMissionControleSiAvionControle()
+        private void ApplyMissionInitiale()
         {
             Avion selected = cbImmat.SelectedItem as Avion;
-            if (selected == null || selected.ControleAFaire != 1) return;
-            Mission missionControle = data.missions.FirstOrDefault(m => m.EstControle == 1);
-            if (missionControle != null)
+            if (selected != null && selected.ControleAFaire == 1)
             {
-                cbMission.Text = missionControle.Libelle;
-                Logger.WriteLine("Avion " + selected.Immat + " en vol de contrôle : mission forcée à '" + missionControle.Libelle + "'");
+                Mission missionControle = data.missions.FirstOrDefault(m => m.EstControle == 1);
+                if (missionControle != null)
+                {
+                    cbMission.Text = missionControle.Libelle;
+                    Logger.WriteLine("Avion " + selected.Immat + " en vol de contrôle : mission forcée à '" + missionControle.Libelle + "'");
+                    return;
+                }
+            }
+            if (string.IsNullOrEmpty(cbMission.Text))
+            {
+                Mission def = Mission.ParDefaut(data.missions);
+                if (def != null)
+                {
+                    cbMission.Text = def.Libelle;
+                    Logger.WriteLine("Aucune mission sélectionnée : mission par défaut '" + def.Libelle + "'");
+                }
             }
         }
 

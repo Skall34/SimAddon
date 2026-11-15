@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -17,6 +18,21 @@ namespace SimDataManager
         public string Libelle { get; set; }
         public int Active { get; set; }
         public int EstControle { get; set; }
+        /// <summary>Types d'appareils autorisés (CSV, '*' = tous). "*" si le serveur ne renvoie pas le champ.</summary>
+        public string TypesAutorises { get; set; } = "*";
+
+        /// <summary>
+        /// Mission par défaut au lancement de l'ACARS : active (Active==1), pas une mission de
+        /// contrôle, et accepte tous les types d'avion (types_autorises '*' ou vide).
+        /// </summary>
+        public static Mission ParDefaut(IEnumerable<Mission> missions)
+        {
+            if (missions == null) return null;
+            return missions
+                .Where(m => m.Active == 1 && m.EstControle == 0 && (string.IsNullOrEmpty(m.TypesAutorises) || m.TypesAutorises.Trim() == "*"))
+                .OrderBy(m => m.Libelle)
+                .FirstOrDefault();
+        }
 
         // comparaison par libellé (et non par référence) : indispensable pour que
         // ComboBox.Items.Contains() retrouve la mission après un rechargement de la liste

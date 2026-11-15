@@ -17,6 +17,7 @@
 // Zero dependance NuGet (runner maison). Exit 0 = PASS, 1 = FAIL.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -202,6 +203,25 @@ static class Tests
         Check(fp2.getFlightNote() == 10 && fp2.getFlightNote(true) == 10, "vol clean : note = 10 dans les deux cas");
     }
 
+    // ---------------------------------------------------------------- Mission.ParDefaut
+    static void MissionDefautTests()
+    {
+        Console.WriteLine("== 7. Mission.ParDefaut : mission par défaut au lancement ==");
+        var missions = new List<Mission>
+        {
+            new Mission { Libelle = "Op Liner", Active = 1, EstControle = 0, TypesAutorises = "Liner" },
+            new Mission { Libelle = "Mission De Contrôle", Active = 1, EstControle = 1, TypesAutorises = "*" },
+            new Mission { Libelle = "Lignes Regulieres", Active = 2, EstControle = 0, TypesAutorises = "*" },
+            new Mission { Libelle = "Loisir", Active = 1, EstControle = 0, TypesAutorises = "*" },
+            new Mission { Libelle = "Taxi", Active = 1, EstControle = 0, TypesAutorises = "" }, // champ absent côté serveur
+        };
+        var def = Mission.ParDefaut(missions);
+        Check(def != null && def.Libelle == "Loisir", "par défaut = première mission active, non-contrôle, tous types ('Loisir')");
+        Check(Mission.ParDefaut(null) == null, "liste null -> null (pas de crash)");
+        var sansDefaut = new List<Mission> { new Mission { Libelle = "Op Liner", Active = 1, EstControle = 0, TypesAutorises = "Liner" } };
+        Check(Mission.ParDefaut(sansDefaut) == null, "aucune mission tous-types -> null (mission laissée vide)");
+    }
+
     static int Main()
     {
         Console.WriteLine("Tests SimAddon (poc/simbridge-client) — port UDP de test : " + TestPort);
@@ -209,6 +229,7 @@ static class Tests
         SimDataBridgeTests();
         FlightEventsTests();
         FlightNoteTests();
+        MissionDefautTests();
         Console.WriteLine();
         Console.WriteLine(_fails == 0 ? $"PASS — {_total}/{_total} tests OK" : $"FAIL — {_fails}/{_total} en echec");
         return _fails == 0 ? 0 : 1;
