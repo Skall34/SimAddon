@@ -274,6 +274,16 @@ static class Tests
         Check(r5 != null && r5.Libelle == "Loisir", "mission contrôle + avion null -> mission par défaut");
     }
 
+    // ---------------------------------------------------------------- Fieldset vol de contrôle (SaveFlightDialog)
+    static void ChampControleActifTests()
+    {
+        Console.WriteLine("== 10. SaveFlightDialog.ChampControleActif : fieldset dégrisé uniquement pour une immat concernée + mission contrôle ==");
+        Check(SaveFlightDialog.ChampControleActif(true, true), "mission contrôle + immat ControleAFaire=1 -> dégrisé");
+        Check(!SaveFlightDialog.ChampControleActif(true, false), "mission contrôle + immat normale -> grisé");
+        Check(!SaveFlightDialog.ChampControleActif(false, true), "mission normale + immat concernée -> grisé");
+        Check(!SaveFlightDialog.ChampControleActif(false, false), "mission normale + immat normale -> grisé");
+    }
+
     static int Main()
     {
         Console.WriteLine("Tests SimAddon (poc/simbridge-client) — port UDP de test : " + TestPort);
@@ -284,6 +294,7 @@ static class Tests
         MissionDefautTests();
         GPSRecorderTests();
         MissionChangementAvionTests();
+        ChampControleActifTests();
         Console.WriteLine();
         Console.WriteLine(_fails == 0 ? $"PASS — {_total}/{_total} tests OK" : $"FAIL — {_fails}/{_total} en echec");
         return _fails == 0 ? 0 : 1;

@@ -238,6 +238,10 @@ namespace FlightRecPlugin
                 }
             }
             Planes = immatriculations;
+
+            // l'immat peut changer dans la boîte de dialogue : le fieldset vol de contrôle suit
+            // (dégrisé uniquement pour une immat concernée)
+            cbImmat.SelectedIndexChanged += (s, e) => UpdateControleCheckboxes();
         }
 
         // Filtre la combo des immatriculations selon la mission choisie (api_getFlotte.php?mission=...)
@@ -250,9 +254,13 @@ namespace FlightRecPlugin
             string mission = cbMission.Text;
             bool estControle = !string.IsNullOrEmpty(mission)
                 && data.missions.Any(m => m.Libelle == mission && m.EstControle == 1);
-            chkStall.Enabled = estControle;
-            chkEngineCut.Enabled = estControle;
-            if (!estControle)
+            // Le fieldset "Vol de contrôle post-maintenance" reste toujours affiché, mais grisé :
+            // les cases ne sont dégrisées que pour une immat concernée (ControleAFaire=1)
+            // avec la mission de contrôle sélectionnée.
+            bool concerne = ChampControleActif(estControle, IsAvionControle(Immat));
+            chkStall.Enabled = concerne;
+            chkEngineCut.Enabled = concerne;
+            if (!concerne)
             {
                 chkStall.Checked = false;
                 chkEngineCut.Checked = false;
@@ -260,6 +268,15 @@ namespace FlightRecPlugin
             // Vol de contrôle : immat et mission verrouillées (cohérence avion/mission exigée côté serveur)
             cbImmat.Enabled = !estControle && !IsReservationLocked;
             cbMission.Enabled = !estControle && !IsReservationLocked;
+        }
+
+        /// <summary>
+        /// Vrai si le fieldset "vol de contrôle" doit être dégrisé : la mission de contrôle
+        /// est sélectionnée ET l'immat choisie est concernée (ControleAFaire=1).
+        /// </summary>
+        public static bool ChampControleActif(bool missionEstControle, bool immatEnControle)
+        {
+            return missionEstControle && immatEnControle;
         }
 
         private async void cbMission_SelectedIndexChanged(object sender, EventArgs e)
