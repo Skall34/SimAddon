@@ -62,7 +62,10 @@ namespace SimDataManager
             landingWeight = 0;
         }
 
-        public short getFlightNote() {
+        /// <param name="volDeControle">true si la mission est une mission de contrôle (EstControle=1) :
+        /// stall et coupure moteur y sont attendus, la note est alors fixée à 10.</param>
+        public short getFlightNote(bool volDeControle = false) {
+            if (volDeControle) return 10;
             short note = 10;
             if (flapsDownSpeed > 130)
             {

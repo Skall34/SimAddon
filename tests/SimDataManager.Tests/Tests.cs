@@ -188,12 +188,27 @@ static class Tests
         Check(log3.Events.Any(e => e.Text == "Démarrage moteurs") && log3.Events.Any(e => e.Text == "Coupure moteur"), "fallback FSUIPC : démarrage + coupure via agrégats");
     }
 
+    // ---------------------------------------------------------------- FlightPerfs note
+    static void FlightNoteTests()
+    {
+        Console.WriteLine("== 6. FlightPerfs : note de vol, vol de contrôle exclu de l'estimation ==");
+        var fp = new FlightPerfs();
+        fp.stallWarning = true;
+        fp.engineCut = true;
+        fp.overspeed = true;
+        Check(fp.getFlightNote() < 10, "vol classique avec stall+overspeed : note < 10");
+        Check(fp.getFlightNote(true) == 10, "vol de contrôle (même avec stall/coupure) : note = 10");
+        var fp2 = new FlightPerfs();
+        Check(fp2.getFlightNote() == 10 && fp2.getFlightNote(true) == 10, "vol clean : note = 10 dans les deux cas");
+    }
+
     static int Main()
     {
         Console.WriteLine("Tests SimAddon (poc/simbridge-client) — port UDP de test : " + TestPort);
         LocalPlanesDBTests();
         SimDataBridgeTests();
         FlightEventsTests();
+        FlightNoteTests();
         Console.WriteLine();
         Console.WriteLine(_fails == 0 ? $"PASS — {_total}/{_total} tests OK" : $"FAIL — {_fails}/{_total} en echec");
         return _fails == 0 ? 0 : 1;

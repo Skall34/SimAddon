@@ -77,6 +77,11 @@ namespace FlightRecPlugin
         /// <summary>Historique des événements du vol (décrochage, coupure/redémarrage moteur, ...) pour la page web.</summary>
         public readonly FlightEventsLog EventsLog = new FlightEventsLog();
 
+        /// <summary>Vrai si la mission sélectionnée est une mission de contrôle (EstControle=1).</summary>
+        private bool MissionCouranteEstControle =>
+            data.missions != null && !string.IsNullOrEmpty(cbMission.Text)
+            && data.missions.Any(m => m.Libelle == cbMission.Text && m.EstControle == 1);
+
         private ReservationMgr.ReservationStatus reservationStatus = ReservationMgr.ReservationStatus.Unknown;
         private Reservation reservation;
         private static bool checkingReservation = false;
@@ -1200,7 +1205,7 @@ namespace FlightRecPlugin
 
             tbCommentaires.Text += " (F.R. V" + version.ToString(3) + ")";
 
-            short note = flightPerfs.getFlightNote();
+            short note = flightPerfs.getFlightNote(MissionCouranteEstControle);
             cbNote.Text = note.ToString();
             return note;
         }
