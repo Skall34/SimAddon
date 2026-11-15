@@ -1143,7 +1143,10 @@ namespace FlightRecPlugin
             if ((data.missions != null) && (data.missions.Count > 0))
             {
                 //cbMission.Items.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
-                cbMission.Items.AddRange(data.missions.ToArray());
+                // La mission de contrôle (EstControle=1) n'est PAS listée : elle ne doit pas être
+                // sélectionnable manuellement, elle est posée automatiquement quand l'immat choisie
+                // doit faire son vol de contrôle (voir ForceMissionControleSiAvionControle).
+                cbMission.Items.AddRange(data.missions.Where(m => m.EstControle != 1).ToArray());
             }
             //await dataReader.FillComboBoxMissionsAsync(cbMission);
             cbMission.DisplayMember = "Libelle";

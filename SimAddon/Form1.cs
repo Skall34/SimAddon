@@ -1606,8 +1606,6 @@ namespace SimAddon
                 AppVersion = Application.ProductVersion,
                 SimConnected = _simData.isConnectedToSim,
                 SimSource = _simData.UsingBridge ? "SimBridge (UDP X-Plane)" : "FSUIPC/XUIPC",
-                BridgeActive = _simData.IsSimBridgeActive,
-                BridgeFrames = _simData.BridgeFramesReceived,
                 SiteUrl = Properties.Settings.Default.GSheetAPIUrl,
                 GeneratedAt = DateTime.Now.ToString("HH:mm:ss")
             };

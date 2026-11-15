@@ -219,7 +219,9 @@ namespace FlightRecPlugin
             valNote.Value = 8;
             List<string> missions = new List<string>();
 
-            missions.AddRange(data.missions.Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
+            // La mission de contrôle (EstControle=1) n'est pas proposée dans la liste :
+            // elle est forcée automatiquement si l'avion choisi doit faire son vol de contrôle.
+            missions.AddRange(data.missions.Where(m => m.EstControle != 1).Select(mission => mission.Libelle).Where(mission => !string.IsNullOrEmpty(mission)).ToArray());
             Missions = missions;
 
             data.avions.Sort();

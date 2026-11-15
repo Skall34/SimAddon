@@ -18,8 +18,6 @@ namespace SimAddon
             public string AppVersion = "";
             public string SimSource = "";        // "SimBridge (UDP X-Plane)" ou "FSUIPC/XUIPC"
             public bool SimConnected;
-            public bool BridgeActive;
-            public long BridgeFrames;
             public string AircraftType = "";
             public string AircraftUiName = "";
             public string TailNumber = "";
@@ -97,9 +95,6 @@ namespace SimAddon
             }
             string simColor = d.SimConnected ? "#2e7d32" : "#c62828";
             string simText = d.SimConnected ? "Connecté — " + Esc(d.SimSource) : "Simulateur non détecté";
-            string bridgeText = d.BridgeActive
-                ? "Plugin SimBridge actif (" + d.BridgeFrames + " trames reçues) — stall warning disponible"
-                : "Plugin SimBridge non détecté (X-Plane 12 : installer SimBridge.xpl)";
             string plane = !string.IsNullOrEmpty(d.AircraftType) ? Esc(d.AircraftType) : "Non détecté";
             if (!string.IsNullOrEmpty(d.TailNumber)) plane += " · " + Esc(d.TailNumber);
             string pos = string.Format(System.Globalization.CultureInfo.InvariantCulture,
@@ -153,9 +148,6 @@ footer{margin-top:24px;font-size:12px;color:#7a8aa0;text-align:center;}
             sb.Append("<div class='card'><h2>Carburant / Payload</h2><div class='val'>")
               .Append(string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:0}", d.FuelKg)).Append(" kg fuel · ")
               .Append(string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:0.0}", d.PayloadKg)).Append(" kg payload</div></div>");
-
-            sb.Append("<div class='card'><h2>Pont SimBridge (X-Plane 12)</h2><div class='val' style='font-size:14px'>")
-              .Append(Esc(bridgeText)).Append("</div></div>");
 
             // Alertes en cours (stall / overspeed / coupure moteur)
             sb.Append("<div class='card'><h2>Alertes en cours</h2><div class='val' style='font-size:14px'>");
