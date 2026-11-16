@@ -187,6 +187,12 @@ static class Tests
         log3.Update(Sit(0, 0, 0, 120, 0, true, false), null);
         log3.Update(Sit(0, 0, 0, 110, 0, true, true), null);
         Check(log3.Events.Any(e => e.Text == "Démarrage moteurs") && log3.Events.Any(e => e.Text == "Coupure moteur"), "fallback FSUIPC : démarrage + coupure via agrégats");
+
+        string block = log.ToCommentBlock();
+        Check(block.StartsWith("Événements du vol :") && block.Contains("Décrochage") && block.Contains("Overspeed")
+            && block.Split('\n').Count(l => l.Contains(" — ")) == log.Events.Count,
+            "ToCommentBlock : en-tête + une ligne horodatée par événement");
+        Check(new FlightEventsLog().ToCommentBlock() == string.Empty, "ToCommentBlock : vide si aucun événement");
     }
 
     // ---------------------------------------------------------------- FlightPerfs note

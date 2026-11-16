@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using SimAddonLogger;
 using SimAddonPlugin;
 
@@ -119,6 +120,17 @@ namespace FlightRecPlugin
 
             _prevStall = s.stallWarning != 0;
             _prevOver = s.overSpeedWarning != 0;
+        }
+
+        /// <summary>Bloc texte des événements horodatés, à ajouter aux commentaires du vol (chaîne vide si aucun événement).</summary>
+        public string ToCommentBlock()
+        {
+            if (_events.Count == 0) return string.Empty;
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Événements du vol :");
+            foreach (FlightEvent e in _events)
+                sb.AppendLine(e.ToDisplayString());
+            return sb.ToString();
         }
 
         /// <summary>Alertes actuellement actives (pour la page web) : STALL / OVERSPEED / COUPURE MOTEUR.</summary>

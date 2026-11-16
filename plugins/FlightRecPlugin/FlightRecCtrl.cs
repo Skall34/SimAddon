@@ -1347,7 +1347,7 @@ namespace FlightRecPlugin
                 arrivalTime = _endTime,
                 noteDuVol = _note,
                 mission = cbMission.Text,
-                commentaire = tbCommentaires.Text,
+                commentaire = BuildCommentWithEvents(),
                 payload = _endPayload,
                 GPSData = gpsTrace,
                 FlightParamsData = flightData,
@@ -1360,6 +1360,20 @@ namespace FlightRecPlugin
             flightParamsFilename+="_"+lbStartIata.Text+"-"+lbEndIata.Text+"_"+_startTime.ToString("yyyyMMdd_HHmmss");
 
             Logger.WriteLine("End of flight data updated");
+        }
+
+        // Construit le commentaire du vol : commentaire saisi + événements capturés pendant le vol
+        private string BuildCommentWithEvents()
+        {
+            string comment = tbCommentaires.Text;
+            string events = EventsLog.ToCommentBlock();
+            if (!string.IsNullOrWhiteSpace(events))
+            {
+                if (!string.IsNullOrWhiteSpace(comment))
+                    comment += Environment.NewLine;
+                comment += events.TrimEnd();
+            }
+            return comment;
         }
 
         private bool CheckBeforeSave()
@@ -1430,7 +1444,7 @@ namespace FlightRecPlugin
                 //cet appel declenche une exception si une condition de save n'est pas remplie.
                 CheckBeforeSave();
 
-                string fullComment = tbCommentaires.Text;
+                string fullComment = BuildCommentWithEvents();
                 //crée un dictionnaire des valeurs à envoyer
                 SaveFlightDialog saveFlightDialog = new SaveFlightDialog(this, data);
                 saveFlightDialog.IsReservationLocked = (reservationStatus == ReservationMgr.ReservationStatus.Accepted);

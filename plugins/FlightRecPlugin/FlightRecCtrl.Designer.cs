@@ -171,6 +171,7 @@ namespace FlightRecPlugin
             // tbCallsign
             // 
             tbCallsign.BackColor = Color.FromArgb(192, 255, 192);
+            tbCallsign.CharacterCasing = CharacterCasing.Upper;
             tbCallsign.Dock = DockStyle.Fill;
             tbCallsign.Location = new Point(153, 4);
             tbCallsign.Margin = new Padding(4);
